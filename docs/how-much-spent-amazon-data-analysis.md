@@ -104,7 +104,7 @@ Jupyter 笔记本允许我们在单元格中编写和运行小代码片段。在
 
 这是它看起来的样子。让我们将这个代码输入到我们的第一个 Jupyter 笔记本单元格中，然后点击“运行”按钮，或者使用键盘上的 Shift+Enter(Mac 上的 Cmd + Enter)来运行所选的单元格。
 
-```
+```py
  import pandas as pd
 
 df = pd.read_csv('amazon-orders.csv')
@@ -123,11 +123,11 @@ df.head()
 
 如果我们想得到数据集的完整尺寸，我们可以使用`df.shape`。这给了我们数据框架的尺寸。
 
-```
+```py
  df.shape 
 ```
 
-```
+```py
 (59, 23) 
 ```
 
@@ -149,7 +149,7 @@ df.head()
 
 然后，我们将再次使用`.head()`函数来确保我们的更改生效。
 
-```
+```py
  df = df.fillna(0)
 df.head() 
 ```
@@ -176,7 +176,7 @@ df.head()
 
 现在，让我们把它们放在一起，然后再次使用`head()`来检查我们在下一行的工作。
 
-```
+```py
  df["Total Charged"] = df["Total Charged"].str.replace('$','').astype(float)
 df.head() 
 ```
@@ -195,11 +195,11 @@ df.head()
 
 Pandas 包括一些我们可以在本专栏中使用的基本数学函数。让我们从`.sum()`开始，它将给出该列中每个数字的总数——换句话说，我们在亚马逊上花费的总数。
 
-```
+```py
  df["Total Charged"].sum() 
 ```
 
-```
+```py
 1777.7300000000002 
 ```
 
@@ -211,11 +211,11 @@ Pandas 包括一些我们可以在本专栏中使用的基本数学函数。让�
 
 找到总数并不是我们唯一能做的事情，因为我们已经清理了那一列数据！熊猫让我们能够非常快速地进行一些其他的计算。例如，平均购买价格是多少？我们可以使用`.mean()`来找出:
 
-```
+```py
  df["Total Charged"].mean() 
 ```
 
-```
+```py
 30.131016949152542 
 ```
 
@@ -223,31 +223,31 @@ Pandas 包括一些我们可以在本专栏中使用的基本数学函数。让�
 
 因为查看平均值有时会隐藏异常值，所以查看中间值也很好。我们可以使用`.median()`来做到这一点。
 
-```
+```py
  df["Total Charged"].median() 
 ```
 
-```
+```py
 15.95 
 ```
 
 真有意思！我的平均花费比我的平均花费低很多。看起来我做了一些昂贵的订单。让我们通过使用`max()`来看看价格最高的订单是什么:
 
-```
+```py
  df["Total Charged"].max() 
 ```
 
-```
+```py
 210.99 
 ```
 
 好吧，我最贵的订单是 211 美元。我的最低价订单怎么办？我们可以使用`.min()`来找到那个:
 
-```
+```py
  df["Total Charged"].min() 
 ```
 
-```
+```py
 1.04 
 ```
 
@@ -261,7 +261,7 @@ Pandas 包括一些我们可以在本专栏中使用的基本数学函数。让�
 
 但是编程的美妙之处在于:我们已经编写了可以修复 T4 的代码。我们需要做的就是从上面复制粘贴我们的列清理代码，并用`"Tax Charged"`替换`"Total Charged"`，告诉 Python 对`"Tax Charged"`列执行相同的操作。
 
-```
+```py
  df["Tax Charged"] = df["Tax Charged"].str.replace('$','').astype(float)
 df.head() 
 ```
@@ -276,21 +276,21 @@ df.head()
 
 ![](img/f51535b51d77fe1574e3d0ac929d15e8.png)很快，色谱柱就可以进行我们想要的任何分析了。例如，根据这个数据集，我们缴纳的税款总额是多少？我们将再次使用`.sum()`来找出:
 
-```
+```py
  df["Tax Charged"].sum() 
 ```
 
-```
+```py
 52.60999999999999 
 ```
 
 显然，我在亚马逊上花掉的钱中有 52.61 美元用于缴税。不同商品的税率不同——我们可以在上面的数据框架预览中看到，有些商品根本不征税。但是如果我们想的话，我们可以通过简单地将我们的`"Total Charged"`总和除以我们的`"Tax Charged"`总和来计算出总税率，就像这样:
 
-```
+```py
  df["Tax Charged"].sum() / df["Total Charged"].sum() 
 ```
 
-```
+```py
 0.02959392033660904 
 ```
 
@@ -308,7 +308,7 @@ df.head()
 
 我们真的只需要看到一行就可以确定我们的日期已经更改，所以让我们为我们的老朋友`df.head()`提供一个自定义**参数**。我们可以自定义它显示的行数。如果我们将数字`1`放在括号内，它将显示数据集的一行。
 
-```
+```py
  df['Order Date'] = pd.to_datetime(df['Order Date'])
 df.head() 
 ```
@@ -329,11 +329,11 @@ df.head()
 
 太好了！我们可以使用`df.plot.bar()`以非常简单的方式制作一个基本的条形图。我们可以将所需的 X 轴和 Y 轴列作为参数传递给该函数，并且我们还可以添加其他参数来执行旋转 X 轴标签之类的操作。但是看看当我们按原样绘制数据框架时会发生什么:
 
-```
+```py
  df.plot.bar(x='Order Date', y='Total Charged', rot=90) 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x1c30f9c4e10> 
 ```
 
@@ -345,11 +345,11 @@ df.head()
 
 我们所需要做的就是将`figsize=(20,10)`添加到我们代码中已经有的参数中。请注意，每个单独的参数都用逗号分隔。
 
-```
+```py
  df.plot.bar(x='Order Date', y='Total Charged', rot=90, figsize=(20,10)) 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x1c3129870b8> 
 ```
 
@@ -369,12 +369,12 @@ df.head()
 
 以下是它的整体外观:
 
-```
+```py
  daily_orders = df.groupby('Order Date').sum()["Total Charged"]
 daily_orders.head() 
 ```
 
-```
+```py
 Order Date
 2019-04-01  63.91
 2019-04-04  156.12
@@ -392,11 +392,11 @@ Name: Total Charged, dtype: float64
 
 是时候把它做成条形图了。我们可以用`Series.plot.bar()`做到这一点，因为我们的系列只有一列和一组索引标签，我们甚至不需要定义 x 和 y 轴。熊猫会自动这么做。
 
-```
+```py
  daily_orders.plot.bar(figsize=(20,10)) 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x1c3110bbf60> 
 ```
 
@@ -412,11 +412,11 @@ Name: Total Charged, dtype: float64
 
 让我们把它放到我们的代码中，看看它看起来怎么样！
 
-```
+```py
  daily_orders.plot.bar(figsize=(20, 10), color='#61D199') 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x1c311dcd5c0> 
 ```
 

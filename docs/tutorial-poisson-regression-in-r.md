@@ -41,21 +41,21 @@ February 27, 2019
 
 首先，我们将创建一个 6 色矢量:
 
-```
+```py
  # vector of colors
 colors <- c("Red", "Blue", "Gold", "Black", "Pink", "Green") 
 ```
 
 接下来，我们将为分布创建一个列表，它将具有不同的 *μ* 值:
 
-```
+```py
  # declare a list to hold distribution values
 poisson.dist < - list() 
 ```
 
 然后，我们将为 *μ* 创建一个值向量，并对来自 *μ* 的值进行循环，每个值的分位数范围为 0-20，将结果存储在一个列表中:
 
-```
+```py
  a < - c(1, 2, 3, 4, 5, 6) # A vector for values of u
 for (i in 1:6) {
     poisson.dist[[i]] <- c(dpois(0:20, i)) # Store distribution vector for each corresponding value of u
@@ -64,7 +64,7 @@ for (i in 1:6) {
 
 最后，我们将使用`plot()`来绘制这些点。`plot()`是 R 中的基本图形函数。在 R 中绘制数据的另一种常用方法是使用流行的`ggplot2`包；这包括在 [Dataquest 的 R 课程](https://www.dataquest.io/path/data-analyst-r)中。但是对于本教程，我们将坚持基 R 函数。
 
-```
+```py
  # plot each vector in the list using the colors vectors to represent each value for u
 plot(unlist(poisson.dist[1]), type = "o", xlab="y", ylab = "P(y)", 
 col = colors[i])
@@ -91,7 +91,7 @@ legend("topright", legend = a, inset = 0.08, cex = 1.0, fill = colors, title = "
 
 我们可以生成 R 的正态分布，如下所示:
 
-```
+```py
  # create a sequence -3 to +3 with .05 increments 
 xseq < - seq(-3, 3, .05) 
 
@@ -120,12 +120,12 @@ plot(xseq, densities, col = "blue", xlab = "", ylab = "Density", type = "l", lwd
 
 我们必须找出拥有十七辆或多**辆**汽车的概率，所以我们将使用`lower.trail = FALSE`并将 q 设为 16:
 
-```
+```py
  ppois(16, 12, lower.tail = FALSE)
 # lower.tail = logical; if TRUE (default) then probabilities are P[X < = x], otherwise, P[X > x]. 
 ```
 
-```
+```py
  ## [1] 0.101291 
 ```
 
@@ -145,7 +145,7 @@ plot(xseq, densities, col = "blue", xlab = "", ylab = "Density", type = "l", lwd
 
 为了将非线性关系转换成线性形式，使用了一个**链接函数**，它是泊松回归的**对数**。因此，泊松回归模型也被称为*对数线性模型*。泊松回归模型的一般数学形式是:
 
-```
+```py
 log(y)=α + β[1]x[1] + β[2]x[2] + … + β[p]x[p]
 ```
 
@@ -159,13 +159,13 @@ log(y)=α + β[1]x[1] + β[2]x[2] + … + β[p]x[p]
 
 考虑一个包含一个预测变量和一个响应变量的方程:
 
-```
+```py
 log(y)=α + β(x)
 ```
 
  **这相当于:
 
-```
+```py
 y = exp(α + β(x)) = exp(α) + exp(β * x)
 ```
  **注意:在泊松回归模型中，预测变量或解释变量可以是数值或分类值的混合。
@@ -190,7 +190,7 @@ y = exp(α + β(x)) = exp(α) + exp(β * x)
 
 在 R 中，`glm()`命令用于建模广义线性模型。下面是`glm()`的大致结构:
 
-```
+```py
  glm(formula, family = familytype(link = ""), data,...) 
 ```
 
@@ -219,20 +219,20 @@ y = exp(α + β(x)) = exp(α) + exp(β * x)
 
 我们将建立与织造过程中纱线断裂频率相关的泊松回归模型。这些数据可以在 R 中的`datasets`包中找到，所以我们需要做的第一件事是使用`install.package("datasets")`安装包，并用`library(datasets)`加载库:
 
-```
+```py
  # install.packages("datasets")
 library(datasets) # include library datasets after installation 
 ```
 
 `datasets`包包括大量的数据集，所以我们需要专门选择我们的纱线数据。[查阅包文档](https://cran.r-project.org/manuals.html)，我们可以看到它被称为 **warpbreaks** ，所以我们把它作为一个对象存储。
 
-```
+```py
  data < - warpbreaks 
 ```
 
 我们来看看数据:
 
-```
+```py
  columns < - names(data) # Extract column names from dataframe
 columns # show columns 
 ```
@@ -253,13 +253,13 @@ columns # show columns
 
 让我们看看如何使用`ls.str()`命令构建数据:
 
-```
+```py
  ls.str(warpbreaks) 
 ```
 
 输出:
 
-```
+```py
 breaks : num [1:54] 26 30 54 25 70 52 51 26 67 18 ...
 tension : Factor w/ 3 levels "L","M","H": 1 1 1 1 1 1 1 1 1 2 ...
 wool : Factor w/ 2 levels "A","B": 1 1 1 1 1 1 1 1 1 1 ... 
@@ -271,7 +271,7 @@ wool : Factor w/ 2 levels "A","B": 1 1 1 1 1 1 1 1 1 1 ...
 
 我们可以通过创建直方图来查看因变量`breaks`的数据连续性:
 
-```
+```py
  hist(data$breaks) 
 ```
 
@@ -281,13 +281,13 @@ wool : Factor w/ 2 levels "A","B": 1 1 1 1 1 1 1 1 1 1 ...
 
 让我们检查因变量的`mean()`和`var()`:
 
-```
+```py
  mean(data$breaks) # calculate mean 
 ```
 
 输出:`[1] 28.14815`
 
-```
+```py
  var(data$breaks) # calculate variance 
 ```
 
@@ -297,7 +297,7 @@ wool : Factor w/ 2 levels "A","B": 1 1 1 1 1 1 1 1 1 1 ...
 
 让我们使用`glm()`命令来拟合泊松模型。
 
-```
+```py
  # model poisson regression using glm()
 poisson.model < - glm(breaks ~ wool + tension, data, family = poisson(link = "log"))
 summary(poisson.model) 
@@ -307,7 +307,7 @@ summary(poisson.model)
 
 输出:
 
-```
+```py
 Call: glm(formula = breaks ~ wool + tension, family = poisson(link = "log"), data = data)
 
 Deviance Residuals: 
@@ -353,14 +353,14 @@ r 将分类变量视为哑变量。分类变量，也称为指标变量，通过
 
 因此，为了获得更准确的标准误差，我们可以使用*准泊松*模型:
 
-```
+```py
  poisson.model2 < - glm(breaks ~ wool + tension, data = data, family = quasipoisson(link = "log"))
 summary(poisson.model2) 
 ```
 
 输出:
 
-```
+```py
 Call: 
 glm(formula = breaks ~ wool + tension, family = poisson(link = "log"), data = data)
 
@@ -388,7 +388,7 @@ Number of Fisher Scoring iterations: 4
 
 既然我们有了两种不同的型号，让我们来比较一下哪一种更好。首先，我们将安装`arm`库，因为它包含了我们需要的一个函数:
 
-```
+```py
  # install.packages("arm")
 
 # load library arm that contains the function se.coef()
@@ -397,7 +397,7 @@ library(arm)
 
 现在我们将使用`se.coef()`函数从每个模型中提取系数，然后使用`cbind()`将这些提取的值合并到一个数据帧中，这样我们就可以对它们进行比较。
 
-```
+```py
  # extract coefficients from first model using 'coef()'
 coef1 = coef(poisson.model) 
 
@@ -419,7 +419,7 @@ models.both
 
 输出:
 
-```
+```py
 coef1 se.coef1 coef2 se.coef2 exponent
 (Intercept) 3.6919631 0.04541069 3.6919631 0.09374352 40.1235380
 woolB -0.2059884 0.05157117 -0.2059884 0.10646089 0.8138425
@@ -431,7 +431,7 @@ tensionH -0.5184885 0.06395944 -0.5184885 0.13203462 0.5954198
 
 记住这几点，让我们看看*羊毛*的估价。其值为 **-0.2059884** ， **-0.2059884** 的指数为 **0.8138425** 。
 
-```
+```py
 1-0.8138425 
 ```
 
@@ -443,7 +443,7 @@ tensionH -0.5184885 0.06395944 -0.5184885 0.13203462 0.5954198
 
 一旦建立了模型，我们就可以使用`predict(model, data, type)`来预测结果，使用新的数据框架包含除训练数据之外的数据。让我们看一个例子。
 
-```
+```py
  # make a dataframe with new data
 newdata = data.frame(wool = "B", tension = "M")
 
@@ -459,7 +459,7 @@ predict(poisson.model2, newdata = newdata, type = "response")
 
 当你与他人分享你的分析时，表格通常不是吸引人们注意力的最佳方式。图表帮助人们更快地掌握你的发现。在 R 中可视化数据最流行的方法可能是`ggplot2`(在 [Dataquest 的数据可视化课程](https://www.dataquest.io/course/r-data-viz/)中讲授)，我们还将使用一个名为 [jtools](https://cran.r-project.org/web/packages/jtools/jtools.pdf) 的出色的 R 包，它包括专门用于汇总和可视化回归模型的工具。让我们用`jtools`来形象化`poisson.model2`。
 
-```
+```py
  # Install the package jtools if not already installed
 install.packages("jtools")
 
@@ -470,7 +470,7 @@ install.packages("ggstance")
 
 `jtools`提供了`plot_summs()`和`plot_coefs()`来可视化模型的概要，也允许我们用`ggplot2`来比较不同的模型。
 
-```
+```py
  # Include jtools library
 library(jtools)
 
@@ -480,7 +480,7 @@ plot_summs(poisson.model2, scale = TRUE, exp = TRUE)
 
 ![poisson regression unnamed-chunk-15-1](img/86b32e4fa997852cd2e9257cba798f3a.png "poisson regression unnamed-chunk-15-1")
 
-```
+```py
  # plot regression coefficients for poisson.model2 and poisson.model
 plot_summs(poisson.model, poisson.model2, scale = TRUE, exp = TRUE) 
 ```
@@ -501,7 +501,7 @@ plot_summs(poisson.model, poisson.model2, scale = TRUE, exp = TRUE)
 
 在 **warpbreaks** 数据中，我们有分类预测变量，所以我们将使用`cat_plot()`来可视化它们之间的相互作用，通过给它参数来指定我们想要使用的模型、我们正在查看的预测变量以及它与之组合以产生结果的其他预测变量。
 
-```
+```py
  cat_plot(poisson.model2, pred = wool, modx = tension)
 # argument 1: regression model
 # pred: The categorical variable that will appear on x-axis
@@ -514,7 +514,7 @@ plot_summs(poisson.model, poisson.model2, scale = TRUE, exp = TRUE)
 
 我们可以做同样的事情来看看`tension`:
 
-```
+```py
  # using cat_plot. Pass poisson.model2 and we want to see effect of tension type so we set pred=tension
 cat_plot(poisson.model2, pred = tension, modx = wool) 
 ```
@@ -527,7 +527,7 @@ cat_plot(poisson.model2, pred = tension, modx = wool)
 
 我们还可以使用`geom`参数定义由`cat_plot()`创建的绘图类型。该参数增强了对图的解释。我们可以这样使用它，将`geom`作为附加参数传递给`cat_plot`:
 
-```
+```py
  cat_plot(poisson.model2, pred = tension, modx = wool, geom = "line") 
 ```
 
@@ -537,7 +537,7 @@ cat_plot(poisson.model2, pred = tension, modx = wool)
 
 我们也可以通过添加`plot.points = TRUE`来将观察结果包含在绘图中:
 
-```
+```py
  cat_plot(poisson.model2, pred = tension, modx = wool, geom = "line", plot.points = TRUE) 
 ```
 
@@ -563,17 +563,17 @@ cat_plot(poisson.model2, pred = tension, modx = wool)
 
 让我们使用来自 [ISwR 包](https://cran.r-project.org/web/packages/ISwR/index.html)的另一个名为`eba1977`的数据集来为比率数据建立泊松回归模型。首先，我们将安装软件包:
 
-```
+```py
  # install.packages("ISwR")library(ISwR) 
 ```
 
-```
+```py
 ## Warning: package 'ISwR' was built under R version 3.4.4 
 ```
 
 现在，让我们来看看关于数据的一些细节，并打印前十行来了解数据集包含的内容。
 
-```
+```py
  data(eba1977)
 cancer.data = eba1977
 cancer.data[1:10, ]
@@ -592,7 +592,7 @@ cancer.data[1:10, ]
 
 输出:
 
-```
+```py
 city age pop cases
 1 Fredericia 40-54 3059 11
 2 Horsens 40-54 2879 13
@@ -610,7 +610,7 @@ city age pop cases
 
 如上式所示，比率数据由 *log* ( *n* )计算，在该数据中 *n* 是人口，因此我们将首先找到人口的 log。我们可以为*病例/人群*建模如下:
 
-```
+```py
  # find the log(n) of each value in 'pop' column. It is the third column
 logpop = log(cancer.data[ ,3])
 
@@ -623,7 +623,7 @@ new.cancer.data
 
 输出:
 
-```
+```py
 city age pop cases logpop
 1 Fredericia 40-54 3059 11 8.025843
 2 Horsens 40-54 2879 13 7.965198
@@ -653,7 +653,7 @@ city age pop cases logpop
 
 现在，让我们用`offset()`对速率数据进行建模。
 
-```
+```py
  poisson.model.rate < - glm(cases ~ city + age+ offset(logpop), family = poisson(link = "log"), data = cancer.data)
 
 #display summary
@@ -662,7 +662,7 @@ summary(poisson.model.rate)
 
 输出:
 
-```
+```py
 Call:
 glm(formula = cases ~ city + age + offset(logpop), family = poisson(link = "log"), data = cancer.data)
 
@@ -695,11 +695,11 @@ Number of Fisher Scoring iterations: 5
 
 我们使用`fitted(model)`返回模型拟合的值。它使用模型所基于的训练数据返回结果。让我们试一试:
 
-```
+```py
  fitted(poisson.model.rate) 
 ```
 
-```
+```py
 1 2 3 4 5 6 7 8 
 10.954812 7.411803 7.760169 6.873215 8.615485 8.384458 7.798635 7.201421 
 9 10 11 12 13 14 15 16 
@@ -710,7 +710,7 @@ Number of Fisher Scoring iterations: 5
 
 使用此模型，我们可以使用`predict()`函数预测新数据集每 1000 人的病例数，就像我们之前对计数数据模型所做的那样:
 
-```
+```py
  # create a test dataframe containing new values of variables
 test.data = data.frame(city = "Kolding", age = "40-54", pop = 1000, logpop = log(1000)) 
 

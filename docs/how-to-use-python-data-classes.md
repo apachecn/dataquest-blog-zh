@@ -18,7 +18,7 @@ November 1, 2022![Dataclasses](img/cb0bfe4cbc81f2044faccf86eb842c80.png)
 
 作为一个开始的例子，假设我们正在实现一个类来存储关于某一组人的数据。对于每个人，我们将有诸如姓名、年龄、身高和电子邮件地址等属性。这是一个普通班级的样子:
 
-```
+```py
 class Person():
     def __init__(self, name, age, height, email):
         self.name = name
@@ -29,7 +29,7 @@ class Person():
 
 然而，如果我们使用`dataclasses`模块，我们需要导入`dataclass`来在我们创建的类中使用它作为装饰器。当我们这样做时，我们不再需要编写 **init** 函数，只需要指定类的属性和它们的类型。下面是同样的`Person`类，以这种方式实现:
 
-```
+```py
 from dataclasses import dataclass
 
 @dataclass
@@ -42,7 +42,7 @@ class Person():
 
 我们还可以为类属性设置默认值:
 
-```
+```py
 @dataclass
 class Person():
     name: str = 'Joe'
@@ -53,13 +53,13 @@ class Person():
 print(Person())
 ```
 
-```
+```py
  Person(name='Joe', age=30, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)')
 ```
 
 提醒一下，Python 不接受类和函数中 default 之后的非默认属性，所以这会抛出一个错误:
 
-```
+```py
 @dataclass
 class Person():
     name: str = 'Joe'
@@ -68,7 +68,7 @@ class Person():
     email: str 
 ```
 
-```
+```py
  ---------------------------------------------------------------------------
 
     TypeError                                 Traceback (most recent call last)
@@ -113,18 +113,18 @@ class Person():
 
 一旦定义了类，就很容易实例化一个新对象并访问其属性，就像使用标准类一样:
 
-```
+```py
 person = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)')
 print(person.name)
 ```
 
-```
+```py
  Joe
 ```
 
 到目前为止，我们已经使用了常规的数据类型，如 string、integer 和 float 我们还可以将`dataclass`与`typing`模块结合起来，在类中创建任何类型的属性。例如，让我们给`Person`添加一个`house_coordinates`属性:
 
-```
+```py
 from typing import Tuple
 
 @dataclass
@@ -138,13 +138,13 @@ class Person():
 print(Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)', (40.748441, -73.985664)))
 ```
 
-```
+```py
  Person(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)', house_coordinates=(40.748441, -73.985664))
 ```
 
 按照同样的逻辑，我们可以创建一个数据类来保存`Person`类的多个实例:
 
-```
+```py
 from typing import List
 
 @dataclass
@@ -154,14 +154,14 @@ class People():
 
 注意，`People`类中的`people`属性被定义为`Person`类的实例列表。例如，我们可以像这样实例化一个`People`对象:
 
-```
+```py
 joe = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)', (40.748441, -73.985664))
 mary = Person('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protection)', (-73.985664, 40.748441))
 
 print(People([joe, mary]))
 ```
 
-```
+```py
  People(people=[Person(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)', house_coordinates=(40.748441, -73.985664)), Person(name='Mary', age=43, height=1.67, email='[[email protected]](/cdn-cgi/l/email-protection)', house_coordinates=(-73.985664, 40.748441))])
 ```
 
@@ -173,7 +173,7 @@ print(People([joe, mary]))
 
 例如，当我们调用对象时，我们将定义如下例所示的方法:
 
-```
+```py
 class Person():
     def __init__(self, name, age, height, email):
         self.name = name
@@ -188,13 +188,13 @@ person = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protecti
 print(person)
 ```
 
-```
+```py
  Person(name=Joe, age=25, height=1.85, [[email protected]](/cdn-cgi/l/email-protection))
 ```
 
 然而，当使用`dataclass`时，没有必要写这些:
 
-```
+```py
 @dataclass
 class Person():
     name: str
@@ -206,7 +206,7 @@ person = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protecti
 print(person)
 ```
 
-```
+```py
  Person(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)')
 ```
 
@@ -214,7 +214,7 @@ print(person)
 
 如果我们想要定制我们类的表示，我们总是可以覆盖它:
 
-```
+```py
 @dataclass
 class Person():
     name: str
@@ -229,7 +229,7 @@ person = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protecti
 print(person)
 ```
 
-```
+```py
  This is a Person called Joe.
 ```
 
@@ -237,7 +237,7 @@ print(person)
 
 说到比较，`dataclasses`模块让我们的生活更轻松。例如，我们可以像这样直接比较一个类的两个实例:
 
-```
+```py
 @dataclass
 class Person():
     name: str = 'Joe'
@@ -248,7 +248,7 @@ class Person():
 print(Person() == Person())
 ```
 
-```
+```py
  True
 ```
 
@@ -258,7 +258,7 @@ print(Person() == Person())
 
 如果使用标准 Python 类，即使这些类实际上彼此相等，相同的比较也会产生不同的结果:
 
-```
+```py
 class Person():
     def __init__(self, name='Joe', age=30, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)'):
         self.name = name
@@ -269,25 +269,25 @@ class Person():
 print(Person() == Person())
 ```
 
-```
+```py
  False
 ```
 
 如果不使用`dataclass`装饰器，该类不会测试两个实例是否相等。因此，默认情况下，Python 将使用对象的`id`进行比较，正如我们在下面看到的，它们是不同的:
 
-```
+```py
 print(id(Person()))
 print(id(Person()))
 ```
 
-```
+```py
 1734438049008
 1734438050976
 ```
 
 所有这些意味着我们必须编写一个`__eq__`方法来进行比较:
 
-```
+```py
 class Person():
     def __init__(self, name='Joe', age=30, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)'):
         self.name = name
@@ -305,7 +305,7 @@ class Person():
 print(Person() == Person())
 ```
 
-```
+```py
  True
 ```
 
@@ -326,7 +326,7 @@ print(Person() == Person())
 
 在处理数据时，我们经常需要对值进行排序。在我们的场景中，我们可能希望根据一些属性对不同的人进行排序。为此，我们将使用上面提到的`dataclass`装饰器的`order`参数，它支持类中的排序:
 
-```
+```py
 @dataclass(order=True)
 class Person():
     name: str
@@ -339,24 +339,24 @@ class Person():
 
 让我们实例化我们的`joe`和`mary`对象，看看一个是否比另一个大:
 
-```
+```py
 joe = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)')
 mary = Person('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protection)')
 
 print(joe > mary)
 ```
 
-```
+```py
  False
 ```
 
 Python 告诉我们`joe`不大于`mary`，但是基于什么标准呢？该类将对象作为包含其属性的元组进行比较，如下所示:
 
-```
+```py
 print(('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)') > ('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protection)'))
 ```
 
-```
+```py
  False
 ```
 
@@ -368,7 +368,7 @@ print(('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)') > (
 
 在我们的排序问题中，我们将使用`field`在类中创建一个`sort_index`属性。该属性只能在对象实例化后创建，并且是`dataclasses`用于排序的属性:
 
-```
+```py
 from dataclasses import dataclass, field
 
 @dataclass(order=True)
@@ -384,7 +384,7 @@ class Person():
 
 在我们引用了这个新属性之后，我们将使用第二个新工具:`__post_int__`方法。顾名思义，这个方法紧接在`__init__`方法之后执行。我们将使用`__post_int__`来定义`sort_index`，就在对象创建之后。举个例子，假设我们想根据人们的年龄来比较他们。方法如下:
 
-```
+```py
 @dataclass(order=True)
 class Person():
     sort_index: int = field(init=False, repr=False)
@@ -399,20 +399,20 @@ class Person():
 
 如果我们做同样的比较，我们知道乔比玛丽年轻:
 
-```
+```py
 joe = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)')
 mary = Person('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protection)')
 
 print(joe > mary)
 ```
 
-```
+```py
  False
 ```
 
 如果我们想按身高对人进行排序，我们可以使用以下代码:
 
-```
+```py
 @dataclass(order=True)
 class Person():
     sort_index: float = field(init=False, repr=False)
@@ -430,7 +430,7 @@ mary = Person('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protectio
 print(joe > mary)
 ```
 
-```
+```py
  True
 ```
 
@@ -444,7 +444,7 @@ print(joe > mary)
 
 有了`frozen=False`，我们可以很容易地进行这样的修改:
 
-```
+```py
 @dataclass()
 class Person():
     name: str
@@ -458,7 +458,7 @@ joe.age = 35
 print(joe)
 ```
 
-```
+```py
  Person(name='Joe', age=35, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)')
 ```
 
@@ -466,7 +466,7 @@ print(joe)
 
 但是，当设置为`True`时，任何修改对象的尝试都会引发错误:
 
-```
+```py
 @dataclass(frozen=True)
 class Person():
     name: str
@@ -480,7 +480,7 @@ joe.age = 35
 print(joe)
 ```
 
-```
+```py
  ---------------------------------------------------------------------------
 
     FrozenInstanceError                       Traceback (most recent call last)
@@ -502,7 +502,7 @@ print(joe)
 
 让我们回忆一下我们在本文前面创建的`People`类，但是现在让我们把它变成不可变的:
 
-```
+```py
 @dataclass(frozen=True)
 class People():
     people: List[Person]
@@ -517,7 +517,7 @@ class Person():
 
 然后我们创建了两个`Person`类的实例，并使用它们创建了一个`People`的实例，我们将其命名为`two_people`:
 
-```
+```py
 joe = Person('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)')
 mary = Person('Mary', 43, 1.67, '[[email protected]](/cdn-cgi/l/email-protection)')
 
@@ -525,28 +525,28 @@ two_people = People([joe, mary])
 print(two_people)
 ```
 
-```
+```py
  People(people=[Person(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)'), Person(name='Mary', age=43, height=1.67, email='[[email protected]](/cdn-cgi/l/email-protection)')])
 ```
 
 `People`类中的`people`属性是一个列表。我们可以很容易地在`two_people`对象中访问这个列表中的值:
 
-```
+```py
 print(two_people.people[0])
 ```
 
-```
+```py
  Person(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)')
 ```
 
 因此，尽管`Person`和`People`类都是不可变的，但列表不是，这意味着我们可以改变列表中的值:
 
-```
+```py
 two_people.people[0] = Person('Joe', 35, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)')
 print(two_people.people[0])
 ```
 
-```
+```py
  Person(name='Joe', age=35, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)')
 ```
 
@@ -561,7 +561,7 @@ print(two_people.people[0])
 `dataclasses`模块也支持继承，这意味着我们可以创建一个使用另一个数据类属性的数据类。仍然使用我们的`Person`类，我们将创建一个新的`Employee`类，它继承了`Person`的所有属性。
 于是我们有了`Person`:
 
-```
+```py
 @dataclass(order=True)
 class Person():
     name: str
@@ -572,7 +572,7 @@ class Person():
 
 还有新的`Employee`类:
 
-```
+```py
 @dataclass(order=True)
 class Employee(Person):
     salary: int
@@ -581,11 +581,11 @@ class Employee(Person):
 
 现在我们可以使用`Person`类的所有属性创建一个`Employee`类的对象:
 
-```
+```py
 print(Employee('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)', 100000, 'Marketing'))
 ```
 
-```
+```py
  Employee(name='Joe', age=25, height=1.85, email='[[email protected]](/cdn-cgi/l/email-protection)', salary=100000, departament='Marketing')
 ```
 
@@ -593,7 +593,7 @@ print(Employee('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protectio
 
 请注意默认属性。假设我们在`Person`中有默认属性，但在`Employee`中没有。如下面的代码所示，这种情况会引发一个错误:
 
-```
+```py
 @dataclass
 class Person():
     name: str = 'Joe'
@@ -609,7 +609,7 @@ class Employee(Person):
 print(Employee('Joe', 25, 1.85, '[[email protected]](/cdn-cgi/l/email-protection)', 100000, 'Marketing'))
 ```
 
-```
+```py
  ---------------------------------------------------------------------------
 
     TypeError                                 Traceback (most recent call last)

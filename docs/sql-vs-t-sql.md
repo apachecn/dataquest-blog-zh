@@ -67,7 +67,7 @@ SQL 语句一次执行一条，也称为“非过程化”T-SQL 以一种“过�
 
 #### SQL 示例
 
-```
+```py
 SELECT *
 FROM users
 ORDER BY age
@@ -76,7 +76,7 @@ LIMIT 10;
 
 #### T-SQL 示例
 
-```
+```py
 SELECT TOP 10 (*)
 FROM users
 ORDER BY age;
@@ -86,7 +86,7 @@ ORDER BY age;
 
 最后，如前所述，T-SQL 提供了常规 SQL 中没有的功能。ISNULL 函数就是一个例子。这将替换来自特定列的空值。对于年龄列中值为 NULL 的任何行，下面的将返回年龄“0”。
 
-```
+```py
 SELECT ISNULL(0, age)
 FROM users;
 ```

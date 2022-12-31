@@ -45,7 +45,7 @@ Lending Club 定期在其网站上发布其所有批准和拒绝的贷款申请[
 
 首先，让我们导入一些我们将使用的库，并设置一些参数以使输出更容易阅读。出于本教程的目的，我们假设您已经牢固掌握了使用 Python 处理数据的基础知识，包括使用 pandas、numpy 等。因此，如果你需要温习这些技能，你可以浏览我们的课程列表。
 
-```
+```py
  import pandas as pd
 import numpy as np
 pd.set_option('max_columns', 120)
@@ -71,7 +71,7 @@ plt.rcParams['figure.figsize'] = (12,8)*
 
 现在，让我们继续执行这些步骤:
 
-```
+```py
  # skip row 1 so pandas can parse the data properly.
 loans_2007 = pd.read_csv('data/lending_club_loans.csv', skiprows=1, low_memory=False)
 half_count = len(loans_2007) / 2
@@ -81,7 +81,7 @@ loans_2007 = loans_2007.drop(['url','desc'],axis=1) # These columns are not usef
 
 让我们使用 pandas `head()`方法来显示 loans_2007 数据帧的前三行，以确保我们能够正确地加载数据集:
 
-```
+```py
 loans_2007.head(3)
 ```
 
@@ -93,11 +93,11 @@ loans_2007.head(3)
 
 让我们也使用 pandas `.shape`属性来查看我们在此阶段处理的样本和特性的数量:
 
-```
+```py
 loans_2007.shape
 ```
 
-```
+```py
 (42538, 56)
 ```
 
@@ -109,18 +109,18 @@ loans_2007.shape
 
 让我们打开字典看一看。
 
-```
+```py
  data_dictionary = pd.read_csv('LCDataDictionary.csv') # Loading in the data dictionary
 print(data_dictionary.shape[0])
 print(data_dictionary.columns.tolist())
 ```
 
-```
+```py
  117
 ['LoanStatNew', 'Description']
 ```
 
-```
+```py
  data_dictionary.head()
 data_dictionary = data_dictionary.rename(columns={'LoanStatNew': 'name', 'Description': 'description'})
 ```
@@ -140,7 +140,7 @@ data_dictionary = data_dictionary.rename(columns={'LoanStatNew': 'name', 'Descri
 *   `first value` —包含第一行`loans_2007`的值。
 *   `description` —解释`loans_2007`中每一列的含义。
 
-```
+```py
  loans_2007_dtypes = pd.DataFrame(loans_2007.dtypes,columns=['dtypes'])
 loans_2007_dtypes = loans_2007_dtypes.reset_index()
 loans_2007_dtypes['name'] = loans_2007_dtypes['index']
@@ -149,7 +149,7 @@ loans_2007_dtypes['first value'] = loans_2007.loc[0].values
 preview = loans_2007_dtypes.merge(data_dictionary, on='name',how='left') 
 ```
 
-```
+```py
 preview.head()
 ```
 
@@ -179,7 +179,7 @@ preview.head()
 
 让我们显示`preview`的前 19 行并进行分析:
 
-```
+```py
 preview[:19]
 ```
 
@@ -220,7 +220,7 @@ preview[:19]
 
 对我们的模型有用的是关注借款人群体而不是个人。这正是评级的作用——它根据借款人的信用评分和其他行为对借款人进行细分，这就是为什么我们将保留`grade`列，并降低利息`int_rate`和`sub_grade`。在移动到下一组列之前，让我们从数据框架中删除这些列。
 
-```
+```py
  drop_list = ['id','member_id','funded_amnt','funded_amnt_inv',
 'int_rate','sub_grade','emp_title','issue_d']
 loans_2007 = loans_2007.drop(drop_list,axis=1)
@@ -232,7 +232,7 @@ loans_2007 = loans_2007.drop(drop_list,axis=1)
 
 让我们继续下面的 19 个专栏:
 
-```
+```py
 preview[19:38]
 ```
 
@@ -270,7 +270,7 @@ preview[19:38]
 
 让我们继续从数据框中删除这 5 列:
 
-```
+```py
  drop_cols = [ 'zip_code','out_prncp','out_prncp_inv',
 'total_pymnt','total_pymnt_inv']
 loans_2007 = loans_2007.drop(drop_cols, axis=1)
@@ -280,7 +280,7 @@ loans_2007 = loans_2007.drop(drop_cols, axis=1)
 
 让我们来分析最后一组特性:
 
-```
+```py
 preview[38:]
 ```
 
@@ -317,7 +317,7 @@ preview[38:]
 
 让我们删除最后一组列:
 
-```
+```py
  drop_cols = ['total_rec_prncp','total_rec_int',
 'total_rec_late_fee','recoveries',
 'collection_recovery_fee', 'last_pymnt_d'
@@ -345,19 +345,19 @@ FICO 分数是一种信用分数:银行和信用卡用来表示一个人的信�
 
 让我们看看我们可以使用的两列中的值:
 
-```
+```py
  print(loans_2007['fico_range_low'].unique())
 print(loans_2007['fico_range_high'].unique())
 ```
 
-```
+```py
  [ 735\. 740\. 690\. 695\. 730\. 660\. 675\. 725\. 710\. 705\. 720\. 665\. 670\. 760\. 685\. 755\. 680\. 700\. 790\. 750\. 715\. 765\. 745\. 770\. 780\. 775\. 795\. 810\. 800\. 815\. 785\. 805\. 825\. 820\. 630\. 625\. nan 650\. 655\. 645\. 640\. 635\. 610\. 620\. 615.]
 [ 739\. 744\. 694\. 699\. 734\. 664\. 679\. 729\. 714\. 709\. 724\. 669\. 674\. 764\. 689\. 759\. 684\. 704\. 794\. 754\. 719\. 769\. 749\. 774\. 784\. 779\. 799\. 814\. 804\. 819\. 789\. 809\. 829\. 824\. 634\. 629\. nan 654\. 659\. 649\. 644\. 639\. 614\. 624\. 619.]
 ```
 
 让我们去掉缺失的值，然后绘制直方图来查看两列的范围:
 
-```
+```py
  fico_columns = ['fico_range_high','fico_range_low']
 print(loans_2007.shape[0])
 loans_2007.dropna(subset=fico_columns,inplace=True)
@@ -365,7 +365,7 @@ print(loans_2007.shape[0])
 loans_2007[fico_columns].plot.hist(alpha=0.5,bins=20);
 ```
 
-```
+```py
  42538
 42535
 ```
@@ -374,13 +374,13 @@ loans_2007[fico_columns].plot.hist(alpha=0.5,bins=20);
 
 现在让我们继续为`fico_range_low`和`fico_range_high`列的平均值创建一个列，并将其命名为`fico_average`。请注意，这不是每个借款人的平均 FICO 分数，而是我们知道的借款人所处的最高和最低范围的平均值。
 
-```
+```py
 loans_2007['fico_average'] = (loans_2007['fico_range_high'] + loans_2007['fico_range_low']) / 2
 ```
 
 让我们检查一下我们刚才做了什么。
 
-```
+```py
  cols = ['fico_range_low','fico_range_high','fico_average']
 loans_2007[cols].head()
 ```
@@ -395,13 +395,13 @@ loans_2007[cols].head()
 
 很好！我们得到了平均计算和一切权利。现在，我们可以删除`fico_range_low`、`fico_range_high`、`last_fico_range_low`和`last_fico_range_high`列。
 
-```
+```py
  drop_cols = ['fico_range_low','fico_range_high','last_fico_range_low', 'last_fico_range_high']
 loans_2007 = loans_2007.drop(drop_cols, axis=1)
 loans_2007.shape
 ```
 
-```
+```py
 (42535, 33)
 ```
 
@@ -413,7 +413,7 @@ loans_2007.shape
 
 我们的主要目标是预测谁将偿还贷款，谁将违约，我们需要找到一个反映这一点的栏目。我们从预览数据帧中的列描述中了解到,`loan_status`是主数据集中描述贷款状态的唯一字段，因此让我们将该列用作目标列。
 
-```
+```py
 preview[preview.name == 'loan_status']
 ```
 
@@ -423,11 +423,11 @@ preview[preview.name == 'loan_status']
 
 目前，此列包含需要转换为数值的文本值，以便能够用于训练模型。让我们在本专栏中探讨不同的价值观，并想出一个转换它们的策略。我们将使用 DataFrame 方法 [`value_counts()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.value_counts.html) 返回`loan_status`列中唯一值的频率。
 
-```
+```py
 loans_2007["loan_status"].value_counts()
 ```
 
-```
+```py
  Fully Paid 33586
 Charged Off 5653
 Does not meet the credit policy. Status:Fully Paid 1988
@@ -446,7 +446,7 @@ Name: loan_status, dtype: int64
 
 下面，我们将这些数据汇总到下表中，这样我们就可以看到唯一的值、它们在数据集中的出现频率，并更清楚地了解每个值的含义:
 
-```
+```py
 meaning = [
 "Loan has been fully paid off.",
 "Loan for which there is no longer a reasonable expectation of further payments.",
@@ -486,7 +486,7 @@ loan_statuses_explanation
 
 有几种不同的方法来转换一列中的所有值，我们将使用 [DataFrame 方法`replace()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.replace.html) 。
 
-```
+```py
  loans_2007 = loans_2007[(loans_2007["loan_status"] == "Fully Paid") |
 (loans_2007["loan_status"] == "Charged Off")]
 mapping_dictionary = {"loan_status":{ "Fully Paid": 1, "Charged Off": 0}}
@@ -495,7 +495,7 @@ loans_2007 = loans_2007.replace(mapping_dictionary)
 
 #### 可视化目标列结果
 
-```
+```py
  fig, axs = plt.subplots(1,2,figsize=(14,7))
 sns.countplot(x='loan_status',data=filtered_loans,ax=axs[0])
 axs[0].set_title("Frequency of each Loan Status")
@@ -516,20 +516,20 @@ plt.show()
 
 熊猫[系列方法`nunique()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.nunique.html) 返回唯一值的个数，不包括任何空值。我们可以在数据集上应用这个方法，通过一个简单的步骤来删除这些列。
 
-```
+```py
 loans_2007 = loans_2007.loc[:,loans_2007.apply(pd.Series.nunique) != 1]
 ```
 
 同样，有些列可能有多个唯一值，但其中一个值在数据集中出现的频率很低。让我们查找并删除任何唯一值出现次数少于四次的列:
 
-```
+```py
  for col in loans_2007.columns:
     if (len(loans_2007[col].unique()) < 4):
     print(loans_2007[col].value_counts())
     print() 
 ```
 
-```
+```py
  36 months 29096
 60 months 10143
 Name: term, dtype: int64
@@ -547,20 +547,20 @@ Name: pymnt_plan, dtype: int64
 
 付款计划列(`pymnt_plan`)有两个唯一值，`'y'`和`'n'`，其中`'y'`只出现一次。让我们放弃这个专栏:
 
-```
+```py
  print(loans_2007.shape[1])
 loans_2007 = loans_2007.drop('pymnt_plan', axis=1)
 print("We've been able to reduce the features to => {}".format(loans_2007.shape[1]))
 ```
 
-```
+```py
  25
 We've been able to reduce the features to => 24
 ```
 
 最后，让我们使用 pandas 将我们新清理的数据帧保存为 CSV 文件:
 
-```
+```py
 loans_2007.to_csv("processed_data/filtered_loans_2007.csv",index=False)
 ```
 
@@ -582,13 +582,13 @@ loans_2007.to_csv("processed_data/filtered_loans_2007.csv",index=False)
 
 首先，让我们加载上一节最终输出的数据:
 
-```
+```py
  filtered_loans = pd.read_csv('processed_data/filtered_loans_2007.csv')
 print(filtered_loans.shape)
 filtered_loans.head() 
 ```
 
-```
+```py
 (39239, 24)
 ```
 
@@ -609,12 +609,12 @@ filtered_loans.head()
     *   `False`如果原始值不为空
 *   然后，使用 Pandas DataFrame 方法 [`sum()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.sum.html) 来计算每一列中空值的数量。
 
-```
+```py
  null_counts = filtered_loans.isnull().sum()
 print("Number of null values in each column:\n{}".format(null_counts))
 ```
 
-```
+```py
  Number of null values in each column:
 loan_amnt 0
 term 0
@@ -656,7 +656,7 @@ dtype: int64
 
 这是它在代码中的样子。
 
-```
+```py
  filtered_loans = filtered_loans.drop("pub_rec_bankruptcies",axis=1)
 filtered_loans = filtered_loans.dropna() 
 ```
@@ -671,11 +671,11 @@ filtered_loans = filtered_loans.dropna()
 
 我们已经处理了丢失的值，所以现在让我们找出属于**对象**数据类型的列的数量，并弄清楚如何将这些值变成数字。
 
-```
+```py
 print("Data types and their frequency\n{}".format(filtered_loans.dtypes.value_counts()))
 ```
 
-```
+```py
 Data types and their frequency
 float64 11
 object 11
@@ -685,12 +685,12 @@ dtype: int64
 
 我们有 11 个**对象**列，包含需要转换成数字特征的文本。让我们使用 DataFrame 方法 [select_dtype](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.select_dtypes.html) 只选择对象列，然后显示一个示例行，以便更好地理解每列中的值是如何格式化的。
 
-```
+```py
  object_columns_df = filtered_loans.select_dtypes(include=['object'])
 print(object_columns_df.iloc[0])
 ```
 
-```
+```py
 term 36 months
 grade B
 emp_length  10+ years
@@ -711,7 +711,7 @@ Name: 0, dtype: object
 *   在生成的 Series 对象上，使用`astype()`方法转换为类型`float`。
 *   将新的浮点值序列赋回`filtered_loans`中的`revol_util`列。
 
-```
+```py
 filtered_loans['revol_util'] = filtered_loans['revol_util'].str.rstrip('%').astype('float')
 ```
 
@@ -739,14 +739,14 @@ filtered_loans['revol_util'] = filtered_loans['revol_util'].str.rstrip('%').asty
 
 首先，让我们研究一下六个列的唯一值计数，这些列似乎包含分类值:
 
-```
+```py
  cols = ['home_ownership', 'grade','verification_status', 'emp_length', 'term', 'addr_state']
 for name in cols:
     print(name,':')
     print(object_columns_df[name].value_counts(),'\n') 
 ```
 
-```
+```py
  home_ownership :
 RENT 18677
 MORTGAGE 17381
@@ -844,13 +844,13 @@ Name: addr_state, dtype: int64
 
 接下来，让我们看看`purpose`和`title`列的唯一值计数，以了解我们想要保留哪些列。
 
-```
+```py
  for name in ['purpose','title']:
 print("Unique Values in column: {}\n".format(name))
 print(filtered_loans[name].value_counts(),'\n')
 ```
 
-```
+```py
  Unique Values in column: purpose
 debt_consolidation 18355
 credit_card 5073
@@ -936,7 +936,7 @@ Name: title, dtype: int64
 
 让我们删除到目前为止已经决定不保留的列:
 
-```
+```py
  drop_cols = ['last_credit_pull_d','addr_state','title','earliest_cr_line']
 filtered_loans = filtered_loans.drop(drop_cols,axis=1)
 ```
@@ -969,7 +969,7 @@ filtered_loans = filtered_loans.drop(drop_cols,axis=1)
 
 有不同的方法来处理这两种类型。为了将顺序值映射到整数，我们可以使用 pandas DataFrame 方法`replace()`将`grade`和`emp_length`映射到适当的数值:
 
-```
+```py
  mapping_dict = {
 "emp_length": {
 "10+ years": 10,
@@ -1015,14 +1015,14 @@ filtered_loans[['emp_length','grade']].head()
 
 让我们继续对数据集中的名义列进行编码:
 
-```
+```py
  nominal_columns = ["home_ownership", "verification_status", "purpose", "term"]
 dummy_df = pd.get_dummies(filtered_loans[nominal_columns])
 filtered_loans = pd.concat([filtered_loans, dummy_df], axis=1)
 filtered_loans = filtered_loans.drop(nominal_columns, axis=1)
 ```
 
-```
+```py
 filtered_loans.head()
 ```
 
@@ -1036,11 +1036,11 @@ filtered_loans.head()
 
 最后，让我们检查一下这个部分的最终输出，以确保所有的特征长度相同，不包含空值，并且是数字的。我们将使用 pandas 的信息方法来检查`filtered_loans`数据帧:
 
-```
+```py
 filtered_loans.info()
 ```
 
-```
+```py
  <class 'pandas.core.frame.dataframe'="">
 Int64Index: 39177 entries, 0 to 39238
 Data columns (total 39 columns):
@@ -1098,7 +1098,7 @@ memory usage: 5.7 MB
 
 正如我们之前所做的，我们可以使用方便的 pandas `to_csv()`函数将数据帧存储为 CSV。
 
-```
+```py
 filtered_loans.to_csv("processed_data/cleaned_loans_2007.csv",index=False)
 ```
 

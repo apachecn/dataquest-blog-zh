@@ -101,7 +101,7 @@ June 2, 2016
 *   将文件读入[熊猫数据帧](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html)。
 *   将每个数据帧放入 Python 字典中。
 
-```
+```py
 import pandas
 import numpy as np
 files = ["ap_2010.csv", "class_size.csv", "demographics.csv", "graduation.csv", "hs_directory.csv", "math_test_results.csv", "sat_results.csv"]
@@ -113,13 +113,13 @@ data[f.replace(".csv", "")] = d
 
 一旦我们读入数据，我们就可以在数据帧上使用  方法来打印每个数据帧的前`5`行:
 
-```
+```py
 for k,v in data.items():
 print("\n" + k + "\n")
 print(v.head())
 ```
 
-```
+```py
 math_test_results
 DBN Grade Year Category Number Tested Mean Scale Score Level 1 # \
 0 01M015 3 2006 All Students 39 667 21 01M015 3 2007 All Students 31 672 22 01M015 3 2008 All Students 37 668 03 01M015 3 2009 All Students 33 668 04 01M015 3 2010 All Students 26 677 6 Level 1 % Level 2 # Level 2 % Level 3 # Level 3 % Level 4 # Level 4 % \0 5.1% 11 28.2% 20 51.3% 6 15.4%1 6.5% 3 9.7% 22 71% 4 12.9%2 0% 6 16.2% 29 78.4% 2 5.4%3 0% 4 12.1% 28 84.8% 1 3%4 23.1% 12 46.2% 6 23.1% 2 7.7% Level 3+4 # Level 3+4 %0 26 66.7%1 26 83.9%2 31 83.8%3 29 87.9%4 8 30.8%ap_2010 DBN SchoolName AP Test Takers \0 01M448  UNIVERSITY NEIGHBORHOOD H.S. 391 01M450 EAST SIDE COMMUNITY HS 192 01M515 LOWER EASTSIDE PREP 243 01M539 NEW EXPLORATIONS SCI,TECH,MATH 2554 02M296 High School of Hospitality Management s Total Exams Taken Number of Exams with scores 3 4 or 50 49 101 21 s2 26 243 377 1914 s ssat_results DBN SCHOOL NAME \0 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL STUDIES1 01M448 UNIVERSITY NEIGHBORHOOD HIGH SCHOOL2 01M450 EAST SIDE COMMUNITY SCHOOL3 01M458 FORSYTH SATELLITE ACADEMY4 01M509 MARTA VALLE HIGH SCHOOL Num of SAT Test Takers SAT Critical Reading Avg. Score SAT Math Avg. Score \0 29 355 4041 91 383 4232 70 377 4023 7 414 4014 44 390 433 SAT Writing Avg. Score0 3631 3662 3703 3594 384class_size CSD BOROUGH SCHOOL CODE SCHOOL NAME GRADE PROGRAM TYPE \0 1 M M015 P.S. 015 Roberto Clemente 0K GEN ED1 1 M M015 P.S. 015 Roberto Clemente 0K CTT2 1 M M015 P.S. 015 Roberto Clemente 01 GEN ED3 1 M M015 P.S. 015 Roberto Clemente 01 CTT4 1 M M015 P.S. 015 Roberto Clemente 02 GEN ED CORE SUBJECT (MS CORE and 9-12 ONLY) CORE COURSE (MS CORE and 9-12 ONLY) \0 - -1 - -2 - -3 - -4 - - SERVICE CATEGORY(K-9* ONLY) NUMBER OF STUDENTS / SEATS FILLED \0 - 19.01 - 21.02 - 17.03 - 17.04 - 15.0 NUMBER OF SECTIONS AVERAGE CLASS SIZE SIZE OF SMALLEST CLASS \0 1.0 19.0 19.01 1.0 21.0 21.02 1.0 17.0 17.03 1.0 17.0 17.04 1.0 15.0 15.0 SIZE OF LARGEST CLASS DATA SOURCE SCHOOLWIDE PUPIL-TEACHER RATIO0 19.0 ATS NaN1 21.0 ATS NaN2 17.0 ATS NaN3 17.0 ATS NaN4 15.0 ATS NaNdemographics DBN Name schoolyear fl_percent frl_percent \0 01M015 P.S. 015 ROBERTO CLEMENTE 20052006 89.4 NaN1 01M015 P.S. 015 ROBERTO CLEMENTE 20062007 89.4 NaN2 01M015 P.S. 015 ROBERTO CLEMENTE 20072008 89.4 NaN3 01M015 P.S. 015 ROBERTO CLEMENTE 20082009 89.4 NaN4 01M015 P.S. 015 ROBERTO CLEMENTE 20092010 96.5 total_enrollment prek k grade1 grade2 ... black_num black_per \0 281 15 36 40 33 ... 74 26.31 243 15 29 39 38 ... 68 28.02 261 18 43 39 36 ... 77 29.53 252 17 37 44 32 ... 75 29.84 208 16 40 28 32 ... 67 32.2 hispanic_num hispanic_per white_num white_per male_num male_per female_num \0 189 67.3 5 1.8 158.0 56.2 123.01 153 63.0 4 1.6 140.0 57.6 103.02 157 60.2 7 2.7 143.0 54.8 118.03 149 59.1 7 2.8 149.0 59.1 103.04 118 56.7 6 2.9 124.0 59.6 84.0 female_per0 43.81 42.42 45.23 40.94 40.4[5 rows x 38 columns]graduation Demographic DBN School Name Cohort \0 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 20031 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 20042 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 20053 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 20064 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 2006 Aug Total Cohort Total Grads - n Total Grads - % of cohort Total Regents - n \0 5 s s s1 55 37 67.3% 172 64 43 67.2% 273 78 43 55.1% 364 78 44 56.4% 37 Total Regents - % of cohort Total Regents - % of grads \0 s s1 30.9% 45.9%2 42.2% 62.8%3 46.2% 83.7%4 47.4% 84.1% ... Regents w/o Advanced - n \0 ... s1 ... 172 ... 273 ... 364 ... 37 Regents w/o Advanced - % of cohort Regents w/o Advanced - % of grads \0 s s1 30.9% 45.9%2 42.2% 62.8%3 46.2% 83.7%4 47.4% 84.1% Local - n Local - % of cohort Local - % of grads Still Enrolled - n \0 s s s s1 20 36.4% 54.1% 152 16 25% 37.200000000000003% 93 7 9% 16.3% 164 7 9% 15.9% 15 Still Enrolled - % of cohort Dropped Out - n Dropped Out - % of cohort0 s s s1 27.3% 3 5.5%2 14.1% 9 14.1%3 20.5% 11 14.1%4 19.2% 11 14.1%[5 rows x 23 columns]hs_directory dbn school_name boro \0 17K548 Brooklyn School for Music & Theatre Brooklyn1 09X543 High School for Violin and Dance Bronx2 09X327 Comprehensive Model School Project M.S. 327 Bronx3 02M280 Manhattan Early College School for Advertising Manhattan4 28Q680 Queens Gateway to Health Sciences Secondary Sc... Queens building_code phone_number fax_number grade_span_min grade_span_max \0 K440 718-230-6250 718-230-6262 9 121 X400 718-842-0687 718-589-9849 9 122 X240 718-294-8111 718-294-8109 6 123 M520 718-935-3477 NaN 9 104 Q695 718-969-3155 718-969-3552 6 12 expgrade_span_min expgrade_span_max \0 NaN NaN1 NaN NaN2 NaN NaN3 9 14.04 NaN NaN ... \0 ...1 ...2 ...3 ...4 ... priority02 \0 Then to New York City residents1 Then to New York City residents who attend an ...2 Then to Bronx students or residents who attend...3 Then to New York City residents who attend an ...4 Then to Districts 28 and 29 students or residents priority03 \0 NaN1 Then to Bronx students or residents2 Then to New York City residents who attend an ...3 Then to Manhattan students or residents4 Then to Queens students or residents priority04 priority05 \0 NaN NaN1 Then to New York City residents NaN2 Then to Bronx students or residents Then to New York City residents3 Then to New York City residents NaN4 Then to New York City residents NaN priority06 priority07 priority08 priority09 priority10 \0 NaN NaN NaN NaN NaN1 NaN NaN NaN NaN NaN2 NaN NaN NaN NaN NaN3 NaN NaN NaN NaN NaN4 NaN NaN NaN NaN NaN Location 10 883 Classon Avenue\nBrooklyn, NY 11225\n(40.67...1 1110 Boston Road\nBronx, NY 10456\n(40.8276026...2 1501 Jerome Avenue\nBronx, NY 10452\n(40.84241...3 411 Pearl Street\nNew York, NY 10038\n(40.7106...4 160-20 Goethals Avenue\nJamaica, NY 11432\n(40...[5 rows x 58 columns]
@@ -141,11 +141,11 @@ DBN Grade Year Category Number Tested Mean Scale Score Level 1 # \
 
 `DBN`列如下所示:
 
-```
+```py
 data["demographics"]["DBN"].head()
 ```
 
-```
+```py
 0 01M015
 1 01M015
 2 01M015
@@ -156,7 +156,7 @@ Name: DBN, dtype: object
 
 如果我们查看`class_size`数据，下面是我们在第一个`5`行中看到的内容:
 
-```
+```py
 data["class_size"].head()
 ```
 
@@ -172,7 +172,7 @@ data["class_size"].head()
 
 现在我们知道如何构建`DBN`，我们可以将它添加到`class_size`和`hs_directory`数据集中:
 
-```
+```py
 data["class_size"]["DBN"] = data["class_size"].apply(lambda x: "{0:02d}{1}".format(x["CSD"], x["SCHOOL CODE"]), axis=1)
 data["hs_directory"]["DBN"] = data["hs_directory"]["dbn"]
 ```
@@ -188,7 +188,7 @@ data["hs_directory"]["DBN"] = data["hs_directory"]["dbn"]
 *   添加一个标志来指示每个数据集属于哪个学区。
 *   在数据帧上使用 [concat](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.concat.html) 方法将数据集合并成一个数据集。
 
-```
+```py
 survey1 = pandas.read_csv("schools/survey_all.txt", delimiter="\t", encoding='windows-1252')
 survey2 = pandas.read_csv("schools/survey_d75.txt", delimiter="\t", encoding='windows-1252')
 survey1["d75"] = False
@@ -198,7 +198,7 @@ survey = pandas.concat([survey1, survey2], axis=0)
 
 一旦我们把调查结合起来，还有一个额外的复杂因素。我们希望最大限度地减少组合数据集中的列数，这样我们就可以轻松地比较列并找出相关性。不幸的是，调查数据中有许多列对我们来说不是很有用:
 
-```
+```py
 survey.head()
 ```
 
@@ -218,7 +218,7 @@ survey.head()
 
 然后我们可以删除`survey`中任何无关的列:
 
-```
+```py
 survey["DBN"] = survey["dbn"]
 survey_fields = ["DBN", "rr_s", "rr_t", "rr_p", "N_s", "N_t", "N_p", "saf_p_11", "com_p_11", "eng_p_11", "aca_p_11", "saf_t_11", "com_t_11", "eng_t_10", "aca_t_11", "saf_s_11", "com_s_11", "eng_s_11", "aca_s_11", "saf_tot_11", "com_tot_11", "eng_tot_11", "aca_tot_11",]
 survey = survey.loc[:,survey_fields]
@@ -226,7 +226,7 @@ data["survey"] = survey
 survey.shape
 ```
 
-```
+```py
 (1702, 23)
 ```
 
@@ -236,7 +236,7 @@ survey.shape
 
 如果我们看一下一些数据集，包括`class_size`，我们会立即发现一个问题:
 
-```
+```py
 data["class_size"].head()
 ```
 
@@ -250,7 +250,7 @@ data["class_size"].head()
 
 每个高中都有几行(通过重复的`DBN`和`SCHOOL NAME`字段可以看到)。然而，如果我们看一下`sat_results`数据集，它只有每个高中一行:
 
-```
+```py
 data["sat_results"].head()
 ```
 
@@ -269,7 +269,7 @@ data["sat_results"].head()
 *   将`class_size`数据集按`DBN`分组，取每列的平均值。本质上，我们会找到每个学校的平均`class_size`值。
 *   重置索引，因此将`DBN`作为一列添加回去。
 
-```
+```py
 class_size = data["class_size"]
 class_size = class_size[class_size["GRADE "] == "09-12"]
 class_size = class_size[class_size["PROGRAM TYPE"] == "GEN ED"]
@@ -282,7 +282,7 @@ data["class_size"] = class_size
 
 接下来，我们需要压缩`demographics`数据集。这些数据是为同一所学校收集了多年的，因此每所学校都有重复的行。我们将只选择`schoolyear`字段最近可用的行:
 
-```
+```py
 demographics = data["demographics"]
 demographics = demographics[demographics["schoolyear"] == 20112012]
 data["demographics"] = demographics
@@ -290,14 +290,14 @@ data["demographics"] = demographics
 
 我们需要压缩`math_test_results`数据集。该数据集由`Grade`和`Year`分割。我们只能从一年中选择一个级别:
 
-```
+```py
 data["math_test_results"] = data["math_test_results"][data["math_test_results"]["Year"] == 2011]
 data["math_test_results"] = data["math_test_results"][data["math_test_results"]["Grade"] == '8']
 ```
 
 最后，`graduation`需要浓缩:
 
-```
+```py
 data["graduation"] = data["graduation"][data["graduation"]["Cohort"] == "2006"]
 data["graduation"] = data["graduation"][data["graduation"]["Demographic"] == "Total Cohort"]
 ```
@@ -311,7 +311,7 @@ data["graduation"] = data["graduation"][data["graduation"]["Demographic"] == "To
 *   将每个 SAT 分数列从字符串转换为数字。
 *   将所有列相加得到`sat_score`列，这是 SAT 总分。
 
-```
+```py
 cols = ['SAT Math Avg. Score', 'SAT Critical Reading Avg. Score', 'SAT Writing Avg. Score']
 for c in cols:
 data["sat_results"][c] = data["sat_results"][c].convert_objects(convert_numeric=True)
@@ -323,7 +323,7 @@ data['sat_results']['sat_score'] = data['sat_results'][cols[0]] + data['sat_resu
 *   解析来自`Location 1`列的纬度和经度列。
 *   将`lat`和`lon`转换为数字。
 
-```
+```py
 data["hs_directory"]['lat'] = data["hs_directory"]['Location 1'].apply(lambda x: x.split("\n")[-1].replace("(", "").replace(")", "").split(", ")[0])
 data["hs_directory"]['lon'] = data["hs_directory"]['Location 1'].apply(lambda x: x.split("\n")[-1].replace("(", "").replace(")", "").split(", ")[1])
 for c in ['lat', 'lon']:
@@ -332,13 +332,13 @@ data["hs_directory"][c] = data["hs_directory"][c].convert_objects(convert_numeri
 
 现在，我们可以打印出每个数据集，看看我们有什么:
 
-```
+```py
 for k,v in data.items():
 print(k)
 print(v.head())
 ```
 
-```
+```py
 math_test_results DBN Grade Year Category Number Tested Mean Scale Score \111 01M034 8 2011 All Students 48 646280 01M140 8 2011 All Students 61 665346 01M184 8 2011 All Students 49 727388 01M188 8 2011 All Students 49 658411 01M292 8 2011 All Students 49 650 Level 1 # Level 1 % Level 2 # Level 2 % Level 3 # Level 3 % Level 4 # \111 15 31.3% 22 45.8% 11 22.9% 0280 1 1.6% 43 70.5% 17 27.9% 0346 0 0% 0 0% 5 10.2% 44388 10 20.4% 26 53.1% 10 20.4% 3411 15 30.6% 25 51% 7 14.3% 2 Level 4 % Level 3+4 # Level 3+4 %111 0% 11 22.9%280 0% 17 27.9%346 89.8% 49 100%388 6.1% 13 26.5%411 4.1% 9 18.4%survey DBN rr_s rr_t rr_p N_s N_t N_p saf_p_11 com_p_11 eng_p_11 \0 01M015 NaN 88 60 NaN 22.0 90.0 8.5 7.6 7.51 01M019 NaN 100 60 NaN 34.0 161.0 8.4 7.6 7.62 01M020 NaN 88 73 NaN 42.0 367.0 8.9 8.3 8.33 01M034 89.0 73 50 145.0 29.0 151.0 8.8 8.2 8.04 01M063 NaN 100 60 NaN 23.0 90.0 8.7 7.9 8.1 ... eng_t_10 aca_t_11 saf_s_11 com_s_11 eng_s_11 aca_s_11 \0 ... NaN 7.9 NaN NaN NaN NaN1 ... NaN 9.1 NaN NaN NaN NaN2 ... NaN 7.5 NaN NaN NaN NaN3 ... NaN 7.8 6.2 5.9 6.5 7.44 ... NaN 8.1 NaN NaN NaN NaN saf_tot_11 com_tot_11 eng_tot_11 aca_tot_110 8.0 7.7 7.5 7.91 8.5 8.1 8.2 8.42 8.2 7.3 7.5 8.03 7.3 6.7 7.1 7.94 8.5 7.6 7.9 8.0[5 rows x 23 columns]ap_2010 DBN SchoolName AP Test Takers \0 01M448 UNIVERSITY NEIGHBORHOOD H.S. 391 01M450 EAST SIDE COMMUNITY HS 192 01M515 LOWER EASTSIDE PREP 243 01M539 NEW EXPLORATIONS SCI,TECH,MATH 2554 02M296 High School of Hospitality Management s Total Exams Taken Number of Exams with scores 3 4 or 50 49 101 21 s2 26 243 377 1914 s ssat_results DBN SCHOOL NAME \0 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL STUDIES1 01M448 UNIVERSITY NEIGHBORHOOD HIGH SCHOOL2 01M450 EAST SIDE COMMUNITY SCHOOL3 01M458 FORSYTH SATELLITE ACADEMY4 01M509 MARTA VALLE HIGH SCHOOL Num of SAT Test Takers SAT Critical Reading Avg. Score \0 29 355.01 91 383.02 70 377.03 7 414.04 44 390.0 SAT Math Avg. Score SAT Writing Avg. Score sat_score0 404.0 363.0 1122.01 423.0 366.0 1172.02 402.0 370.0 1149.03 401.0 359.0 1174.04 433.0 384.0 1207.0class_size DBN CSD NUMBER OF STUDENTS / SEATS FILLED NUMBER OF SECTIONS \0 01M292 1 88.0000 4.0000001 01M332 1 46.0000 2.0000002 01M378 1 33.0000 1.0000003 01M448 1 105.6875 4.7500004 01M450 1 57.6000 2.733333 AVERAGE CLASS SIZE SIZE OF SMALLEST CLASS SIZE OF LARGEST CLASS \0 22.564286 18.50 26.5714291 22.000000 21.00 23.5000002 33.000000 33.00 33.0000003 22.231250 18.25 27.0625004 21.200000 19.40 22.866667 SCHOOLWIDE PUPIL-TEACHER RATIO0 NaN1 NaN2 NaN3 NaN4 NaNdemographics DBN Name schoolyear \6 01M015 P.S. 015 ROBERTO CLEMENTE 2011201213 01M019 P.S. 019 ASHER LEVY 2011201220 01M020 PS 020 ANNA SILVER 2011201227 01M034 PS 034 FRANKLIN D ROOSEVELT 2011201235 01M063 PS 063 WILLIAM MCKINLEY 20112012 fl_percent frl_percent total_enrollment prek k grade1 grade2 \6 NaN 89.4 189 13 31 35 2813 NaN 61.5 328 32 46 52 5420 NaN 92.5 626 52 102 121 8727 NaN 99.7 401 14 34 38 3635 NaN 78.9 176 18 20 30 21 ... black_num black_per hispanic_num hispanic_per white_num \6 ... 63 33.3 109 57.7 413 ... 81 24.7 158 48.2 2820 ... 55 8.8 357 57.0 1627 ... 90 22.4 275 68.6 835 ... 41 23.3 110 62.5  15 white_per male_num male_per female_num female_per6 2.1 97.0 51.3 92.0 48.713 8.5 147.0 44.8 181.0 55.220 2.6 330.0 52.7 296.0 47.327 2.0 204.0 50.9 197.0 49.135 8.5 97.0 55.1 79.0 44.9[5 rows x 38 columns]graduation Demographic DBN School Name Cohort \3 Total Cohort 01M292 HENRY STREET SCHOOL FOR INTERNATIONAL 200610 Total Cohort 01M448 UNIVERSITY NEIGHBORHOOD HIGH SCHOOL 200617 Total Cohort 01M450 EAST SIDE COMMUNITY SCHOOL 200624 Total Cohort 01M509 MARTA VALLE HIGH SCHOOL 200631 Total Cohort 01M515 LOWER EAST SIDE PREPARATORY HIGH SCHO 2006 Total Cohort Total Grads - n Total Grads - % of cohort Total Regents - n \3 78 43 55.1% 3610 124 53 42.7% 4217 90 70 77.8% 6724 84 47 56% 4031 193 105 54.4% 91 Total Regents - % of cohort Total Regents - % of grads \3 46.2% 83.7%10 33.9% 79.2%17 74.400000000000006% 95.7%24 47.6% 85.1%31 47.2% 86.7% ... Regents w/o Advanced - n \3 ... 3610 ... 3417 ... 6724 ... 2331 ... 22 Regents w/o Advanced - % of cohort Regents w/o Advanced - % of grads \3 46.2% 83.7%10 27.4% 64.2%17 74.400000000000006% 95.7%24 27.4% 48.9%31 11.4% 21% Local - n Local - % of cohort Local - % of grads Still Enrolled - n \3 7 9% 16.3% 1610 11 8.9% 20.8% 4617 3 3.3% 4.3% 1524 7 8.300000000000001% 14.9% 2531 14 7.3% 13.3% 53 Still Enrolled - % of cohort Dropped Out - n Dropped Out - % of cohort3 20.5% 11 14.1%10 37.1% 20 16.100000000000001%17 16.7% 5 5.6%24 29.8% 5 6%31 27.5% 35 18.100000000000001%[5 rows x 23 columns]hs_directory dbn school_name boro \0 17K548 Brooklyn School for Music & Theatre Brooklyn1 09X543 High School for Violin and Dance Bronx2 09X327 Comprehensive Model School Project M.S. 327 Bronx3 02M280 Manhattan Early College School for Advertising Manhattan4 28Q680 Queens Gateway to Health Sciences Secondary Sc... Queens building_code phone_number fax_number grade_span_min grade_span_max \0 K440 718-230-6250 718-230-6262 9 121 X400 718-842-0687 718-589-9849 9 122 X240 718-294-8111 718-294-8109 6 123 M520 718-935-3477 NaN 9 104 Q695 718-969-3155 718-969-3552  6 12 expgrade_span_min expgrade_span_max ... \0 NaN NaN ...1 NaN NaN ...2 NaN NaN ...3 9 14.0 ...4 NaN NaN ... priority05 priority06 priority07 priority08 \0 NaN NaN NaN NaN1 NaN NaN NaN NaN2 Then to New York City residents NaN NaN NaN3 NaN NaN NaN NaN4 NaN NaN NaN NaN priority09 priority10 Location 1 \0 NaN NaN 883 Classon Avenue\nBrooklyn, NY 11225\n(40.67...1 NaN NaN 1110 Boston Road\nBronx, NY 10456\n(40.8276026...2 NaN NaN 1501 Jerome Avenue\nBronx, NY 10452\n(40.84241...3 NaN NaN 411 Pearl Street\nNew York, NY 10038\n(40.7106...4 NaN NaN 160-20 Goethals Avenue\nJamaica, NY 11432\n(40... DBN lat lon0 17K548 40.670299 -73.9616481 09X543 40.827603 -73.9044752 09X327 40.842414 -73.9161623 02M280 40.710679 -74.0008074 28Q680 40.718810 -73.806500[5 rows x 61 columns]
 ```
 
@@ -355,7 +355,7 @@ math_test_results DBN Grade Year Category Number Tested Mean Scale Score \111 01
 *   决定加入策略— `inner`或`outer`。
 *   使用列`DBN`将项目连接到数据框`full`。
 
-```
+```py
 flat_data_names = [k for k,v in data.items()]
 flat_data = [data[k] for k in flat_data_names]
 full = flat_data[0]
@@ -370,7 +370,7 @@ if name not in ["math_test_results"]:
 full = full.merge(f, on="DBN", how=join_type)full.shape
 ```
 
-```
+```py
 survey
 0
 ap_2010
@@ -387,7 +387,7 @@ hs_directory
 0
 ```
 
-```
+```py
 (374, 174)
 ```
 
@@ -395,7 +395,7 @@ hs_directory
 
 现在我们有了数据框架，我们几乎拥有了进行分析所需的所有信息。不过，还是有一些缺失的部分。我们可能希望将[跳级](https://apstudent.collegeboard.org/home)考试成绩与 SAT 成绩相关联，但是我们需要首先将这些列转换成数字，然后填入任何缺失的值:
 
-```
+```py
 cols = ['AP Test Takers ', 'Total Exams Taken', 'Number of Exams with scores 3 4 or 5']
 for col in cols:
 full[col] = full[col].convert_objects(convert_numeric=True)
@@ -404,13 +404,13 @@ full[cols] = full[cols].fillna(value=0)
 
 然后，我们需要计算一个`school_dist`列来表示学校的学区。这将使我们能够匹配学区，并使用我们之前下载的地区地图绘制地区级统计数据:
 
-```
+```py
 full["school_dist"] = full["DBN"].apply(lambda x: x[:2])
 ```
 
 最后，我们需要用列的平均值填充`full`中任何缺失的值，这样我们就可以计算相关性:
 
-```
+```py
 full = full.fillna(full.mean())
 ```
 
@@ -418,11 +418,11 @@ full = full.fillna(full.mean())
 
 浏览数据集并查看哪些列与您关心的列相关的一个好方法是计算相关性。这将告诉您哪些列与您感兴趣的列密切相关。我们可以通过熊猫数据帧上的 [corr](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.corr.html) 方法来做到这一点。相关性越接近`0`，联系越弱。越靠近`1`，正相关越强，越靠近`-1`，负相关越强:
 
-```
+```py
 full.corr()['sat_score']
 ```
 
-```
+```py
 Year NaN
 Number Tested 8.127817e-02
 rr_s 8.484298e-02
@@ -507,7 +507,7 @@ Name: sat_score, dtype: float64
 *   为城市中的每所高中在地图上添加标记。
 *   显示地图。
 
-```
+```py
 import folium
 from folium import plugins
 schools_map = folium.Map(location=[full['lat'].mean(), full['lon'].mean()], zoom_start=10)
@@ -520,7 +520,7 @@ schools_map
 
 这张地图很有帮助，但是很难看出纽约市大多数学校在哪里。相反，我们将制作一个热图:
 
-```
+```py
 schools_heatmap = folium.Map(location=[full['lat'].mean(), full['lon'].mean()], zoom_start=10)
 schools_heatmap.add_children(plugins.HeatMap([[row["lat"], row["lon"]] for name, row in full.iterrows()]))
 schools_heatmap.save("heatmap.html")
@@ -537,7 +537,7 @@ schools_heatmap
 *   计算每个学区每列的平均值。
 *   转换`school_dist`字段以删除前导的`0`，这样我们就可以匹配我们的地理区域数据。
 
-```
+```py
 district_data = full.groupby("school_dist").agg(np.mean)
 district_data.reset_index(inplace=True)
 district_data["school_dist"] = district_data["school_dist"].apply(lambda x: str(int(x)))
@@ -545,7 +545,7 @@ district_data["school_dist"] = district_data["school_dist"].apply(lambda x: str(
 
 我们现在可以绘制出每个学区的平均 SAT 分数。为此，我们将以 [GeoJSON](https://geojson.org/) 格式读入数据，以获得每个地区的形状，然后使用`school_dist`列将每个地区的形状与 SAT 分数进行匹配，最后创建绘图:
 
-```
+```py
 def show_district_map(col):
 geo_path = 'schools/districts.geojson'
 districts = folium.Map(location=[full['lat'].mean(), full['lon'].mean()], zoom_start=10)
@@ -569,11 +569,11 @@ show_district_map("sat_score")
 
 我们可以用散点图来探究这个问题，散点图比较了所有学校的总入学人数和所有学校的 SAT 分数。
 
-```
+```py
 full.plot.scatter(x='total_enrollment', y='sat_score')
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10fe79978>
 ```
 
@@ -583,7 +583,7 @@ full.plot.scatter(x='total_enrollment', y='sat_score')
 
 我们可以通过获取低入学率和低 SAT 分数的学校名称来进一步探究这个问题:
 
-```
+```py
 34 INTERNATIONAL SCHOOL FOR LIBERAL ARTS
 143 NaN
 148 KINGSBRIDGE INTERNATIONAL HIGH SCHOOL
@@ -605,11 +605,11 @@ Name: School Name, dtype: object
 
 既然我们知道学校里英语语言学习者的比例与较低的 SAT 分数相关，我们可以探究这种关系。第`ell_percent`栏是每个学校学习英语的学生的百分比。我们可以对这种关系做一个散点图:
 
-```
+```py
 full.plot.scatter(x='ell_percent', y='sat_score')
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10fe824e0>
 ```
 
@@ -617,7 +617,7 @@ full.plot.scatter(x='ell_percent', y='sat_score')
 
 看起来有一群 SAT 分数高的学校也有低的平均分数。我们可以在地区一级对此进行调查，计算出每个地区英语学习者的百分比，并查看它是否与我们按地区划分的 s at 分数图相匹配:
 
-```
+```py
 show_district_map("ell_percent")
 ```
 
@@ -627,11 +627,11 @@ show_district_map("ell_percent")
 
 假设学生、家长和老师的调查结果与 SAT 成绩有很大的相关性是公平的。例如，学术期望高的学校往往会有更高的 SAT 分数，这是有道理的。为了测试这一理论，让我们绘制出 SAT 分数和各种调查指标:
 
-```
+```py
 full.corr()["sat_score"][["rr_s", "rr_t", "rr_p", "N_s", "N_t", "N_p", "saf_tot_11", "com_tot_11", "aca_tot_11", "eng_tot_11"]].plot.bar()
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x114652400>
 ```
 
@@ -643,11 +643,11 @@ full.corr()["sat_score"][["rr_s", "rr_t", "rr_p", "N_s", "N_t", "N_p", "saf_tot_
 
 调查的另一个角度包括种族和 SAT 分数。有一个很大的相关差异，画出来将有助于我们理解发生了什么:
 
-```
+```py
 full.corr()["sat_score"][["white_per", "asian_per", "black_per", "hispanic_per"]].plot.bar()
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x108166ba8>
 ```
 
@@ -655,7 +655,7 @@ full.corr()["sat_score"][["white_per", "asian_per", "black_per", "hispanic_per"]
 
 看起来白人和亚裔学生比例较高与 SAT 分数较高相关，但黑人和西班牙裔学生比例较高与 SAT 分数较低相关。对于西班牙裔学生，这可能是因为有更多的新移民是英语学习者。我们可以按地区绘制西班牙裔的比例图来观察这种相关性:
 
-```
+```py
 show_district_map("hispanic_per")
 ```
 
@@ -665,11 +665,11 @@ show_district_map("hispanic_per")
 
 最后要探讨的角度是性别和 SAT 成绩的关系。我们注意到，学校中女性比例较高往往与 SAT 分数较高相关。我们可以用一个条形图来形象地描述这一点:
 
-```
+```py
 full.corr()["sat_score"][["male_per", "female_per"]].plot.bar()
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10774d0f0>
 ```
 
@@ -677,11 +677,11 @@ full.corr()["sat_score"][["male_per", "female_per"]].plot.bar()
 
 为了深入了解这种相关性，我们可以制作一个`female_per`和`sat_score`的散点图:
 
-```
+```py
 full.plot.scatter(x='female_per', y='sat_score')
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x104715160>
 ```
 
@@ -689,11 +689,11 @@ full.plot.scatter(x='female_per', y='sat_score')
 
 看起来有一群学校的女生比例很高，SAT 分数也很高(在右上方)。我们可以得到这个集群中学校的名称:
 
-```
+```py
 full[(full["female_per"] > 65) & (full["sat_score"] > 1400)]["School Name"]
 ```
 
-```
+```py
 3 PROFESSIONAL PERFORMING ARTS HIGH SCH
 92 ELEANOR ROOSEVELT HIGH SCHOOL
 100 TALENT UNLIMITED HIGH SCHOOL
@@ -710,12 +710,12 @@ Name: School Name, dtype: object
 
 到目前为止，我们已经从人口统计学的角度看了。我们有数据可以看的一个角度是更多的学生参加跳级考试和更高的 SAT 分数之间的关系。它们之间存在关联是有道理的，因为学业成绩优异的学生往往在 SAT 考试中表现更好。
 
-```
+```py
 full["ap_avg"] = full["AP Test Takers "] / full["total_enrollment"]
 full.plot.scatter(x='ap_avg', y='sat_score')
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x11463a908>
 ```
 
@@ -723,11 +723,11 @@ full.plot.scatter(x='ap_avg', y='sat_score')
 
 看起来这两者之间确实有很强的相关性。右上角的学校很有意思，它的 SAT 分数很高，参加 AP 考试的学生比例也很高:
 
-```
+```py
 full[(full["ap_avg"] > .3) & (full["sat_score"] > 1700)]["School Name"]
 ```
 
-```
+```py
 92 ELEANOR ROOSEVELT HIGH SCHOOL
 98 STUYVESANT HIGH SCHOOL
 157 BRONX HIGH SCHOOL OF SCIENCE

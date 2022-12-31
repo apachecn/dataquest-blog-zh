@@ -12,7 +12,7 @@ Python 的函数(包括[内置函数](https://docs.python.org/3/library/function
 
 为了理解 Python 如何处理函数内部的全局变量，让我们做一个小实验。我们将创建两个全局变量 number_1 和 number_2，并将它们赋给整数 5 和 10。然后，我们将使用这些全局变量作为执行一些简单数学运算的函数的参数。我们还将使用变量名作为函数的参数名。然后，我们会看到函数中所有变量的使用是否影响了这些变量的全局值。
 
-```
+```py
 number_1 = 5
 number_2 = 10
 
@@ -27,7 +27,7 @@ print(number_1)
 print(number_2)
 ```
 
-```
+```py
 150
 5
 10
@@ -43,7 +43,7 @@ print(number_2)
 
 我们已经看到，我们在函数中对上面的`number_1`这样的变量所做的事情不会影响它的全局值。但是`number_1`是一个整数，这是一个非常基本的数据类型。如果我们用不同的数据类型(比如列表)进行相同的实验，会发生什么呢？下面，我们将创建一个名为`duplicate_last()`的函数，它将复制我们作为参数传递的任何列表中的最后一个条目。
 
-```
+```py
 initial_list = [1, 2, 3]
 
 def duplicate_last(a_list):
@@ -56,7 +56,7 @@ print(new_list)
 print(initial_list)
 ```
 
-```
+```py
 [1, 2, 3, 3]
 [1, 2, 3, 3]
 ```
@@ -73,7 +73,7 @@ print(initial_list)
 
 为此，我们将编写一个名为`make_percentages()`的函数，它将一个字典作为参数，并将计数转换为百分比。我们需要从零开始计数，然后遍历字典中的每个值，将它们添加到计数中，这样我们就可以得到评级的总数。然后我们将再次遍历字典，对每个值做一些数学运算来计算百分比。
 
-```
+```py
 content_ratings = {'4+': 4433, '9+': 987, '12+': 1155, '17+': 622}
 
 def make_percentages(a_dictionary):
@@ -96,13 +96,13 @@ def make_percentages(a_dictionary):
 
 但是当我们使用全局变量`content_ratings`作为这个新函数的参数时会发生什么呢？
 
-```
+```py
 c_ratings_percentages = make_percentages(content_ratings)
 print(c_ratings_percentages)
 print(content_ratings)
 ```
 
-```
+```py
 {'4+': 61.595109073224954, '9+': 13.714047519799916, '12+': 16.04835348061692, '17+': 8.642489926358204}
 {'4+': 61.595109073224954, '9+': 13.714047519799916, '12+': 16.04835348061692, '17+': 8.642489926358204}
 ```
@@ -119,7 +119,7 @@ print(content_ratings)
 
 让我们从考虑一个简单的变量赋值开始:
 
-```
+```py
 a = 5
 ```
 
@@ -136,7 +136,7 @@ a = 5
 
 列表和字典等可变数据类型的行为不同。他们 ***可以*更新**。例如，让我们列一个简单的清单:
 
-```
+```py
 list_1 = [1, 2]
 ```
 
@@ -146,7 +146,7 @@ list_1 = [1, 2]
 
 即使我们创建了多个列表变量，只要它们指向同一个列表，当列表改变时，它们都会被更新，如下面的代码所示:
 
-```
+```py
 list_1 = [1, 2]
 list_2 = list_1
 list_1.append(3)
@@ -154,7 +154,7 @@ print(list_1)
 print(list_2)
 ```
 
-```
+```py
 [1, 2, 3]
 [1, 2, 3]
 ```
@@ -173,14 +173,14 @@ print(list_2)
 
 如果你还没有学过方法，不要着急。它们包含在[我们的中级 Python 课程](https://www.dataquest.io/course/python-for-data-science-intermediate)中，但是对于本教程，你需要知道的是`.copy()`的工作方式类似于`.append()`:
 
-```
+```py
 list.append() # adds something to a list
 list.copy() # makes a copy of a list
 ```
 
 让我们再来看看我们为列表编写的函数，并更新它，这样函数*内部发生的事情*不会改变`initial_list`。我们需要做的就是将传递给函数的参数从`initial_list`改为`initial_list.copy()`。
 
-```
+```py
 initial_list = [1, 2, 3]
 
 def duplicate_last(a_list):
@@ -193,7 +193,7 @@ print(new_list)
 print(initial_list)
 ```
 
-```
+```py
 [1, 2, 3, 3]
 [1, 2, 3]
 ```
@@ -204,7 +204,7 @@ print(initial_list)
 
 然而，这个解决方案仍然不是完美的，因为我们必须记住在每次传递一个参数给我们的函数时添加`.copy()`，否则会有意外改变`initial_list`的全局值的风险。如果我们不想为此担心，我们实际上可以在函数本身内部创建列表副本:
 
-```
+```py
 initial_list = [1, 2, 3]
 
 def duplicate_last(a_list):
@@ -218,7 +218,7 @@ print(new_list)
 print(initial_list)
 ```
 
-```
+```py
 [1, 2, 3, 3]
 [1, 2, 3]
 ```
@@ -227,7 +227,7 @@ print(initial_list)
 
 `.copy()`方法也适用于字典。与列表一样，我们可以简单地将`.copy()`添加到参数中，我们传递函数来创建一个将用于该函数的副本，而不改变原始变量:
 
-```
+```py
 content_ratings = {'4+': 4433, '9+': 987, '12+': 1155, '17+': 622}
 
 def make_percentages(a_dictionary):
@@ -246,7 +246,7 @@ print(c_ratings_percentages)
 print(content_ratings)
 ```
 
-```
+```py
 {'4+': 61.595109073224954, '9+': 13.714047519799916, '12+': 16.04835348061692, '17+': 8.642489926358204}
 {'4+': 4433, '9+': 987, '12+': 1155, '17+': 622}
 ```
@@ -255,7 +255,7 @@ print(content_ratings)
 
 下面，我们将在函数内部使用`.copy()`。这将确保我们可以在不改变作为参数传递给它的全局变量的情况下使用它，并且我们不需要记住给我们传递的每个参数添加`.copy()`。
 
-```
+```py
 content_ratings = {'4+': 4433, '9+': 987, '12+': 1155, '17+': 622}
 
 def make_percentages(a_dictionary):
@@ -275,7 +275,7 @@ print(c_ratings_percentages)
 print(content_ratings)
 ```
 
-```
+```py
 {'4+': 61.595109073224954, '9+': 13.714047519799916, '12+': 16.04835348061692, '17+': 8.642489926358204}
 {'4+': 4433, '9+': 987, '12+': 1155, '17+': 622}
 ```

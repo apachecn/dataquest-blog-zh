@@ -38,7 +38,7 @@ Python 整合了一个内置模块`venv`(来自“虚拟环境”)，可以创�
 4.  通过运行`pip list`列出该环境中安装的软件包。目前没有那么多，因为这是一个新鲜的环境。
 5.  使用`deactivate`命令将其禁用。
 
-```
+```py
 python3 -m venv ./venv_dir
 source venv_dir/bin/activate
 pip list
@@ -54,7 +54,7 @@ setuptools    44.0.0
 
 *注意`pip`收集并安装这些包的依赖项，比如`numpy`(`pandas`需要的)和`matplotlib`(`seaborn`需要的)。*
 
-```
+```py
 pip install pandas==1.2.5 seaborn
 ```
 
@@ -87,7 +87,7 @@ Anaconda 提供了自己的开源包管理器`conda`。它与`pip`非常相似�
 3.  现在通过运行`conda install pandas=1.2.5 seaborn jupyterlab`安装`pandas`、`seaborn`和`jupyterlab`。
 4.  您现在可以通过运行`jupyterlab`命令来运行 JupyterLab。
 
-```
+```py
 conda create -n test_env_v2
 
 Collecting package metadata (current_repodata.json): done
@@ -126,7 +126,7 @@ conda activate test_env_v2
 
 运行`conda config --add channel conda-forge`添加该频道。现在，无论何时你想从`conda-forge`安装包，只需在`conda install`上添加`-c conda-forge`选项——例如，`conda install -c conda-forge pandas seaborn`从`conda-forge`通道安装`pandas`和`seaborn`。
 
-```
+```py
 (test_env_v2) [[email protected]](/cdn-cgi/l/email-protection):~$ conda config --add channel conda-forge
 
 (test_env_v2) [[email protected]](/cdn-cgi/l/email-protection):~$ conda install -c conda-forge pandas seaborn

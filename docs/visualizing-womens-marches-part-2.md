@@ -8,7 +8,7 @@ March 30, 2018This post is the second in a series on visualizing the Women’s M
 
 因为我们最终希望能够构建可视化游行的地图，所以我们需要纬度和经度坐标。如果我们预览这两个数据帧，您会注意到我们遗漏了这两个数据帧的信息:
 
-```
+```py
 sm_marches.head()
 ```
 
@@ -19,7 +19,7 @@ sm_marches.head()
 | three | 密歇根州阿德里安 | 大调音阶的第三音 | 美国 | One hundred and fifty | One hundred and fifty | One hundred and fifty |
 | four | 亚利桑那州阿霍 | 阿塞拜疆（Azerbaijan 的缩写） | 美国 | Two hundred and fifty | Two hundred and fifty | Two hundred and fifty |
 
-```
+```py
 wiki_marches.head()
 ```
 
@@ -34,7 +34,7 @@ wiki_marches.head()
 
 `TX)`而另一个使用完整的状态名(如`Texas`)。幸运的是，我们可以使用地理编码服务来解决缺失地理数据和状态表示的问题。[地理编码](https://en.wikipedia.org/wiki/Geocoding)是将地址转换成一对具体的经纬度坐标的过程。使用地理编码服务来改善数据集是[数据丰富](https://www.techopedia.com/definition/28037/data-enrichment)的一个例子。数据丰富在数据科学项目中非常常见，因为原始数据很少包含我们感兴趣的所有信息。虽然我们没有游行发生地点的具体地址，但地理编码服务将接受城市和州名的组合(例如，`TX`或`Texas`的州市)。有许多地理编码服务，但我们将使用[geocodeio](https://geocod.io/)，因为它是我熟悉的一种服务，并且有 2500 个免费查找层。![geocodio_one-2](img/0b980b68d5ae8607cc4d307cc01f90ab.png)我们可以通过上传电子表格文件或[他们的 API](https://geocod.io/docs/) 来使用 Geocodio。由于我们只有两个小的电子表格，我们将使用他们的上传工具。请注意，使用地理编码*需要您创建一个帐户。以下是一些其他地理编码服务的列表，如果你不想使用 geocodeio:[https://geo Services . tamu . edu/Services/Geocode/other geocoders/](https://geoservices.tamu.edu/Services/Geocode/OtherGeocoders/)让我们使用 [`DataFrame.to_csv()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_csv.html) 将`sm_marches`导出为 CSV 文件:*
 
-```
+```py
 sm_marches.to_csv("sm_marches.csv", index=False)
 ```
 
@@ -42,7 +42,7 @@ sm_marches.to_csv("sm_marches.csv", index=False)
 
 `sm_marches.csv`和`FinalWiki.csv`到 Geocodio。该服务将要求您指定哪些列代表地址、州、国家、邮政编码等(您不需要拥有所有的字段)。然后，Geocodio 将在新列中添加该服务对每行的最佳猜测，并让您将新的 CSV 文件下载回您的计算机。最后，将这些文件重命名为`FinalWiki_geocodio.csv`和`sm_csv_geocodio.csv`。让我们将这两个文件读回到 dataframes 中，并研究添加的列。
 
-```
+```py
 sm_gc = pd.read_csv("sm_csv_geocodio.csv")
 wiki_gc = pd.read_csv("FinalWiki_geocodio.csv")
 sm_gc.head()
@@ -55,7 +55,7 @@ sm_gc.head()
 | three | 密歇根州阿德里安 | 大调音阶的第三音 | 美国 | One hundred and fifty | One hundred and fifty | One hundred and fifty | 41.889943 | -84.065892 | One | 地方 | 圆盘烤饼 | 圆盘烤饼 | 艾德里安(男子名) | 大调音阶的第三音 | Lenawee County | Forty-nine thousand two hundred and twenty-one | 美国 | 来自美国人口普查局的老虎/线数据集 |
 | four | 亚利桑那州阿霍 | 阿塞拜疆（Azerbaijan 的缩写） | 美国 | Two hundred and fifty | Two hundred and fifty | Two hundred and fifty | 32.384890 | -112.890110 | One | 地方 | 圆盘烤饼 | 圆盘烤饼 | Ajo | 阿塞拜疆（Azerbaijan 的缩写） | 皮马县 | Eighty-five thousand three hundred and twenty-one | 美国 | 来自美国人口普查局的老虎/线数据集 |
 
-```
+```py
 wiki_gc.head()
 ```
 
@@ -85,21 +85,21 @@ Geocodio 增加了几个额外的列:
 
 `1`(注意列名的细微差别):
 
-```
+```py
 sm_count = len(sm_gc[sm_gc['Accuracy Score'] < 1.00][['City_State', 'City', 'State.1', 'Latitude', 'Longitude']])
 wiki_count = len(wiki_gc[wiki_gc['Accuracy Score'] < 1.00][['State', 'City', 'City.1', 'State.1', 'Latitude', 'Longitude']])
 print(sm_count)
 print(wiki_count)
 ```
 
-```
+```py
 32
 16
 ```
 
 由于没有太多的行，我们可以手动检查 Geocodio 不确定的每一行。让我们增加熊猫在 jupyter 笔记本中显示的行数，以便更容易验证每一行。
 
-```
+```py
 pd.options.display.max_rows = 50
 ```
 
@@ -113,7 +113,7 @@ pd.options.display.max_rows = 50
 
 `sm_gc`:
 
-```
+```py
  sm_replace_dict = {
     15: [30.6266, 81.4609],
     70: [37.191807, -108.078634],
@@ -145,7 +145,7 @@ for i in sm_drop:
 
 `wiki_gc`:
 
-```
+```py
  for k,v in wiki_replace_dict.items():
     wiki_gc.at[k, 'Latitude'] = v[0]
     wiki_gc.at[k, 'Longitude'] = v[1]
@@ -156,7 +156,7 @@ for i in wiki_drop:
 
 让我们只选择要用于分析和可视化的列，并将它们分配给新的数据框架:
 
-```
+```py
  sm_keep_cols = ['City_State', 'State', 'Average', 'Latitude', 'Longitude']
 wiki_keep_cols = ['City', 'State', 'Turnout', 'Latitude', 'Longitude']
 
@@ -166,7 +166,7 @@ wiki_ds = wiki_gc[wiki_keep_cols]
 
 最后，让我们将描述投票人数的两列都转换成数字列。
 
-```
+```py
  wiki_ds['Turnout'] = pd.to_numeric(wiki_ds['Turnout'])
 sm_ds['Average'] = pd.to_numeric(sm_ds['Average'].str.replace(",", ""))
 ```
@@ -177,12 +177,12 @@ sm_ds['Average'] = pd.to_numeric(sm_ds['Average'].str.replace(",", ""))
 
 我们已经进行了多轮数据清理，所以让我们首先了解每个数据集中代表的游行次数:
 
-```
+```py
  print(len(sm_ds))
 print(len(wiki_ds))
 ```
 
-```
+```py
 627
 506
 ```
@@ -193,7 +193,7 @@ print(len(wiki_ds))
 
 [五三八](https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle)风格。虽然 fivethirtyeight matplotlib 风格提供了美学基线，但它并没有完全复制他们使用的情节。如果你有兴趣学习如何完全复制他们的风格，你应该看看[如何用 Python](https://www.dataquest.io/blog/making-538-plots/?utm_source=dataquest%20blog&utm_medium=internal%20link&utm_campaign=Womens%20March%20Part%202&utm_term=replicate%20their%20style%20completely&utm_content=intext) 生成 FiveThirtyEight 图形。
 
-```
+```py
 %matplotlib inline
 import matplotlib.pyplot as plt
 import matplotlib.style as style
@@ -204,7 +204,7 @@ style.use('fivethirtyeight')
 
 [DataFrame.plot()](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.plot.html) 方法生成横条图，将 [matplotlib Axes 对象](https://matplotlib.org/api/axes_api.html)赋给一个变量，然后使用方法修改每个图。
 
-```
+```py
  colors = [[0,158/255,115/255]]sm_top_10_plot = sm_ds.sort_values(by='Average', ascending=False)[0:10].plot(x='City_State', y='Average', kind='bar', figsize = (10,6), fontsize=16, color=colors)
 sm_top_10_plot.legend_.remove()
 
@@ -215,7 +215,7 @@ sm_top_10_plot.set_ylabel('Turnout', fontsize=20)
 
 ![sm_top_10_plot-2](img/2cbf17ee17ee6787990bf46dfddcabdf.png)让我们对来自维基百科的数据集进行复制:
 
-```
+```py
  wiki_top_10_plot = wiki_ds.sort_values(by='Turnout', ascending=False)[0:10].plot(x='City', y='Turnout', kind='barh', figsize = (10,6), fontsize=16, color=colors)
 wiki_top_10_plot.legend_.remove()
 
@@ -229,7 +229,7 @@ wiki_top_10_plot.set_xlabel('Turnout', fontsize=18, labelpad=20)
 *   将状态名添加到`wiki_ds`(目前只包含状态码)并将状态码添加到`sm_ds`(目前只包含状态名)。
 *   将`wiki_ds`数据框中的`City`和`State`列合并成一个`City_State`列。
 
-```
+```py
 state_codes = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DC", "DE", "FL", "GA", 
           "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", 
           "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", 
@@ -261,7 +261,7 @@ sm_ds[~sm_ds['State'].isin(states)]
 
 现在让我们弄清楚哪些州名不在 50 个州名的列表中:
 
-```
+```py
 wiki_ds[~wiki_ds['State'].isin(state_names)]
 ```
 
@@ -277,7 +277,7 @@ wiki_ds[~wiki_ds['State'].isin(state_names)]
 
 让我们删除描述不在美国大陆的游行的所有行(除了华盛顿特区之外的所有行)，并手动处理描述华盛顿 DC 游行的行(因为这是一个边缘情况)。
 
-```
+```py
  sm_ds = sm_ds.drop([102, 131, 168, 219, 475, 477, 500, 591])
 wiki_ds = wiki_ds.drop([263, 390, 401, 430, 431, 438, 474])
 
@@ -289,7 +289,7 @@ wiki_ds.at[479, "State"] = "District Of Columbia"
 
 `State_Codes`和一个用于两个数据帧的`State_Names`列。
 
-```
+```py
  sm_ds['State_Codes'] = sm_ds['State']
 sm_ds['State_Names'] = ""
 
@@ -328,13 +328,13 @@ for key, row in wiki_ds.iterrows():
 
 `sm_ds`包含一个友好的列，用于在我们的绘图中显示城市和州代码(`City_State`),`wiki_ds`数据框架没有。我们将通过连接两列来添加它:
 
-```
+```py
 wiki_ds['City_State'] = wiki_ds ['City'] + ', ' + wiki_ds['State_Codes']
 ```
 
 最后，让我们创建一个 matplotlib 子图网格，2 行 1 列，并显示两个条形图。
 
-```
+```py
 fig = plt.figure(figsize=(8,12))
 ax1 = fig.add_subplot(2,1,1)
 ax2 = fig.add_subplot(2,1,2)
@@ -355,7 +355,7 @@ ax2.set_title("Top 10 Marches Crowdsourced From Wikipedia \n")
 
 现在让我们把每个州发生的游行数量形象化为柱状图。默认情况下，y 轴刻度标签使用浮点值。我们可以获取这些刻度标签，将它们转换为整数值，然后将它们设置回来。让我们从社交媒体数据集开始。
 
-```
+```py
  sm_state_hist = sm_ds['State_Names'].value_counts().plot(kind='hist', figsize=(8,6), bins=15, title="Distribution Of Marches Per State")
 sm_state_hist.set_xlabel("# Marches")
 sm_state_hist.set_ylabel("# States")
@@ -368,7 +368,7 @@ plt.savefig("sm_state_hist.png", bbox_inches="tight")
 
 超过一半的州有大约 12 次或更少的游行。还有一个明显的异常状态，大约有 72 次游行。如果我们绘制维基百科数据集，我们观察到一个非常相似的直方图。
 
-```
+```py
  wiki_state_hist = wiki_ds['State_Names'].value_counts().plot(kind='hist', figsize=(8,6), bins=15, title="Distribution Of Marches Per State. Source: Wikipedia")
 wiki_state_hist.set_xlabel("# Marches")
 
@@ -378,11 +378,11 @@ wiki_state_hist.set_yticklabels(y_labels)
 
 ![wiki_state_hist-1](img/c30bd635c1c4b0ac8eec8eff7768322a.png)哪个状态是离群值？
 
-```
+```py
 print("State with the most # of marches:", sm_ds['State_Names'].value_counts().index[0])
 ```
 
-```
+```py
 California
 ```
 
@@ -396,7 +396,7 @@ California
 
 [groupby](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.groupby.html) 和 [aggregation](https://pandas.pydata.org/pandas-docs/stable/groupby.html) 能够按州对两个数据框架中的所有游行进行分组，然后按每个州的总投票人数进行排序。
 
-```
+```py
 sm_ds.groupby('State_Names').agg(['count', 'sum'])['Average'].sort_values('count', ascending=False)[0:15]
 ```
 
@@ -422,7 +422,7 @@ sm_ds.groupby('State_Names').agg(['count', 'sum'])['Average'].sort_values('count
 
 很少有游行会导致如此高的投票率。维基百科数据集也是如此:
 
-```
+```py
 wiki_ds.groupby('State_Names').agg(['count', 'sum'])['Turnout'].sort_values('sum', ascending=False)[0:15]
 ```
 
@@ -450,7 +450,7 @@ wiki_ds.groupby('State_Names').agg(['count', 'sum'])['Turnout'].sort_values('sum
 
 [follow](https://python-visualization.github.io/folium/)包，它提供了一个用于生成交互式地图(以 HTML、CSS 和 JavaScript 呈现)的 Python API。不幸的是，我们的博客目前不支持嵌入式 javascript，所以我们将在这里包含截图。要在 lyum 中创建地图，我们首先需要导入相关模块，然后创建一个`folium.folium.Map`对象:
 
-```
+```py
  from folium.plugins import MarkerCluster
 from folium import plugins
 from folium.plugins import HeatMap
@@ -463,7 +463,7 @@ map_clusters = folium.Map()
 
 `MarkerCluster()`构造函数，然后使用`MarkerCluster.add_to()`方法将标记集群链接到我们创建的地图对象。
 
-```
+```py
  data = sm_ds[['Latitude', 'Longitude']].values
 MarkerCluster(data).add_to(map_clusters)
 

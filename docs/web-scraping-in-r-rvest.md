@@ -32,7 +32,7 @@ April 13, 2020![we'll do some web scraping in R with rvest to gather data about 
 
 最简单的 HTML 文档如下所示:
 
-```
+```py
 <html>
 <head>
 ```
@@ -41,7 +41,7 @@ April 13, 2020![we'll do some web scraping in R with rvest to gather data about 
 
 注意单词`html`被`<>`括号包围，这表明它是一个标签。为了给这个 HTML 文档添加更多的结构和文本，我们可以添加以下内容:
 
-```
+```py
 <head>
 </head>
 <body>
@@ -77,7 +77,7 @@ HTML 提供了网页的内容和结构，而 CSS 提供了网页应该如何设�
 
 我们可以通过将一些包含颜色信息的 CSS 直接插入到每一行文本的 HTML 标记中来实现，就像这样:
 
-```
+```py
 <p style=”color:red” >Text 1</p>
 <p style=”color:red” >Text 2</p>
 <p style=”color:red” >Text 3</p>
@@ -89,7 +89,7 @@ HTML 提供了网页的内容和结构，而 CSS 提供了网页应该如何设�
 
 我们可以用一个`class`选择器代替所有这些`<p>`标签中的`style`文本:
 
-```
+```py
 <p class=”red-text” >Text 1</p>
 <p class=”red-text” >Text 2</p>
 <p class=”red-text” >Text 3</p>
@@ -97,7 +97,7 @@ HTML 提供了网页的内容和结构，而 CSS 提供了网页应该如何设�
 
 `class`选择器，我们可以更好地表明这些`<p>`标签在某种程度上是相关的。在一个单独的 CSS 文件中，我们可以创建红色文本类，并通过编写以下内容来定义它的外观:
 
-```
+```py
 .red-text {
     color : red;
 }
@@ -109,7 +109,7 @@ HTML 提供了网页的内容和结构，而 CSS 提供了网页应该如何设�
 
 类似地，我们可能经常想要抓取使用 **id** 标识的特定数据。CSS ids 用于给单个元素一个可识别的名称，很像一个类如何帮助定义一类元素。
 
-```
+```py
 <p id=”special” >This is a special tag.</p>
 ```
 
@@ -129,11 +129,11 @@ HTML 提供了网页的内容和结构，而 CSS 提供了网页应该如何设�
 
 为了使用`rvest`库，我们首先需要安装它并用`library()`函数导入它。
 
-```
+```py
 install.packages(“rvest”)
 ```
 
-```
+```py
 library(rvest)
 ```
 
@@ -141,17 +141,17 @@ library(rvest)
 
 `read_html()`接受一个 web URL 作为参数。让我们从前面的简单的无 CSS 页面开始，看看这个函数是如何工作的。
 
-```
+```py
 simple <- read_html("https://dataquestio.github.io/web-scraping-pages/simple.html")
 ```
 
 `read_html()`函数返回一个列表对象，它包含我们前面讨论过的树状结构。
 
-```
+```py
 simple
 ```
 
-```
+```py
 {html_document}
 <html>
 [1] <head>\n<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\n<title>A simple exa ...
@@ -162,13 +162,13 @@ simple
 
 在这种情况下，我们没有这样的 CSS，但是我们知道我们想要访问的`<p>`标签是页面上唯一的同类标签。为了捕获文本，我们需要分别使用`html_nodes()`和`html_text()`函数来搜索这个`<p>`标签并检索文本。下面的代码实现了这一点:
 
-```
+```py
 simple %>%
 html_nodes("p") %>%
 html_text()
 ```
 
-```
+```py
 "Here is some simple content for this page."
 ```
 
@@ -206,7 +206,7 @@ html_text()
 
 通过点击元素本身，我们可以看到七天的天气预报包含在下面的 HTML 中。我们压缩了一些内容，使其更具可读性:
 
-```
+```py
 <div id="seven-day-forecast-container">
 <ul id="seven-day-forecast-list" class="list-unstyled">
 <li class="forecast-tombstone">
@@ -227,7 +227,7 @@ html_text()
 
 从上面的 HTML 来看，似乎每个温度都包含在类`temp`中。一旦我们有了所有这些标签，我们就可以从中提取文本。
 
-```
+```py
 forecasts <- read_html("https://forecast.weather.gov/MapClick.php?lat=37.7771&lon=-122.4196#.Xl0j6BNKhTY") %>%
     html_nodes(“.temp”) %>%
     html_text()
@@ -235,7 +235,7 @@ forecasts <- read_html("https://forecast.weather.gov/MapClick.php?lat=37.7771&lo
 forecasts
 ```
 
-```
+```py
 [1] "Low: 51 °F" "High: 69 °F" "Low: 49 °F" "High: 69 °F"
 [5] "Low: 51 °F" "High: 65 °F" "Low: 51 °F" "High: 60 °F"
 [9] "Low: 47 °F"
@@ -245,12 +245,12 @@ forecasts
 
 现在我们有了我们感兴趣的 R 变量的实际数据，我们只需要做一些常规的数据分析，将向量转换成我们需要的格式。例如:
 
-```
+```py
 library(readr)
 parse_number(forecasts)
 ```
 
-```
+```py
 [1] 51 69 49 69 51 65 51 60 47
 ```
 

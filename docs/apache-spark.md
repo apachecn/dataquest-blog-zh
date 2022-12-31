@@ -20,12 +20,12 @@ Spark 中的核心数据结构是一个 RDD，即弹性分布式数据集。顾�
 
 首先，我们将把包含所有日常节目嘉宾的数据集加载到 RDD 中。我们使用的是 [FiveThirtyEight 的数据集](https://github.com/fivethirtyeight/data/tree/master/daily-show-guests)的`TSV`版本。TSV 文件由制表符`"\t"`分隔，而不是像 CSV 文件那样由逗号`","`分隔。
 
-```
+```py
 raw_data = sc.textFile("daily_show.tsv")
 raw_data.take(5)
 ```
 
-```
+```py
 ['YEAR\tGoogleKnowlege_Occupation\tShow\tGroup\tRaw_Guest_List',
 '1999\tactor\t1/11/99\tActing\tMichael J. Fox',
 '1999\tComedian\t1/12/99\tComedy\tSandra Bernhard',
@@ -39,13 +39,13 @@ raw_data.take(5)
 
 SparkContext 对象通常作为变量`sc`被引用。然后我们运行:
 
-```
+```py
 raw_data = sc.textFile("daily_show.tsv")
 ```
 
 将 TSV 数据集读入 RDD 对象`raw_data`。RDD 对象`raw_data`非常类似于字符串对象的列表，数据集中的每一行对应一个对象。然后我们使用`take()`方法打印 RDD 的前 5 个元素:
 
-```
+```py
 raw_data.take(5)
 ```
 
@@ -67,7 +67,7 @@ Spark 大量借鉴了 Hadoop 的 Map-Reduce 模式，但在许多方面有很大
 
 我们将浏览一个例子，这样你会有更好的理解。如果你仔细观察，`raw_data`是一种很难处理的格式。虽然目前每个元素都是一个`String`，但我们希望将每个元素都转换成一个`List`，这样数据更易于管理。传统上，我们会:
 
-```
+```py
 1\. Use a `for` loop to iterate over the collection
 2\. Split each `String` on the delimiter
 3\. Store the result in a `List`
@@ -75,7 +75,7 @@ Spark 大量借鉴了 Hadoop 的 Map-Reduce 模式，但在许多方面有很大
 
 让我们来看看如何在 Spark 中使用`map`来实现这一点。在下面的代码块中，我们:
 
-```
+```py
 1\. Call the RDD function `map()` to specify we want the enclosed logic to be applied to every line in our dataset
 2\. Write a lambda function to split each line using the tab delimiter "\t" and assign the resulting RDD to `daily_show`
 3\. Call the RDD function `take()` on `daily_show` to display the first 5 elements (or rows) of the resulting RDD
@@ -83,12 +83,12 @@ Spark 大量借鉴了 Hadoop 的 Map-Reduce 模式，但在许多方面有很大
 
 `map(f)`函数被称为转换步骤，需要命名函数或 lambda 函数`f`。
 
-```
+```py
 daily_show = raw_data.map(lambda line: line.split('\t'))
 daily_show.take(5)
 ```
 
-```
+```py
 [['YEAR', 'GoogleKnowlege_Occupation', 'Show', 'Group', 'Raw_Guest_List'],
 ['1999', 'actor', '1/11/99', 'Acting', 'Michael J. Fox'],
 ['1999', 'Comedian', '1/12/99', 'Comedy', 'Sandra Bernhard'],
@@ -100,7 +100,7 @@ daily_show.take(5)
 
 PySpark 的一个精彩特性是能够将我们的逻辑(我们更喜欢用 Python 编写)与实际的数据转换分离开来。在上面的代码块中，我们用 Python 代码编写了一个 lambda 函数:
 
-```
+```py
 raw_data.map(lambda: line(line.split('\t')))
 ```
 
@@ -108,7 +108,7 @@ raw_data.map(lambda: line(line.split('\t')))
 
 **这个**就是 PySpark 的力量。无需学习任何 Scala，我们就可以利用 Spark 的 Scala 架构带来的数据处理性能提升。更棒的是，当我们跑步时:
 
-```
+```py
 daily_show.take(5)
 ```
 
@@ -118,7 +118,7 @@ daily_show.take(5)
 
 在 Spark 中，有两种方法:
 
-```
+```py
 1\. Transformations - map(), reduceByKey()
 2\. Actions - take(), reduce(), saveAsTextFile(), collect()
 ```
@@ -135,7 +135,7 @@ daily_show.take(5)
 
 我们想得到一个直方图，或者说是一个统计数字，显示每年的来宾数量。如果`daily_show`是列表的列表，我们可以编写下面的 Python 代码来实现这个结果:
 
-```
+```py
 tally = dict()
 for line in daily_show:
   year = line[0]
@@ -147,12 +147,12 @@ for line in daily_show:
 
 `tally`中的键将是唯一的`Year`值，并且该值将是数据集中包含该值的行数。如果我们想使用 Spark 达到同样的结果，我们将不得不使用一个`Map`步骤，然后是一个`ReduceByKey`步骤。
 
-```
+```py
 tally = daily_show.map(lambda x: (x[0], 1)).reduceByKey(lambda x,y: x+y)
 print(tally)
 ```
 
-```
+```py
 PythonRDD[156] at RDD at PythonRDD.scala:43
 ```
 
@@ -160,7 +160,7 @@ PythonRDD[156] at RDD at PythonRDD.scala:43
 
 您可能会注意到，打印`tally`并没有返回我们期望的直方图。由于懒惰评估，PySpark 延迟执行`map`和`reduceByKey`步骤，直到我们真正需要它。在我们使用`take()`来预览`tally`中的前几个元素之前，我们将遍历刚刚编写的代码。
 
-```
+```py
 daily_show.map(lambda x: (x[0], 1)).reduceByKey(lambda x, y: x+y)
 ```
 
@@ -171,7 +171,7 @@ daily_show.map(lambda x: (x[0], 1)).reduceByKey(lambda x, y: x+y)
 
 我们的高级策略是用代表`Year`的键和代表`1`的值创建一个元组。在`map`步骤之后，Spark 将在内存中维护一个类似如下的元组列表:
 
-```
+```py
 ('YEAR', 1)
 ('1991', 1)
 ('1991', 1)
@@ -182,7 +182,7 @@ daily_show.map(lambda x: (x[0], 1)).reduceByKey(lambda x, y: x+y)
 
 我们希望将其简化为:
 
-```
+```py
 ('YEAR', 1)
 ('1991', 4)
 ...
@@ -190,11 +190,11 @@ daily_show.map(lambda x: (x[0], 1)).reduceByKey(lambda x, y: x+y)
 
 `reduceByKey(f)`使用我们指定的函数`f`将元组与相同的键组合在一起。为了查看这两步的结果，我们将使用`take`命令，该命令强制懒惰代码立即运行。由于`tally`是一个 RDD，我们不能使用 Python 的`len`函数来知道集合中有多少元素，而是需要使用 RDD `count()`函数。
 
-```
+```py
 tally.take(tally.count())
 ```
 
-```
+```py
 [('YEAR', 1),
 ('2013', 166),
 ('2001', 157),
@@ -219,7 +219,7 @@ tally.take(tally.count())
 
 与熊猫不同，Spark 对列标题一无所知，也没有把它们放在一边。我们需要一种方法来消除这种元素:
 
-```
+```py
 ('YEAR', 1)
 ```
 
@@ -227,7 +227,7 @@ tally.take(tally.count())
 
 删除该元组的唯一方法是创建一个没有该元组的新 RDD 对象。Spark 附带了一个函数`filter(f)`,允许我们从现有的只包含符合我们标准的元素的 RDD 中创建一个新的。指定一个返回二进制值的函数`f`、`True`或`False`，得到的 RDD 将由函数求值为`True`的元素组成。在 [Spark 的文档](https://spark.apache.org/docs/1.1.1/api/python/pyspark.rdd.RDD-class.html#filter)中阅读更多关于`filter`功能的信息。
 
-```
+```py
 def filter_year(line):
     if line[0] == 'YEAR':
         return False
@@ -242,14 +242,14 @@ filtered_daily_show = daily_show.filter(lambda line: filter_year(line))
 
 由于 Spark 对内存的积极使用(仅将磁盘作为备份并用于特定任务)和良好架构的核心，Spark 能够显著改善 Hadoop 的周转时间。在下面的代码块中，我们将过滤掉没有列出职业的演员，小写每个职业，生成一个职业直方图，并输出直方图中的前 5 个元组。
 
-```
+```py
 filtered_daily_show.filter(lambda line: line[1] != '') \
                    .map(lambda line: (line[1].lower(), 1)) \
                    .reduceByKey(lambda x,y: x+y) \
                    .take(5)
 ```
 
-```
+```py
 [('radio personality', 3),
 ('television writer', 1),
 ('american political figure', 2),

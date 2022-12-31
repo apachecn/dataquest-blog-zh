@@ -55,7 +55,7 @@ R Markdown 功能强大，因为它可以用于数据分析和数据科学，与
 
 R Markdown 是一个免费的开源工具，像其他 R 包一样安装。使用以下命令安装 R Markdown:
 
-```
+```py
 install.packages("rmarkdown")
 ```
 
@@ -100,7 +100,7 @@ install.packages("rmarkdown")
 
 **注意:**如果您在 RStudio 之外的 R Markdown 中工作，请使用函数`rmarkdown::render()`来编译您的文档。提供带引号的文档名作为函数参数。例如:
 
-```
+```py
 `rmarkdown::render("RMarkdown_Guide.Rmd")`
 ```
 
@@ -110,13 +110,13 @@ install.packages("rmarkdown")
 
 注意在默认情况下。Rmd 文件，文件中有两个部分， **R Markdown** 和**包括地块**。这些是二级头，因为有双散列标记(##)。让我们在指南“文本格式基础”中创建新的二级标题，输入:
 
-```
+```py
 ## Text Formatting Basics
 ```
 
 接下来是第三级标题，称为标题，如下所示:
 
-```
+```py
 ## Text Formatting Basics
 ### Headers
 ```
@@ -141,7 +141,7 @@ install.packages("rmarkdown")
 
 如果您不希望标题在最终输出中呈现为标题，请将代码用反斜杠括起来，如下所示，将文本格式化为代码:
 
-```
+```py
 `# First Level Header`
 ```
 
@@ -149,7 +149,7 @@ install.packages("rmarkdown")
 
 现在，我们将创建一个名为**项目符号和编号列表**的新的第三级标题，并在指南中键入以下内容以生成无序列表:
 
-```
+```py
 * List element 1
 * List element 2
 * List element 3
@@ -161,7 +161,7 @@ install.packages("rmarkdown")
 
 以下是编号列表所需的语法:
 
-```
+```py
 1\. Numbered list 1
 1\. Numbered list 2
 1\. Numbered list 3.
@@ -171,7 +171,7 @@ install.packages("rmarkdown")
 
 也可以将有序列表和有序列表结合起来。按两次`tab`来缩进未排序的项目符号:
 
-```
+```py
 1\. Numbered list 1
 1\. Numbered list 2
  * Item 1
@@ -186,7 +186,7 @@ install.packages("rmarkdown")
 
 我们将继续通过添加基本的文本格式来构建我们的 R Markdown 指南。创建一个名为**文本格式**的新的第三级标题，并复制或键入以下内容:
 
-```
+```py
 * Make text italic like *this* or _this_. 
 * Make text bold like **this** or __this__.
 * Use `backticks` for code.
@@ -202,7 +202,7 @@ install.packages("rmarkdown")
 
 R Markdown 使链接网站和图片变得容易。在我们指南中称为**链接的这一部分，**我们记录了以下内容:
 
-```
+```py
 Direct in-line links: <https://rmarkdown.rstudio.com/>.
 
 Phrase links: RStudio's [R Markdown page](https://rmarkdown.rstudio.com/).
@@ -266,7 +266,7 @@ R Markdown 的一个优点是，您有许多选项来控制如何评估和呈现
 
 使用带`r`的内联代码，并在反勾号内添加要评估的代码。例如，下面是我们如何总结内置于 R 中的`cars`数据集中的行数和列数:
 
-```
+```py
 ## Inline Code
 
 The `cars` dataset contains `r nrow(cars)` rows and `r ncol(cars)` columns.
@@ -292,7 +292,7 @@ The `cars` dataset contains `r nrow(cars)` rows and `r ncol(cars)` columns.
 
 正如本文前面提到的，默认情况下，R Markdown 中的表显示为您在 R 控制台中看到的样子。为了改善 R Markdown 文档中表格的美观，使用函数`knitr::kable()`。这里有一个例子:
 
-```
+```py
 knitr::kable(head(cars), caption = "The First Few Rows of the Cars Dataset")
 ```
 
@@ -310,7 +310,7 @@ knitr::kable(head(cars), caption = "The First Few Rows of the Cars Dataset")
 
 YAML 报头中指定的元数据控制输出。一个 R Markdown 文档可以支持多种输出格式。回想一下，呈现为 HTML 通常比 PDF 更快。如果您想以 HTML 格式预览文档，但最终会将文档输出为 PDF 格式，请注释掉 PDF 规范，直到需要为止，如下所示:
 
-```
+```py
 ---
 title: "R Markdown Guide"
 author: "Dataquest"
@@ -336,7 +336,7 @@ output: html_document
 
 让我们将 R Markdown 指南转换为一个幻灯片演示。ioslides 选项编译成 HTML，这对于在屏幕共享的远程会议中进行演示非常有用。我们用`output: ioslides_presentation`将指南转换成幻灯片演示。
 
-```
+```py
 ---
 title: "R Markdown Guide"
 author: "Dataquest"
@@ -355,7 +355,7 @@ output: ioslides_presentation
 
 为了通过手动换行符解决这种情况，我们根据需要在每个第三级标题前插入`***`，如下所示:
 
-```
+```py
 ## Text Formatting Basics
 ### Headers`# First Level Header``## Second Level Header``### Third Level Header`***
 ### Bulleted or Numbered Lists
@@ -376,7 +376,7 @@ output: ioslides_presentation
 
 你会注意到这篇博文包括一个目录。你可能记得我们在 R Markdown 写了这篇博客。我们在这篇博文中添加了目录，并在 YAML 标题中添加了一行代码`toc: true`。看起来是这样的:
 
-```
+```py
 output: 
  html_document:
     toc: true

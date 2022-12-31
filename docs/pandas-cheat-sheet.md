@@ -24,7 +24,7 @@ March 4, 2020![](img/02a84fd526339d91307f931e386864ef.png)
 
 另外，快速提醒—要使用下面列出的命令，您需要首先导入相关的库，如下所示:
 
-```
+```py
 import pandas as pd
 import numpy as np
 ```

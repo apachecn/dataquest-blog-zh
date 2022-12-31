@@ -20,7 +20,7 @@ May 24, 2022![](img/0c2f507744ab483bb47d640cd91bdfd5.png)
 
 为了使用 Scrapy，你需要安装它。幸运的是，通过 pip 有一个非常简单的方法。可以用`pip install scrapy`安装 Scrapy。你也可以在[垃圾文件](https://docs.scrapy.org/en/latest/intro/install.html)中找到其他安装选项。建议在 Python 虚拟环境中安装 Scrapy。
 
-```
+```py
 virtualenv env
 source env/bin/activate
 pip install scrapy
@@ -32,7 +32,7 @@ pip install scrapy
 
 每当你创建一个新的 Scrapy 项目，你需要使用一个特定的文件结构，以确保 Scrapy 知道在哪里寻找它的每个模块。幸运的是，Scrapy 有一个方便的命令，可以帮助你用 Scrapy 的所有模块创建一个空的 Scrapy 项目:
 
-```
+```py
 scrapy startproject bookscraper
 ```
 
@@ -48,7 +48,7 @@ scrapy startproject bookscraper
  ┃ ┣ 📜pipelines.py
  ┃ ┗ 📜settings.py
  ┗ 📜scrapy.cfg
-```
+```py
 
 这是一个典型的 Scrapy 项目文件结构。让我们快速检查一下这些文件和文件夹，以便您理解每个元素的作用:
 
@@ -99,7 +99,7 @@ class BookItem(Item):
     upc = Field()
     image_url = Field()
     url = Field()
-```
+```py
 
 在代码片段中可以看到，您需要导入两个 Scrapy 对象:`Item`和`Field`。
 
@@ -115,7 +115,7 @@ class BookItem(Item):
 
 ```
 touch bookscraper.py
-```
+```py
 
 这个蜘蛛文件包含蜘蛛逻辑和抓取代码。为了确定该文件中需要包含哪些内容，让我们检查一下网站！
 
@@ -171,7 +171,7 @@ class BookScraper(CrawlSpider):
         book_item["upc"] = response.css(".table.table-striped > tr:nth-child(1) > td::text").get()
         book_item["url"] = response.url
         return book_item
-```
+```py
 
 让我们来分析一下这段代码中发生了什么:
 
@@ -186,7 +186,7 @@ class BookScraper(CrawlSpider):
 
 ```
 scrapy crawl bookscraper
-```
+```py
 
 运行这个命令后，你会看到 Scrapy 的实时输出，因为它正在抓取整个网站:
 

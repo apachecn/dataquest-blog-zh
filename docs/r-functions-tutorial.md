@@ -26,14 +26,14 @@ June 11, 2019![r-function-r-programming](img/c29eb9c496b7a72a0a7542765de34b83.pn
 
 注意，作为我们将传递给这些函数的参数的一部分，我们已经指定了我们希望看到的列。例如，`summary()`函数为我们提供了 position、company、reviews 和 location 列的摘要，因为这些是我们在参数中指定的列(我们传递给函数的输入，以便它执行操作)。
 
-```
+```py
 df <- read.csv("alldata.csv") #read in csv file as data.frame
 df$description <- as.character(df$description) #change factor to character
 
 head(df[,c(1,2,4,5)])
 ```
 
-```
+```py
 ##                                                                      position
 ## 1                                                        Development Director
 ## 2 An Ostentatiously-Excitable Principal Research Assistant to Chief Scientist
@@ -50,11 +50,11 @@ head(df[,c(1,2,4,5)])
 ## 6 McKinsey & Company     385 Atlanta, GA 30318
 ```
 
-```
+```py
 summary(df[,c(1,2,4,5)])
 ```
 
-```
+```py
 ##                       position   
 ##  Data Scientist           : 351  
 ##  Senior Data Scientist    :  96  
@@ -87,11 +87,11 @@ summary(df[,c(1,2,4,5)])
 
 虽然我们没有把它包括在我们上面的总结中，但是在这个数据集中有一个“描述”栏，包含了每个单独的工作描述。让我们通过使用`nchar()`函数来看看这些描述有多长，该函数接收一个字符串并返回字符数。在下面的代码中，我们将指定我们只想查看数据集第一行中的“description”列。
 
-```
+```py
 nchar(df[1,"description"])
 ```
 
-```
+```py
 ## [1] 2208
 ```
 
@@ -109,7 +109,7 @@ R 是为处理大型数据集而构建的，数据框中的每一列都是一个
 
 为了存储我们的长度计数，我们将在`df`中创建一个名为`symcount`的新列，并将`nchar(df$description)`的输出分配给它。这告诉`nchar()`函数对整个描述列(向量)中的每个值进行操作。我们还将指定`nchar()`对每个值的输出应该存储在我们新的`symcount`列中。
 
-```
+```py
 df$symcount <- nchar(df$description)
 head(df$symcount)
 
@@ -120,7 +120,7 @@ head(df$symcount)
 # all(symcount == df$symcount)
 ```
 
-```
+```py
 ## [1] 2208 4412 2778 2959 3639 3920
 ```
 
@@ -134,7 +134,7 @@ head(df$symcount)
 
 `plot()`是内置通用函数的一个很好的例子，所以让我们用`plot()`来形象化我们刚刚测量的工作描述的长度。再次注意，我们可以将整个`symcount`列传递给`plot()`，它将绘制每个数据点。
 
-```
+```py
 plot(df$symcount)
 ```
 
@@ -144,7 +144,7 @@ We can see from the plot that most job descriptions have less than 10,000 symbol
 
 让我们看看数据集中排名前 4 位的公司的 symcount。我们将首先创建一个仅包含前四名公司的新数据框(可以从我们的`summary()`结果中获得)，然后将该数据框传递给`plot()`，并将我们的 *x* 和 *y* 值(分别为 company 和 symcount)作为两个独立的参数。
 
-```
+```py
 top4 <- names(summary(df$company)[1:4]) #get names of top 4 companies
 justtop4 <- df[df$company %in% top4,] #create a data frame with only jobs from the top 4
 justtop4$company <- factor(justtop4$company) # make sure there are only 4 levels in our new factor
@@ -162,12 +162,12 @@ It looks like Amazon has shorter job descriptions than the other companies, thou
 
 `summary()`和`plot()`(如前所述)是 r 中**通用函数**的例子，通用函数为对象的不同*类*创建不同的输出。当我们单独绘制 symcount(一个数字向量)时，`plot()`给了我们一个散点图。当我们绘制评论(一个数字向量)和公司(一个分类向量)时，`plot()`创建了一个箱线图。当我们绘制一个 aov 对象(由`aov()`函数创建)时，它给我们一系列的图来帮助我们评估我们的模型。
 
-```
+```py
 ANOVA <- aov(symcount ~ company, data = justtop4)
 summary(ANOVA)
 ```
 
-```
+```py
 ##              Df    Sum Sq   Mean Sq F value Pr(>F)    
 ## company       3 322841803 107613934   95.02 <2e-16 ***
 ## Residuals   812 919674198   1132604                   
@@ -175,7 +175,7 @@ summary(ANOVA)
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
-```
+```py
 par(mfrow = c(2,2)) #lets us see all 4 plots at once!
 plot(ANOVA)
 ```
@@ -207,7 +207,7 @@ Similarly, when we called `summary()` on a dataframe, it provided a table of sum
 
 我们先给它一个明确的**名字** : `phdFinder()`。我们将创建一个名为`phdFinder`的变量来存储我们的函数。为了创建一个函数，我们使用`function(){}`。
 
-```
+```py
 phdFinder <- function(){
 
 }
@@ -219,7 +219,7 @@ phdFinder <- function(){
 
 在我们的函数中，唯一不同的是工作描述，所以我们将添加一个名为`description`的变量作为参数。
 
-```
+```py
 phdFinder <- function(description){
 }
 ```
@@ -228,7 +228,7 @@ phdFinder <- function(description){
 
 是一个内置的 R 函数，它在一个更大的字符串中寻找一个更小的字符串(比如“PhD”)。如果描述中有“PhD ”,它将返回`TRUE`,如果没有，则返回`FALSE`。让我们将它添加到我们的函数代码中，并将它的评估结果赋给一个名为`mentioned`的变量。
 
-```
+```py
 phdFinder <- function(description){
   mentioned <- grepl("PhD",description)
 }
@@ -242,7 +242,7 @@ phdFinder <- function(description){
 
 为了演示这一点，让我们添加一个`return()`行，然后在它后面添加几个打印语句。
 
-```
+```py
 phdFinder <- function(description){
   print("checking...")
   mentioned <-  grepl("PhD",description)
@@ -257,11 +257,11 @@ phdFinder <- function(description){
 
 现在我们已经编写了自定义函数，让我们来试试吧！我们写它不仅仅是为了好玩和开心。让我们来看看原始数据集中的第一份工作描述(存储为数据框`df`)，看看这份工作是否需要博士学位。
 
-```
+```py
 phdFinder(df[1,"description"])
 ```
 
-```
+```py
 ## [1] "checking..."
 ## [1] FALSE
 ```
@@ -274,14 +274,14 @@ phdFinder(df[1,"description"])
 
 让我们在`df`中创建一个名为`phd`的新列，并将在`df$description`上调用`phdFinder()`的结果存储在那里。
 
-```
+```py
 df$phd <- phdFinder(df$description)
 head(df$phd)
 
 print(sum(df$phd)/length(df$phd))
 ```
 
-```
+```py
 ## [1] "checking..."
 ## [1] FALSE FALSE FALSE FALSE  TRUE FALSE
 ## [1] 0.2415279
@@ -321,7 +321,7 @@ Another thing to think about is **scope**. We can think of our global R environm
 
 注意在下面的代码中，变量`x`的值是如何根据它是在函数之外(全局变量)还是在函数之内而变化的。`x`的值可以在函数内重新分配，但是由于函数环境是临时的，并且在函数运行后不再存在，所以`x`的*全局*值不变:
 
-```
+```py
 x <- 10
 print(paste("Outside the function, x is...", x))
 
@@ -334,13 +334,13 @@ square(x)
 print(paste("Outside the function, x is...", x))
 ```
 
-```
+```py
 ## [1] "Outside the function, x is... 10"
 ## [1] "Inside the function, x is... 100"
 ## [1] "Outside the function, x is... 10"
 ```
 
-```
+```py
 x <- c(1,2,3)
 print(paste("Outside the function, x is...", x[1],x[2],x[3]))
 
@@ -353,13 +353,13 @@ square(x)
 print(paste("Outside the function, x is...",  x[1],x[2],x[3]))
 ```
 
-```
+```py
 ## [1] "Outside the function, x is... 1 2 3"
 ## [1] "Inside the function, x is... 1 4 9"
 ## [1] "Outside the function, x is... 1 2 3"
 ```
 
-```
+```py
 x <- data.frame(a = c(1,2,3))
 print("Outside the function, x is...")
 print(x)
@@ -375,7 +375,7 @@ print("Outside the function, x is...")
 print(x)
 ```
 
-```
+```py
 ## [1] "Outside the function, x is..."
 ##   a
 ## 1 1
@@ -405,7 +405,7 @@ print(x)
 
 一旦 R 搜索了这个本地环境并且没有结果，它将在全局环境中搜索`my_test_word`。由于`my_test_word`存在于全局环境中，R 将在函数中使用它。
 
-```
+```py
 my_test_word <- "python" #R uses "python" for my_test_word because it can't find my_test_word in the local function environment
 
 wordFinder <- function(description){
@@ -418,11 +418,11 @@ wordFinder <- function(description){
 wordFinder(df[1,"description"])
 ```
 
-```
+```py
 ## [1] "checking for... python"
 ```
 
-```
+```py
 ## [1] FALSE
 ```
 
@@ -434,7 +434,7 @@ What if we define `my_test_word` twice, both inside and outside the function? Le
 
 因为我们已经知道 R 在全局环境之前搜索函数环境，我们可能预测 R 将使用`'data'`作为`my_test_word`的值，因为这是在函数内部分配的值。事实上，事情就是这样:
 
-```
+```py
 my_test_word <- "python" 
 
 wordFinder <- function(description){
@@ -448,7 +448,7 @@ wordFinder <- function(description){
 wordFinder(df[1,"description"])
 ```
 
-```
+```py
 ## [1] "checking for... data"
 ## [1] TRUE
 ```
@@ -465,7 +465,7 @@ R 通过在函数运行后移除局部函数环境为我们做了整理，这很
 
 在`wordFinder()`中，我们返回`mentioned`。自从 R 去掉了局部函数环境，`mentioned`就不再存在了。当我们试图把它打印出来时，我们得到一个错误。
 
-```
+```py
 my_test_word <- "python" 
 
 wordFinder <- function(description){
@@ -480,18 +480,18 @@ wordFinder(df[1,"description"])
 print(mentioned)
 ```
 
-```
+```py
 ## Error in print(mentioned): object 'mentioned' not found
 ```
 
-```
+```py
 ## [1] "checking for... data"
 ## [1] TRUE
 ```
 
 然而，由于`wordFinder()`返回`mentioned`的值，我们可以通过将函数的输出赋给一个变量，将它存储在全局环境中。现在我们可以在函数之外使用这个值。
 
-```
+```py
 my_test_word <- "python" 
 
 wordFinder <- function(description){
@@ -506,7 +506,7 @@ mentioned2 <- wordFinder(df[1,"description"])
 print(mentioned2)
 ```
 
-```
+```py
 ## [1] "checking for... data"
 ## [1] TRUE
 ```

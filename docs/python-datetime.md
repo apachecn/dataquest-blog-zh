@@ -40,7 +40,7 @@ Python 中的`datetime`模块有 5 个主要类(模块的一部分):
 
 让我们导入`datetime`模块并创建我们的第一个日期和时间对象:
 
-```
+```py
 # From the datetime module import date
 from datetime import date
 
@@ -48,7 +48,7 @@ from datetime import date
 date(2000, 2, 3)
 ```
 
-```
+```py
 datetime.date(2000, 2, 3)
 ```
 
@@ -56,12 +56,12 @@ datetime.date(2000, 2, 3)
 
 编码完全是实验，所以假设我们想要创建一个 2000-26-03 的对象:
 
-```
+```py
 # Create a date object of 2000-26-03
 date(2000, 26, 3)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
@@ -77,7 +77,7 @@ ValueError: month must be in 1..12
 
 让我们看看如何创建一个`datetime.time`对象:
 
-```
+```py
 # From the datetime module import time
 from datetime import time
 
@@ -85,7 +85,7 @@ from datetime import time
 time(5, 35, 2)
 ```
 
-```
+```py
 datetime.time(5, 35, 2)
 ```
 
@@ -93,7 +93,7 @@ datetime.time(5, 35, 2)
 
 现在，如果我们希望在一个对象中既有日期又有时间呢？我们应该使用`datetime`类:
 
-```
+```py
 # From the datetime module import datetime
 from datetime import datetime
 
@@ -101,28 +101,28 @@ from datetime import datetime
 datetime(2000, 2, 3, 5, 35, 2)
 ```
 
-```
+```py
 datetime.datetime(2000, 2, 3, 5, 35, 2)
 ```
 
 太好了，我们有了目标。我们还可以更明确地将关键字参数传递给`datetime`构造函数:
 
-```
+```py
 datetime(year=2000, month=2, day=3, hour=5, minute=35, second=2)
 ```
 
-```
+```py
 datetime.datetime(2000, 2, 3, 5, 35, 2)
 ```
 
 如果我们只传入三个参数(年、月和日)会怎么样？这会导致错误吗？
 
-```
+```py
 # Create a datetime object of 2000-02-03
 datetime(2000, 2, 3)
 ```
 
-```
+```py
 datetime.datetime(2000, 2, 3, 0, 0)
 ```
 
@@ -130,13 +130,13 @@ datetime.datetime(2000, 2, 3, 0, 0)
 
 在很多情况下，我们希望知道此刻的准确时间。我们可以使用`datetime`类的`now()`方法:
 
-```
+```py
 # Time at the moment
 now = datetime.now()
 now
 ```
 
-```
+```py
 datetime.datetime(2022, 2, 14, 11, 33, 25, 516707)
 ```
 
@@ -144,22 +144,22 @@ datetime.datetime(2022, 2, 14, 11, 33, 25, 516707)
 
 如果我们只需要今天的日期，我们可以使用来自`date`类的`today()`方法:
 
-```
+```py
 today = date.today()
 today
 ```
 
-```
+```py
 datetime.date(2022, 2, 14)
 ```
 
 如果只是需要时间，我们可能会写`time.now()`，但是行不通。相反，我们必须访问`datetime.now()`对象的`hour`、`minute`和`second`属性，并将它们传递给`time`构造函数:
 
-```
+```py
 time(now.hour, now.minute, now.second)
 ```
 
-```
+```py
 datetime.time(11, 33, 25)
 ```
 
@@ -167,24 +167,24 @@ datetime.time(11, 33, 25)
 
 我们还可以使用`isocalendar()`函数从`datetime`对象中提取星期数和日期。它将返回一个包含 ISO 年份、周数和工作日数的三项元组:
 
-```
+```py
 # isocalendar() returns a 3-item tuple with ISO year, week number, and weekday number
 now.isocalendar()
 ```
 
-```
+```py
 datetime.IsoCalendarDate(year=2022, week=7, weekday=1)
 ```
 
 在 ISO 格式中，一周从星期一开始，到星期日结束。一周中的每一天都用从 1(星期一)到 7(星期日)的数字编码。如果我们想要访问这些元组元素中的一个，我们使用*括号符号*:
 
-```
+```py
 # Access week number
 week_number = now.isocalendar()[1]
 week_number
 ```
 
-```
+```py
 7
 ```
 
@@ -196,22 +196,22 @@ week_number
 
 我们将学习的第一个将日期字符串转换成`date`对象的函数是`fromisoformat`。我们这样称呼它是因为它使用了 ISO 8601 格式(即`YYYY-MM-DD`)。让我们看一个例子:
 
-```
+```py
 # Convert a date string into a date object
 date.fromisoformat("2022-12-31")
 ```
 
-```
+```py
 datetime.date(2022, 12, 31)
 ```
 
 ISO 格式也包含时间，但是如果我们把它传递给函数，它就不起作用了:
 
-```
+```py
 date.fromisoformat("2022-12-31 00:00:00")
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
@@ -224,12 +224,12 @@ ValueError: Invalid isoformat string: '2022-12-31 00:00:00'
 
 当然，我们也可以执行相反的操作，将一个`datetime`对象转换成 ISO 格式的日期字符串。为此，我们应该使用`isoformat()`:
 
-```
+```py
 # Convert a datetime object into a string in the ISO format
 date(2022, 12, 31).isoformat()
 ```
 
-```
+```py
 '2022-12-31'
 ```
 
@@ -237,7 +237,7 @@ date(2022, 12, 31).isoformat()
 
 为了解决上面的`ValueError`问题，我们可以使用`strptime()`函数，该函数可以将一个*任意的*日期/时间字符串转换成一个`datetime`对象。我们的字符串不一定需要遵循 ISO 格式，但是我们应该指定字符串的哪一部分代表哪一个日期或时间单位(年、小时等)。).让我们看一个例子来阐明。首先，我们将使用严格的 ISO 格式将一个字符串转换成一个`datetime`对象:
 
-```
+```py
 # Date as a string
 iso_date = "2022-12-31 23:59:58"
 
@@ -248,7 +248,7 @@ iso_format = "%Y-%m-%d %H:%M:%S"
 datetime.strptime(iso_date, iso_format)
 ```
 
-```
+```py
 datetime.datetime(2022, 12, 31, 23, 59, 58)
 ```
 
@@ -266,7 +266,7 @@ Python 中使用的其他代码可以参考这个[网站](https://strftime.org/)
 
 让我们再看几个使用其他格式的例子:
 
-```
+```py
 # European date as a string
 european_date = "31-12-2022"
 
@@ -277,13 +277,13 @@ european_format = "%d-%m-%Y"
 datetime.strptime(european_date, european_format)
 ```
 
-```
+```py
 datetime.datetime(2022, 12, 31, 0, 0)
 ```
 
 正如我们在上面看到的，字符串被成功转换，但是我们有额外的零来表示时间。让我们看一个使用其他代码的示例:
 
-```
+```py
 # Full month name date
 full_month_date = "12 September 2022"
 
@@ -294,13 +294,13 @@ full_month_format = "%d %B %Y"
 datetime.strptime(full_month_date, full_month_format)
 ```
 
-```
+```py
 datetime.datetime(2022, 9, 12, 0, 0)
 ```
 
 再次成功！注意**我们定义的格式应该匹配日期字符串**的格式。因此，如果我们用空格、冒号、连字符或其他字符来分隔时间单位，它们应该在代码字符串中。否则，Python 会抛出一个`ValueError`:
 
-```
+```py
 # Full month name date
 full_month_date = "12 September 2022"
 
@@ -311,7 +311,7 @@ full_month_format = "%d%B %Y"
 datetime.strptime(full_month_date, full_month_format)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
@@ -349,7 +349,7 @@ ValueError: time data '12 September 2022' does not match format '%d%B %Y'
 
 在 Python 中，我们还可以使用`strftime()`函数将`datetime`对象转换成字符串。它有两个参数:一个`datetime`对象和输出字符串的格式。
 
-```
+```py
 # Create a datetime object
 datetime_obj = datetime(2022, 12, 31)
 
@@ -366,37 +366,37 @@ print(f"American date string: {datetime.strftime(datetime_obj, american_format)}
 print(f"European date string: {datetime.strftime(datetime_obj, european_format)}.")
 ```
 
-```
+```py
 American date string: 12-31-2022.
 European date string: 31-12-2022.
 ```
 
 我们将同一个`datetime`对象转换成两种不同的格式。我们还可以指定其他格式，比如完整的月份名称后面跟着日期和年份。
 
-```
+```py
 full_month = "%B %d, %Y"
 datetime.strftime(datetime_obj, full_month)
 ```
 
-```
+```py
 'December 31, 2022'
 ```
 
 使用`strftime`的另一种方法是将其放在`datetime`对象之后:
 
-```
+```py
 datetime_obj = datetime(2022, 12, 31, 23, 59, 59)
 full_datetime = "%B %d, %Y %H:%M:%S"
 datetime_obj.strftime(full_datetime)
 ```
 
-```
+```py
 'December 31, 2022 23:59:59'
 ```
 
 实际上，如果我们想要提取不同年份中 12 月 31 日的工作日名称，`strftime()`可能会很有用:
 
-```
+```py
 # Extract the weekday name of December 31
 weekday_format = "%A"
 
@@ -404,7 +404,7 @@ for year in range(2022, 2026):
     print(f"Weekday of December 31, {year} is {date(year, 12, 31).strftime(weekday_format)}.")
 ```
 
-```
+```py
 Weekday of December 31, 2022 is Saturday.
 Weekday of December 31, 2023 is Sunday.
 Weekday of December 31, 2024 is Tuesday.
@@ -415,12 +415,12 @@ Weekday of December 31, 2025 is Wednesday.
 
 在编程中，经常会看到日期和时间以 [Unix 时间戳格式](https://en.wikipedia.org/wiki/Unix_time)存储。这种格式用数字表示任何日期。基本上，时间戳是从 1970 年 1 月 1 日 00:00:00 UTC(协调世界时)开始的 *Unix 纪元*过去的秒数。我们可以使用`timestamp()`函数来计算这个数字:
 
-```
+```py
 new_year_2023 = datetime(2022, 12, 31)
 datetime.timestamp(new_year_2023)
 ```
 
-```
+```py
 1672441200.0
 ```
 
@@ -428,11 +428,11 @@ datetime.timestamp(new_year_2023)
 
 我们可以通过使用`fromtimestamp()`功能来执行相反的操作:
 
-```
+```py
 datetime.fromtimestamp(1672441200)
 ```
 
-```
+```py
 datetime.datetime(2022, 12, 31, 0, 0)
 ```
 
@@ -444,7 +444,7 @@ datetime.datetime(2022, 12, 31, 0, 0)
 
 我们可以执行的第一个操作是计算两个日期之间的差异。为此，我们使用减号:
 
-```
+```py
 # Instatiate two dates
 first_date = date(2022, 1, 1)
 second_date = date(2022, 12, 31)
@@ -459,17 +459,17 @@ def dt_string(date, date_format="%B %d, %Y"):
 print(f"The number of days and hours between {dt_string(first_date)} and {dt_string(second_date)} is {date_diff}.")
 ```
 
-```
+```py
 The number of days and hours between January 01, 2022 and December 31, 2022 is 364 days, 0:00:00.
 ```
 
 让我们看看``first_date - second_date`` 返回什么类型的对象:
 
-```
+```py
 type(date_diff)
 ```
 
-```
+```py
 datetime.timedelta
 ```
 
@@ -477,11 +477,11 @@ datetime.timedelta
 
 如果我们只对两次约会之间的天数感兴趣呢？我们可以访问`timedelta`对象的不同属性，其中一个叫做`.days`。
 
-```
+```py
 print(f"The number of days between {dt_string(first_date)} and {dt_string(second_date)} is {(date_diff).days}.")
 ```
 
-```
+```py
 The number of days between January 01, 2022 and December 31, 2022 is 364.
 ```
 
@@ -489,7 +489,7 @@ The number of days between January 01, 2022 and December 31, 2022 is 364.
 
 现在我们已经知道了`timedelta`对象，是时候介绍一下`timedelta()`函数了。它允许我们对时间对象执行许多算术运算，通过加减时间单位，如日、年、周、秒等。例如，我们可能想知道 30 天后是星期几。为此，我们必须创建一个表示当前时间的对象和一个定义我们添加的时间量的`timedelta`对象:
 
-```
+```py
 # Import timedelta
 from datetime import timedelta
 
@@ -503,13 +503,13 @@ one_month = timedelta(days=30)
 print(f"The day in 30 days is {dt_string(now + one_month)}.")
 ```
 
-```
+```py
 The day in 30 days is March 16, 2022.
 ```
 
 如果我们查看`timedelta`函数(`help(timedelta)`)的帮助页面，我们会看到它有以下参数:`days=0, seconds=0, microseconds=0, milliseconds=0, minutes=0, hours=0, weeks=0`。所以，你可以练习给一个日期加上或减去其他时间单位。例如，我们可以计算 2030 年新年前 12 小时的时间:
 
-```
+```py
 # New year 2030
 new_year_2030 = datetime(2030, 1, 1, 0, 0)
 
@@ -523,13 +523,13 @@ twelve_hours_before = (new_year_2030 - twelve_hours).strftime("%B %d, %Y, %H:%M:
 print(f"The time twelve hours before New Year 2030 will be {twelve_hours_before}.")
 ```
 
-```
+```py
 The time twelve hours before New Year 2030 will be December 31, 2029, 12:00:00.
 ```
 
 我们还可以组合`timedelta()`函数的多个参数来计算一个更具体的时间。例如，从现在起 27 天 3 小时 45 分钟后的时间是什么？
 
-```
+```py
 # Current time
 now = datetime.now()
 
@@ -542,7 +542,7 @@ twenty_seven_days = (now + specific_timedelta).strftime("%B %d, %Y, %H:%M:%S")
 print(f"The time in 27 days, 3 hours, and 45 minutes will be {twenty_seven_days}.")
 ```
 
-```
+```py
 The time in 27 days, 3 hours, and 45 minutes will be March 13, 2022, 15:18:39.
 ```
 
@@ -552,7 +552,7 @@ The time in 27 days, 3 hours, and 45 minutes will be March 13, 2022, 15:18:39.
 
 例如，我们想从当前时间中减去 2 年 3 个月 4 天 5 小时:
 
-```
+```py
 # Import relativedelta
 from dateutil.relativedelta import relativedelta
 
@@ -567,17 +567,17 @@ two_years = (now - relative_delta).strftime("%B %d, %Y, %H:%M:%S")
 print(f"The time 2 years, 3 months, 4 days, and 5 hours ago was {two_years}.")
 ```
 
-```
+```py
 The time 2 years, 3 months, 4 days, and 5 hours ago was November 10, 2019, 06:33:40.
 ```
 
 我们还可以使用`relativedelta()`来计算两个`datetime`对象之间的差异:
 
-```
+```py
 relativedelta(datetime(2030, 12, 31), now)
 ```
 
-```
+```py
 relativedelta(years=+8, months=+10, days=+16, hours=+12, minutes=+26, seconds=+19, microseconds=+728345)
 ```
 
@@ -597,7 +597,7 @@ Python 区分了两类日期时间对象: [*天真的*和*觉察的*](https://do
 
 首先，我们来看一个幼稚的时间对象:
 
-```
+```py
 # Import tzinfo
 from datetime import tzinfo
 
@@ -608,7 +608,7 @@ naive_datetime = datetime.now()
 type(naive_datetime.tzinfo)
 ```
 
-```
+```py
 NoneType
 ```
 
@@ -616,7 +616,7 @@ NoneType
 
 让我们使用`zoneinfo`创建一个 aware `datetime`对象，特别是`ZoneInfo`类，它是`datetime.tzinfo`抽象类的一个实现:
 
-```
+```py
 # Import ZoneInfo 
 from zoneinfo import ZoneInfo
 
@@ -629,7 +629,7 @@ dt_utc = datetime.now(tz=utc_tz)
 type(dt_utc.tzinfo)
 ```
 
-```
+```py
 zoneinfo.ZoneInfo
 ```
 
@@ -639,14 +639,14 @@ zoneinfo.ZoneInfo
 
 首先，我们可以在`zoneinfo`中列出所有可用的时区:
 
-```
+```py
 import zoneinfo
 
 # Will return a long list of timezones (opens many files!)
 zoneinfo.available_timezones() 
 ```
 
-```
+```py
 {'Africa/Abidjan',
  'Africa/Accra',
  'Africa/Addis_Ababa',
@@ -1247,7 +1247,7 @@ zoneinfo.available_timezones()
 
 现在我们可以使用`ZoneInfo`来确定不同地区的当前时间:
 
-```
+```py
 # Function to convert datetime into ISO formatted time
 def iso(time, time_format="%Y-%m-%d %H:%M:%S"):
     return time.strftime(time_format)
@@ -1268,18 +1268,18 @@ print(f"Current time in Central Europe is {iso(dt_cet)}.")
 print(f"Current time in California is {iso(dt_pst)}.")
 ```
 
-```
+```py
 Current time in Central Europe is 2022-02-14 11:33:42.
 Current time in California is 2022-02-14 02:33:42.
 ```
 
 让我们打印`datetime.now(tz=cet_tz)`:
 
-```
+```py
 print(datetime.now(tz=cet_tz))
 ```
 
-```
+```py
 2022-02-14 11:33:43.048967+01:00
 ```
 
@@ -1287,7 +1287,7 @@ print(datetime.now(tz=cet_tz))
 
 此外，`ZoneInfo`类处理夏令时。例如，我们可以在 DST 发生变化的一天中增加一天(24 小时)。在美国，2022 年，它将发生在 11 月 5 日(时钟向后)。
 
-```
+```py
 # Define timedelta
 time_delta = timedelta(days=1)
 
@@ -1299,7 +1299,7 @@ print(november_5_2022)
 print(november_5_2022 + time_delta)
 ```
 
-```
+```py
 2022-11-05 15:00:00-07:00
 2022-11-06 15:00:00-08:00
 ```
@@ -1312,7 +1312,7 @@ print(november_5_2022 + time_delta)
 
 这里我们将使用来自`dateutil`包的`tz`，它允许我们设置本地时区来展示`dateutil`包的效用。然而，我们也可以使用`zoneinfo`的`build/etc/localtime`时区来做同样的事情。
 
-```
+```py
 from zoneinfo import ZoneInfo
 from dateutil import tz
 from datetime import datetime
@@ -1339,7 +1339,7 @@ if __name__ == "__main__":
     main()
 ```
 
-```
+```py
 New Year in New Your City will come on: January 1, 2023 00:00:00.
 Time left to New Year 2023 in NYC is: 10 months, 17 days, 18 hours, 26 minutes, 16 seconds.
 ```

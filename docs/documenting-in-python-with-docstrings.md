@@ -24,7 +24,7 @@ Python 的[禅告诉我们“可读性很重要”，“显式比隐式好。”
 
 让我们来看一些 Python 中文档字符串的例子！例如，下面的普通函数采用两个变量，或者返回它们的和(默认情况下),或者返回它们之间的差:
 
-```
+```py
 def sum_subtract(a, b, operation="sum"):
     if operation == "sum":
         return a + b
@@ -36,13 +36,13 @@ def sum_subtract(a, b, operation="sum"):
 print(sum_subtract(1, 2, operation="sum"))
 ```
 
-```
+```py
  3
 ```
 
 这个函数非常简单，但是为了展示 Python docstrings 的强大功能，让我们编写一些文档:
 
-```
+```py
 def sum_subtract(a, b, operation="sum"):
     """
     Return sum or difference between the numbers 'a' and 'b'.
@@ -61,11 +61,11 @@ def sum_subtract(a, b, operation="sum"):
 
 引擎盖下发生了什么？如果我们在`sum_subtract()`函数上运行`help()`函数，就会弹出 docstring。所有文档完整的包都有(几乎)所有函数的 docstrings。例如，让我们看看熊猫的数据帧:
 
-```
+```py
 import pandas as pd
 ```
 
-```
+```py
 help(pd.DataFrame)
 
 # Help on class DataFrame in module pandas.core.frame:
@@ -113,11 +113,11 @@ help(pd.DataFrame)
 
 从技术上讲，docstring 被分配给这个对象的一个自动生成的属性，称为`__doc__`。我们还可以打印出该属性，并看到它与之前完全相同:
 
-```
+```py
 print(pd.DataFrame.__doc__[:1570])  # Truncated
 ```
 
-```
+```py
  Two-dimensional, size-mutable, potentially heterogeneous tabular data.
 
     Data structure also contains labeled axes (rows and columns).
@@ -186,7 +186,7 @@ print(pd.DataFrame.__doc__[:1570])  # Truncated
 
 [这个数据集](https://www.kaggle.com/datasets/deepcontractor/top-video-games-19952021-metacritic)包含了 1995-2021 年 [Metacritic](https://www.metacritic.com/) 上的顶级视频游戏。
 
-```
+```py
 from datetime import datetime
 import pandas as pd
 
@@ -194,7 +194,7 @@ all_games = pd.read_csv("all_games.csv")
 print(all_games.head())
 ```
 
-```
+```py
  name        platform        release_date  \
 0  The Legend of Zelda: Ocarina of Time     Nintendo 64   November 23, 1998   
 1              Tony Hawk's Pro Skater 2     PlayStation  September 20, 2000   
@@ -214,7 +214,7 @@ print(all_games.head())
 
 首先，让我们编写这个函数并测试它:
 
-```
+```py
 def days_release(date):
     current_date = datetime.now()
     release_date_dt = datetime.strptime(date, "%B %d, %Y") # Convert date string into datetime object
@@ -223,7 +223,7 @@ def days_release(date):
 print(all_games["release_date"].apply(days_release))
 ```
 
-```
+```py
 0        8626
 1        7959
 2        5181
@@ -240,7 +240,7 @@ Name: release_date, Length: 18800, dtype: int64
 
 该函数如预期的那样工作，但是最好用 docstrings 来补充它。首先，让我们使用 **SciPy/NumPy 格式**:
 
-```
+```py
 def days_release(date):
     """
     Return the difference in days between the current date and game release date.
@@ -264,7 +264,7 @@ def days_release(date):
 
 接下来，一个 **Google docstrings** 的例子:
 
-```
+```py
 def days_release(date):
     """Return the difference in days between the current date and game release date.
 
@@ -281,7 +281,7 @@ def days_release(date):
 
 一个**重组文本**的例子:
 
-```
+```py
 def days_release(date):
     """Return the difference in days between the current date and game release date.
 
@@ -297,7 +297,7 @@ def days_release(date):
 
 最后，一个 **Epytext** 的例子:
 
-```
+```py
 def days_release(date):
     """Return the difference in days between the current date and the game release date.
     @type date: str
@@ -322,7 +322,7 @@ def days_release(date):
 
 Python docstrings 还描述了小脚本的功能和使用指南，这些小脚本可能适用于我们一些日常任务的自动化。例如，我经常需要将丹麦克朗转换成欧元。我可以每次在谷歌上输入一个查询，或者我可以下载一个应用程序来帮我完成，但这一切似乎都过于复杂和多余。我知道一欧元大约是 7.45 丹麦克朗，因为我几乎总是在 Linux 终端上工作，所以我决定编写一个小的 CLI 程序，将一种货币转换成另一种货币:
 
-```
+```py
 """
 DKK-EUR and EUR-DKK converter.
 

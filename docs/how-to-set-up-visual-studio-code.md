@@ -60,7 +60,7 @@ Visual Studio 代码是一个强大的、可扩展的轻量级代码编辑器，
 
 非常好。我们拥有在 VS 代码中编写和运行 Python 代码所需的一切。让我们用 VS 代码写下面的代码，然后运行它。
 
-```
+```py
 def palindrome(a):
         a = a.upper()
         return a == a[::-1]
@@ -79,7 +79,7 @@ else:
 
 如您所见，所有输出都出现在集成终端中。让我们再多谈谈这个奇妙的特性。
 
-由于执行终端命令几乎是编写代码不可或缺的一部分，VS 代码通过将这一优秀特性嵌入到 IDE 中为开发人员带来了极大的便利。要查看终端，可以在 macOS 或 Windows 机器上键入`Ctrl` + ```，或者使用**查看>终端**菜单命令。另外，如果你想关闭一个集成终端，点击终端窗口右上角的 bin 图标。从技术上讲，集成终端使用计算机上安装的 Shell，例如，Windows 上的 PowerShell 或命令提示符，macOS 和 Linux 上的 bash 或 zsh。
+由于执行终端命令几乎是编写代码不可或缺的一部分，VS 代码通过将这一优秀特性嵌入到 IDE 中为开发人员带来了极大的便利。要查看终端，可以在 macOS 或 Windows 机器上键入`Ctrl` + ```py，或者使用**查看>终端**菜单命令。另外，如果你想关闭一个集成终端，点击终端窗口右上角的 bin 图标。从技术上讲，集成终端使用计算机上安装的 Shell，例如，Windows 上的 PowerShell 或命令提示符，macOS 和 Linux 上的 bash 或 zsh。
 
 Visual Studio 代码允许我们使用终端设置自定义终端的外观。为此，打开终端设置页面，点击终端窗口右上角的向下箭头按钮，选择**配置终端设置**选项；您可以轻松定制字体、间距和光标样式:
 ![Select the Configure Terminal Settings option](img/4153ba59f428cb0abd58f7a3bf03b4eb.png)
@@ -98,7 +98,7 @@ VS 代码中另一个有用的特性是运行单行或多行代码，只需选�
 
 ```
 print("Hello, world!")
-```
+```py
 
 然后选择语句，右键选择**在 Python 终端**中运行选择/行选项，如下:
 ![Run Selection/Line in Python Terminal optional](img/9c7fe555eddf926757a2489db083b291.png)
@@ -125,7 +125,7 @@ REPL 的一个很大的特点就是可以即时看到运行命令的结果。所
 
 ```
 pip3 install autopep8
-```
+```py
 
 安装完成后，关闭终端。现在打开 VS 代码的设置，搜索 *Python 格式化*,**Autopep8 Path**和 **Provider** 字段都需要用 auto pep 8 填充，如下:
 ![Fill out Autopep8 Path and Provider](img/38abb7447d48ccaf8c243a9384df3079.png)

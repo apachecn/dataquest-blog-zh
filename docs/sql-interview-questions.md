@@ -79,7 +79,7 @@ Click to reveal answer
 
 有几种可能的答案。这里有一个:
 
-```
+```py
 SELECT a.name, a.surname, a.birth_date, a.faculty
   FROM alumni AS a
  INNER JOIN evaluation AS e
@@ -105,7 +105,7 @@ Click to reveal answer
 
 有几种可能的答案。这里有一个:
 
-```
+```py
 SELECT *
   FROM beverages
  WHERE fruit_pct BETWEEN 35 AND 40;
@@ -127,7 +127,7 @@ Click to reveal answer
 
 有几种可能的答案。这里有一个:
 
-```
+```py
 SELECT *
   FROM beverages
  WHERE contributed_by NOT LIKE '% %';
@@ -149,7 +149,7 @@ Click to reveal answer
 
 有几种可能的答案。这里有一个:
 
-```
+```py
 SELECT contributed_by, AVG(fruit_pct) AS mean_fruit
   FROM beverages
  GROUP BY contributed_by
@@ -160,7 +160,7 @@ SELECT contributed_by, AVG(fruit_pct) AS mean_fruit
 
 看看下面给出的查询:
 
-```
+```py
 SELECT column, AGG_FUNC(column_or_expression), …
   FROM a_table
  INNER JOIN some_table
@@ -203,7 +203,7 @@ Click to reveal answer
 
 以下查询产生了`my_table`的哪些行？给个描述性的回答。
 
-```
+```py
 SELECT *
   FROM my_table
  WHERE 1 = 1.0;
@@ -217,7 +217,7 @@ Click to reveal answer
 
 以下查询产生了`my_table`的哪些行？给个描述性的回答。
 
-```
+```py
 SELECT *
   FROM my_table
  WHERE NULL = NULL;

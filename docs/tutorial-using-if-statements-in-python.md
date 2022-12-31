@@ -17,7 +17,7 @@ March 3, 2022![](img/003004299b2177c8ae16cb0f11ca0424.png)
 
 在 Python 中，`if`语句是实现条件的起点。让我们看一个最简单的例子:
 
-```
+```py
 if <condition>:
     <expression>
 ```
@@ -28,7 +28,7 @@ if <condition>:
 
 我们来看一个具体的例子。
 
-```
+```py
 # Basic if statement
 x = 3
 y = 10
@@ -37,7 +37,7 @@ if x < y:
     print("x is smaller than y.")
 ```
 
-```
+```py
 x is smaller than y.
 ```
 
@@ -47,7 +47,7 @@ x is smaller than y.
 
 让我们看一个更复杂的例子。
 
-```
+```py
 # A slightly more complex example
 x = 3
 y = 10
@@ -58,7 +58,7 @@ if x < y:
 print(f"Variable z is now {z}.")
 ```
 
-```
+```py
 Variable z is now 13.
 ```
 
@@ -68,7 +68,7 @@ Variable z is now 13.
 
 让我们看看如果我们执行下面的代码会发生什么:
 
-```
+```py
 # What happens here?
 x = 3
 y = 10
@@ -85,7 +85,7 @@ if x > y:
 
 如果我们想在条件不满足的情况下执行一些代码呢？我们在`if`语句下面添加一个`else`语句。让我们看一个例子。
 
-```
+```py
 # else statement
 x = 3
 y = 10
@@ -96,7 +96,7 @@ else:
     print("x is smaller than y.")
 ```
 
-```
+```py
 x is smaller than y.
 ```
 
@@ -112,7 +112,7 @@ x is smaller than y.
 
 如果满足条件会怎么样？
 
-```
+```py
 # What if the condition is met?
 x = 3
 y = 10
@@ -123,7 +123,7 @@ else:
     print("x is greater than y.")
 ```
 
-```
+```py
 x is smaller than y.
 ```
 
@@ -133,7 +133,7 @@ x is smaller than y.
 
 如果`x`等于`y`呢？
 
-```
+```py
 # x is equal to y
 x = 3
 y = 3
@@ -144,7 +144,7 @@ else:
     print("x is greater than y.")
 ```
 
-```
+```py
 x is greater than y.
 ```
 
@@ -154,7 +154,7 @@ x is greater than y.
 
 让我们重写上面的例子，添加一个`elif`语句。
 
-```
+```py
 # x is equal to y with elif statement
 x = 3
 y = 3
@@ -167,7 +167,7 @@ else:
     print("x is greater than y.")
 ```
 
-```
+```py
 x is equal to y.
 ```
 
@@ -185,7 +185,7 @@ Python 首先检查条件`x < y`是否满足。它不是，所以它继续到第
 
 在这个例子中，我们将使用字符串而不是整数来演示 Python 中的`if`条件的灵活性。
 
-```
+```py
 # elif condition
 tomorrow = "warm"
 
@@ -197,13 +197,13 @@ else:
     print("I'll stay home.")
 ```
 
-```
+```py
 I'll go to the sea.
 ```
 
 Python 首先检查变量`tomorrow`是否等于“warm ”,如果是，则打印出`I'll go to the sea.`,并停止执行。如果第一个条件没有满足会怎么样？
 
-```
+```py
 # Tomorrow is very hot
 tomorrow = "very hot"
 
@@ -215,7 +215,7 @@ else:
     print("I'll stay home.")
 ```
 
-```
+```py
 I'll go to the forest.
 ```
 
@@ -225,7 +225,7 @@ I'll go to the forest.
 
 当然，**您可以使用任意数量的`elif`语句。**让我们添加更多的条件，并将`else`语句下输出的内容改为`Weather not recognized.`(例如，如果明天是“f”，我们不知道它的含义)。
 
-```
+```py
 # Several elif conditions
 tomorrow = "snowy"
 
@@ -241,7 +241,7 @@ else:
     print("Weather not recognized.")
 ```
 
-```
+```py
 I'll build a snowman.
 ```
 
@@ -257,7 +257,7 @@ I'll build a snowman.
 
 看看下面的代码。
 
-```
+```py
 # Biome prediction with and logical operator
 humidity = "low"
 temperature = "high"
@@ -272,7 +272,7 @@ else:
     print("I don't know!")
 ```
 
-```
+```py
 It's a hot desert.
 ```
 
@@ -284,7 +284,7 @@ It's a hot desert.
 
 让我们看一个例子。假设您有一个从 1 到 14(包括 1 和 14)的数字列表，您想要提取所有小于 3 或大于或等于 10 的数字。您可以使用一个`or`操作符来获得结果！
 
-```
+```py
 # or logical operator
 nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 nums_less_3_greater_equal_10 = []
@@ -296,7 +296,7 @@ for num in nums:
 print(nums_less_3_greater_equal_10)
 ```
 
-```
+```py
 [1, 2, 10, 11, 12, 13, 14]
 ```
 
@@ -306,7 +306,7 @@ print(nums_less_3_greater_equal_10)
 
 为了实验方便，我们把`or`改成`and`。
 
-```
+```py
 # Change or to and
 nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 nums_less_3_greater_equal_10 = []
@@ -318,7 +318,7 @@ for num in nums:
 print(nums_less_3_greater_equal_10)
 ```
 
-```
+```py
 []
 ```
 
@@ -328,11 +328,11 @@ print(nums_less_3_greater_equal_10)
 
 为了让事情更清楚，看看这个`print`声明。
 
-```
+```py
 print(False or True)
 ```
 
-```
+```py
 True
 ```
 
@@ -342,11 +342,11 @@ True
 
 现在，如果我们把`or`改成`and`会发生什么？
 
-```
+```py
 print(False and True)
 ```
 
-```
+```py
 False
 ```
 
@@ -358,7 +358,7 @@ False
 
 我们将使用`%`操作符来判断数字是否是偶数。表达式`number % another_number`将得出`number`除以`another_number`的余数。如果我们想知道一个数是否是偶数，那么这个数除以 2 的余数应该是 0。
 
-```
+```py
 # More complex logical statements
 nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 nums_less_3_greater_equal_10_multiple_2 = []
@@ -370,7 +370,7 @@ for num in nums:
 print(nums_less_3_greater_equal_10_multiple_2)
 ```
 
-```
+```py
 [2, 10, 12, 14]
 ```
 
@@ -380,7 +380,7 @@ print(nums_less_3_greater_equal_10_multiple_2)
 
 我们为什么要用括号？是因为 Python 中的**运算符优先级**。如果我们移除它们呢？
 
-```
+```py
 # More complex logical statements without parentheses
 nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 nums_less_3_greater_equal_10_multiple_2 = []
@@ -392,7 +392,7 @@ for num in nums:
 print(nums_less_3_greater_equal_10_multiple_2)
 ```
 
-```
+```py
 [1, 2, 10, 12, 14]
 ```
 
@@ -417,7 +417,7 @@ print(nums_less_3_greater_equal_10_multiple_2)
 
 Python 是一种非常灵活的编程语言，它允许你在其他 if 语句中使用 if 语句，即所谓的**嵌套`if`语句**。让我们看一个例子。
 
-```
+```py
 # Nested if statements
 mark =  85
 
@@ -438,7 +438,7 @@ else:
     print("Failed.")
 ```
 
-```
+```py
 Well done!
 ```
 
@@ -454,7 +454,7 @@ Well done!
 
 2021 年 10 月发布的 Python 3.10 中加入了[模式匹配](https://en.wikipedia.org/wiki/Pattern_matching)。简而言之，可以看出`if..elif`语句的不同语法。让我们看一个例子，用模式匹配重写前面的例子。
 
-```
+```py
 # Previous example
 tomorrow = "snowy"
 
@@ -470,11 +470,11 @@ else:
     print("Weather not recognized.")
 ```
 
-```
+```py
 I'll build a snowman.
 ```
 
-```
+```py
 # Pattern matching with match..case syntax
 tomorrow = "snowy"
 
@@ -491,7 +491,7 @@ match tomorrow:
         print("Weather not recognized.")
 ```
 
-```
+```py
 I'll build a snowman.
 ```
 
@@ -503,7 +503,7 @@ I'll build a snowman.
 
 当您开始编写更复杂的代码时，您可能会发现自己不得不使用一个**占位符来代替您稍后想要实现的代码。**`pass`语句就是这个占位符。让我们看一个有和没有`pass`语句的例子。
 
-```
+```py
 # Without pass
 num = 3
 if num == 3:
@@ -511,7 +511,7 @@ if num == 3:
 print("I'll write this code later.")
 ```
 
-```
+```py
  Input In [24]
     print("I'll write this code later.")
     ^
@@ -520,7 +520,7 @@ IndentationError: expected an indented block after 'if' statement on line 3
 
 输出:
 
-```
+```py
 File "<ipython-input-26-4af22b0ed55d>", line 4
     print("I'll write this code later.")
     ^
@@ -529,7 +529,7 @@ IndentationError: expected an indented block
 
 Python 需要一些“if”语句下的代码，但是你还没有实现它！你可以在那里写“通过”来解决这个问题。
 
-```
+```py
 # With pass
 num = 3
 if num == 3:
@@ -538,7 +538,7 @@ if num == 3:
 print("I'll write this code later.")
 ```
 
-```
+```py
 I'll write this code later.
 ```
 
@@ -546,7 +546,7 @@ I'll write this code later.
 
 相反，如果你在“If”语句中放置“pass ”, Python 不会抛出任何错误，而是传递给“if”语句下的任何代码。即使在第一个“if”语句下面有其他条件，这也是有效的。
 
-```
+```py
 # With pass
 num = 4
 if num == 3:
@@ -557,7 +557,7 @@ else:
     print("The variable num is neither 3 nor 4.")
 ```
 
-```
+```py
 The variable num is 4.
 ```
 

@@ -68,14 +68,14 @@ June 29, 2017![html-web-scraping-beautifulsoup](img/d53ba24c31539e6b155a71c08e7b
 *   使用`get()`向服务器请求网页内容，并将服务器的响应存储在变量`response`中。
 *   通过访问`.text`属性打印`response`的一小部分内容(`response`现在是一个`Response`对象)。
 
-```
+```py
 from requests import get
 url = 'https://www.imdb.com/search/title?release_date=2017&sort=num_votes,desc&page=1'
 response = get(url)
 print(response.text[:500])
 ```
 
-```
+```py
 <!DOCTYPE html><
 htmlxmlns:og="https://ogp.me/ns#"xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
@@ -121,13 +121,13 @@ var ue_mid = "A1EVAM02EL8SFB";
 *   从包`bs4`中导入`BeautifulSoup`类创建器。
 *   通过创建一个`BeautifulSoup`对象来解析`response.text`，并将这个对象分配给`html_soup`。`'html.parser'`参数表明我们想要使用 [Python 的内置 HTML 解析器](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#specifying-the-parser-to-use)来进行解析。
 
-```
+```py
 from bs4 import BeautifulSoup
 html_soup = BeautifulSoup(response.text, 'html.parser')
 type(html_soup)
 ```
 
-```
+```py
 bs4.BeautifulSoup
 ```
 
@@ -137,13 +137,13 @@ bs4.BeautifulSoup
 
 现在让我们使用`find_all()` [方法](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#find-all)提取所有具有`lister-item mode-advanced`的`class`属性的`div`容器:
 
-```
+```py
 movie_containers = html_soup.find_all('div', class_ = 'lister-item mode-advanced')
 print(type(movie_containers))
 print(len(movie_containers))
 ```
 
-```
+```py
 <class 'bs4.element.ResultSet'>
 50
 ```
@@ -164,12 +164,12 @@ print(len(movie_containers))
 
 我们可以通过在`movie_containers`上使用列表符号来访问第一个容器，它包含关于一部电影的信息。
 
-```
+```py
 first_movie = movie_containers[0]
 first_movie
 ```
 
-```
+```py
 <div class="lister-item mode-advanced">
 <div class="lister-top-right">
 <div class="ribbonize" data-caller="filmosearch" data-tconst="tt3315342"></div>
@@ -262,32 +262,32 @@ Stars:
 
 `first_movie`是一个`Tag` [对象](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#kinds-of-objects)，其中的各种 HTML 标签被存储为其属性。我们可以像访问 Python 对象的任何属性一样访问它们。但是，使用标签名称作为属性只会选择该名称的第一个标签。如果我们运行`first_movie.div`，我们只得到第一个`div`标签的内容:
 
-```
+```py
 first_movie.div
 ```
 
-```
+```py
 <div class="lister-top-right">
 <div class="ribbonize" data-caller="filmosearch" data-tconst="tt3315342"></div></div>
 ```
 
 访问第一个锚标签(`<a>`)不会将我们带到电影的名称。第一个`<a>`在第二个`div`的某个地方:
 
-```
+```py
 first_movie.a
 ```
 
-```
+```py
 <a href="/title/tt3315342/?ref_=adv_li_i"> <img alt="Logan" class="loadlate" data-tconst="tt3315342" height="98" loadlate="https://images-na.ssl-images-amazon.cimg/M/[[email protected]](/cdn-cgi/l/email-protection)_V1_UX67_CR0,0,67,98_AL_.jpg" src="https://ia.media-imdb.cimg/G/01/imimg/nopicture/large/film-184890147._CB522736516_.png" width="67"/></a>
 ```
 
 然而，访问第一个`<h3>`标签使我们非常接近:
 
-```
+```py
 first_movie.h3
 ```
 
-```
+```py
 <h3 class="lister-item-header">
 <span class="lister-item-index unbold text-primary">1.</span>
 <a href="/title/tt3315342/?ref_=adv_li_tt">Logan</a
@@ -297,22 +297,22 @@ first_movie.h3
 
 从这里开始，我们可以使用属性符号来访问`<h3>`标签中的第一个`<a>`:
 
-```
+```py
 first_movie.h3.a
 ```
 
-```
+```py
 <a href="/title/tt3315342/?ref_=adv_li_tt">Logan</a>
 ```
 
 现在只需要从那个`<a>`标签中访问文本:
 
-```
+```py
 first_name = first_movie.h3.a.text
 first_name
 ```
 
-```
+```py
 'Logan'
 ```
 
@@ -326,23 +326,23 @@ first_name
 
 区别标记由分配给`class`属性的值`lister-item-year text-muted unbold`组成。因此，我们在`<h3>`标记中寻找具有这些值的第一个`<span>`:
 
-```
+```py
 first_year = first_movie.h3.find('span', class_ = 'lister-item-year text-muted unbold')
 first_year
 ```
 
-```
+```py
 <span class="lister-item-year text-muted unbold">(2017)</span>
 ```
 
 从这里开始，我们只需使用属性符号来访问文本:
 
-```
+```py
 first_year = first_year.text
 first_year
 ```
 
-```
+```py
 '(2017)'
 ```
 
@@ -358,22 +358,22 @@ first_year
 
 让我们使用属性符号，希望第一个`<strong>`也是包含评级的那个。
 
-```
+```py
 first_movie.strong
 ```
 
-```
+```py
 <strong>8.3</strong>
 ```
 
 太好了！我们将访问文本，将其转换为`float`类型，并将其赋给变量`first_imdb`:
 
-```
+```py
 first_imdb = float(first_movie.strong.text)
 first_imdb
 ```
 
-```
+```py
 8.3
 ```
 
@@ -387,13 +387,13 @@ first_imdb
 
 *注意，如果你从 DevTools 的标签中复制粘贴这些值，在`metascore`和`favorable`之间会有两个空格。确保在将值作为参数传递给`class_`参数时，只有一个空白字符。否则，`find()`什么也找不到。*
 
-```
+```py
 first_mscore = first_movie.find('span', class_ = 'metascore favorable')
 first_mscore = int(first_mscore.text)
 print(first_mscore)
 ```
 
-```
+```py
 77
 ```
 
@@ -407,12 +407,12 @@ print(first_mscore)
 
 `name`属性不同于`class`属性。使用 BeautifulSoup，我们可以通过任何属性访问元素。`find()`和`find_all()`函数有一个名为`attrs`的参数。为此，我们可以传递我们作为字典搜索的属性和值:
 
-```
+```py
 first_votes = first_movie.find('span', attrs = {'name':'nv'})
 first_votes
 ```
 
-```
+```py
 <span data-value="320428" name="nv">320,428</span>
 ```
 
@@ -420,17 +420,17 @@ first_votes
 
 你可以像对待字典一样对待一个`Tag`对象。HTML 属性是字典的关键字。HTML 属性的值就是字典的键值。这就是我们如何访问`data-value`属性的值:
 
-```
+```py
 first_votes['data-value']
 ```
 
-```
+```py
 '320428'
 ```
 
 让我们将该值转换为一个整数，并将其赋给`first_votes`:
 
-```
+```py
 first_votes = int(first_votes['data-value'])
 ```
 
@@ -454,12 +454,12 @@ first_votes = int(first_votes['data-value'])
 
 重要提示:当我运行下面的代码时，第八个容器没有 Metascore。然而，这是一个移动的目标，因为每部电影的投票数不断变化。为了获得与我在下一个演示代码单元中所做的相同的输出，您应该在运行代码时搜索一个没有 Metascore 的容器。
 
-```
+```py
 eighth_movie_mscore = movie_containers[7].find('div', class_ = 'ratings-metascore')
 type(eighth_movie_mscore)
 ```
 
-```
+```py
 NoneType
 ```
 
@@ -469,7 +469,7 @@ NoneType
 *   遍历`movie_containers`(包含所有 50 个电影容器的变量)中的每个容器。
 *   仅当容器具有元得分时，才提取感兴趣的数据点。
 
-```
+```py
 # Lists to store the scraped data in
 names = []
 years = []
@@ -499,7 +499,7 @@ for container in movie_containers:
 
 让我们检查一下目前收集的数据。熊猫让我们很容易看到我们是否成功地收集了数据。
 
-```
+```py
 import pandas as pd
 test_df = pd.DataFrame({'movie': names,
 'year': years,
@@ -511,7 +511,7 @@ print(test_df.info())
 test_df
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 32 entries, 0 to 31
 Data columns (total 5 columns):
@@ -568,7 +568,7 @@ None
 
 如果您遇到这个问题，请将以下值传递给`get()`函数的`headers`参数:
 
-```
+```py
 headers = {"Accept-Language": "en-US, en;q=0.5"}
 ```
 
@@ -597,7 +597,7 @@ headers = {"Accept-Language": "en-US, en;q=0.5"}
 *   创建一个名为`pages`的列表，用对应于前 4 页的**字符串**填充它。
 *   创建一个名为`years_url`的列表，并用与 2000-2017 年相对应的**字符串**填充它。
 
-```
+```py
 pages = [str(i) for i in range(1,5)]
 years_url = [str(i) for i in range(2000,2018)]
 ```
@@ -614,7 +614,7 @@ years_url = [str(i) for i in range(2000,2018)]
 
 现在，让我们只导入这两个函数来防止包含主 sleep from 循环的代码单元过度拥挤
 
-```
+```py
 from time import sleep
 from random
 import randint
@@ -641,7 +641,7 @@ import randint
     *   计算自第一次请求以来经过的时间，并将该值分配给`elapsed_time`。
     *   打印请求的数量和频率。
 
-```
+```py
 from time import timestart_time = time()
 requests = 0
 for _ in range(5):
@@ -652,7 +652,7 @@ for _ in range(5):
     print('Request: {}; Frequency: {} requests/s'.format(requests, requests/elapsed_time))
 ```
 
-```
+```py
 Request: 1; Frequency: 0.49947650463238624 requests/s
 Request: 2; Frequency: 0.4996998027377252 requests/s
 Request: 3; Frequency: 0.5995400143227362 requests/s
@@ -662,7 +662,7 @@ Request: 5; Frequency: 0.4543451628627026 requests/s
 
 由于我们将发出 72 个请求，随着输出的增加，我们的工作看起来会有点混乱。为了避免这种情况，我们将在每次迭代后清除输出，并用关于最近请求的信息替换它。为此，我们将使用 IPython 的`core.display` [模块](https://ipython.org/ipython-doc/2/api/generated/IPython.core.display.html#module-IPython.core.display)中的`clear_output()` [函数](https://ipython.org/ipython-doc/2/api/generated/IPython.core.display.html#IPython.core.display.clear_output)。我们将`clear_output()`的`wait`参数设置为`True`，等待替换当前输出，直到出现新的输出。
 
-```
+```py
 from IPython.core.display import clear_output
 start_time = time()requests = 0
 for _ in range(5):
@@ -675,7 +675,7 @@ for _ in range(5):
 clear_output(wait = True)
 ```
 
-```
+```py
 Request: 5; Frequency: 0.6240351700607663 requests/s
 ```
 
@@ -685,11 +685,11 @@ Request: 5; Frequency: 0.6240351700607663 requests/s
 
 为了监控状态代码，我们将设置程序，以便在出现问题时发出警告。一个[成功请求](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#2xx_Success)由状态码 200 表示。如果状态代码不是 200，我们将使用`warnings` 中的`warn()` 抛出警告。
 
-```
+```py
 from warnings import warnwarn("Warning Simulation")
 ```
 
-```
+```py
 /Users/joshuadevlin/.virtualenvs/everday-ds/lib/python3.4/site-packages/ipykernel/__main__.py:3:
 UserWarning: Warning Simulation app.launch_new_instance()
 ```
@@ -717,7 +717,7 @@ UserWarning: Warning Simulation app.launch_new_instance()
 *   遍历所有这些容器。
 *   如果容器有 Metascore，则提取数据。
 
-```
+```py
 # Redeclaring the lists to store data in
 names = []
 years = []
@@ -789,7 +789,7 @@ for year_url in years_url:
                 votes.append(int(vote))
 ```
 
-```
+```py
 Request:72; Frequency: 0.07928964663062842 requests/s
 ```
 
@@ -805,7 +805,7 @@ Request:72; Frequency: 0.07928964663062842 requests/s
 *   打印一些关于新创建的`DataFrame`的信息。
 *   显示前 10 个条目。
 
-```
+```py
 movie_ratings = pd.DataFrame({'movie': names,
 'year': years,
 'imdb': imdb_ratings,
@@ -816,7 +816,7 @@ print(movie_ratings.info())
 movie_ratings.head(10)
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 2862 entries, 0 to 2861
 Data columns (total 5 columns):
@@ -860,7 +860,7 @@ None
 
 让我们从重新排列各列开始:
 
-```
+```py
 movie_ratings = movie_ratings[['movie', 'year', 'imdb', 'metascore', 'votes']]
 movie_ratings.head()
 ```
@@ -879,11 +879,11 @@ movie_ratings.head()
 
 让我们检查一下`year`列的唯一值。这有助于我们了解如何进行我们想要的转换。为了查看所有的唯一值，我们将使用`unique()`方法:
 
-```
+```py
 movie_ratings['year'].unique()
 ```
 
-```
+```py
 array(['(2000)', '(I) (2000)', '(2001)', '(I) (2001)', '(2002)',
 '(I) (2002)', '(2003)', '(I) (2003)', '(2004)', '(I) (2004)',
 '(2005)', '(I) (2005)', '(2006)', '(I) (2006)', '(2007)',
@@ -899,17 +899,17 @@ array(['(2000)', '(I) (2000)', '(2001)', '(I) (2001)', '(2002)',
 
 从末尾向开头数，我们可以看到年份总是位于第五个字符到第二个字符之间。我们将使用`.str()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.str.html?highlight=series%20str#pandas.Series.str)来只选择那个区间。我们还将使用`astype()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.astype.html?highlight=series%20astype#pandas.Series.astype)将结果转换为整数:
 
-```
+```py
 movie_ratings.loc[:, 'year'] = movie_ratings['year'].str[-5:-1].astype(int)
 ```
 
 让我们直观地看到`year`列的前 3 个值，以便快速检查。我们还可以在输出的最后一行看到值的类型:
 
-```
+```py
 movie_ratings['year'].head(3)
 ```
 
-```
+```py
 0 2000
 1 2000
 2 2000
@@ -918,7 +918,7 @@ Name: year, dtype: int64
 
 现在，我们将检查每种评级的最小值和最大值。我们可以通过熊猫的`describe()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.describe.html?highlight=describe#pandas.DataFrame.describe)很快做到这一点。当在一个`DataFrame`上应用时，这个方法为`DataFrame`的每个数字列返回各种描述性统计数据。在下一行代码中，我们仅选择描述最小值和最大值的行，以及描述 IMDB 评级和 Metascores 的列。
 
-```
+```py
 movie_ratings.describe().loc[['min', 'max'], ['imdb', 'metascore']]
 ```
 
@@ -933,7 +933,7 @@ movie_ratings.describe().loc[['min', 'max'], ['imdb', 'metascore']]
 
 我们将每个 IMDB 评级乘以 10，然后通过查看前 3 行进行快速检查:
 
-```
+```py
 movie_ratings['n_imdb'] = movie_ratings['imdb'] * 10
 movie_ratings.head(3)
 ```
@@ -948,7 +948,7 @@ movie_ratings.head(3)
 
 所以我们省省吧:
 
-```
+```py
 movie_ratings.to_csv('movie_ratings.csv')
 ```
 
@@ -967,7 +967,7 @@ movie_ratings.to_csv('movie_ratings.csv')
 *   在同一个`ax`上绘制两个等级的标准化分布。
 *   隐藏所有三个`axes`的顶部和右侧脊椎。
 
-```
+```py
 import matplotlib.pyplot as plt
 
 fig, axes = plt.subplots(nrows = 1, ncols = 3, figsize = (16,4))

@@ -22,7 +22,7 @@ Pandas 数据帧索引可用于各种任务:根据预定义的标准提取数据
 
 为了进一步的实验，我们将创建一个假的数据帧:
 
-```
+```py
 import pandas as pd
 
 df = pd.DataFrame({'col_1': list(range(1, 11)), 'col_2': list(range(11, 21)), 'col_3': list(range(21, 31)),
@@ -52,11 +52,11 @@ df
 
 如果我们需要从 pandas 数据帧的一列或多列中选择所有数据，我们可以简单地使用索引操作符`[]`。为了从单个列中选择所有数据，我们传递该列的名称:
 
-```
+```py
 df['col_2']
 ```
 
-```
+```py
 0    11
 1    12
 2    13
@@ -72,12 +72,12 @@ Name: col_2, dtype: int64
 
 最终的对象是一个熊猫系列。相反，如果我们想要一个单列数据帧作为输出，我们需要包含第二对方括号`[[]]`:
 
-```
+```py
 print(df[['col_2']])
 type(df[['col_2']])
 ```
 
-```
+```py
  col_2
 0     11
 1     12
@@ -95,7 +95,7 @@ pandas.core.frame.DataFrame
 
 也可以从 pandas 数据帧中选择多个列，并将列名列表传递给索引操作符。此操作的结果将始终是一个熊猫数据帧:
 
-```
+```py
 df[['col_5', 'col_1', 'col_8']]
 ```
 
@@ -116,11 +116,11 @@ df[['col_5', 'col_1', 'col_8']]
 
 如果所提供的列表中至少有一个列名不在数据帧中，将抛出`KeyError`:
 
-```
+```py
 df[['col_5', 'col_1', 'col_8', 'col_100']]
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 KeyError                                  Traceback (most recent call last)
@@ -156,11 +156,11 @@ KeyError: "['col_100'] not in index"
 
 要仅选择数据帧中的一列，我们可以通过其名称作为属性直接访问它:
 
-```
+```py
 df.col_3
 ```
 
-```
+```py
 0    21
 1    22
 2    23
@@ -176,11 +176,11 @@ Name: col_3, dtype: int64
 
 上面这段代码相当于`df['col_3']`:
 
-```
+```py
 df['col_3']
 ```
 
-```
+```py
 0    21
 1    22
 2    23
@@ -204,12 +204,12 @@ Name: col_3, dtype: int64
 
 让我们暂时在数据帧的列名中引入一些混乱，看看如果我们尝试使用属性 access 会发生什么:
 
-```
+```py
 df.columns = ['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col 6', 'col-7', 8, 'last']
 df.columns
 ```
 
-```
+```py
 Index(['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col 6', 'col-7', 8,
        'last'],
       dtype='object')
@@ -217,24 +217,24 @@ Index(['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col 6', 'col-7', 8,
 
 上面，我们更改了最后四列的名称。现在，让我们看看如何在这些列上使用属性操作符:
 
-```
+```py
 # The column name contains a white space
 df.col 6
 ```
 
-```
+```py
  File "C:\Users\Utente\AppData\Local\Temp/ipykernel_2100/3654995016.py", line 2
     df.col 6
            ^
 SyntaxError: invalid syntax
 ```
 
-```
+```py
 # The column name contains a punctuation mark (except for the underscore)
 df.col-7
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 AttributeError                            Traceback (most recent call last)
@@ -253,12 +253,12 @@ AttributeError                            Traceback (most recent call last)
 AttributeError: 'DataFrame' object has no attribute 'col'
 ```
 
-```
+```py
 # The column name coincides with a pandas method name
 df.last
 ```
 
-```
+```py
  <bound method NDFrame.last of    col_1  col_2  col_3  col_4  col_5  col 6  col-7   8  last
     0      1     11     21     31     41     51     61  71    81
     1      2     12     22     32     42     52     62  72    82
@@ -272,26 +272,26 @@ df.last
     9     10     20     30     40     50     60     70  80    90>
 ```
 
-```
+```py
 # The column name is not a string 
 df.8
 ```
 
-```
+```py
  File "C:\Users\Utente\AppData\Local\Temp/ipykernel_2100/2774159673.py", line 2
     df.8
       ^
 SyntaxError: invalid syntax
 ```
 
-```
+```py
 # An attempt to create a new column using the attribute access
 df.new = 0
 print(df.new)     # an attribute was created
 print(df['new'])  # a column was not created
 ```
 
-```
+```py
 0
 
 ---------------------------------------------------------------------------
@@ -343,7 +343,7 @@ KeyError: 'new'
 
 让我们恢复原来的列名，并继续下一种基于标签的数据帧索引方法:
 
-```
+```py
 df.columns = ['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col_6', 'col_7', 'col_8', 'col_9']
 df
 ```
@@ -367,12 +367,12 @@ df
 
 在继续之前，让我们看看数据帧的当前标签是什么。为此，我们将使用属性`columns`和`index`:
 
-```
+```py
 print(df.columns)
 print(df.index)
 ```
 
-```
+```py
 Index(['col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col_6', 'col_7', 'col_8',
        'col_9'],
       dtype='object')
@@ -381,11 +381,11 @@ RangeIndex(start=0, stop=10, step=1)
 
 注意，数据帧行的标签由一种特定类型的对象表示，在我们的例子中，它由从 0 到 9 的有序整数组成。这些整数是有效的行标签，它们可以在应用`loc`索引器时使用。例如，要提取带有*标签* 0 的行，这也是我们的数据帧的第一行，我们可以使用以下语法:
 
-```
+```py
 df.loc[0]
 ```
 
-```
+```py
 col_1     1
 col_2    11
 col_3    21
@@ -402,7 +402,7 @@ Name: 0, dtype: int64
 
 然而，为了进一步实验`loc`索引器，让我们将行标签重命名为更有意义的字符串数据类型:
 
-```
+```py
 df.index = ['row_1', 'row_2', 'row_3', 'row_4', 'row_5', 'row_6', 'row_7', 'row_8', 'row_9', 'row_10']
 df
 ```
@@ -422,11 +422,11 @@ df
 
 让我们使用`loc`索引器和新的行标签再次提取数据帧第一行的值:
 
-```
+```py
 df.loc['row_1']
 ```
 
-```
+```py
 col_1     1
 col_2    11
 col_3    21
@@ -441,7 +441,7 @@ Name: row_1, dtype: int64
 
 如果我们想要访问**多个不同的行**，不一定按照原始数据帧中的顺序，我们必须传递一个行标签列表:
 
-```
+```py
 df.loc[['row_6', 'row_2', 'row_9']]
 ```
 
@@ -455,11 +455,11 @@ df.loc[['row_6', 'row_2', 'row_9']]
 
 如果提供的列表中至少有一个标签不在数据帧中，将抛出`KeyError`:
 
-```
+```py
 df.loc[['row_6', 'row_2', 'row_100']]
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 KeyError                                  Traceback (most recent call last)
@@ -507,7 +507,7 @@ KeyError: "['row_100'] not in index"
 
 我们可能需要从原始数据帧中选择**多个连续的行**，而不是选择不同的行。在这种情况下，我们可以应用*切片*，即指定由冒号分隔的开始和结束行标签:
 
-```
+```py
 df.loc['row_7':'row_9']
 ```
 
@@ -521,7 +521,7 @@ df.loc['row_7':'row_9']
 
 如果我们需要所有的行，包括特定行的(例如`df.loc[:'row_4']`)，或者从特定行开始，直到末端(例如`df.loc['row_4':]`)，可以将其中一个切片末端打开:
 
-```
+```py
 # Selecting all the rows up to and including 'row_4'
 df.loc[:'row_4']
 ```
@@ -535,7 +535,7 @@ df.loc[:'row_4']
 
 为了选择**多行和多列**，实际上意味着这些行和列的交叉点处的数据帧的数据点的子集，我们向`loc`索引器传递两个由逗号分隔的参数:必要的行标签和列标签。对于行标签和列标签，它可以是一个标签列表、一个标签片(或一个开放标签片)或一个字符串形式的单个标签。一些例子:
 
-```
+```py
 df.loc[['row_4', 'row_2'], ['col_5', 'col_2', 'col_9']]
 ```
 
@@ -544,7 +544,7 @@ df.loc[['row_4', 'row_2'], ['col_5', 'col_2', 'col_9']]
 | 第 4 行 | forty-four | Fourteen | Eighty-four |
 | 第 2 行 | forty-two | Twelve | Eighty-two |
 
-```
+```py
 df.loc[['row_4', 'row_2'], 'col_5':'col_7']
 ```
 
@@ -553,7 +553,7 @@ df.loc[['row_4', 'row_2'], 'col_5':'col_7']
 | 第 4 行 | forty-four | Fifty-four | Sixty-four |
 | 第 2 行 | forty-two | fifty-two | Sixty-two |
 
-```
+```py
 df.loc['row_4':'row_6', 'col_5':]
 ```
 
@@ -563,11 +563,11 @@ df.loc['row_4':'row_6', 'col_5':]
 | 第 5 行 | Forty-five | Fifty-five | Sixty-five | Seventy-five | eighty-five |
 | 第 6 行 | Forty-six | fifty-six | Sixty-six | Seventy-six | Eighty-six |
 
-```
+```py
 df.loc[:'row_4', 'col_5']
 ```
 
-```
+```py
 row_1    41
 row_2    42
 row_3    43
@@ -577,11 +577,11 @@ Name: col_5, dtype: int64
 
 一个特殊的情况是当我们需要从一个数据帧中显式地获取一个值时。为此，我们将必要的行和列标签作为由逗号分隔的两个参数进行传递:
 
-```
+```py
 df.loc['row_6', 'col_3']
 ```
 
-```
+```py
 26
 ```
 
@@ -589,11 +589,11 @@ df.loc['row_6', 'col_3']
 
 对于上一节的最后一种情况，即从数据帧中只选择一个值，有一种更快的方法——使用`at`索引器。语法与`loc`索引器的语法相同，只是这里我们总是使用由逗号分隔的两个标签(对于行和列):
 
-```
+```py
 df.at['row_6', 'col_3']
 ```
 
-```
+```py
 26
 ```
 
@@ -607,7 +607,7 @@ df.at['row_6', 'col_3']
 
 要从 pandas 数据帧的**多个连续行**中检索所有数据，我们可以简单地使用索引操作符`[]`和一系列必要的行位置(可以是一个开放的范围):
 
-```
+```py
 df[3:6]
 ```
 
@@ -617,7 +617,7 @@ df[3:6]
 | 第 5 行 | five | Fifteen | Twenty-five | Thirty-five | Forty-five | Fifty-five | Sixty-five | Seventy-five | eighty-five |
 | 第 6 行 | six | Sixteen | Twenty-six | Thirty-six | Forty-six | fifty-six | Sixty-six | Seventy-six | Eighty-six |
 
-```
+```py
 df[:3]
 ```
 
@@ -635,12 +635,12 @@ df[:3]
 
 为了访问**单行**或**多行**，我们将*一个参数*传递给`iloc`索引器，该索引器表示相应的行位置、行位置列表(如果行是不同的)或行位置范围(如果行是连续的):
 
-```
+```py
 # Selecting one row 
 df.iloc[3]
 ```
 
-```
+```py
 col_1     4
 col_2    14
 col_3    24
@@ -653,7 +653,7 @@ col_9    84
 Name: row_4, dtype: int64
 ```
 
-```
+```py
 # Selecting disparate rows in the necessary order
 df.iloc[[9, 8, 7]]
 ```
@@ -664,7 +664,7 @@ df.iloc[[9, 8, 7]]
 | 第 9 行 | nine | Nineteen | Twenty-nine | Thirty-nine | forty-nine | Fifty-nine | sixty-nine | Seventy-nine | eighty-nine |
 | 第 8 行 | eight | Eighteen | Twenty-eight | Thirty-eight | Forty-eight | Fifty-eight | sixty-eight | seventy-eight | Eighty-eight |
 
-```
+```py
 # Selecting a slice of sequential rows
 df.iloc[3:6]
 ```
@@ -675,7 +675,7 @@ df.iloc[3:6]
 | 第 5 行 | five | Fifteen | Twenty-five | Thirty-five | Forty-five | Fifty-five | Sixty-five | Seventy-five | eighty-five |
 | 第 6 行 | six | Sixteen | Twenty-six | Thirty-six | Forty-six | fifty-six | Sixty-six | Seventy-six | Eighty-six |
 
-```
+```py
 # Selecting a slice of sequential rows (an open-ending range)
 df.iloc[:3]
 ```
@@ -698,28 +698,28 @@ df.iloc[:3]
 
 一些例子:
 
-```
+```py
 # Selecting an individual data point
 df.iloc[0, 0]
 ```
 
-```
+```py
 1
 ```
 
-```
+```py
 # Selecting one row and multiple disparate columns 
 df.iloc[0, [2, 8, 3]]
 ```
 
-```
+```py
 col_3    21
 col_9    81
 col_4    31
 Name: row_1, dtype: int64
 ```
 
-```
+```py
 # Selecting multiple disparate rows and multiple sequential columns 
 df.iloc[[8, 1, 9], 5:9]
 ```
@@ -730,7 +730,7 @@ df.iloc[[8, 1, 9], 5:9]
 | 第 2 行 | fifty-two | Sixty-two | seventy-two | Eighty-two |
 | 第 10 行 | Sixty | Seventy | Eighty | Ninety |
 
-```
+```py
 # Selecting multiple sequential rows and multiple sequential columns (with open-ending ranges)
 df.iloc[:3, 6:]
 ```
@@ -741,7 +741,7 @@ df.iloc[:3, 6:]
 | 第 2 行 | Sixty-two | seventy-two | Eighty-two |
 | 第三行 | Sixty-three | Seventy-three | Eighty-three |
 
-```
+```py
 # Selecting all rows and multiple disparate columns 
 df.iloc[:, [1, 3, 7]]
 ```
@@ -761,11 +761,11 @@ df.iloc[:, [1, 3, 7]]
 
 注意，如果我们向`iloc`索引器传递至少一个越界的位置号(无论是整行/列的单个整数还是列表中的一个整数)，将会抛出一个`IndexError`:
 
-```
+```py
 df.iloc[[1, 3, 100]]
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 IndexError                                Traceback (most recent call last)
@@ -830,11 +830,11 @@ IndexError: positional indexers are out-of-bounds
 
 但是，对于整数范围(一部分连续的行或列)，允许超出边界的位置数:
 
-```
+```py
 df.iloc[1, 5:100]
 ```
 
-```
+```py
 col_6    52
 col_7    62
 col_8    72
@@ -844,7 +844,7 @@ Name: row_2, dtype: int64
 
 这也适用于上一节中讨论的索引运算符:
 
-```
+```py
 df[7:1000]
 ```
 
@@ -858,11 +858,11 @@ df[7:1000]
 
 要从数据帧中只选择一个值，我们可以使用`iat`索引器，它比`iloc`执行得更快。语法与`iloc`索引器相同，只是这里我们总是使用两个整数(行号和列号):
 
-```
+```py
 df.iat[1, 2]
 ```
 
-```
+```py
 22
 ```
 
@@ -870,7 +870,7 @@ df.iat[1, 2]
 
 除了基于标签或基于位置的 pandas 数据帧索引之外，还可以根据特定条件从数据帧中选择一个子集:
 
-```
+```py
 df[df['col_2'] > 15]
 ```
 
@@ -897,7 +897,7 @@ df[df['col_2'] > 15]
 
 此外，我们可以在同一列或多列上定义几个标准。用于此目的的运算符有`&` ( *和*)、`|` ( *或*)、`~` ( *而非*)。每个条件必须放在单独的一对括号中:
 
-```
+```py
 # Selecting all the rows of the dataframe where the value of `col_2` is greater than 15 but not equal to 19
 df[(df['col_2'] > 15) & (df['col_2'] != 19)]
 ```
@@ -909,7 +909,7 @@ df[(df['col_2'] > 15) & (df['col_2'] != 19)]
 | 第 8 行 | eight | Eighteen | Twenty-eight | Thirty-eight | Forty-eight | Fifty-eight | sixty-eight | seventy-eight | Eighty-eight |
 | 第 10 行 | Ten | Twenty | Thirty | Forty | Fifty | Sixty | Seventy | Eighty | Ninety |
 
-```
+```py
 # Selecting all the rows of the dataframe where the value of `col_2` is greater than 15 
 # or the value of `col_5` is equal to 42
 df[(df['col_2'] > 15) | (df['col_5'] == 42)]
@@ -924,7 +924,7 @@ df[(df['col_2'] > 15) | (df['col_5'] == 42)]
 | 第 9 行 | nine | Nineteen | Twenty-nine | Thirty-nine | forty-nine | Fifty-nine | sixty-nine | Seventy-nine | eighty-nine |
 | 第 10 行 | Ten | Twenty | Thirty | Forty | Fifty | Sixty | Seventy | Eighty | Ninety |
 
-```
+```py
 # Selecting all the rows of the dataframe where the value of `col_2` is NOT greater than 15 
 df[~(df['col_2'] > 15)]
 ```
@@ -941,7 +941,7 @@ df[~(df['col_2'] > 15)]
 
 最后，我们可以以各种方式组合基于标签、基于位置和布尔数据帧的索引方法。为此，我们应该再次应用`loc`索引器，并使用行的`index`属性和列的`columns`属性来访问位置号:
 
-```
+```py
 df.loc[df.index[[3, 4]], ['col_3', 'col_7']]
 ```
 
@@ -950,7 +950,7 @@ df.loc[df.index[[3, 4]], ['col_3', 'col_7']]
 | 第 4 行 | Twenty-four | Sixty-four |
 | 第 5 行 | Twenty-five | Sixty-five |
 
-```
+```py
 df.loc['row_3':'row_6', df.columns[[0, 5]]]
 ```
 
@@ -961,7 +961,7 @@ df.loc['row_3':'row_6', df.columns[[0, 5]]]
 | 第 5 行 | five | Fifty-five |
 | 第 6 行 | six | fifty-six |
 
-```
+```py
 df.loc[df['col_4'] > 35, 'col_4':'col_7']
 ```
 

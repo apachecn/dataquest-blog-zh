@@ -14,7 +14,7 @@ for 循环是 R 编程语言的主要控制流结构之一。它用于迭代对�
 
 R 中 for 循环的基本语法如下:
 
-```
+```py
 for (variable in sequence) {
     expression
 }
@@ -34,13 +34,13 @@ for (variable in sequence) {
 
 从一个非常简单的例子开始，让我们打印从 1 到 5 的所有数字。为此，我们将采用由`:`操作符(`1:5`)创建的相应向量，并使用`print()`函数作为表达式:
 
-```
+```py
 for (x in 1:5) {
     print(x)
 }
 ```
 
-```
+```py
 [1] 1
 [1] 2
 [1] 3
@@ -52,13 +52,13 @@ for (x in 1:5) {
 
 如果我们需要将每个值打印为一个字符，给出更多的上下文，我们可以将`paste()`函数添加到表达式中:
 
-```
+```py
 for (month in 1:5) {
     print(paste('Month:', month))
 }
 ```
 
-```
+```py
 [1] "Month: 1"
 [1] "Month: 2"
 [1] "Month: 3"
@@ -68,7 +68,7 @@ for (month in 1:5) {
 
 通常，我们需要评估 for 循环体中的条件表达式，并基于此输出相应的结果:
 
-```
+```py
 for (month in 1:5) {
     if (month < 3) {
         print(paste('Winter, month', month))
@@ -78,7 +78,7 @@ for (month in 1:5) {
 }
 ```
 
-```
+```py
 [1] "Winter, month 1"
 [1] "Winter, month 2"
 [1] "Spring, month 3"
@@ -88,11 +88,11 @@ for (month in 1:5) {
 
 使用易于理解且一致的语法，注意缩进，并将循环体的每个部分放在新的一行上，我们清楚地看到，对于第 1 个月和第 2 个月(即小于 3 个月)，for 循环打印“Winter”和该月的数字。对于其他月份，For 循环输出“Spring”和月份号。通过下面这段代码，我们有效地获得了相同的结果:
 
-```
+```py
 for(month in 1:5) if(month < 3)print(paste('Winter, month', month))else print(paste('Spring, month', month))
 ```
 
-```
+```py
 [1] "Winter, month 1"
 [1] "Winter, month 2"
 [1] "Spring, month 3"
@@ -104,7 +104,7 @@ for(month in 1:5) if(month < 3)print(paste('Winter, month', month))else print(pa
 
 我们可以通过将每次迭代的结果附加到一个最初为空的向量，将 for 循环的输出存储在一个新的向量中，如下例所示:
 
-```
+```py
 vect_1 <- c(2, 7, 4, 9, 8)
 vect_2 <- numeric()
 
@@ -125,7 +125,7 @@ vect_2
 
 for 循环也适用于字符向量:
 
-```
+```py
 animals <- c('koala', 'cat', 'dog', 'panda')
 
 for (animal in animals) {
@@ -133,7 +133,7 @@ for (animal in animals) {
 }
 ```
 
-```
+```py
 [1] "koala"
 [1] "cat"
 [1] "dog"
@@ -146,32 +146,32 @@ for (animal in animals) {
 
 首先，让我们创建一个混合数据类型和结构的列表:
 
-```
+```py
 my_list <- list(c(5, 8, 2, 9), 'cat', 'dog', c('koala', 'panda', 'rabbit'), TRUE, 3.14)
 my_list
 ```
 
 2.  “猫”
 
-```
+```py
 *   “狗” 
 ```
 
 *   真实的
 
-```
+```py
 *   Three point one four
 ```
 
 我们可以打印列表中每个项目的值:
 
-```
+```py
 for (item in my_list) {
     print(item)
 }
 ```
 
-```
+```py
 [1] 5 8 2 9
 [1] "cat"
 [1] "dog"
@@ -182,13 +182,13 @@ for (item in my_list) {
 
 我们还可以打印列表中每个项目的长度:
 
-```
+```py
 for (item in my_list) {
     print(length(item))
 }
 ```
 
-```
+```py
 [1] 4
 [1] 1
 [1] 1
@@ -199,7 +199,7 @@ for (item in my_list) {
 
 现在，让我们基于`my_list`创建一个新列表，初始列表的每一项都复制两次:
 
-```
+```py
 my_list_2 <- list()
 
 for(i in 1:length(my_list)) {
@@ -209,7 +209,7 @@ for(i in 1:length(my_list)) {
 my_list_2
 ```
 
-```
+```py
 
 正如我们在向量部分所做的那样，我们可以在上面的 for 循环体中添加一个条件评估。让我们创建一个新的列表`my_list_3`，同样基于`my_list`，初始列表的每个条目复制两次，*，但是只针对长度大于 1* 的条目。否则会加一个人物`'Too short item'`:
 
@@ -225,19 +225,19 @@ for(i in 1:length(my_list)) {
 }
 
 my_list_3
-```
+```py
 
 2.  '太短的项目'
 
 ```
 *   '太短的项目' 
-```
+```py
 
 '太短的项目'
 
 ```
 *   '太短的项目'
-```
+```py
 
 在矩阵上使用 For 循环
 由于 R 中的矩阵是具有行和列的二维数据结构，为了循环通过矩阵，我们必须使用**嵌套 for 循环**，即一个 for 循环在另一个 for 循环内:
@@ -250,7 +250,7 @@ for (row in 1:nrow(my_matrix)) {
         print(paste('Row', row, 'col', col, 'value', my_matrix[row, col]))
     }
 }
-```
+```py
 
 ```
 [1] "Row 1 col 1 value 1"
@@ -262,7 +262,7 @@ for (row in 1:nrow(my_matrix)) {
 [1] "Row 3 col 1 value 3"
 [1] "Row 3 col 2 value 6"
 [1] "Row 3 col 3 value 9"
-```
+```py
 
 在上面这段代码中，我们创建了一个 3×3 的矩阵，用 1 到 9 的整数填充它，并使用 2 个嵌套的 for 循环来遍历行和列，并打印矩阵中每个单元格的值。
 通过嵌套的 for 循环，我们可以修改矩阵的值。例如，让我们重置矩阵的所有值，使每个值都等于相应单元格的索引之和。为此，我们将使用一个内置的 R 函数`dim()`来返回矩阵的维数:
@@ -275,7 +275,7 @@ for(i in 1:dim(my_matrix)[1]) {
 }
 
 my_matrix
-```
+```py
 
  Two |
  three |
@@ -300,7 +300,7 @@ for (x in qualities) {
         print(paste(x, y))
     }
 }
-```
+```py
 
 ```
 [1] "funny koala"
@@ -315,7 +315,7 @@ for (x in qualities) {
 [1] "friendly cat"
 [1] "friendly dog"
 [1] "friendly panda"
-```
+```py
 
 在数据帧上使用 For 循环
 就像我们对上述矩阵所做的一样，我们可以循环遍历 dataframe，它也是一个二维数据结构:
@@ -327,7 +327,7 @@ super_sleepers <- data.frame(rating=1:4,
                              avg_sleep_hours=c(21, 18, 17, 10))
 
 print(super_sleepers)
-```
+```py
 
 ```
  rating   animal   country avg_sleep_hours
@@ -335,7 +335,7 @@ print(super_sleepers)
 2      2 hedgehog     Italy              18
 3      3    sloth      Peru              17
 4      4    panda     China              10
-```
+```py
 
 ```
 for (row in 1:nrow(super_sleepers)) {
@@ -343,7 +343,7 @@ for (row in 1:nrow(super_sleepers)) {
         print(paste('Row', row, 'col', col, 'value', super_sleepers[row, col]))
     }
 }
-```
+```py
 
 ```
 [1] "Row 1 col 1 value 1"
@@ -362,7 +362,7 @@ for (row in 1:nrow(super_sleepers)) {
 [1] "Row 4 col 2 value panda"
 [1] "Row 4 col 3 value China"
 [1] "Row 4 col 4 value 10"
-```
+```py
 
 在 For 循环中使用`Break`语句
 在 for 循环的逻辑条件中使用了`break`语句，以便在遍历完所有项之前退出循环。在嵌套循环的情况下，该语句只中断最内层的循环。
@@ -377,11 +377,11 @@ for (animal in animals) {
     }
     print(animal)
 }
-```
+```py
 
 ```
 [1] "koala"
-```
+```py
 
 我们看到，即使在“koala”之后的某个地方，我们的向量`animals`中有另一个至少有 4 个字符的项目(“panda”)，for 循环也没有达到那个值，并在第一次出现一个少于 4 个字符的项目(“cat”)时停止执行。
 在 For 循环中使用`Next`语句
@@ -397,12 +397,12 @@ for (animal in animals) {
     }
     print(animal)
 }
-```
+```py
 
 ```
 [1] "koala"
 [1] "panda"
-```
+```py
 
 这一次，少于 4 个字符的两个项目(“猫”和“狗”)都被丢弃，而另外两个项目(“考拉”和“熊猫”)被打印。
 结论

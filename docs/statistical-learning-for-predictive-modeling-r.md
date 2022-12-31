@@ -27,7 +27,7 @@ May 16, 2018
 
 [树](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/trees.html)数据集包含在 base R 的`datasets`包中，它将帮助我们回答这个问题。由于我们正在使用一个现有的(干净的)数据集，上面的步骤 1 和 2 已经完成，所以我们可以直接跳到步骤 3 中的一些初步探索性分析。这个数据集是什么样子的？
 
-```
+```py
 data(trees) ## access the data from R’s datasets package
 head(trees) ## look at the first several rows of the data
 ```
@@ -40,7 +40,7 @@ head(trees) ## look at the first several rows of the data
 | Ten point seven | Eighty-one | Eighteen point eight |
 | Ten point eight | Eighty-three | Nineteen point seven |
 
-```
+```py
 str(trees) ## look at the structure of the variables
 ```
 
@@ -60,7 +60,7 @@ str(trees) ## look at the structure of the variables
 
 为了决定我们是否可以建立一个预测模型，第一步是看看我们的预测变量和反应变量(在这种情况下是周长、高度和体积)之间是否存在关系。让我们做一些探索性的数据可视化。我们将使用`GGally`包中的 [`ggpairs()`](https://cran.r-project.org/web/packages/GGally/GGally.pdf) 函数来创建一个绘图矩阵，以查看变量之间的关系。
 
-```
+```py
 ggpairs(data=trees, columns=1:3, title="trees data")
 ```
 
@@ -84,7 +84,7 @@ ggpairs(data=trees, columns=1:3, title="trees data")
 
 让我们深入研究，建立一个树木体积和周长的线性模型。r 用基本函数`lm()`使这变得简单明了。
 
-```
+```py
 fit_1 <- lm(Volume ~ Girth, data = trees)
 ```
 
@@ -112,7 +112,7 @@ fit_1 <- lm(Volume ~ Girth, data = trees)
 
 让我们使用`summary()`调用我们模型的输出。模型输出将为我们提供所需的信息，以测试我们的假设并评估模型与数据的吻合程度。
 
-```
+```py
 summary(fit_1)
 ```
 
@@ -144,7 +144,7 @@ summary(fit_1)
 
 我们可以使用`ggplot2`制作一个直方图来直观显示这一点。
 
-```
+```py
 ggplot(data=trees, aes(fit_1$residuals)) +
 geom_histogram(binwidth = 1, color = "black", fill = "purple4") +
 theme(panel.background = element_rect(fill = "white"),
@@ -177,7 +177,7 @@ ggtitle("Histogram for Model Residuals")
 
 让我们来看看适合我们的宽度和体积数据的模型。我们可以通过使用`ggplot()`将线性模型拟合到我们数据的散点图来做到这一点:
 
-```
+```py
 ggplot(data = trees, aes(x = Girth, y = Volume)) +
 geom_point() +
 stat_smooth(method = "lm", col = "dodgerblue3") +
@@ -203,7 +203,7 @@ ggtitle("Linear Model Fitted to Data")
 
 我们的模型从树的周长预测树的体积会有多好？我们将使用`predict()`函数，这是一个通用的 R 函数，用于从模型拟合函数的模块中进行预测。`predict()`将我们的线性回归模型和我们需要响应变量值的预测变量的值作为参数。
 
-```
+```py
 predict(fit_1, data.frame(Girth = 18.2))
 ```
 
@@ -217,14 +217,14 @@ predict(fit_1, data.frame(Girth = 18.2))
 
 使用`lm()`函数很容易做到这一点:我们只需要添加另一个预测变量。
 
-```
+```py
 fit_2 <- lm(Volume ~ Girth + Height, data = trees)
 summary(fit_2)
 ```
 
 ![lm_output2-1](img/c2c7c0afa03c66224a7c492b17d7b1b0.png)我们可以从模型输出中看到，围长和高与体积显著相关，并且模型很好地符合我们的数据。我们调整后的 *R²* 值也比我们调整后的 *R²* 型号`fit_1`高一点。因为我们在这个模型中有两个预测变量，我们需要一个第三维度来可视化它。我们可以使用包`scatterplot3d`创建一个漂亮的 3d 散点图:首先，我们为预测变量(在我们的数据范围内)制作一个网格。`expand.grid()`函数根据因子变量的所有组合创建一个数据框。
 
-```
+```py
 Girth <- seq(9,21, by=0.5) ## make a girth vector
 Height <- seq(60,90, by=0.5) ## make a height vector
 pred_grid <- expand.grid(Girth = Girth, Height = Height)
@@ -233,25 +233,25 @@ pred_grid <- expand.grid(Girth = Girth, Height = Height)
 
 接下来，我们基于预测变量网格对体积进行预测:
 
-```
+```py
 pred_grid$Volume2 <-predict(fit_2, new = pred_grid)
 ```
 
 现在，我们可以根据预测网格和预测体积制作 3d 散点图:
 
-```
+```py
 fit_2_sp <- scatterplot3d(pred_grid$Girth, pred_grid$Height, pred_grid$Volume2, angle = 60, color = "dodgerblue", pch = 1, ylab = "Hight (ft)", xlab = "Girth (in)", zlab = "Volume (ft3)" )
 ```
 
 最后叠加我们的实际观察结果，看看它们有多吻合:
 
-```
+```py
 fit_2_sp$points3d(trees$Girth, trees$Height, trees$Volume, pch=16)
 ```
 
 让我们看看这个模型如何预测我们的树的体积。这一次，我们包括树的高度，因为我们的模型使用高度作为预测变量:
 
-```
+```py
 predict(fit_2, data.frame(Girth = 18.2, Height = 72))
 ```
 
@@ -265,14 +265,14 @@ predict(fit_2, data.frame(Girth = 18.2, Height = 72))
 
 同样，使用`lm()`很容易构建这个模型:
 
-```
+```py
 fit_3 <- lm(Volume ~ Girth * Height, data = trees)
 summary(fit_3)
 ```
 
 注意，在我们的模型中，**“周长*高度”**术语是**“周长+高度+周长*高度”**的简写。![lm_output3](img/05ab4afbab0c6197f2a00a8d0b1155c2.png)正如我们所猜测的，树高和树围的交互作用是显著的，这表明我们应该在我们用来预测树木体积的模型中包括交互作用项。调整后的*R²值接近 1，f *的大值*和 p*的小值*也支持这一决定，表明我们的模型非常适合该数据。让我们来看一个散点图，用这个模型来直观地显示树木体积的预测值。我们可以使用为`fit_2`可视化生成的预测值的相同网格:*
 
-```
+```py
 Girth <- seq(9,21, by=0.5)
 Height <- seq(60,90, by=0.5)
 pred_grid <- expand.grid(Girth = Girth, Height = Height)
@@ -280,19 +280,19 @@ pred_grid <- expand.grid(Girth = Girth, Height = Height)
 
 类似于我们如何可视化`fit_2`模型，我们将使用带有交互项的`fit_3`模型来预测预测变量网格中的体积值:
 
-```
+```py
 pred_grid$Volume3 <-predict(fit_3, new = pred_grid)
 ```
 
 现在我们制作预测网格和预测体积的散点图:
 
-```
+```py
 fit_3_sp <- scatterplot3d(pred_grid$Girth, pred_grid$Height, pred_grid$Volume3, angle = 60, color = "dodgerblue", pch = 1, ylab = "Hight (ft)", xlab = "Girth (in)", zlab = "Volume (ft3)")
 ```
 
 最后，我们叠加我们观察到的数据:
 
-```
+```py
 fit_3_sp$points3d(trees$Girth, trees$Height, trees$Volume, pch=16)
 ```
 
@@ -300,7 +300,7 @@ fit_3_sp$points3d(trees$Girth, trees$Height, trees$Volume, pch=16)
 
 在这幅图中有点难以看出，但这次我们的预测位于某个曲面上，而不是平面上。现在是关键时刻:让我们用这个模型来预测我们的树的体积。
 
-```
+```py
 predict(fit_3, data.frame(Girth = 18.2, Height = 72))
 ```
 
@@ -312,7 +312,7 @@ predict(fit_3, data.frame(Girth = 18.2, Height = 72))
 
 使用模型进行预测时，最好避免试图外推至远远超出用于构建模型的值的范围。为了说明这一点，让我们试着估算一棵小树苗(幼树)的体积:
 
-```
+```py
 predict(fit_3, data.frame(Girth = 0.25, Height = 4))
 ```
 

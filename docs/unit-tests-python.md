@@ -18,17 +18,17 @@ Python 有两个主要框架来简化单元测试:`unittest`和`PyTest`。第一
 
 例如，下面一行中的条件为真，因此它不输出或返回任何内容:
 
-```
+```py
 assert 1 > 0
 ```
 
 然而，如果我们改变这个条件，使它成为假，我们得到一个`AssertionError`:
 
-```
+```py
 assert 1 < 0
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 AssertionError                            Traceback (most recent call last)
 <ipython-input-2-2d19dbe67b58> in <module>
@@ -39,12 +39,12 @@ AssertionError:
 
 注意，在错误消息的最后一行中，在`AssertionError:`之后没有实际的消息。那是因为用户应该传递这个消息。方法如下:
 
-```
+```py
 n = 0
 assert 1 < n, 'The Condition is False'
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 AssertionError                            Traceback (most recent call last)
 <ipython-input-3-e335e3eb84ff> in <module>
@@ -56,7 +56,7 @@ AssertionError: The Condition is False
 
 因此，使用`assert`的基本语法如下:
 
-```
+```py
 assert <condition being tested>, <error message to be displayed>
 ```
 
@@ -95,7 +95,7 @@ assert <condition being tested>, <error message to be displayed>
 
 所以让我们实现一组简单的单元测试。首先，我们需要有一些代码来测试。为此，让我们考虑下面的`Calculations`类，它位于`tests`目录下的`my_calculations.py`文件中:
 
-```
+```py
 # project/code/my_calculations.py
 
 class Calculations:
@@ -122,7 +122,7 @@ class Calculations:
 
 假设我们有以下文件夹结构:
 
-```
+```py
 project/
 │
 ├── code/
@@ -132,7 +132,7 @@ project/
 └── tests.py
 ```
 
-```
+```py
 # project/test.py
 
 import unittest
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
 注意，我们使用`assertEqual`来断言`get_sum`的输出是否等于 10。我们还为失败的情况设置了消息。最后，当我们运行这个脚本时，`unittest.main()`运行测试。这是我们得到的输出:
 
-```
+```py
 .
 ----------------------------------------------------------------------
 Ran 1 test in 0.000s
@@ -165,7 +165,7 @@ OK
 
 例如，如果我们将期望值从 10 更改为 11，测试将会失败，并且我们会得到以下输出:
 
-```
+```py
 ----------------------------------------------------------------------
 Traceback (most recent call last):
   File ".\my_test.py", line 9, in test_sum
@@ -179,7 +179,7 @@ Ran 1 test in 0.001s
 
 按照同样的逻辑，我们有下面的代码来测试`Calculations`类中的所有四个方法:
 
-```
+```py
 import unittest
 from code.my_calculations import Calculations
 
@@ -207,7 +207,7 @@ if __name__ == '__main__':
 
 所有的测试都运行了:
 
-```
+```py
 ....
 ----------------------------------------------------------------------
 Ran 4 tests in 0.001s
@@ -216,7 +216,7 @@ OK
 
 顺便说一下，所有方法的名称都以单词`test`开头并不是偶然的。这是我们使用的惯例，以便`unittest`能够识别它应该运行的测试。例如，下面的代码只运行三个测试:
 
-```
+```py
 import unittest
 from code.my_calculations import Calculations
 
@@ -242,7 +242,7 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-```
+```py
 ...
 ----------------------------------------------------------------------
 Ran 3 tests in 0.001s
@@ -257,7 +257,7 @@ OK
 
 `TestCase`类已经有一个在每次测试前运行的`setUp`方法。所以当我们创建一个新的方法时，实际上是用我们自己的方法覆盖默认方法。这是实现了这个新方法的代码:
 
-```
+```py
 import unittest
 from code.my_calculations import Calculations
 
@@ -284,7 +284,7 @@ if __name__ == '__main__':
 
 这意味着`calculations`对象将在每次测试运行之前被初始化。另一种选择是使用`setUpClass`来代替。这个想法是一样的，唯一的区别是这个方法将只运行一次，而不是在每次测试之前。这是该方法的实现方式:
 
-```
+```py
 @classmethod
 def setUpClass(self):
     self.calculation = Calculations(8, 2)
@@ -296,7 +296,7 @@ def setUpClass(self):
 
 使用命令行界面运行单元测试可以提高您的工作效率，因为它允许您一次运行多个文件:
 
-```
+```py
 >>>pyhon -m unittest
 ```
 
@@ -306,7 +306,7 @@ def setUpClass(self):
 
 假设我们有下面的`tests`目录:
 
-```
+```py
 tests/
 ├── init.py
 ├── test.py
@@ -315,7 +315,7 @@ tests/
 
 `test_str.py`文件包含以下测试，这些测试取自 unittest 文档中的一个示例:
 
-```
+```py
 import unittest
 
 class TestStringMethods(unittest.TestCase):
@@ -340,13 +340,13 @@ if __name__ == '__main__':
 
 如果我们想在两个文件中运行测试，我们可以使用下面一行:
 
-```
+```py
 >>>python -m unittest -v
 ```
 
 `-v`使输出更加详细，这在同时运行几个测试时非常有用:
 
-```
+```py
 test_diff (teste.test.TestCalculations) ... ok
 test_product (teste.test.TestCalculations) ... ok
 test_quotient (teste.test.TestCalculations) ... ok
@@ -361,19 +361,19 @@ OK
 
 我们还可以指定要运行的单个文件:
 
-```
+```py
 >>>python -m unittest -v tests.test
 ```
 
 在上一行中，`tests.test`确保只有 tests.py 文件会运行。使用相同的逻辑，我们指定测试类，甚至我们想要运行的单个方法:
 
-```
+```py
 >>>python -m unittest -v tests.test.TestCalculations.test_diff
 ```
 
 上面的行将只运行`test_diff`方法，正如我们在输出中看到的:
 
-```
+```py
 test_diff (teste.test.TestCalculations) ... ok
 ----------------------------------------------------------------------
 Ran 1 test in 0.000s

@@ -58,14 +58,14 @@ January 3, 2018
 
 上面绘制的学习曲线是出于教学目的而理想化的。然而，在实践中，它们通常看起来非常不同。因此，让我们通过使用一些真实世界的数据将讨论转移到实际环境中。我们将尝试建立回归模型来预测发电厂每小时的电能输出。我们使用的数据来自土耳其研究人员 pnar tüfek ci 和 Heysem Kaya，可以从[这里](https://archive.ics.uci.edu/ml/datasets/Combined+Cycle+Power+Plant)下载。由于数据存储在一个`.xlsx`文件中，我们使用 pandas 的`read_excel()` [函数](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_excel.html?highlight=read_excel#pandas.read_excel)将其读入:
 
-```
+```py
 import pandas as pd
 electricity = pd.read_excel('Folds5x2_pp.xlsx')
 print(electricity.info())
 electricity.head(3)
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 9568 entries, 0 to 9567
 Data columns (total 5 columns):
@@ -101,7 +101,7 @@ None
 
 让我们首先决定我们想要使用什么样的训练集大小来生成学习曲线。最小值为 1。最大值由训练集中的实例数给出。我们的训练集有 9568 个实例，所以最大值是 9568。然而，我们还没有抛开验证集。我们将使用 80:20 的比例，最终得到 7654 个实例(80%)的训练集和 1914 个实例(20%)的验证集。假设我们的训练集将有 7654 个实例，我们可以用来生成学习曲线的最大值是 7654。在我们的例子中，我们使用这六种尺寸:
 
-```
+```py
 train_sizes = [1, 100, 500, 2000, 5000, 7654]
 ```
 
@@ -121,7 +121,7 @@ train_sizes = [1, 100, 500, 2000, 5000, 7654]
     *   `cv` —确定交叉验证分割策略(我们将立即讨论这一点)；
     *   `scoring` —表示要使用的误差度量；目的是使用均方差(MSE)度量，但这不是`scoring`的可能参数；我们将使用最近的代理，负的 MSE，我们稍后将不得不翻转符号。
 
-```
+```py
  from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import learning_curve
 features = ['AT', 'V', 'AP', 'RH']
@@ -135,13 +135,13 @@ scoring = 'neg_mean_squared_error')
 
 我们已经知道`train_sizes`里有什么了。让我们检查另外两个变量，看看`learning_curve()`返回了什么:
 
-```
+```py
  print('Training scores:\n\n', train_scores)
 print('\n', '-' * 70) # separator to make the output easy to read
 print('\nValidation scores:\n\n', validation_scores)
 ```
 
-```
+```py
  Training scores:
 [[ -0\. -0\. -0\. -0\. -0\. ] [-19.71230701 -18.31492642 -18.31492642 -18.31492642 -18.31492642] [-18.14420459 -19.63885072 -19.63885072 -19.63885072 -19.63885072] [-21.53603444 -20.18568787 -19.98317419 -19.98317419 -19.98317419] [-20.47708899 -19.93364211 -20.56091569 -20.4150839 -20.4150839 ] [-20.98565335 -20.63006094 -21.04384703 -20.63526811 -20.52955609]] --------------------------------------------------------------------Validation scores:
 [[-619.30514723 -379.81090366 -374.4107861 370.03037109 -373.30597982]
@@ -165,7 +165,7 @@ print('\nValidation scores:\n\n', validation_scores)
 
 为了绘制学习曲线，我们只需要每个训练集大小的一个错误分数，而不是 5。为此，在下一个代码单元中，我们取每行的平均值，并翻转错误分数的符号(如上所述)。
 
-```
+```py
  train_scores_mean = -train_scores.mean(axis = 1)
 validation_scores_mean = -validation_scores.mean(axis = )
 print('Mean training scores\n\n', pd.Series(train_scores_mean, index = train_sizes))
@@ -173,7 +173,7 @@ print('\n', '-' * 20) # separator
 print('\nMean validation scores\n\n',pd.Series(validation_scores_mean, index = train_sizes))
 ```
 
-```
+```py
  Mean training scores
 1 -0.000000
 100 18.594403
@@ -206,7 +206,7 @@ dtype: float64
 
 我们使用常规的 matplotlib 工作流程绘制学习曲线:
 
-```
+```py
  import matplotlib.pyplot as plt
 
 plt.style.use('seaborn')
@@ -219,7 +219,7 @@ plt.legend()
 plt.ylim(0,40)
 ```
 
-```
+```py
 (0, 40)
 ```
 
@@ -260,7 +260,7 @@ plt.ylim(0,40)
 
 让我们看看一个非正则化的随机森林回归子在这里的表现。我们将使用与上面相同的工作流程来生成学习曲线。这一次，我们将把所有东西都打包到一个函数中，以便以后使用。为了比较，我们还将显示上面的线性回归模型的学习曲线。
 
-```
+```py
  ### Bundling our previous work into a function ###
 def learning_curves(estimator, data, features, target, train_sizes, cv):
    train_sizes, train_scores, validation_scores = learning_curve(
@@ -308,7 +308,7 @@ for model, i in [(RandomForestRegressor(), 1), (LinearRegression(),2)]:
 
 在我们的情况下，我们没有任何其他现成的数据。我们可以进入电厂进行一些测量，但我们将把这个留到另一篇文章中(开玩笑)。让我们试着规范我们的随机森林算法。一种方法是调整每个决策树中叶子节点的最大数量。这可以通过使用`RandomForestRegressor()`的`max_leaf_nodes`参数来完成。你不一定要理解这个正则化技术。对于我们这里的目的，你需要关注的是这种正则化对学习曲线的影响。
 
-```
+```py
 learning_curves(RandomForestRegressor(max_leaf_nodes = 350), electricity, features, target, train_sizes, 5)
 ```
 

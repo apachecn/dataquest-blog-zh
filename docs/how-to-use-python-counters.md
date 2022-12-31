@@ -31,25 +31,25 @@ Python 的`Counter`是 dictionary 数据类型的一个子类，用于通过创�
 如前所述，`Counter`对象提供了一种快速计算 iterable 对象中项的简单方法。
 为了演示`Counter`对象如何工作并显示其结果，让我们从从`collections`模块导入`Counter`类开始，然后将它应用于一个字符串，如下所示:
 
-```
+```py
 from collections import Counter
 a_str = 'barbara'
 counter_obj = Counter(a_str)
 print(counter_obj)
 ```
 
-```
+```py
  Counter({'a': 3, 'b': 2, 'r': 2})
 ```
 
 如图所示，上面的代码计算单词中的字母。让我们通过在前面的代码中添加以下几行来使输出更有吸引力。
 
-```
+```py
 for item in counter_obj.items():
     print("Item: ", item[0]," Frequency: ", item[1])
 ```
 
-```
+```py
  Item:  b  Frequency:  2
     Item:  a  Frequency:  3
     Item:  r  Frequency:  2
@@ -58,23 +58,23 @@ for item in counter_obj.items():
 `Counter`类实现了有用的方法，比如`update()`和`most_common([n])`。`update()`方法获取一个 iterable 对象，并将其添加到现有的 counter 对象中。
 让我们试试吧:
 
-```
+```py
 counter_obj.update("wallace")
 print(counter_obj)
 ```
 
-```
+```py
  Counter({'a': 5, 'b': 2, 'r': 2, 'l': 2, 'w': 1, 'c': 1, 'e': 1})
 ```
 
 `most_common([n])`方法返回一个有序的元组列表，其中包含`n`个最常见的
 项及其计数。
 
-```
+```py
 print(counter_obj.most_common(1))
 ```
 
-```
+```py
  [('a', 5)]
 ```
 
@@ -84,7 +84,7 @@ print(counter_obj.most_common(1))
 
 > “恐惧导致愤怒；愤怒导致仇恨；仇恨导致冲突；冲突导致痛苦。”下面是我们的做法:
 
-```
+```py
 quote_1 = "Fear leads to anger; anger leads to hatred; hatred leads to conflict; conflict leads to suffering."
 words_1 = quote_1.replace(';','').replace('.','').split()
 word_counts = Counter(words_1)
@@ -92,13 +92,13 @@ the_most_frequent = word_counts.most_common(1)
 print(the_most_frequent)
 ```
 
-```
+```py
  [('leads', 4)]
 ```
 
 在上面的代码中，`Counter`对象生成一个字典，将输入序列中的可散列项映射到出现的次数，如下所示:
 
-```
+```py
 {
  'Fear': 1,
  'leads': 4,
@@ -112,7 +112,7 @@ print(the_most_frequent)
 
 正如本教程第一部分所提到的，`Counter`对象的一个有价值的特性是它们可以用数学运算来组合。例如:
 
-```
+```py
 from pprint import pprint
 quote_2 = "Fear, anger, and hatred essentially come from a lack of perspective as to what life is all about."
 words_2 = quote_2.replace(',','').replace('.','').split()
@@ -124,7 +124,7 @@ print()
 pprint(dict_2)
 ```
 
-```
+```py
  Counter({'leads': 4,
              'to': 4,
              'anger': 2,
@@ -155,11 +155,11 @@ pprint(dict_2)
 
 现在，我们能够合并或减去这两个计数器实例。让我们试试它们:
 
-```
+```py
 pprint(dict_1 + dict_2)
 ```
 
-```
+```py
  Counter({'to': 5,
              'leads': 4,
              'anger': 3,
@@ -183,11 +183,11 @@ pprint(dict_1 + dict_2)
              'about': 1})
 ```
 
-```
+```py
 pprint(dict_1 - dict_2)
 ```
 
-```
+```py
  Counter({'leads': 4,
              'to': 3,
              'conflict': 2,
@@ -204,7 +204,7 @@ pprint(dict_1 - dict_2)
 
 以下 iterable 对象显示了连续两天的 t 恤销售额，如下所示:
 
-```
+```py
 sales_day_1 = ['red','green','white','red','red','green', 'white','green','red','red','red', 'white', 'white']
 sales_day_2 = ('red','red','green','white','green','white','red','red','green', 'white','green','red','green','red','red')
 price = {'red':74.99, 'green':83.99, 'white':51.99}
@@ -224,7 +224,7 @@ print("Minimun Sales:", minimum_sales)
 print("Maximum Sales:", maximum_sales)
 ```
 
-```
+```py
  Total Sales: Counter({'red': 13, 'green': 8, 'white': 7})
     Sales Increment over Two Days: Counter({'green': 2, 'red': 1})
     Minimun Sales: Counter({'red': 6, 'green': 3, 'white': 3})
@@ -236,12 +236,12 @@ print("Maximum Sales:", maximum_sales)
 我们在上面的代码中使用了`&`和`|`操作符来返回每件 t 恤颜色的最小和最大销售额。这里就来讨论一下这两个算子。交集运算符(`&`)返回两个计数器中计数最小的对象，而并集运算符(`|`)返回两个计数器中计数最大的对象。
 要计算每种颜色的总销售额，我们可以使用下面的代码片段:
 
-```
+```py
 for color,quantity in total_sales.items():
     print(f"Total sales of '{color}' T-shirts: ${quantity*price_counter[color]:.2f}")
 ```
 
-```
+```py
  Total sales of 'red' T-shirts: $974.87
     Total sales of 'green' T-shirts: $671.92
     Total sales of 'white' T-shirts: $363.93
@@ -249,12 +249,12 @@ for color,quantity in total_sales.items():
 
 为了检索用于创建`Counter`的原始数据，我们可以使用`elements()`方法，如下所示:
 
-```
+```py
 for item in sales_day_1_counter.elements():
     print(item)
 ```
 
-```
+```py
  red
     red
     red

@@ -31,7 +31,7 @@ September 8, 2016![python api tutorial twitter](img/51c3f49df270b67f06060e87edd8
 
 该流程可能涉及如下脚本:
 
-```
+```py
  import pandas
 data = pandas.read_csv("products_sold.csv")
 # Print out the mean selling price.
@@ -42,7 +42,7 @@ print(data["price"].mean())# Plot out the sale prices.data["price"].plot()
 
 我们可以修改上面的程序来处理我们事先下载的一组推文:
 
-```
+```py
 import pandas
 tweets = pandas.read_csv("tweets.csv")
 # Get the emotion (sentiment) in each tweet.
@@ -59,7 +59,7 @@ sentiment = tweets["text"].apply(get_sentiment)
 
 为了实现这一点，我们需要使用一种叫做事件驱动编程的编程范式。在事件驱动编程中，程序根据外部输入执行动作。一个很好的例子是网络浏览器。网络浏览器可能由几个功能组成:
 
-```
+```py
  def go_to_site(url):
 # Given a url, visit the site. ...
 def go_back():
@@ -80,7 +80,7 @@ Chrome 浏览器的截图——你可以看到与每个回调函数相关的按�
 
 在 web 浏览器的例子中，我们依靠用户来生成事件，但是我们也可以依靠其他程序来生成事件。比方说，我们有一个程序，它对 tweets 进行流式处理，然后调用我们的程序来处理它们。我们的程序中只需要几个函数:
 
-```
+```py
  def filter_tweet(tweet):
 # Remove any tweets that don't match our criteria.
     if not tweet_matches_criteria(tweet):
@@ -114,7 +114,7 @@ def store_tweet(tweet):
 
 第一步是打开到 Twitter 流 API 的连接。这涉及到打开一个持久的 HTTP 连接。Tweepy 使用下面的代码段来实现这一点，您可以在这里找到:
 
-```
+```py
 resp = self.session.request('POST',
     url,
     data=self.body,
@@ -134,7 +134,7 @@ resp = self.session.request('POST',
 
 一旦我们打开一个连接，我们将需要监听通过该连接传来的推文。Twitter 通过连接以纯文本形式发送数据，如下所示:
 
-```
+```py
 HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
@@ -148,7 +148,7 @@ Transfer-Encoding: chunked
 
 例如，随着我们处理更多的推文，我们可能会在我们的流中看到更多的推文，如下所示:
 
-```
+```py
 HTTP/1.1 200 OK
 Content-Type: application/json
 Transfer-Encoding: chunked
@@ -162,7 +162,7 @@ Transfer-Encoding: chunked
 
 一旦 tweepy 解码了 tweepy 数据，它就将数据传递给一个预先注册的回调函数。你可以在这里看到它的代码[，我们将复制下面的一部分:](https://github.com/tweepy/tweepy/blob/master/tweepy/streaming.py#L296)
 
-```
+```py
 def _data(self, data):
     if self.listener.on_data(data) is False:
         self.running = False 
@@ -203,14 +203,14 @@ Twitter 流媒体 API 有[速率限制](https://dev.twitter.com/streaming/overvi
 
 我们可以用下面的代码设置 tweepy 向 Twitter 认证:
 
-```
+```py
  auth = tweepy.OAuthHandler(TWITTER_APP_KEY, TWITTER_APP_SECRET)
 auth.set_access_token(TWITTER_KEY, TWITTER_SECRET)
 ```
 
 然后，我们可以创建一个 [API](https://github.com/tweepy/tweepy/blob/master/tweepy/api.py#L18) 对象来从 Twitter 获取数据——我们将传递身份验证:
 
-```
+```py
 api = tweepy.API(auth)
 ```
 
@@ -218,7 +218,7 @@ api = tweepy.API(auth)
 
 正如我们上面提到的，使用 tweepy 打开 Twitter 流需要一个用户定义的`listener`类。我们需要子类化 [StreamListener](https://github.com/tweepy/tweepy/blob/master/tweepy/streaming.py#L30) 类，并实现一些自定义逻辑。`StreamListener`类有一个叫做`on_data`的方法。这个方法会自动算出 Twitter 发送的是什么类型的数据，并调用合适的方法来处理具体的数据类型。它可以处理像用户发送直接消息、推文被删除等事件。目前，我们只关心用户何时发布推文。因此，我们需要覆盖 [on_status](https://github.com/tweepy/tweepy/blob/master/tweepy/streaming.py#L87) 方法:
 
-```
+```py
  class StreamListener(tweepy.StreamListener):
 def on_status(self, status):
     print(status.text)
@@ -228,7 +228,7 @@ def on_status(self, status):
 
 我们还需要覆盖`StreamListener`的 [on_error](https://github.com/tweepy/tweepy/blob/master/tweepy/streaming.py#L118) 方法，这样我们就可以正确处理来自 Twitter API 的错误。如果我们受到速率限制，Twitter API 将发送一个 [420 状态码](https://dev.twitter.com/streaming/overview/connecting)。如果发生这种情况，我们会想要断开连接。如果是其他错误，我们会继续:
 
-```
+```py
  class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
         print(status.text)
@@ -250,7 +250,7 @@ def on_status(self, status):
 *   通过调用[过滤器](https://github.com/tweepy/tweepy/blob/master/tweepy/streaming.py#L423)方法开始传输推文。这将开始从`filter.json` API 端点传输推文，并将它们传递给我们的监听器回调。
     *   按照 API 的要求，我们传入一个要过滤的术语列表。
 
-```
+```py
 stream_listener = StreamListener()
 stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
 stream.filter(track=["trump", "clinton", "hillary clinton", "donald trump"])
@@ -266,7 +266,7 @@ stream.filter(track=["trump", "clinton", "hillary clinton", "donald trump"])
     *   如果`retweeted_status`属性存在，那么不处理 tweet。
     *   打印所有没有转发的推文。
 
-```
+```py
  def on_status(self, status):
     if status.retweeted_status:
         return
@@ -281,7 +281,7 @@ print(status.text)
 
 例如，下面的代码将过滤掉收藏少于`10`的任何推文:
 
-```
+```py
  def on_status(self, status):
     if status.favorite_count is None or status.favorite_count < 10:
         return
@@ -308,7 +308,7 @@ print(status.text)
 
 我们可以用`on_status`方法提取这些信息:
 
-```
+```py
  description = status.user.description
 loc = status.user.location
 text = status.text
@@ -333,14 +333,14 @@ bg_color = status.user.profile_background_color
 *   在 tweet 的文本上初始化 [TextBlob](https://textblob.readthedocs.io/en/dev/api_reference.html#textblob.blob.TextBlob) 类。
 *   从班级中获取情绪得分。
 
-```
+```py
  blob = TextBlob(text)
 sent = blob.sentiment
 ```
 
 一旦我们有了`sent`对象，我们需要从中提取`polarity`和`subjectivity`。`polarity`是推文的负面或正面，用`-1`到`1`来衡量。`subjectivity`是指推文的客观或主观程度。`0`表示推文非常客观，`1`表示非常主观。为此，我们只需访问属性:
 
-```
+```py
  polarity = sent.polarity
 subjectivity = sent.subjectivity
 ```
@@ -355,7 +355,7 @@ subjectivity = sent.subjectivity
 
 我们必须首先使用连接字符串连接到我们的数据库:
 
-```
+```py
  import dataset
 db = dataset.connect("sqlite:///tweets.db")
 ```
@@ -364,14 +364,14 @@ db = dataset.connect("sqlite:///tweets.db")
 
 然后，我们必须将我们的坐标 json 字典转储到一个字符串中，这样我们就可以存储它:
 
-```
+```py
  if coords is not None:
     coords = json.dumps(coords)
 ```
 
 最后，我们可以在`on_status`方法中添加代码，将 tweet 写入数据库:
 
-```
+```py
  table = db["tweets"]
 table.insert(dict(
     user_description=description,
@@ -397,7 +397,7 @@ table.insert(dict(
 
 我们希望将我们使用过的一些常量(比如数据库连接字符串、我们的数据库名称和我们的 Twitter 键)分离到一个单独的文件中，名为`settings.py`，这样它们就很容易更改。下面是`settings.py`的默认内容:
 
-```
+```py
  TRACK_TERMS = ["trump", "clinton", "hillary clinton", "donald trump"]
 CONNECTION_STRING = "sqlite:///tweets.db"
 CSV_NAME = "tweets.csv"
@@ -414,14 +414,14 @@ TABLE_NAME = "tweets"
 
 例如，下面的代码将从我们的数据库中查询所有的 tweets:
 
-```
+```py
  db = dataset.connect("sqlite:///tweets.db")
 result = db["tweets"].all() 
 ```
 
 一旦我们有了一组结果，我们就可以处理它们，或者将它们存储到一个 csv 文件中，如下例所示:
 
-```
+```py
  dataset.freeze(result, format='csv', filename=settings.CSV_NAME)
 ```
 

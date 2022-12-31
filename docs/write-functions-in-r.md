@@ -30,7 +30,7 @@ R 中有许多有用的内置函数用于各种目的。一些最受欢迎的是
 
 让我们来看看上面的一些函数的运行情况:
 
-```
+```py
 vector <- c(3, 5, 2, 3, 1, 4)
 
 print(min(vector))
@@ -44,7 +44,7 @@ print(sort(vector, decreasing=TRUE))
 print(exists('vector'))  ## note the quotation marks
 ```
 
-```
+```py
 [1] 1
 [1] 3
 [1] 3
@@ -61,7 +61,7 @@ NULL
 
 虽然应用内置函数方便了许多常见的任务，但我们通常需要创建自己的函数来自动执行特定的任务。为了在 R 中声明一个用户定义的函数，我们使用关键字`function`。语法如下:
 
-```
+```py
 function_name <- function(parameters){
   function body 
 }
@@ -77,14 +77,14 @@ function_name <- function(parameters){
 
 有时，它们被称为**正式论点**。函数参数是函数定义中的变量，放在括号内并用逗号分隔，每次我们调用函数时，这些变量将被设置为实际值(称为**参数**)。例如:
 
-```
+```py
 circumference <- function(r){
     2*pi*r
 }
 print(circumference(2))
 ```
 
-```
+```py
 [1] 12.56637
 ```
 
@@ -92,20 +92,20 @@ print(circumference(2))
 
 一个函数没有参数是可能的，尽管很少有用:
 
-```
+```py
 hello_world <- function(){
     'Hello, World!'
 }
 print(hello_world())
 ```
 
-```
+```py
 [1] "Hello, World!"
 ```
 
 此外，一些参数可以在函数定义中设置为默认值(那些与典型情况相关的值)，然后可以在调用函数时重置这些值。回到我们的`circumference`函数，我们可以将一个圆的默认半径设置为 1，那么如果我们在没有传递参数的情况下调用该函数，它将计算单位圆(即半径为 1 的圆)的周长。否则，它将使用提供的半径计算圆的周长:
 
-```
+```py
 circumference <- function(r=1){
     2*pi*r
 }
@@ -113,7 +113,7 @@ print(circumference())
 print(circumference(2))
 ```
 
-```
+```py
 [1] 6.283185
 [1] 12.56637
 ```
@@ -122,14 +122,14 @@ print(circumference(2))
 
 函数体是花括号中的一组命令，每次我们调用函数时，这些命令都会按照预先定义的顺序运行。换句话说，在函数体中，我们放置了我们需要函数做的事情:
 
-```
+```py
 sum_two_nums <- function(x, y){
     x + y
 }
 print(sum_two_nums(1, 2))
 ```
 
-```
+```py
 [1] 3
 ```
 
@@ -137,18 +137,18 @@ print(sum_two_nums(1, 2))
 
 如果函数体包含一个语句，可以去掉花括号。例如:
 
-```
+```py
 sum_two_nums <- function(x, y) x + y
 print(sum_two_nums(1, 2))
 ```
 
-```
+```py
 [1] 3
 ```
 
 正如我们从上面的例子中看到的，在 R 中，定义函数时通常不需要显式地包含 return 语句，因为 R 函数只是自动返回函数体中最后一个求值的表达式。然而，我们仍然可以使用语法`return(expression_to_be_returned)`在函数体内添加 return 语句。如果我们需要从一个函数返回多个结果，这是不可避免的。例如:
 
-```
+```py
 mean_median <- function(vector){
     mean <- mean(vector)
     median <- median(vector)
@@ -157,7 +157,7 @@ mean_median <- function(vector){
 print(mean_median(c(1, 1, 1, 2, 3)))
 ```
 
-```
+```py
 [1] 1.6 1.0
 ```
 
@@ -169,14 +169,14 @@ print(mean_median(c(1, 1, 1, 2, 3)))
 
 如果我们通过位置传递参数*，我们需要遵循函数中定义的相同的参数序列:*
 
-```
+```py
 subtract_two_nums <- function(x, y){
     x - y
 }
 print(subtract_two_nums(3, 1))
 ```
 
-```
+```py
 [1] 2
 ```
 
@@ -184,7 +184,7 @@ print(subtract_two_nums(3, 1))
 
 如果我们按名称传递参数*，即明确指定函数中定义的每个参数取什么值，参数的顺序并不重要:*
 
-```
+```py
 subtract_two_nums <- function(x, y){
     x - y
 }
@@ -192,7 +192,7 @@ print(subtract_two_nums(x=3, y=1))
 print(subtract_two_nums(y=1, x=3))
 ```
 
-```
+```py
 [1] 2
 [1] 2
 ```
@@ -201,7 +201,7 @@ print(subtract_two_nums(y=1, x=3))
 
 有可能混合使用基于位置和基于名称的参数匹配。让我们来看一个根据女性的体重(公斤)、身高(厘米)和年龄(年)计算基础代谢率(基础代谢率)或每日卡路里消耗量的函数示例。将在函数中使用的公式是[米夫林-圣杰尔方程](https://en.wikipedia.org/wiki/Basal_metabolic_rate):
 
-```
+```py
 calculate_calories_women <- function(weight, height, age){
     (10 * weight) + (6.25 * height) - (5 * age) - 161
 }
@@ -209,11 +209,11 @@ calculate_calories_women <- function(weight, height, age){
 
 现在，我们来计算一个 30 岁，体重 60 kg，身高 165 cm 的女性的热量。但是，对于年龄参数，我们将按名称传递参数，对于其他两个参数，我们将按位置传递参数:
 
-```
+```py
 print(calculate_calories_women(age=30, 60, 165))
 ```
 
-```
+```py
 [1] 1320.25
 ```
 
@@ -221,14 +221,14 @@ print(calculate_calories_women(age=30, 60, 165))
 
 最后，我们可以完全省略一些(或全部)论点。如果我们在函数定义中将一些(或全部)参数设置为默认值，就会发生这种情况。让我们返回到我们的`calculate_calories_women`函数，将女性的默认年龄设置为 30 岁；
 
-```
+```py
 calculate_calories_women <- function(weight, height, age=30){
     (10 * weight) + (6.25 * height) - (5 * age) - 161
 }
 print(calculate_calories_women(60, 165))
 ```
 
-```
+```py
 [1] 1320.25
 ```
 
@@ -236,7 +236,7 @@ print(calculate_calories_women(60, 165))
 
 当调用一个函数时，我们通常将这个操作的结果赋给一个变量，以便以后使用:
 
-```
+```py
 circumference <- function(r){
     2*pi*r
 }
@@ -244,7 +244,7 @@ circumference_radius_5 <- circumference(5)
 print(circumference_radius_5)
 ```
 
-```
+```py
 [1] 31.41593
 ```
 
@@ -252,7 +252,7 @@ print(circumference_radius_5)
 
 在 R 函数的定义中，我们可以使用其他函数。我们之前已经见过这样的例子，当我们在用户定义的函数`mean_median`中使用内置的`mean()`和`median()`函数时:
 
-```
+```py
 mean_median <- function(vector){
     mean <- mean(vector)
     median <- median(vector)
@@ -262,7 +262,7 @@ mean_median <- function(vector){
 
 也可以将调用一个函数的输出作为参数直接传递给另一个函数:
 
-```
+```py
 radius_from_diameter <- function(d){
     d/2
 }
@@ -274,7 +274,7 @@ circumference <- function(r){
 print(circumference(radius_from_diameter(4)))
 ```
 
-```
+```py
 [1] 12.56637
 ```
 
@@ -282,7 +282,7 @@ print(circumference(radius_from_diameter(4)))
 
 最后，函数可以*嵌套*，这意味着我们可以在另一个函数中定义一个新函数。比方说，我们需要一个将三个不相交圆的圆面积相加的函数:
 
-```
+```py
 sum_circle_ares <- function(r1, r2, r3){
     circle_area <- function(r){
         pi*r^2
@@ -293,17 +293,17 @@ sum_circle_ares <- function(r1, r2, r3){
 print(sum_circle_ares(1, 2, 3))
 ```
 
-```
+```py
 [1] 43.9823
 ```
 
 上面，我们在`sum_circle_ares`函数中定义了`circle_area`函数。然后，我们在外部函数中调用内部函数三次(`circle_area(r1)`、`circle_area(r2)`和`circle_area(r3)`)，以计算每个圆的面积，进一步对这些面积求和。现在，如果我们试图在`sum_circle_ares`函数之外调用`circle_area`函数，程序会抛出一个错误，因为内部函数存在并且只在定义它的函数内部工作:
 
-```
+```py
 print(circle_area(10))
 ```
 
-```
+```py
 Error in circle_area(10): could not find function "circle_area"
 Traceback:
 
@@ -315,7 +315,7 @@ Traceback:
 1.  与创建任何函数类似，内部函数应该在外部函数中至少使用 3 次。否则，创建它是不可行的。
 2.  如果我们希望能够独立于更大的函数使用函数，我们应该在更大的函数之外创建它，而不是嵌套这些函数。例如，如果我们要在`sum_circle_ares`函数之外使用`circle_area`函数，我们将编写以下代码:
 
-```
+```py
 circle_area <- function(r){
     pi*r^2
 }
@@ -328,7 +328,7 @@ print(sum_circle_ares(1, 2, 3))
 print(circle_area(10))
 ```
 
-```
+```py
 [1] 43.9823
 [1] 314.1593
 ```

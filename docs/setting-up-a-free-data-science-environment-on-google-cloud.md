@@ -54,13 +54,13 @@ January 4, 2018Whether you’re running out of memory on your local machine or s
 
 首先，让我们安装[蟒蛇](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html)。从命令行，使用`curl`下载二进制安装文件的最简单方法。unix 工具 [curl](https://curl.haxx.se/docs/manpage.html#URL) 从指定的 url 下载文件，并使用`-O`标志写入文件(而不是立即显示下载的内容):
 
-```
+```py
 curl -O https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
 ```
 
 下载完成后，您可以使用`bash`开始设置过程:
 
-```
+```py
 bash Anaconda3-5.0.1-Linux-x86_64.sh
 ```
 
@@ -68,13 +68,13 @@ bash Anaconda3-5.0.1-Linux-x86_64.sh
 
 现在我们已经安装了 anaconda，我们可以创建一个新的 [anaconda 环境](https://conda.io/docs/user-guide/tasks/manage-environments.html)。我们在 Dataquest 教授使用 Python 3.5，所以我们在这里也将使用该版本:
 
-```
+```py
 conda create --name ds python=3.5
 ```
 
 当您创建一个环境时，Anaconda 会为您安装许多流行的数据科学库(如`numpy`和`jupyter notebook`)。安装过程完成后，您可以像这样激活您的环境:
 
-```
+```py
 source activate ds
 ```
 
@@ -122,13 +122,13 @@ source activate ds
 
 运行此命令以生成配置文件。
 
-```
+```py
 jupyter notebook --generate-config
 ```
 
 现在我们已经设置好了一切，让我们使用以下标志启动 Jupyter 笔记本:
 
-```
+```py
 jupyter notebook --no-browser --port=8000
 ```
 

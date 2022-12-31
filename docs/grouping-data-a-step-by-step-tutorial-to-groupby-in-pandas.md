@@ -16,7 +16,7 @@ February 2, 2022![](img/ea7ec6f7195d2a1dc05d5a24c0eceb35.png)
 
 让我们用一个来自 Kaggle [诺贝尔奖数据集](https://www.kaggle.com/imdevskp/nobel-prize)的例子来一步一步地探索这个分离-应用-组合链:
 
-```
+```py
 import pandas as pd
 import numpy as np
 
@@ -41,23 +41,23 @@ df.head()
 
 例如，在我们的例子中，我们可以按奖项类别对诺贝尔奖的数据进行分组:
 
-```
+```py
 grouped = df.groupby('category')
 ```
 
 也可以使用多个列来执行数据分组，传递列的列表。让我们先按奖项类别对数据进行分组，然后，在每个已创建的组中，我们将根据获奖年份应用附加分组:
 
-```
+```py
 grouped_category_year = df.groupby(['category', 'awardYear'])
 ```
 
 现在，如果我们尝试打印我们创建的两个 GroupBy 对象中的一个，我们实际上将看不到任何组:
 
-```
+```py
 print(grouped)
 ```
 
-```
+```py
 <pandas.core.groupby.generic.DataFrameGroupBy object at 0x0000026083789DF0>
 ```
 
@@ -65,11 +65,11 @@ print(grouped)
 
 为了简单地检查产生的 GroupBy 对象，并检查组是如何被精确地分割的，我们可以从中提取出`groups`或`indices`属性。它们都返回一个字典，其中键是创建的组，值是原始数据帧中每个组的实例的轴标签(对于`groups`属性)或索引(对于`indices`属性)的列表:
 
-```
+```py
 grouped.indices
 ```
 
-```
+```py
 {'Chemistry': array([  2,   3,   7,   9,  10,  11,  13,  14,  15,  17,  19,  39,  62,
          64,  66,  71,  75,  80,  81,  86,  92, 104, 107, 112, 129, 135,
         153, 169, 175, 178, 181, 188, 197, 199, 203, 210, 215, 223, 227,
@@ -151,26 +151,26 @@ grouped.indices
 
 为了找到 GroupBy 对象中的组数，我们可以从中提取出`ngroups`属性或者调用 Python 标准库的`len`函数:
 
-```
+```py
 print(grouped.ngroups)
 print(len(grouped))
 ```
 
-```
+```py
 6
 6
 ```
 
 如果我们需要可视化每个组的所有或部分条目，我们可以迭代 GroupBy 对象:
 
-```
+```py
 for name, entries in grouped:
     print(f'First 2 entries for the "{name}" category:')
     print(30*'-')
     print(entries.head(2), '\n\n')
 ```
 
-```
+```py
 First 2 entries for the "Chemistry" category:
 ------------------------------
    awardYear   category  prizeAmount  prizeAmountAdjusted               name  \
@@ -234,7 +234,7 @@ First 2 entries for the "Physiology or Medicine" category:
 
 相反，如果我们想以 DataFrame 的形式选择一个组，我们应该对 GroupBy 对象使用方法`get_group()`:
 
-```
+```py
 grouped.get_group('Economic Sciences')
 ```
 
@@ -266,7 +266,7 @@ grouped.get_group('Economic Sciences')
 
 要聚合 GroupBy 对象的数据(即，按组计算汇总统计数据)，我们可以在对象上使用`agg()`方法:
 
-```
+```py
 # Showing only 1 decimal for all float numbers
 pd.options.display.float_format = '{:.1f}'.format
 
@@ -288,7 +288,7 @@ grouped.agg(np.mean)
 
 我们可以不使用`agg()`方法，而是直接在 GroupBy 对象上应用相应的 pandas 方法。最常用的方法有`mean()`、`median()`、`mode()`、`sum()`、`size()`、`count()`、`min()`、`max()`、`std()`、`var()`(计算每组的方差)、`describe()`(按组输出描述性统计量)、`nunique()`(给出每组唯一值的个数)。
 
-```
+```py
 grouped.sum()
 ```
 
@@ -305,11 +305,11 @@ grouped.sum()
 
 通常，我们只对某些特定列的统计数据感兴趣，所以我们需要指定它(或它们)。在上面的例子中，我们肯定不想对所有年份求和。相反，我们可能希望按奖项类别对奖项值求和。为此，我们可以选择 GroupBy 对象的`prizeAmountAdjusted`列，就像我们选择 DataFrame 的一列一样，并对其应用`sum()`函数:
 
-```
+```py
 grouped['prizeAmountAdjusted'].sum()
 ```
 
-```
+```py
 category
 Chemistry                 1151447726
 Economic Sciences          658373449
@@ -324,7 +324,7 @@ Name: prizeAmountAdjusted, dtype: int64
 
 如果我们需要合计两列或更多列的数据，我们使用双方括号:
 
-```
+```py
 grouped[['prizeAmount', 'prizeAmountAdjusted']].sum()
 ```
 
@@ -341,7 +341,7 @@ grouped[['prizeAmount', 'prizeAmountAdjusted']].sum()
 
 可以对 GroupBy 对象的一列或多列同时应用多个函数。为此，我们再次需要`agg()`方法和感兴趣的函数列表:
 
-```
+```py
 grouped[['prizeAmount', 'prizeAmountAdjusted']].agg([np.sum, np.mean, np.std])
 ```
 
@@ -360,7 +360,7 @@ grouped[['prizeAmount', 'prizeAmountAdjusted']].agg([np.sum, np.mean, np.std])
 
 此外，我们可以考虑通过传递一个字典，对 GroupBy 对象的不同列应用不同的聚合函数:
 
-```
+```py
 grouped.agg({'prizeAmount': [np.sum, np.size], 'prizeAmountAdjusted': np.mean})
 ```
 
@@ -383,7 +383,7 @@ grouped.agg({'prizeAmount': [np.sum, np.size], 'prizeAmountAdjusted': np.mean})
 
 转换 GroupBy 对象的数据的最常见的 pandas 方法是`transform()`。例如，它有助于计算每个组的 z 分数:
 
-```
+```py
 grouped[['prizeAmount', 'prizeAmountAdjusted']].transform(lambda x: (x - x.mean()) / x.std())
 ```
 
@@ -405,11 +405,11 @@ grouped[['prizeAmount', 'prizeAmountAdjusted']].transform(lambda x: (x - x.mean(
 
 通过变换方法，我们还可以用组均值、中值、众数或任何其他值替换缺失数据:
 
-```
+```py
 grouped['gender'].transform(lambda x: x.fillna(x.mode()[0]))
 ```
 
-```
+```py
 0        male
 1        male
 2        male
@@ -430,11 +430,11 @@ Name: gender, Length: 950, dtype: object
 
 过滤方法基于预定义的条件丢弃组或每个组中的特定行，并返回原始数据的子集。例如，我们可能希望只保留所有组中某一列的值，其中该列的组平均值大于预定义的值。在我们的数据框架中，让我们过滤掉所有组，使`prizeAmountAdjusted`列的组平均值小于 7，000，000，并且在输出中只保留这一列:
 
-```
+```py
 grouped['prizeAmountAdjusted'].filter(lambda x: x.mean() > 7000000)
 ```
 
-```
+```py
 0      12295082
 5       9000000
 45      8361204
@@ -451,11 +451,11 @@ Name: prizeAmountAdjusted, Length: 84, dtype: int64
 
 另一个例子是过滤掉具有超过一定数量的元素的组:
 
-```
+```py
 grouped['prizeAmountAdjusted'].filter(lambda x: len(x) < 100)
 ```
 
-```
+```py
 0      12295082
 5       9000000
 45      8361204
@@ -474,7 +474,7 @@ Name: prizeAmountAdjusted, Length: 84, dtype: int64
 
 除了过滤掉整个组，还可以从每个组中丢弃某些行。这里有一些有用的方法是`first()`、`last()`和`nth()`。将其中一个应用于 GroupBy 对象会相应地返回每个组的第一个/最后一个/第 n 个条目:
 
-```
+```py
 grouped.last()
 ```
 
@@ -491,7 +491,7 @@ grouped.last()
 
 对于`nth()`方法，我们必须传递一个整数，该整数代表我们想要为每个组返回的条目的索引:
 
-```
+```py
 grouped.nth(1)
 ```
 
@@ -510,7 +510,7 @@ grouped.nth(1)
 
 过滤出每组中的行的另外两种方法是`head()`和`tail()`，对应返回每组的第一个/最后一个 *n* 行(默认为 5 行):
 
-```
+```py
 grouped.head(3)
 ```
 

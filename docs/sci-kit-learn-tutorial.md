@@ -31,7 +31,7 @@ Scikit-learn 是一个免费的 Python 机器学习库。它具有各种算法�
 
 首先，我们将导入 pandas 模块，并使用一个变量`url`来存储要从中下载数据集的 url。
 
-```
+```py
 #import necessary modules
 import pandas as pd
 #store the url in a variable
@@ -40,7 +40,7 @@ url = "https://community.watsonanalytics.com/wp-content/uploads/2015/04/WA_Fn-Us
 
 接下来，我们将使用 pandas 模块提供的`read_csv()`方法来读取包含逗号分隔值的`csv`文件，并将其转换为 pandas 数据帧。
 
-```
+```py
 # Read in the data with `read_csv()`
 sales_data = pd.read_csv(url)
 ```
@@ -57,7 +57,7 @@ sales_data = pd.read_csv(url)
 
 现在，我们已经从数据源下载了数据集，并将其转换为 pandas 数据帧，让我们显示这个数据帧中的一些记录。为此，我们将使用`head()`方法。
 
-```
+```py
 # Using .head() method to view the first few records of the data set
 sales_data.head()
 ```
@@ -80,7 +80,7 @@ sales_data.head()
 
 为了探索数据集，我们将使用一些第三方 Python 库来帮助我们处理数据，以便它可以有效地用于 scikit-learn 的强大算法。但是我们可以从我们在上一节中使用的相同的`head()`方法开始查看导入的数据集的前几条记录，因为`head()`实际上能够做的远不止这些！我们可以定制`head()`方法，以便只显示特定数量的记录:
 
-```
+```py
 # Using head() method with an argument which helps us to restrict the number of initial records that should be displayed
 sales_data.head(n=2)
 ```
@@ -94,7 +94,7 @@ sales_data.head(n=2)
 
 现在我们已经查看了数据帧的初始记录，让我们尝试查看数据集中的最后几条记录。这可以使用`tail()`方法来完成，该方法与`head()`方法的语法相似。让我们看看`tail()`方法能做什么:
 
-```
+```py
 # Using .tail() method to view the last few records from the dataframe
 sales_data.tail()
 ```
@@ -109,7 +109,7 @@ sales_data.tail()
 
 上面代码片段中的`tail()`方法返回数据帧`sales_data`中的最后几条记录。我们也可以向`tail()`方法传递一个参数，只查看数据帧中有限数量的记录:
 
-```
+```py
 # Using .tail() method with an argument which helps us to restrict the number of initial records that should be displayed
 sales_data.tail(n=2)
 ```
@@ -124,12 +124,12 @@ sales_data.tail(n=2)
 
 现在，如果我们能看到这个数据集中可用的不同数据类型，那就太好了；如果我们以后需要做一些转换，这些信息会很方便。我们可以在熊猫身上用`dtypes()`方法做到这一点:
 
-```
+```py
 # using the dtypes() method to display the different datatypes available
 sales_data.dtypes
 ```
 
-```
+```py
 Opportunity Number int64
 Supplies Subgroup object
 Supplies Group object
@@ -162,7 +162,7 @@ dtype: object
 
 让我们设置代码来使用`Seaborn`模块:
 
-```
+```py
 # import the seaborn module
 import seaborn as sns
 # import the matplotlib module
@@ -196,7 +196,7 @@ sns.despine(offset=10, trim=True)
 
 我们将使用 Seaborn 模块提供的`violinplot()`方法来创建小提琴情节。让我们首先导入`seaborn`模块，并使用`set()`方法定制我们的绘图大小。我们将看到图形的大小为 16.7 像素乘以 13.27 像素:
 
-```
+```py
 # import the seaborn module
 import seaborn as sns
 # import the matplotlib module
@@ -207,7 +207,7 @@ sns.set(rc={'figure.figsize':(16.7,13.27)})
 
 接下来，我们将使用`violinplot()`方法创建 violinplot，然后使用`show()`方法显示 plot
 
-```
+```py
 # plotting the violinplot
 sns.violinplot(x="Opportunity Result",y="Client Size By Revenue", hue="Opportunity Result", data=sales_data);
 plt.show()
@@ -233,7 +233,7 @@ plt.show()
 
 现在，让我们开始实际的转换过程。我们将使用由`LabelEncoder()`提供的`fit_transform()`方法对分类列中的标签进行编码，例如`sales_data`数据帧中的‘市场路线’,并将它们转换成类似于我们在上面的图表中所看到的数字标签。`fit_transform()`函数将用户定义的标签作为输入，然后返回编码标签。让我们通过一个简单的例子来理解编码是如何完成的。在下面的代码示例中，我们有一个城市列表，即`["paris", "paris", "tokyo", "amsterdam"]`，我们将尝试将这些字符串标签编码成类似于下面的内容—`[2, 2, 1,3]`。
 
-```
+```py
 #import the necessary module
 from sklearn import preprocessing
 # create the Labelencoder object
@@ -243,7 +243,7 @@ encoded_value = le.fit_transform(["paris", "paris", "tokyo", "amsterdam"])
 print(encoded_value)
 ```
 
-```
+```py
 [1 1 2 0]
 ```
 
@@ -255,7 +255,7 @@ print(encoded_value)
 
 既然我们现在对`LabelEncoder()`的工作原理有了一个很好的了解，我们可以继续使用这个方法对来自`sales_data`数据帧的分类标签进行编码，并将它们转换成数字标签。在前面的部分中，在数据集的初始探索过程中，我们看到以下列包含字符串值:“供应品子组”、“区域”、“市场路线”、“机会结果”、“竞争对手类型”和“供应品组”。在我们开始编码这些字符串标签之前，让我们快速地看一下这些列包含的不同标签:-
 
-```
+```py
 print("Supplies Subgroup' : ",sales_data['Supplies Subgroup'].unique())
 print("Region : ",sales_data['Region'].unique())
 print("Route To Market : ",sales_data['Route To Market'].unique())
@@ -264,7 +264,7 @@ print("Competitor Type : ",sales_data['Competitor Type'].unique())
 print("'Supplies Group : ",sales_data['Supplies Group'].unique())
 ```
 
-```
+```py
 Supplies Subgroup' : ['Exterior Accessories' 'Motorcycle Parts' 'Shelters & RV'
 'Garage & Car Care' 'Batteries & Accessories' 'Performance Parts'
 'Towing & Hitches' 'Replacement Parts' 'Tires & Wheels'
@@ -280,7 +280,7 @@ Competitor Type : ['Unknown' 'Known' 'None']
 
 我们现在已经布置了来自`sales_data`数据框架的不同分类列以及这些列下的唯一类。现在，是时候将这些字符串编码成数字标签了。为此，我们将运行下面的代码，然后深入了解它的工作原理:
 
-```
+```py
 #import the necessary module
 from sklearn import preprocessing
 # create the Labelencoder object
@@ -314,7 +314,7 @@ sales_data.head()
 
 但是在进行所有这些拆分之前，让我们首先分离我们的特性和目标变量。与本教程之前一样，我们将首先运行下面的代码，然后仔细看看它做了什么:
 
-```
+```py
 # select columns other than 'Opportunity Number','Opportunity Result'cols = [col for col in sales_data.columns if col not in ['Opportunity Number','Opportunity Result']]
 # dropping the 'Opportunity Number'and 'Opportunity Result' columns
 data = sales_data[cols]
@@ -332,7 +332,7 @@ data.head(n=2)
 
 就是这样！我们已经准备好将我们的功能和目标定义到两个独立的数据框架中。接下来，我们将把数据帧`data`和`target`分成训练集和测试集。分割数据集时，我们将保留 30%的数据作为测试数据，剩余的 70%作为训练数据。但是请记住，这些数字是任意的，最佳分割将取决于您正在处理的特定数据。如果您不确定如何分割数据，80/20 原则是一个不错的默认方法，即您将 80%的数据作为训练数据，将剩余的 20%作为测试数据。然而，对于本教程，我们将坚持我们先前的决定，保留 30%的数据作为测试数据。scikit-learn 中的`train_test_split()`方法可用于拆分数据:
 
-```
+```py
 #import the necessary module
 from sklearn.model_selection import train_test_split
 #split data set into train and test setsdata_train, data_test, target_train, target_test = train_test_split(data,target, test_size = 0.30, random_state = 10)
@@ -387,7 +387,7 @@ Scikit-learn 提供了一组分类算法，这些算法“天真地”假设数�
 
 现在让我们实现来自 scikit 的高斯朴素贝叶斯或`GaussianNB`算法——学习创建我们的预测模型:
 
-```
+```py
 # import the necessary module
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
@@ -400,7 +400,7 @@ pred = gnb.fit(data_train, target_train).predict(data_test)
 print("Naive-Bayes accuracy : ",accuracy_score(target_test, pred, normalize = True))
 ```
 
-```
+```py
 Naive-Bayes accuracy : 0.759056732741
 ```
 
@@ -419,7 +419,7 @@ LinearSVC 或线性支持向量分类是`SVM`(支持向量机)类的一个子类
 
 对于那些想要更多细节的人来说，可以在这里找到一篇解释`Support Vector Machine(SVM)`的非常好的文章，但是现在，让我们开始动手做吧:
 
-```
+```py
 #import the necessary modules
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score
@@ -431,7 +431,7 @@ pred = svc_model.fit(data_train, target_train).predict(data_test)
 print("LinearSVC accuracy : ",accuracy_score(target_test, pred, normalize = True))
 ```
 
-```
+```py
 LinearSVC accuracy : 0.777811004785
 ```
 
@@ -447,7 +447,7 @@ LinearSVC accuracy : 0.777811004785
 
 现在，让我们实现 K-Neighbors 分类器，看看它的得分情况:
 
-```
+```py
 #import necessary modules
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
@@ -461,7 +461,7 @@ pred = neigh.predict(data_test)
 print ("KNeighbors accuracy score : ",accuracy_score(target_test, pred))
 ```
 
-```
+```py
 KNeighbors accuracy score : 0.814550580998
 ```
 
@@ -477,7 +477,7 @@ KNeighbors accuracy score : 0.814550580998
 
 让我们从`GaussianNB`模型开始:
 
-```
+```py
 from yellowbrick.classifier import ClassificationReport
 # Instantiate the classification model and visualizer
 visualizer = ClassificationReport(gnb, classes=['Won','Loss'])
@@ -496,7 +496,7 @@ g = visualizer.poof() # Draw/show/poof the data
 
 与我们在上一节中所做的类似，我们也可以绘制出`LinearSVC`算法的准确度分数:
 
-```
+```py
 from yellowbrick.classifier import ClassificationReport
 # Instantiate the classification model and visualizer
 visualizer = ClassificationReport(svc_model, classes=['Won','Loss'])
@@ -515,7 +515,7 @@ g = visualizer.poof() # Draw/show/poof the data
 
 现在，让我们对 K 近邻分类器分数做同样的事情。
 
-```
+```py
 from yellowbrick.classifier import ClassificationReport
 # Instantiate the classification model and visualizer
 visualizer = ClassificationReport(neigh, classes=['Won','Loss'])

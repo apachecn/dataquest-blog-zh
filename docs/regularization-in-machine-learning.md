@@ -78,7 +78,7 @@ $ $ \ text {弹性净成本函数} = \ text {损失函数}+r \ lambda \sum_{j=1}
 
 首先，让我们加载数据集，并将其分为训练集和测试集，如下所示:
 
-```
+```py
 import mglearn as ml
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -93,14 +93,14 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 现在，我们可以训练线性回归模型，然后打印训练集分数和测试集分数:
 
-```
+```py
 lr = LinearRegression().fit(X_train, y_train)
 
 print(f"Linear Regression-Training set score: {lr.score(X_train, y_train):.2f}")
 print(f"Linear Regression-Test set score: {lr.score(X_test, y_test):.2f}")
 ```
 
-```
+```py
  Linear Regression-Training set score: 0.95
     Linear Regression-Test set score: 0.61
 ```
@@ -109,14 +109,14 @@ print(f"Linear Regression-Test set score: {lr.score(X_test, y_test):.2f}")
 
 为了避免过度拟合并控制模型的复杂性，让我们使用岭回归(L2 正则化)并看看它在数据集上的表现如何:
 
-```
+```py
 from sklearn.linear_model import Ridge
 ridge = Ridge(alpha=0.7).fit(X_train, y_train)
 print(f"Ridge Regression-Training set score: {ridge.score(X_train, y_train):.2f}")
 print(f"Ridge Regression-Test set score: {ridge.score(X_test, y_test):.2f}")
 ```
 
-```
+```py
  Ridge Regression-Training set score: 0.90
     Ridge Regression-Test set score: 0.76
 ```
@@ -127,25 +127,25 @@ print(f"Ridge Regression-Test set score: {ridge.score(X_test, y_test):.2f}")
 
 现在，让我们将套索回归应用于数据集并探究结果。
 
-```
+```py
 from sklearn.linear_model import Lasso
 lasso = Lasso(alpha=1.0).fit(X_train, y_train)
 print(f"Lasso Regression-Training set score: {lasso.score(X_train, y_train):.2f}")
 print(f"Lasso Regression-Test set score: {lasso.score(X_test, y_test):.2f}")
 ```
 
-```
+```py
  Lasso Regression-Training set score: 0.29
     Lasso Regression-Test set score: 0.21
 ```
 
 如图所示，拉索的表现相当令人失望，这是一个不适合的迹象。套索模型效果不好，因为大部分系数都变成了精确的零。如果我们想知道模型中已经使用的特性的确切数量，我们可以使用下面的代码:
 
-```
+```py
 print(f"Number of features: {sum(lasso.coef_ != 0)}")
 ```
 
-```
+```py
  Number of features: 4
 ```
 
@@ -153,29 +153,29 @@ print(f"Number of features: {sum(lasso.coef_ != 0)}")
 
 让我们调整`alpha`,通过将其值降低到 0.01 来减少欠拟合:
 
-```
+```py
 lasso = Lasso(alpha=0.01).fit(X_train, y_train)
 print("Lasso Regression-Training set score: {:.2f}".format(lasso.score(X_train, y_train)))
 print("Lasso Regression-Test set score: {:.2f}".format(lasso.score(X_test, y_test)))
 ```
 
-```
+```py
  Lasso Regression-Training set score: 0.90
     Lasso Regression-Test set score: 0.77
 ```
 
-```
+```py
  /Users/mohammadmehdi/opt/anaconda3/lib/python3.8/site-packages/sklearn/linear_model/_coordinate_descent.py:647: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 4.690e+01, tolerance: 3.233e+00
       model = cd_fast.enet_coordinate_descent(
 ```
 
 重新运行下面的代码显示，通过减少`alpha`，套索模型使用了 104 个特征中的 32 个:
 
-```
+```py
 print(f"Number of features: {sum(lasso.coef_ != 0)}")
 ```
 
-```
+```py
  Number of features: 32
 ```
 
@@ -183,19 +183,19 @@ print(f"Number of features: {sum(lasso.coef_ != 0)}")
 
 我们要使用的最后一种技术是弹性网。让我们看看它做得有多好。
 
-```
+```py
 from sklearn.linear_model import ElasticNet
 elastic_net = ElasticNet(alpha=0.01, l1_ratio=0.01).fit(X_train, y_train)
 print(f"Elastic Net-Training set score: {elastic_net.score(X_train, y_train):.2f}")
 print(f"Elastic Net-Test set score: {elastic_net.score(X_test, y_test):.2f}")
 ```
 
-```
+```py
  Elastic Net-Training set score: 0.84
     Elastic Net-Test set score: 0.70
 ```
 
-```
+```py
  /Users/mohammadmehdi/opt/anaconda3/lib/python3.8/site-packages/sklearn/linear_model/_coordinate_descent.py:647: ConvergenceWarning: Objective did not converge. You might want to increase the number of iterations, check the scale of the features or consider increasing regularisation. Duality gap: 1.474e+02, tolerance: 3.233e+00
       model = cd_fast.enet_coordinate_descent(
 ```

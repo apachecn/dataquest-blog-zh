@@ -22,43 +22,43 @@ February 21, 2019
 
 软件包`matplotlib`和`scipy`可以通过软件包管理器`pip`安装。你可能希望在虚拟环境中安装特定版本的包[，以确保不会与你正在处理的其他项目的依赖项发生冲突。](https://www.pythonforbeginners.com/basics/how-to-use-python-virtualenv/)
 
-```
+```py
 pip install matplotlib==2.2.3
 pip install scipy==1.1.0
 ```
 
 此外，我们在本教程中分析 JPG 图像，只有当你安装一个额外的软件包，枕头支持才可用。
 
-```
+```py
 pip install pillow==5.2.0
 ```
 
 或者，你可以使用 Jupyter 笔记本。本教程的代码是在 Anaconda 版本 1.8.7 的 Jupyter 笔记本上运行的。以上这些包预装在 Anaconda 中。
 
-```
+```py
 import matplotlib
 matplotlib.__version__
 ```
 
-```
+```py
 '3.0.2'
 ```
 
-```
+```py
 import PIL
 PIL.__version__
 ```
 
-```
+```py
 '5.3.0'
 ```
 
-```
+```py
 import scipy
 scipy.__version__
 ```
 
-```
+```py
 '1.1.0'
 ```
 
@@ -76,7 +76,7 @@ scipy.__version__
 
 要在 Python 中读取图像，需要导入 matplotlib 的 image 类([文档](https://matplotlib.org/api/image_api.html))。image 类的 imread()方法将图像解码为其 RGB 值。imread()方法的输出是一个尺寸为 M x N x 3 的数组，其中 M 和 N 是图像的尺寸。
 
-```
+```py
 from matplotlib import image as imgimage = img.imread('./dataquest.jpg')
 
 image.shape(200, 200, 3)
@@ -84,7 +84,7 @@ image.shape(200, 200, 3)
 
 您可以使用 matplotlib 的 pyplot 类的 imshow()方法来显示图像，该图像采用 RGB 值矩阵的形式。
 
-```
+```py
 %matplotlib inlinefrom matplotlib import pyplot as pltplt.imshow(image)
 plt.show()
 ```
@@ -95,7 +95,7 @@ plt.show()
 
 在对图像进行聚类之前，我们需要执行一个额外的步骤。在找出图像主色的过程中，我们不关心像素的位置。因此，我们需要将 M x N x 3 矩阵转换成三个单独的列表，分别包含红色、蓝色和绿色值。以下代码片段将存储在 image 中的矩阵转换为三个单独的列表，每个列表的长度为 40，000 (200 x 200)。
 
-```
+```py
 r = []
 g = []
 b = []for line in image:
@@ -124,7 +124,7 @@ b.append(temp_b)
 
 为了在 matplotlib 中进行 3D 绘图，我们将使用 Axes3D()类([文档](https://matplotlib.org/api/_as_gen/mpl_toolkits.mplot3d.axes3d.Axes3D.html))。在使用 Axes3D()类初始化轴之后，我们使用 scatter 方法并使用三个颜色值列表作为参数。
 
-```
+```py
 from mpl_toolkits.mplot3d import Axes3Dfig = plt.figure()
 ax = Axes3D(fig)
 ax.scatter(r, g, b)
@@ -141,7 +141,7 @@ plt.show()
 
 在上一步中，我们已经确定我们想要两个聚类，现在我们准备对数据执行 k-means 聚类。让我们创建一个 Pandas 数据框来轻松管理变量。
 
-```
+```py
 import pandas as pddf = pd.DataFrame({'red': r,
 'blue': b,
 'green': g})
@@ -155,7 +155,7 @@ import pandas as pddf = pd.DataFrame({'red': r,
 
 上面的第一步确保每个变量的变化同等地影响聚类。想象一下两个尺度相差很大的变量。如果我们忽略上面的第一步，具有较大规模和变化的变量将对集群的形成产生较大影响，从而使过程有偏差。因此，我们使用 whiten()函数对变量进行标准化。whiten()函数接受一个参数，即变量值的列表或数组，并返回标准化的值。标准化后，我们打印数据框的样本。请注意，在标准化列中，列中的变化已经大大减少。
 
-```
+```py
 from scipy.cluster.vq import whitendf['scaled_red'] = whiten(df['red'])
 df['scaled_blue'] = whiten(df['blue'])
 df['scaled_green'] = whiten(df['green'])
@@ -177,7 +177,7 @@ df.sample(n = 10)
 
 下一步是用标准化的列执行 k-means 聚类。我们将使用`kmeans()`函数来执行聚类。`kmeans()`函数([文档](https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.vq.kmeans.html))有两个必需的参数——观察值和聚类数。它返回两个值-聚类中心和失真。失真是每个点与其最近的聚类中心之间距离的平方之和。我们将不会在本教程中使用失真。
 
-```
+```py
 from scipy.cluster.vq import kmeanscluster_centers, distortion = kmeans(df[['scaled_red', 'scaled_green', 'scaled_blue']], 2)
 ```
 
@@ -187,11 +187,11 @@ k-means 聚类的最后一步是生成聚类标签。但是，在本练习中，
 
 我们已经执行了 k-means 聚类并生成了我们的聚类中心，所以让我们看看它们包含什么值。
 
-```
+```py
 print(cluster_centers)
 ```
 
-```
+```py
 [[2.94579782 3.1243935 3.52525635]
 [0.91860119 1.05099931 1.4465091 ]]
 ```
@@ -204,7 +204,7 @@ print(cluster_centers)
 
 让我们探索一下图像中的主色。
 
-```
+```py
 colors = []r_std, g_std, b_std = df[['red', 'green', 'blue']].std()for cluster_center in cluster_centers:
 scaled_r, scaled_g, scaled_b = cluster_center
 colors.append((

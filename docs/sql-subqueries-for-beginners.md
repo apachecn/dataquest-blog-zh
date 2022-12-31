@@ -30,7 +30,7 @@ June 10, 2022![SQL Subqueries](img/602b4fc38b359549cfbb83f693d050d2.png)
 
 子查询的第一个用例包括使用它向主查询的输出中添加新列。语法看起来是这样的:
 
-```
+```py
  SELECT column_1,
        columns_2,
        (SELECT
@@ -47,7 +47,7 @@ GROUP BY 1
 
 主查询返回两列:歌曲名称和用户添加的播放列表数量。需要子查询的是第二列。子查询在这里是必要的，因为我们必须将分配给播放列表的`track_id`与曲目表中的`track_id`进行匹配，然后对每个曲目进行计数。
 
-```
+```py
  SELECT t.name,
     (SELECT 
          count(playlist_id)
@@ -92,7 +92,7 @@ LIMIT 50
 
 对于这个任务，我们需要将每个流派的歌曲数量除以曲目表中的歌曲总数。我们可以通过以下查询轻松访问曲目总数:
 
-```
+```py
  SELECT 
     count(*) as total_tracks
 FROM track
@@ -104,7 +104,7 @@ FROM track
 
 我们可以使用以下查询找到每个流派的曲目总数:
 
-```
+```py
  SELECT 
     g.name as genre,
     count(t.track_id) as number_of_tracks
@@ -144,7 +144,7 @@ ORDER BY 2 DESC
 
 如果我们将这两个查询组合起来，使第一个查询成为子查询，则输出是每个流派的歌曲百分比:
 
-```
+```py
  SELECT 
     g.name as genre,
     round(cast(count(t.track_id) as float) / (SELECT count(*) FROM track), 2) as perc
@@ -188,7 +188,7 @@ ORDER BY 2 DESC
 
 这是语法:
 
-```
+```py
  SELECT
     column_1,
     columns_2
@@ -203,7 +203,7 @@ WHERE column_1 in
 
 首先，让我们获得每个雇员的客户数量。这是一个简单的查询。
 
-```
+```py
 SELECT employee_id,
        e.last_name,
        count(distinct customer_id) as number_of_customers
@@ -223,7 +223,7 @@ ORDER BY 3 DESC
 
 现在，让我们看看哪些顾客在店里至少消费了 100 美元。这是查询:
 
-```
+```py
  SELECT
     c.customer_id,
     round(sum(i.total), 2) as total
@@ -250,7 +250,7 @@ ORDER BY 2 DESC
 
 它是这样工作的:
 
-```
+```py
  SELECT employee_id,
        e.last_name,
        count(distinct customer_id) as number_of_customers
@@ -279,7 +279,7 @@ ORDER BY 3 DESC
 
 1.  当将查询 2 放在主查询的`WHERE`子句中时，我们删除了`total_purchased`列。这是因为我们希望这个查询只返回一列，也就是主查询用作过滤器的那一列。如果我们没有这样做，我们将会看到这样的错误消息(取决于 SQL 的版本):
 
-```
+```py
  sub-select returns 2 columns - expected 1
 ```
 
@@ -295,7 +295,7 @@ ORDER BY 3 DESC
 
 通常看起来是这样的:
 
-```
+```py
  SELECT
     column_1,
     column_2
@@ -309,7 +309,7 @@ WHERE column_1 > 100
 
 例如，这将是我们的子查询:
 
-```
+```py
  SELECT c.customer_id,
        c.last_name,
        c.country,
@@ -362,7 +362,7 @@ ORDER BY 6 DESC
 
 现在，我们可以看到美国哪些用户购买了至少 50 首歌曲:
 
-```
+```py
  SELECT  
     new_table.*
 FROM
@@ -409,7 +409,7 @@ WHERE
 
 我们还可以看到每个州购买了至少 50 首歌曲的用户数量:
 
-```
+```py
  SELECT  
     state,
     count(*)
@@ -457,7 +457,7 @@ ORDER BY 2 desc
 
 还可以使用这个新的 SQL 表进行一些计算，并按订单选择平均花费最高的前 10 名用户:
 
-```
+```py
  SELECT  
     customer_id,
     last_name,

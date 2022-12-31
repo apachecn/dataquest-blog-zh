@@ -18,7 +18,7 @@ January 25, 2018
 
 介绍函数式编程最简单的方法是将其与我们已经知道的东西进行比较:面向对象编程。假设我们想要创建一个行计数器类，它接收一个文件，读取每一行，然后计算文件中的总行数。使用一个*类*，它可能看起来像下面这样:
 
-```
+```py
 class LineCounter:
     def __init__(self, filename):
         self.file = open(filename, 'r')
@@ -35,7 +35,7 @@ class LineCounter:
 
 为了让这两个概念都起作用，对象的状态必须随着时间而改变。在调用了`read()`方法之后，这种状态变化在`lines`属性中很明显。作为一个例子，下面是我们如何使用这个类:
 
-```
+```py
 # example_file.txt contains 100 lines.
 lc = LineCounter('example_file.txt')
 print(lc.lines)
@@ -57,7 +57,7 @@ print(lc.count())
 
 一个物体不断变化的状态既是它的福也是它的祸。为了理解为什么一个变化的状态可以被看作是负面的，我们必须引入一个替代。另一种方法是将行计数器构建为一系列独立的函数。
 
-```
+```py
 def read(filename):
     with open(filename, 'r') as f:
         return [line for line in f]
@@ -75,7 +75,7 @@ lines_count = count(example_lines)
 
 满足上述准则的函数称为**纯函数**。这里有一个例子来突出纯函数和非纯函数之间的区别:
 
-```
+```py
 # Create a global variable `A`.
 A = 5
 
@@ -98,7 +98,7 @@ print(pure_sum(4, 6))
 
 使用纯函数优于不纯(非纯)函数的好处是减少了**副作用**。当在函数的操作中执行了超出其范围的更改时，就会产生副作用。例如，当我们改变一个对象的状态，执行任何 I/O 操作，甚至调用`print()`:
 
-```
+```py
 def read_and_print(filename):
     with open(filename) as f:
         # Side effect of opening a
@@ -118,7 +118,7 @@ def read_and_print(filename):
 
 代替函数声明的`def`语法，我们可以使用一个 [`lambda`表达式](https://docs.python.org/3.5/tutorial/controlflow.html#lambda-expressions)来编写 Python 函数。lambda 语法严格遵循`def`语法，但它不是一对一的映射。下面是一个构建两个整数相加的函数的示例:
 
-```
+```py
 # Using `def` (old way).
 def old_add(a, b):
     return a + b
@@ -132,7 +132,7 @@ new_add = lambda a, b: a + bold_add(10, 5) == new_add(10, 5)
 
 如果我们不把`lambda`赋给一个变量名，它将被称为一个**匿名函数**。这些匿名函数非常有用，尤其是在将它们用作另一个函数的输入时。例如，`sorted()` [函数](https://docs.python.org/3/howto/sorting.html#key-functions)接受一个可选的`key`参数(一个函数),描述列表中的项目应该如何排序。
 
-```
+```py
 unsorted = [('b', 6), ('a', 10), ('d', 0), ('c', 4)]
 
 # Sort on the second tuple value (the integer).
@@ -148,7 +148,7 @@ print(sorted(unsorted, key=lambda x: x[1]))
 
 我们将使用的第一个函数是`map()`函数。`map()`函数接受一个 iterable(即。`list`)，并创建一个新的可迭代对象，一个特殊的地图对象。新对象将一级函数应用于每个元素。
 
-```
+```py
 # Pseudocode for map.
 def map(func, seq):
     # Return `Map` object with
@@ -162,7 +162,7 @@ def map(func, seq):
 
 下面是我们如何使用 map 将`10`或`20`添加到列表中的每个元素:
 
-```
+```py
 values = [1, 2, 3, 4, 5]
 
 # Note: We convert the returned map object to
@@ -183,7 +183,7 @@ print(add_20)
 
 我们要使用的第二个函数是`filter()`函数。`filter()`函数接受一个 iterable，创建一个新的 iterable 对象(同样是一个特殊的`map`对象)，以及一个必须返回一个`bool`值的一级函数。新的`map`对象是所有返回`True`的元素的过滤后的 iterable。
 
-```
+```py
 # Pseudocode for filter.
 def filter(evaluate, seq):
     # Return `Map` object with
@@ -197,7 +197,7 @@ def filter(evaluate, seq):
 
 下面是我们如何从列表中过滤奇数或偶数值:
 
-```
+```py
 values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 # Note: We convert the returned filter object to
@@ -218,7 +218,7 @@ print(odd)
 
 这里有一个例子，说明我们如何使用`reduce()`对列表中的所有元素求和。
 
-```
+```py
 from functools import reduce
 
 values = [1, 2, 3, 4]
@@ -232,7 +232,7 @@ print(summed)
 
 一个有趣的注意事项是，你不需要**而不是**去操作`lambda`表达式的第二个值。例如，您可以编写一个总是返回 iterable 的第一个值的函数:
 
-```
+```py
 from functools import reduce
 
 values = [1, 2, 3, 4, 5]
@@ -248,7 +248,7 @@ print(first_value)
 
 因为我们最终会转换成列表，所以我们应该使用列表理解来重写`map()`和`filter()`函数。这是编写列表的更为*Python 化的*方式，因为我们利用了 Python 的语法来制作列表。以下是你如何将前面的`map()`和`filter()`的例子翻译成列表理解:
 
-```
+```py
 values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 # Map.
@@ -268,7 +268,7 @@ print(even)
 
 有时，我们希望使用函数的行为，但减少它的参数数量。目的是“保存”其中一个输入，并使用保存的输入创建一个默认行为的新函数。假设我们想写一个函数，它总是将 2 加到任何数上:
 
-```
+```py
 def add_two(b):
     return 2 + b
 
@@ -278,7 +278,7 @@ print(add_two(4))
 
 `add_two`函数类似于一般的函数，$f(a，b) = a + b$，只是它默认了其中一个参数($a = 2$)。在 Python 中，我们可以使用`functools`包中的[模块](https://docs.python.org/3.6/library/functools.html#functools.partial)来设置这些参数默认值。`partial`模块接收一个函数，并从第一个参数开始“冻结”任意数量的参数(或 kwargs ),然后返回一个带有默认输入的新函数。
 
-```
+```py
 from functools import partialdef add(a, b):
     return a + b
 
@@ -293,7 +293,7 @@ print(add_ten(4))
 
 分部可以接受任何函数，包括标准库中的函数。
 
-```
+```py
 # A partial that grabs IP addresses using
 # the `map` function from the standard library.
 extract_ips = partial(

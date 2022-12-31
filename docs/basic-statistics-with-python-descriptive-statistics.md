@@ -17,7 +17,7 @@ July 3, 2018![python-statistics](img/664a8eb81784497b3db581523aa412e3.png)The fi
 
 我们将基于真实世界的数据来讨论统计数据，这些数据来自 Kaggle 的[葡萄酒评论](https://www.kaggle.com/zynicide/wine-reviews/data)数据集。数据本身来自一个搜索葡萄酒爱好者网站的刮刀。为了这篇文章，假设你是一个正在培训的品酒师，一个新的品酒师。你发现了这个有趣的葡萄酒数据集，你想比较和对比不同的葡萄酒。您将使用统计数据来描述数据集中的葡萄酒，并从中获得一些见解。也许我们可以从一套便宜的葡萄酒开始我们的训练，或者是评价最高的？下面的代码将数据集`wine-data.csv`作为列表列表加载到变量`wines`中。我们将在整篇文章中对`wines`进行统计。您可以在自己的计算机上使用这些代码。
 
-```
+```py
  import csv
 with open("wine-data.csv", "r", encoding="latin-1") as f:
     wines = list(csv.reader(f))
@@ -59,7 +59,7 @@ with open("wine-data.csv", "r", encoding="latin-1") as f:
 
 **平均值**是一个描述性的统计数据，它着眼于一个数据集的平均值。虽然*的意思是*是一个专业术语，但大多数人会把它理解为仅仅是*的平均值*。这个平均数是怎么算出来的？下图采用了实际的等式，并将计算组件分解为更简单的术语。![Mean Breakdown](img/2fa0611fe33159754bfe584c2390f96e.png)在平均值的情况下，数据集的“中间”指的是这个典型值。平均值代表了我们数据集中典型的观察值。如果我们随机选择一个观察值，那么我们可能会得到一个接近平均值的值。在 Python 中，计算平均值是一项简单的任务。我们来算算数据集中的平均酒分是多少。
 
-```
+```py
  # Extract all of the scores from the data set 
 scores = [float(w[4]) for w in wines]
 
@@ -84,7 +84,7 @@ avg_score
 
 虽然 Python 的标准库不支持中位数函数，但我们仍然可以使用我们描述的过程找到中位数。让我们试着找出葡萄酒价格的中间值。
 
-```
+```py
  # Isolate prices from the data set
 prices = [float(w[5]) for w in wines if w[5] != ""]
 
@@ -105,7 +105,7 @@ sorted_prices[middle]
 
 数据集中一瓶葡萄酒的中值价格是 24 美元。这一发现表明，数据集中至少有一半的葡萄酒售价为 24 美元或更低。那挺好的！如果我们试着找出平均值呢？鉴于它们都代表一个典型值，我们预计它们会大致相同。
 
-```
+```py
 sum(prices)/len(prices)
 
 >>> 33.13
@@ -117,7 +117,7 @@ sum(prices)/len(prices)
 
 请记住，平均值是通过将我们想要的所有值相加并除以项目数来计算的，而中位数是通过简单地重新排列项目来找到的。如果我们的数据中有**异常值**，比其他值高得多或低得多的项目，它会对平均值产生不利影响。也就是说，均值不是**稳健**地离群值。中位数，不必看离群值，对它们是稳健的。让我们看看我们在数据中看到的最高和最低价格。
 
-```
+```py
  min_price = min(prices)
 max_price = max(prices)
 
@@ -132,7 +132,7 @@ print(min_price, max_price)
 
 我们将讨论的最后一个集中趋势的度量是**模式**。众数被定义为在我们的数据中出现最频繁的值。作为“中间”的模式的直觉不像 mean 或 median 那样直接，但是有一个清楚的基本原理。如果一个值在整个数据中重复出现，我们也知道它会影响平均值。一个值出现的越多，对均值的影响就越大。因此，一个模式代表了我们的均值的最高加权贡献因子。像 median 一样，Python 中没有内置的 mode 函数，但是我们可以通过统计我们的价格的外观并寻找最大值来找出它。
 
-```
+```py
  # Initialize an empty dictionary to count our price appearances
 price_counts = {}
 for p in prices:
@@ -163,7 +163,7 @@ for k, v in counts.items():
 
 我们将涉及的第一个传播度量是**范围**。Range 是我们将看到的最简单的计算方法:从数据的最大值中减去数据集的最小值。在调查中值时，我们发现了葡萄酒价格的最小值和最大值，因此我们将使用它们来找出范围。
 
-```
+```py
  price_range = max_price - min_price
 print(price_range)
 
@@ -178,7 +178,7 @@ print(price_range)
 
 我们想要计算标准差，以更好地描述我们的葡萄酒价格和分数，因此我们将为此创建一个专用函数。手工计算数字的累积和很麻烦，但是 Python 的`for`循环让这变得很简单。我们正在制作自己的函数来演示 Python 使得执行这些统计变得容易，但是知道`numpy`库也在`std`下实现标准差也是很好的。
 
-```
+```py
  def stdev(nums):
     diffs = 0
     avg = sum(nums)/len(nums)

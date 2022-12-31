@@ -56,7 +56,7 @@ October 16, 2019![why-learn-data-engineering](img/1d63cc9b31314784a84444afbde174
 
 如果您以前在 Python 中处理过数据，那么您可能非常习惯于输入如下内容:
 
-```
+```py
 import pandas as pd df = pd.read_csv("a_text_file.csv")
 ```
 

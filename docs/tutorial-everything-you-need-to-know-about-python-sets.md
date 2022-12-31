@@ -34,7 +34,7 @@ Python 集合的主要应用包括:
 
 让我们看看它是如何工作的:
 
-```
+```py
 # First way: using the set() function on an iterable object
 set1 = set([1, 1, 1, 2, 2, 3])          # from a list
 set2 = set(('a', 'a', 'b', 'b', 'c'))   # from a tuple
@@ -53,7 +53,7 @@ set5 = {1, 1, 'anaconda', 'anaconda', 8.6, [1, 2, 3], {1, 2, 3}}
 print('Set5:', set5)
 ```
 
-```
+```py
 Set1: {1, 2, 3}
 Set2: {'b', 'c', 'a'}
 Set3: {'n', 'o', 'd', 'c', 'a'}
@@ -81,7 +81,7 @@ TypeError: unhashable type: 'list'
 
 当我们需要创建一个空的 Python 集合时，会出现一种特殊的情况。因为空花括号`{}`创建了一个空的 Python 字典，所以我们不能用这种方法在 Python 中创建一个空集。在这种情况下，使用`set()`功能仍然有效:
 
-```
+```py
 empty1 = {}
 empty2 = set()
 
@@ -89,7 +89,7 @@ print(type(empty1))
 print(type(empty2))
 ```
 
-```
+```py
  <class><class>
 ```
 
@@ -97,13 +97,13 @@ print(type(empty2))
 
 为了检查某个项目在 Python 集合中是否存在，我们使用操作符关键字`in`或关键字组合`not in`:
 
-```
+```py
 myset = {1, 2, 3}
 print(1 in myset)
 print(1 not in myset)
 ```
 
-```
+```py
 True
 False
 ```
@@ -112,14 +112,14 @@ False
 
 由于 Python 集合是无序和无索引的，我们不能通过索引或切片来访问它的项目。一种方法是遍历集合:
 
-```
+```py
 myset = {'a', 'b', 'c', 'd'}
 
 for item in myset:
     print(item)
 ```
 
-```
+```py
 b
 d
 a
@@ -134,7 +134,7 @@ c
 
 我们可以使用`add()`方法向 Python 集合添加单个不可变项，或者使用`update()`方法添加几个不可变项。后者以元组、列表、字符串或其他*不可变项目*的集合作为其参数，然后将它们中的每个单个*唯一项目*(或在字符串的情况下，每个单个*唯一字符*)添加到集合中:
 
-```
+```py
 # Initial set
 myset = set()
 
@@ -155,7 +155,7 @@ myset.update([[1, 2], [3, 4]])  # an attempt to add a list of mutable items (lis
 print(myset)
 ```
 
-```
+```py
 {'a'}
 {'b', 'c', 'a'}
 {'b', 'd', 'c', 'a'}
@@ -186,7 +186,7 @@ TypeError: unhashable type: 'list'
 
 让我们看一些例子:
 
-```
+```py
 # Initial set
 myset = {1, 2, 3, 4}
 print(myset)
@@ -204,7 +204,7 @@ myset.remove(5)   # the item was absent in the set
 print(myset)
 ```
 
-```
+```py
 {1, 2, 3, 4}
 {2, 3, 4}
 {2, 3, 4}
@@ -223,7 +223,7 @@ KeyError                                  Traceback (most recent call last)
 KeyError: 5
 ```
 
-```
+```py
 # Taking the set from the code above
 myset = {2, 3}
 
@@ -240,7 +240,7 @@ myset.pop()
 print(myset)
 ```
 
-```
+```py
 2
 {3}
 set()
@@ -269,7 +269,7 @@ KeyError: 'pop from an empty set'
 
 *   `sum()`–返回仅包含数值的集合中所有项目的总和
 
-```
+```py
 # A set with numeric items
 myset = {5, 10, 15}
 print('Set:', myset)
@@ -293,7 +293,7 @@ print('Min:', min(myset))
 print('Max:', max(myset))
 ```
 
-```
+```py
 Set: {10, 5, 15}
 Size: 3
 Min: 5
@@ -318,14 +318,14 @@ Max: (2, 3)
     > 
     > 
 
-```
+```py
 print(all({1, 2}))
 print(all({1, False}))
 print(any({1, False}))
 print(any({False, False}))
 ```
 
-```
+```py
 True
 False
 True
@@ -334,7 +334,7 @@ False
 
 *   `sorted()`–返回集合中项目的排序列表
 
-```
+```py
 myset = {4, 2, 5, 1, 3}
 print(sorted(myset))
 
@@ -342,7 +342,7 @@ myset = {'c', 'b', 'e', 'a', 'd'}
 print(sorted(myset))
 ```
 
-```
+```py
 [1, 2, 3, 4, 5]
 ['a', 'b', 'c', 'd', 'e']
 ```
@@ -353,7 +353,7 @@ print(sorted(myset))
 
 让我们在以下两个 Python 集合上练习数学集合运算:
 
-```
+```py
 a = {1, 2, 3, 4, 5}
 b = {4, 5, 6, 7}
 ```
@@ -362,14 +362,14 @@ b = {4, 5, 6, 7}
 
 两个(或更多)Python 集合的并集返回两个(所有)集合中所有唯一项目的新集合。可以使用`|`操作符或`union()`方法执行:
 
-```
+```py
 print(a | b)
 print(b | a)
 print(a.union(b))
 print(b.union(a))
 ```
 
-```
+```py
 {1, 2, 3, 4, 5, 6, 7}
 {1, 2, 3, 4, 5, 6, 7}
 {1, 2, 3, 4, 5, 6, 7}
@@ -386,14 +386,14 @@ print(b.union(a))
 
 两个(或更多)Python 集合的交集返回两个(所有)集合共有的项目的新集合。可以使用`&`操作符或`intersection()`方法执行:
 
-```
+```py
 print(a & b)
 print(b & a)
 print(a.intersection(b))
 print(b.intersection(a))
 ```
 
-```
+```py
 {4, 5}
 {4, 5}
 {4, 5}
@@ -408,14 +408,14 @@ print(b.intersection(a))
 
 两个(或更多)Python 集合的差返回一个新的集合，其中包含第一个(左)集合中第二个(右)集合中不存在的所有项目。在两组以上的情况下，操作从左向右进行。对于这个集合操作，我们可以使用`-`操作符或`difference()`方法:
 
-```
+```py
 print(a - b)
 print(b - a)
 print(a.difference(b))
 print(b.difference(a))
 ```
 
-```
+```py
 {1, 2, 3}
 {6, 7}
 {1, 2, 3}
@@ -430,14 +430,14 @@ print(b.difference(a))
 
 两个 Python 集合的对称差返回第一个或第二个集合中存在的一组新项目，但不是两个都存在。换句话说，两个集合的对称差是集合并和集合交之间的差，这对于多个集合的对称差也有意义。我们可以使用`^`操作符或`symmetric_difference()`方法来执行这个操作:
 
-```
+```py
 print(a ^ b)
 print(b ^ a)
 print(a.symmetric_difference(b))
 print(b.symmetric_difference(a))
 ```
 
-```
+```py
 {1, 2, 3, 6, 7}
 {1, 2, 3, 6, 7}
 {1, 2, 3, 6, 7}
@@ -448,7 +448,7 @@ print(b.symmetric_difference(a))
 
 对两个以上 Python 集合进行对称差分运算的语法如下:`a ^ b ^ c`。然而，这一次，我们不能使用`symmetric_difference()`方法，因为它只接受一个参数，否则会引发`TypeError`:
 
-```
+```py
 a = {1, 2, 3, 4, 5}
 b = {4, 5, 6, 7}
 c = {7, 8, 9}
@@ -456,7 +456,7 @@ c = {7, 8, 9}
 a.symmetric_difference(b, c)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 TypeError                                 Traceback (most recent call last)

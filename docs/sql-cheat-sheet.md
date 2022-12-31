@@ -46,21 +46,21 @@ SQL 开发于 20 世纪 70 年代，最初被称为 SEQUEL。因此，今天这�
 
 显示整个表格:
 
-```
+```py
 SELECT *
   FROM table_name;
 ```
 
 从表中选择特定列:
 
-```
+```py
 SELECT column_name_1, column_name_2
   FROM table_name;
 ```
 
 显示表格的前 10 行:
 
-```
+```py
 SELECT *
   FROM table_name
   LIMIT 10;
@@ -70,7 +70,7 @@ SELECT *
 
 添加单行注释:
 
-```
+```py
 -- First comment
 SELECT column_1, column_2, column_3 -- Second comment
   FROM table_name; -- Third comment
@@ -78,7 +78,7 @@ SELECT column_1, column_2, column_3 -- Second comment
 
 添加块注释:
 
-```
+```py
 /*
 This comment
 spans over
@@ -96,21 +96,21 @@ SELECT column_1, column_2, column_3
 
 使用内部联接联接表:
 
-```
+```py
 SELECT column_name_1, column_name_2 FROM table_name_1
 INNER JOIN table_name_2 ON table_name_1.column_name_1 = table_name_2.column_name_1;
 ```
 
 使用左连接来连接表:
 
-```
+```py
 SELECT * FROM facts
 LEFT JOIN cities ON cities.facts_id = facts.id;
 ```
 
 使用右连接来连接表:
 
-```
+```py
 SELECT f.name country, c.name city
 FROM cities c
 RIGHT JOIN facts f ON f.id = c.facts;
@@ -118,7 +118,7 @@ RIGHT JOIN facts f ON f.id = c.facts;
 
 使用完全外部联接来联接表:
 
-```
+```py
 SELECT f.name country, c.name city
 FROM cities c
 FULL OUTER JOIN facts f ON f.id = c.facts_id;
@@ -126,14 +126,14 @@ FULL OUTER JOIN facts f ON f.id = c.facts_id;
 
 在不指定列名的情况下对列排序:
 
-```
+```py
 SELECT name, migration_rate FROM FACTS
 ORDER BY 2 desc; -- 2 refers to migration_rate column
 ```
 
 在子查询中使用联接，但有一个限制:
 
-```
+```py
 SELECT c.name capital_city, f.name country
 FROM facts f
 INNER JOIN (
@@ -145,7 +145,7 @@ LIMIT 10;
 
 连接两个以上表中的数据:
 
-```
+```py
 SELECT [column_names] FROM [table_name_one]
    [join_type] JOIN [table_name_two] ON [join_constraint]
 	 [join_type] JOIN [table_name_three] ON [join_constraint]
@@ -159,7 +159,7 @@ SELECT [column_names] FROM [table_name_one]
 
 将列合并成一列:
 
-```
+```py
 SELECT
 		album_id,
 		artist_id,
@@ -171,7 +171,7 @@ FROM album LIMIT 3;
 
 字符串的匹配部分:
 
-```
+```py
 SELECT
 	first_name,
 	last_name,
@@ -182,7 +182,7 @@ WHERE first_name LIKE "%Jen%";
 
 在带有 CASE 的 SQL 中使用 if/then 逻辑:
 
-```
+```py
 CASE
 	WHEN [comparison_1] THEN [value_1]
 	WHEN [comparison_2] THEN [value_2]
@@ -193,7 +193,7 @@ AS [new_column_name]
 
 使用 WITH 子句:
 
-```
+```py
 WITH track_info AS
 (
 	SELECT
@@ -210,20 +210,20 @@ WHERE album_name = "Jagged Little Pill";
 
 创建视图:
 
-```
+```py
 CREATE VIEW chinook.customer_2 AS
 SELECT * FROM chinook.customer;
 ```
 
 删除视图:
 
-```
+```py
 DROP VIEW chinook.customer_2;
 ```
 
 选择出现在一个或多个 SELECT 语句中的行:
 
-```
+```py
 [select_statement_one]
 UNION
 [select_statement_two];
@@ -231,7 +231,7 @@ UNION
 
 选择在两个 SELECT 语句中都出现的行:
 
-```
+```py
 SELECT * from customer_usa
 INTERSECT
 SELECT * from customer_gt_90_dollars;
@@ -239,7 +239,7 @@ SELECT * from customer_gt_90_dollars;
 
 选择出现在第一个 SELECT 语句中但不出现在第二个 SELECT 语句中的行:
 
-```
+```py
 SELECT * from customer_usa
 EXCEPT
 SELECT * from customer_gt_90_dollars;
@@ -247,7 +247,7 @@ SELECT * from customer_gt_90_dollars;
 
 用语句链接:
 
-```
+```py
 WITH
 usa AS
 	(

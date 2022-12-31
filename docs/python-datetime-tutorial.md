@@ -48,7 +48,7 @@ October 31, 2019![Python datetime tutorial](img/196d3e47f32d7adfe624f40bfb2d8fad
 
 然后，我们将打印当前的日期和时间，以便更仔细地看一看`datetime`对象中包含了什么。我们可以使用`datetime`的`.now()`功能来实现。我们将打印我们的 datetime 对象，然后使用`type()`打印它的类型，这样我们可以更仔细地查看。
 
-```
+```py
 # import datetime class from datetime module
 from datetime import datetime
 
@@ -58,7 +58,7 @@ print(datetime_object)
 print('Type :- ',type(datetime_object))
 ```
 
-```
+```py
 2019-10-25 10:24:01.521881
 Type :-  'datetime.datetime' 
 ```
@@ -81,7 +81,7 @@ Type :-  'datetime.datetime'
 
 当然，`strptime()`不是魔术——它不能把*任何*字符串变成日期和时间，它需要我们的一点帮助来解释它所看到的！但是它能够读取日期和时间数据的最传统的字符串格式(更多细节参见[文档](https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior))。我们给它一个 YYYY-MM-DD 格式的日期字符串，看看它能做什么！
 
-```
+```py
 my_string = '2019-10-31'
 
 # Create date object in given time format yyyy-mm-dd
@@ -91,7 +91,7 @@ print(my_date)
 print('Type: ',type(my_date))
 ```
 
-```
+```py
 2019-10-31 00:00:00 Type:  'datetime.datetime' 
 ```
 
@@ -103,12 +103,12 @@ print('Type: ',type(my_date))
 
 无论如何，我们希望分离出特定的日期元素来进行分析。一种方法是使用 datetime 对象的内置类属性，如`.month`或`.year`:
 
-```
+```py
 print('Month: ', my_date.month) # To Get month from date
 print('Year: ', my_date.year) # To Get month from year
 ```
 
-```
+```py
 Month:  10 Year:  2019 
 ```
 
@@ -126,7 +126,7 @@ Month:  10 Year:  2019
 
 我们先导入`calendar`，然后在`my_date`上使用`.day`和`.weekday()`。从那里，我们可以得到文本格式的星期几，如下所示:
 
-```
+```py
 # import calendar module
 import calendar
 print('Day of Month:', my_date.day)
@@ -138,7 +138,7 @@ print('Day of Week (number): ', my_date.weekday())
 print('Day of Week (name): ', calendar.day_name[my_date.weekday()])
 ```
 
-```
+```py
 Day of Month: 31 Day of Week (number):  3 Day of Week (name):  Thursday 
 ```
 
@@ -146,14 +146,14 @@ Day of Month: 31 Day of Week (number):  3 Day of Week (name):  Thursday
 
 让我们使用 for 循环仔细看看那个`day_name`变量:
 
-```
+```py
 j = 0
 for i in calendar.day_name:
     print(j,'-',i)
     j+=1
 ```
 
-```
+```py
 0 - Monday 1 - Tuesday 2 - Wednesday 3 - Thursday 4 - Friday 5 - Saturday 6 - Sunday 
 ```
 
@@ -165,7 +165,7 @@ for i in calendar.day_name:
 
 让我们使用`.now()`功能设置一个新的日期和时间。截至本文写作时，时间是 2019 年 10 月 25 日上午 10:25。当然，根据您选择运行这段代码的时间，您会得到不同的结果！
 
-```
+```py
 from datetime import datetime todays_date = datetime.now()
 
 # to get hour from datetime
@@ -175,7 +175,7 @@ print('Hour: ', todays_date.hour)
 print('Minute: ', todays_date.minute)
 ```
 
-```
+```py
 Hour:  10 Minute:  25 
 ```
 
@@ -187,12 +187,12 @@ Hour:  10 Minute:  25
 
 具体来说，`isocalendar()`返回一个包含 ISO 年、周数和工作日的元组。 [ISO 日历](https://en.wikipedia.org/wiki/ISO_week_date)是一种广泛使用的基于公历的标准日历。你可以在那个链接上读到更多的细节，但是为了我们的目的，我们需要知道的是它作为一个常规的日历工作，从每周的星期一开始。
 
-```
+```py
 # Return a 3-tuple, (ISO year, ISO week number, ISO weekday).
 todays_date.isocalendar()
 ```
 
-```
+```py
 (2019, 43, 5) 
 ```
 
@@ -200,11 +200,11 @@ todays_date.isocalendar()
 
 从上面我们可以看到，这是一年中的第 43 周，但是如果我们想要隔离这个数字，我们可以像对任何其他 Python 列表或元组一样通过索引来实现:
 
-```
+```py
 todays_date.isocalendar()[1]
 ```
 
-```
+```py
 43
 ```
 
@@ -214,7 +214,7 @@ todays_date.isocalendar()[1]
 
 我们可以使用 datetime 的内置`timestamp()`函数来实现这一点，该函数将一个`datetime`对象作为参数，并以时间戳格式返回日期和时间:
 
-```
+```py
 #import datetime
 from datetime import datetime
 # get current date
@@ -227,13 +227,13 @@ print("Date and Time :", now)
 print("Timestamp:", timestamp)
 ```
 
-```
+```py
 Date and Time : 2019-10-25 10:36:32.827300 Timestamp: 1572014192.8273 
 ```
 
 同样，我们可以使用`fromtimestamp()`进行反向转换。这是一个`datetime`函数，它以时间戳(浮点格式)作为参数，并返回一个`datetime`对象，如下所示:
 
-```
+```py
 #import datetime
 from datetime import datetime
 timestamp = 1572014192.8273
@@ -245,7 +245,7 @@ print("dt_object:", dt_object)
 print("type(dt_object): ", type(dt_object))
 ```
 
-```
+```py
 dt_object: 2019-10-25 10:36:32.827300 type(dt_object):  <class 'datetime.datetime'> 
 ```
 
@@ -257,7 +257,7 @@ dt_object: 2019-10-25 10:36:32.827300 type(dt_object):  <class 'datetime.datetim
 
 默认情况下，timedelta 对象的所有参数都设置为零。让我们创建一个新的两周长的 timedelta 对象，看看它是什么样子:
 
-```
+```py
 #import datetime
 from datetime import timedelta
 # create timedelta object with difference of 2 weeks
@@ -268,7 +268,7 @@ print(type(d))
 print(d.days)
 ```
 
-```
+```py
 14 days, 0:00:00 <class 'datetime.timedelta'> 14 
 ```
 
@@ -276,12 +276,12 @@ print(d.days)
 
 让我们创建另一个时间增量持续时间来进行更多的练习:
 
-```
+```py
 year = timedelta(days=365)
 print(year)
 ```
 
-```
+```py
 365 days, 0:00:00 
 ```
 
@@ -291,7 +291,7 @@ print(year)
 
 (注:下面的代码中，是 10 月 25 日上午 11:12；您的结果将根据您运行代码的时间而有所不同，因为我们正在使用`.now()`函数获取我们的`datetime`对象。
 
-```
+```py
 #import datetime
 from datetime import datetime, timedelta
 # get current time
@@ -308,7 +308,7 @@ print('Date two weeks ago: ', two_weeks_ago)
 print('two_weeks_ago object type: ', type(two_weeks_ago))
 ```
 
-```
+```py
 Today's date:  2019-10-25 11:12:24.863308 Date after 15 days:  2019-11-09 11:12:24.863308 Date two weeks ago:  2019-10-11 11:12:24.863308 two_weeks_ago object type:  <class 'datetime.datetime'> 
 ```
 
@@ -322,7 +322,7 @@ Today's date:  2019-10-25 11:12:24.863308 Date after 15 days:  2019-11-09 11:12:
 
 这里，我们将创建两个`date`对象(请记住，这些对象的工作方式与`datetime`对象相同，只是它们不包含时间数据),并将其中一个减去另一个，以获得持续时间:
 
-```
+```py
 # import datetime
 from datetime import date
 # Create two dates
@@ -335,13 +335,13 @@ print("Difference: ", delta.days)
 print('delta object type: ', type(delta))
 ```
 
-```
+```py
 Difference:  -8 delta object type:  <class 'datetime.timedelta'> 
 ```
 
 上面，为了清楚起见，我们只使用了日期，但是我们可以对`datetime`对象做同样的事情来获得更精确的测量，包括小时、分钟和秒:
 
-```
+```py
 # import datetime
 from datetime import datetime
 # create two dates with year, month, day, hour, minute, and second
@@ -353,7 +353,7 @@ diff = date1-date2
 print("Difference: ", diff)
 ```
 
-```
+```py
 Difference:  36 days, 10:04:20 
 ```
 
@@ -374,7 +374,7 @@ Difference:  36 days, 10:04:20
 
 这次让我们尝试转换一种不同的日期字符串。[这个网站](https://strftime.org/)对于寻找帮助`strptime()`解释我们的字符串输入所需的格式化代码是一个非常有用的参考。
 
-```
+```py
 # import datetime
 from datetime import datetime
 date_string = "1 August, 2019"
@@ -385,7 +385,7 @@ date_object = datetime.strptime(date_string, "%d %B, %Y")
 print("date_object: ", date_object)
 ```
 
-```
+```py
 date_object:  2019-08-01 00:00:00 
 ```
 
@@ -393,7 +393,7 @@ date_object:  2019-08-01 00:00:00
 
 然后，坚持 mm/dd 格式，我们将把它转换成 Unix 时间戳。然后我们将它转换回一个`datetime`对象，并使用几个不同的 [strftime 模式](https://strftime.org/)将那个转换回字符串，以控制输出:
 
-```
+```py
 # import datetime
 from datetime import datetime
 dt_string = "12/11/2018 09:15:32"
@@ -418,7 +418,7 @@ d = date_time.strftime("%X")
 print("Output 3:", d)
 ```
 
-```
+```py
 dt_object1: 2018-11-12 09:15:32 dt_object2: 2018-12-11 09:15:32 Unix Timestamp:  1544537732.0 Output 1: Tue Dec 11 09:15:32 2018 Output 2: 12/11/18 Output 3: 09:15:32 
 ```
 
@@ -426,7 +426,7 @@ dt_object1: 2018-11-12 09:15:32 dt_object2: 2018-12-11 09:15:32 Unix Timestamp: 
 
 让我们多练习一下如何使用这些:
 
-```
+```py
 # current date and time
 now = datetime.now()
 
@@ -451,7 +451,7 @@ date_time = now.strftime("%m/%d/%Y, %H:%M:%S")
 print("Date and Time:",date_time)
 ```
 
-```
+```py
 Year: 2019 Month; 10 Day: 25 Time: 11:56:41 Date and Time: 10/25/2019, 11:56:41 
 ```
 
@@ -463,7 +463,7 @@ Year: 2019 Month; 10 Day: 25 Time: 11:56:41 Date and Time: 10/25/2019, 11:56:41
 
 例如:
 
-```
+```py
 # import timezone from pytz module
 from pytz import timezone
 # Create timezone US/Eastern
@@ -481,7 +481,7 @@ au_tz = timezone('Australia/Sydney')
 print(loc_dt.astimezone(au_tz))
 ```
 
-```
+```py
 2011-11-02 07:27:00-04:00 2011-11-02 16:57:00+05:30 2011-11-02 22:27:00+11:00 
 ```
 
@@ -500,7 +500,7 @@ print(loc_dt.astimezone(au_tz))
 
 让我们看一个简单的例子:
 
-```
+```py
 # import pandas module as pd
 import pandas as pd
 # create date object using to_datetime() function
@@ -508,7 +508,7 @@ date = pd.to_datetime("8th of sep, 2019")
 print(date)
 ```
 
-```
+```py
 2019-09-08 00:00:00 
 ```
 
@@ -516,7 +516,7 @@ print(date)
 
 我们还可以使用 pandas(及其一些附属的 numpy 功能)自动创建日期范围作为 pandas 系列。例如，在下面，我们从上面定义的日期开始创建一系列 12 个日期。然后，我们使用`pd.date_range()`从预定义的日期开始创建一系列不同的日期:
 
-```
+```py
 # Create date series using numpy and to_timedelta() function
 date_series = date + pd.to_timedelta(np.arange(12), 'D')
 print(date_series)
@@ -526,7 +526,7 @@ date_series = pd.date_range('08/10/2019', periods = 12, freq ='D')
 print(date_series)
 ```
 
-```
+```py
 DatetimeIndex(['2019-09-08', '2019-09-09', '2019-09-10', '2019-09-11',                '2019-09-12', '2019-09-13', '2019-09-14', '2019-09-15',                '2019-09-16', '2019-09-17', '2019-09-18', '2019-09-19'],               dtype='datetime64[ns]', freq=None) DatetimeIndex(['2019-08-10', '2019-08-11', '2019-08-12', '2019-08-13',                '2019-08-14', '2019-08-15', '2019-08-16', '2019-08-17',                '2019-08-18', '2019-08-19', '2019-08-20', '2019-08-21'],               dtype='datetime64[ns]', freq='D') 
 ```
 
@@ -536,7 +536,7 @@ DatetimeIndex(['2019-09-08', '2019-09-09', '2019-09-10', '2019-09-11',          
 
 为了探索这一点，让我们使用上面创建的一个系列制作一个快速数据框架:
 
-```
+```py
 # Create a DataFrame with one column date
 df = pd.DataFrame()
 df['date'] = date_series df.head()
@@ -552,7 +552,7 @@ df['date'] = date_series df.head()
 
 现在，让我们使用相关的 Python datetime(通过`dt`访问)属性为日期的每个元素创建单独的列:
 
-```
+```py
 # Extract year, month, day, hour, and minute. Assign all these date component to new column.
 df['year'] = df['date'].dt.year
 df['month'] = df['date'].dt.month
@@ -574,7 +574,7 @@ df.head()
 
 Pandas 还能够从其 datetime 对象中获取其他元素，如一周中的某一天和一年中的某一天。同样，我们可以使用`dt`属性来做到这一点。注意，在这里，通常在 Python 中，一周从索引 0 开始，所以一周的第 5 天是*星期六*。
 
-```
+```py
 # get Weekday and Day of Year. Assign all these date component to new column.
 df['weekday'] = df['date'].dt.weekday
 df['day_name'] = df['date'].dt.weekday_name
@@ -596,7 +596,7 @@ df.head()
 
 为此，我们所要做的就是重新定义`df.index`:
 
-```
+```py
 # Assign date column to dataframe index
 df.index = df.date
 df.head()

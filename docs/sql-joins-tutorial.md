@@ -60,7 +60,7 @@ SQL 连接不必如此具有挑战性！
 
 使用 SQL 连接数据的最常见方式是使用一个**内部连接**。内部联接的语法是:
 
-```
+```py
 SELECT [column_names] FROM [table_name_one]
 INNER JOIN [table_name_two] ON [join_constraint];
 ```
@@ -72,7 +72,7 @@ inner join 子句由两部分组成:
 
 连接通常用在查询中的`FROM`子句之后。让我们来看一个基本的内部连接，其中我们组合了来自两个表的数据。
 
-```
+```py
 SELECT * FROM facts
 INNER JOIN cities ON cities.facts_id = facts.id
 LIMIT 5;
@@ -118,27 +118,27 @@ LIMIT 5;
 
 我们已经知道如何使用[别名](https://www.tutorialspoint.com/sqlite/sqlite_alias_syntax.htm)来指定列的自定义名称，例如:
 
-```
+```py
 SELECT AVG(population) AS average_population
 ```
 
 我们还可以为表名创建别名，这使得带有连接的查询更容易读写。而不是:
 
-```
+```py
 SELECT * FROM facts
 INNER JOIN cities ON cities.facts_id = facts.id
 ```
 
 我们可以写:
 
-```
+```py
 SELECT * FROM facts AS f
 INNER JOIN cities AS c ON c.facts_id = f.id
 ```
 
 就像列名一样，使用`AS`是可选的。我们可以通过书写得到相同的结果:
 
-```
+```py
 SELECT * FROM facts f
 INNER JOIN cities c ON c.facts_id = f.id
 ```
@@ -156,7 +156,7 @@ INNER JOIN cities c ON c.facts_id = f.id
     *   从`facts`到`country_name`的名称列别名。
 *   只包括前 5 行。
 
-```
+```py
 SELECT
     c.*,
     f.name country_name
@@ -184,7 +184,7 @@ LIMIT 5;
 
 到目前为止，通过思考我们的问题，我们已经可以编写我们的大部分查询(它几乎与我们编写的前一个查询相同):
 
-```
+```py
 SELECT
     f.name,
     c.name
@@ -194,13 +194,13 @@ INNER JOIN facts f ON f.id = c.facts_id;
 
 我们过程的最后一部分是确保我们有正确的行。从前面的两个屏幕中我们知道，这样的查询将返回来自`cities`的所有行，这些行在`facts_id`列中与来自`facts`的行有对应的匹配。我们只对城市表中的首都感兴趣，所以我们需要在`capital`列中使用一个`WHERE`子句，如果该城市是首都，则该子句的值为`1`，如果不是，则为`0`:
 
-```
+```py
 WHERE c.capital = 1
 ```
 
 我们现在可以将这些放在一起，编写一个查询来回答我们的问题。我们将把它限制在前 10 行，这样输出的数量是可管理的。
 
-```
+```py
 SELECT
     f.name country,
     c.name capital_city
@@ -229,7 +229,7 @@ LIMIT 10;
 
 我们可以使用 SQL 查询来探索这一点:
 
-```
+```py
 SELECT COUNT(DISTINCT(name)) FROM facts;
 ```
 
@@ -237,7 +237,7 @@ SELECT COUNT(DISTINCT(name)) FROM facts;
 
 | Two hundred and sixty-one |
 
-```
+```py
 SELECT COUNT(DISTINCT(facts_id)) FROM cities;
 ```
 
@@ -255,7 +255,7 @@ SELECT COUNT(DISTINCT(facts_id)) FROM cities;
 
 让我们来看一个例子，用我们编写的第一个查询中的`LEFT JOIN`替换`INNER JOIN`，并从我们之前的图表中查看相同的行选择
 
-```
+```py
 SELECT * FROM facts
 LEFT JOIN cities ON cities.facts_id = facts.id
 ```
@@ -266,19 +266,19 @@ LEFT JOIN cities ON cities.facts_id = facts.id
 
 我们可以使用这些空值过滤我们的结果，只过滤那些不存在于带有`WHERE`子句的`cities`中的国家。当在 SQL 中与 null 进行比较时，我们使用`IS`关键字，而不是`=`符号。如果我们想选择列为空的行，我们可以写:
 
-```
+```py
 WHERE column_name IS NULL
 ```
 
 如果我们想选择列名不为空的行，我们使用:
 
-```
+```py
 WHERE column_name IS NOT NULL
 ```
 
 让我们使用一个左连接来探索不存在于`cities`表中的国家。
 
-```
+```py
 SELECT
     f.name country,
     f.population
@@ -359,14 +359,14 @@ WHERE c.name IS NULL;
 
 下面两个查询，一个使用左连接，一个使用右连接，产生相同的结果。
 
-```
+```py
 SELECT f.name country, c.name city
 FROM facts f
 LEFT JOIN cities c ON c.facts_id = f.id
 LIMIT 5;
 ```
 
-```
+```py
 SELECT f.name country, c.name city
 FROM cities c
 RIGHT JOIN facts f ON f.id = c.facts_id
@@ -381,7 +381,7 @@ SQLite 不支持的另一种连接类型是**完全外部连接**。完整的外
 
 像右连接一样，完全外连接相当少见。完整外部连接的标准 SQL 语法是:
 
-```
+```py
 SELECT f.name country, c.name city
 FROM cities c
 FULL OUTER JOIN facts f ON f.id = c.facts_id
@@ -400,7 +400,7 @@ LIMIT 5;
 
 以前，我们在指定查询结果的顺序时使用了列名，如下所示:
 
-```
+```py
 SELECT
     name,
     migration_rate
@@ -410,7 +410,7 @@ ORDER BY migration_rate desc;
 
 我们可以在查询中使用一个方便的快捷方式，让我们跳过列名，而是使用列在`SELECT`子句中出现的顺序。在这个实例中，`migration_rate`是我们的`SELECT`子句中的第二列，所以我们可以只使用`2`来代替列名:
 
-```
+```py
 SELECT
     name,
     migration_rate
@@ -422,7 +422,7 @@ ORDER BY 2 desc;
 
 让我们用我们所学的来列出人口最多的 10 个首都城市。因为我们对来自`facts`的在`cities`中没有对应城市的国家不感兴趣，所以我们应该使用一个`INNER JOIN`。
 
-```
+```py
 SELECT
     c.name capital_city,
     f.name country,
@@ -481,7 +481,7 @@ LIMIT 10;
 
 使用这个示例作为模型，我们将编写一个类似的查询来查找人口超过 1000 万的非首都城市。
 
-```
+```py
 SELECT
     c.name city,
     f.name country,
@@ -526,7 +526,7 @@ ORDER BY 3 DESC;
 
 我们可以从编写一个查询开始，对每个国家的所有城市人口进行求和。通过对`facts_id`进行分组，我们可以在没有连接的情况下做到这一点(在下面的例子中，我们将使用一个限制来使输出可管理):
 
-```
+```py
 SELECT
     facts_id,
     SUM(population) urban_pop
@@ -545,7 +545,7 @@ LIMIT 5;
 
 接下来，我们将把`facts`表连接到该子查询，选择国家名称、城市人口和总人口(同样，为了保持整洁，我们使用了一个限制):
 
-```
+```py
 SELECT
     f.name country,
     c.urban_pop,
@@ -571,7 +571,7 @@ LIMIT 5;
 
 最后，我们将创建一个新列，将城市人口除以总人口，并使用`WHERE`和`ORDER BY`对结果进行过滤/排序:
 
-```
+```py
 SELECT
     f.name country,
     c.urban_pop,

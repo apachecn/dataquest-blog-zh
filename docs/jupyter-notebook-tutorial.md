@@ -57,7 +57,7 @@ Anaconda 中包含的一些最大的 Python 库包括 [NumPy](https://www.numpy.
 
 如果你是一个已经安装了 Python 的高级用户，并且喜欢手动管理你的包，你可以使用 pip :
 
-```
+```py
 pip3 install jupyter
 ```
 
@@ -127,11 +127,11 @@ Jupyter 的笔记本和仪表板是 web 应用程序，Jupyter 启动一个本�
 
 结果应该是这样的:
 
-```
+```py
 print('Hello World!')
 ```
 
-```
+```py
 Hello World!
 ```
 
@@ -145,7 +145,7 @@ Hello World!
 
 从菜单栏中，点击*插入*并选择*在*下面插入单元格，在你的第一个下面创建一个新的代码单元格，并尝试下面的代码看看会发生什么。你注意到什么不同了吗？
 
-```
+```py
 import time
 time.sleep(3)
 ```
@@ -154,14 +154,14 @@ time.sleep(3)
 
 一般来说，单元格的输出来自于在单元格执行期间专门打印的任何文本数据，以及单元格中最后一行的值，无论是单独的变量、函数调用还是其他内容。例如:
 
-```
+```py
 def say_hello(recipient):
     return 'Hello, {}!'.format(recipient)
 
 say_hello('Tim')
 ```
 
-```
+```py
 'Hello, Tim!'
 ```
 
@@ -200,7 +200,7 @@ Markdown 是一种轻量级的、易于学习的标记语言，用于格式化�
 
 请记住，这篇文章是在 Jupyter 笔记本上写的，所以到目前为止你看到的所有叙述性文本和图像都是用 Markdown 写的。让我们用一个简单的例子来介绍一下基础知识:
 
-```
+```py
 # This is a level 1 heading
 
 ## This is a level 2 heading
@@ -220,7 +220,7 @@ Paragraphs must be separated by an empty line.
 Inline code uses single backticks: `foo()`, and code blocks use triple backticks: 
 ```
 bar()
-``` 
+```py 
 Or can be indented by 4 spaces: 
 
     foo()
@@ -248,7 +248,7 @@ And finally, adding images is easy: ![Alt text](https://www.example.com/image.jp
 
 例如，如果您在一个单元格中导入库或声明变量，它们将在另一个单元格中可用。让我们试试这个来感受一下。首先，我们将导入一个 Python 包并定义一个函数:
 
-```
+```py
 import numpy as np
 def square(x):
     return x * x
@@ -256,13 +256,13 @@ def square(x):
 
 一旦我们执行了上面的单元格，我们就可以在任何其他单元格中引用`np`和`square`。
 
-```
+```py
 x = np.random.randint(1, 10)
 y = square(x)
 print('%d squared is %d' % (x, y))
 ```
 
-```
+```py
 1 squared is 1
 ```
 
@@ -270,17 +270,17 @@ print('%d squared is %d' % (x, y))
 
 你可以自己试试，我们再把变量打印出来。
 
-```
+```py
 print('Is %d squared %d?' % (x, y))
 ```
 
-```
+```py
 Is 1 squared 1?
 ```
 
 这里没有惊喜！但是如果我们改变`y?`的值会发生什么
 
-```
+```py
 y = 10
 print('Is %d squared is %d?' % (x, y))
 ```
@@ -333,7 +333,7 @@ SoS 内核在一台笔记本电脑中提供多语言支持。
 
 通常从专门用于导入和设置的代码单元开始，这样，如果您选择添加或更改任何内容，您可以简单地编辑并重新运行该单元，而不会导致任何副作用。
 
-```
+```py
 %matplotlib inline
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -346,7 +346,7 @@ import seaborn as sns sns.set(style="darkgrid")
 
 现在，让我们继续加载我们的数据。
 
-```
+```py
 df = pd.read_csv('fortune500.csv')
 ```
 
@@ -366,7 +366,7 @@ df = pd.read_csv('fortune500.csv')
 
 现在我们真的开始了！我们的笔记本被安全保存，我们已经将数据集`df`加载到最常用的 pandas 数据结构中，该数据结构被称为`DataFrame`，基本上看起来像一个表。我们的看起来像什么？
 
-```
+```py
 df.head()
 ```
 
@@ -378,7 +378,7 @@ df.head()
 | three | One thousand nine hundred and fifty-five | four | 通用电气 | Two thousand nine hundred and fifty-nine point one | Two hundred and twelve point six |
 | four | One thousand nine hundred and fifty-five | five | 埃斯马特 | Two thousand five hundred and ten point eight | Nineteen point one |
 
-```
+```py
 df.tail()
 ```
 
@@ -394,17 +394,17 @@ df.tail()
 
 让我们重新命名这些列，以便以后引用它们。
 
-```
+```py
 df.columns = ['year', 'rank', 'company', 'revenue', 'profit']
 ```
 
 接下来，我们需要探索我们的数据集。完成了吗？熊猫如预期的读了吗？是否缺少任何值？
 
-```
+```py
 len(df)
 ```
 
-```
+```py
 25500
 ```
 
@@ -412,17 +412,17 @@ len(df)
 
 让我们检查一下我们的数据集是否像我们期望的那样被导入了。一个简单的检查是查看数据类型(或 dtypes)是否被正确解释。
 
-```
+```py
 df.dtypes
 ```
 
-```
+```py
 year int64 rank int64 company object revenue float64 profit object dtype: object
 ```
 
 啊哦。看起来利润栏有问题——我们认为它会像收入栏一样。这表明它很可能包含一些非整数值，所以我们来看看。
 
-```
+```py
 non_numberic_profits = df.profit.str.contains('[^0-9.-]')
 df.loc[non_numberic_profits].head()
 ```
@@ -437,21 +437,21 @@ df.loc[non_numberic_profits].head()
 
 正如我们所怀疑的！有些值是字符串，用于指示丢失的数据。有没有其他的价值观已经悄然进入？
 
-```
+```py
 set(df.profit[non_numberic_profits])
 ```
 
-```
+```py
 {'N.A.'}
 ```
 
 这很容易解释，但是我们应该怎么做呢？嗯，那要看少了多少个值。
 
-```
+```py
 len(df.profit[non_numberic_profits])
 ```
 
-```
+```py
 369
 ```
 
@@ -459,7 +459,7 @@ len(df.profit[non_numberic_profits])
 
 如果包含`N.A.`的行在这些年中大致均匀分布，最简单的解决方法就是删除它们。所以让我们快速看一下分布情况。
 
-```
+```py
 bin_sizes, _, _ = plt.hist(df.year[non_numberic_profits], bins=range(1955, 2006))
 ```
 
@@ -469,26 +469,26 @@ bin_sizes, _, _ = plt.hist(df.year[non_numberic_profits], bins=range(1955, 2006)
 
 出于我们的目的，假设这是可以接受的，并继续删除这些行。
 
-```
+```py
 df = df.loc[~non_numberic_profits]
 df.profit = df.profit.apply(pd.to_numeric)
 ```
 
 我们应该检查一下是否有效。
 
-```
+```py
 len(df)
 ```
 
-```
+```py
 25131
 ```
 
-```
+```py
 df.dtypes
 ```
 
-```
+```py
 year int64 rank int64 company object revenue float64 profit float64 dtype: object
 ```
 
@@ -502,7 +502,7 @@ year int64 rank int64 company object revenue float64 profit float64 dtype: objec
 
 接下来，我们可以通过绘制每年的平均利润来解决手头的问题。我们也可以绘制收入图，所以首先我们可以定义一些变量和一个减少代码的方法。
 
-```
+```py
 group_by_year = df.loc[:, ['year', 'revenue', 'profit']].groupby('year')
 avgs = group_by_year.mean()
 x = avgs.index
@@ -516,7 +516,7 @@ def plot(x, y, ax, title, y_label):
 
 现在我们来策划！
 
-```
+```py
 fig, ax = plt.subplots()
 plot(x, y1, ax, 'Increase in mean Fortune 500 company profits from 1955 to 2005', 'Profit (millions)')
 ```
@@ -527,7 +527,7 @@ plot(x, y1, ax, 'Increase in mean Fortune 500 company profits from 1955 to 2005'
 
 也许收入能告诉我们更多。
 
-```
+```py
 y2 = avgs.revenue
 fig, ax = plt.subplots()
 plot(x, y2, ax, 'Increase in mean Fortune 500 company revenues from 1955 to 2005', 'Revenue (millions)')
@@ -539,7 +539,7 @@ plot(x, y2, ax, 'Increase in mean Fortune 500 company revenues from 1955 to 2005
 
 在栈溢出的一点帮助下[，我们可以用+/-它们的标准偏差叠加这些图。](https://stackoverflow.com/a/47582329/604687)
 
-```
+```py
 def plot_with_std(x, y, stds, ax, title, y_label):
     ax.fill_between(x, y - stds, y + stds, alpha=0.2)
     plot(x, y, ax, title, y_label)
@@ -662,7 +662,7 @@ NBViewer 最初是在 GitHub 的 Jupyter 笔记本集成之前开发的，它允
 
 许多魔法需要额外的输入(就像函数需要参数一样)来告诉它们如何操作。我们将在下一节中查看一个示例，但是您可以通过带问号运行它来查看任何魔术的文档，就像这样:
 
-```
+```py
 %matplotlib?
 ```
 

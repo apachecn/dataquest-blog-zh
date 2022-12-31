@@ -40,7 +40,7 @@ Expedia 竞赛的挑战是，根据用户在 Expedia 上进行搜索的一些属
 
 这里有一个关于如何开始的教程。一旦我们下载了数据，我们就可以用[熊猫](https://pandas.pydata.org/)来读取它:
 
-```
+```py
  import pandas as pd
 destinations = pd.read_csv("destinations.csv")
 test = pd.read_csv("test.csv")
@@ -49,25 +49,25 @@ train = pd.read_csv("train.csv")
 
 我们先来看看有多少数据:
 
-```
+```py
 train.shape
 ```
 
-```
+```py
 (37670293, 24)
 ```
 
-```
+```py
 test.shape
 ```
 
-```
+```py
 (2528243, 22)
 ```
 
 我们有大约`37`百万训练集行，和`2`百万测试集行，这将使这个问题变得有点挑战性。我们可以研究数据的前几行:
 
-```
+```py
 train.head(5)
 ```
 
@@ -84,7 +84,7 @@ train.head(5)
 *   可能对我们的预测有用，所以我们需要转换它。
 *   大多数列都是整数或浮点数，所以我们不能做很多特性工程。比如，`user_location_country`不是一个国家的名字，是一个整数。这使得创建新功能更加困难，因为我们不知道每个值的确切含义。
 
-```
+```py
 test.head(5)
 ```
 
@@ -116,11 +116,11 @@ test.head(5)
 
 现在我们知道了我们预测的是什么，是时候投入进去探索了。我们可以对序列使用 [value_counts](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.value_counts.html) 方法来做到这一点:
 
-```
+```py
 train["hotel_cluster"].value_counts()
 ```
 
-```
+```py
  91    1043720
 41     772743
 48     754033
@@ -145,14 +145,14 @@ train["hotel_cluster"].value_counts()
 *   计算出`train`用户 id 中有多少个`test`用户 id。
 *   查看计数是否与`test`用户 id 的总数相匹配。
 
-```
+```py
  test_ids = set(test.user_id.unique())
 train_ids = set(train.user_id.unique())
 intersection_count = len(test_ids & train_ids)
 intersection_count == len(test_ids)
 ```
 
-```
+```py
 True
 ```
 
@@ -169,7 +169,7 @@ True
 *   将`train`中的`date_time`列从`object`转换为`datetime`值。这使得约会时更容易相处。
 *   从`date_time`中提取`year`和`month`，并将它们分配到各自的列中。
 
-```
+```py
  train["date_time"] = pd.to_datetime(train["date_time"])
 train["year"] = train["date_time"].dt.year
 train["month"] = train["date_time"].dt.month 
@@ -179,7 +179,7 @@ train["month"] = train["date_time"].dt.month
 
 因为`test`中的用户 id 是`train`中用户 id 的子集，所以我们需要以保留每个用户的完整数据的方式进行随机采样。我们可以通过随机选择一定数量的用户来实现这一点，然后只从`train`中选择行，其中`user_id`在我们的用户 id 随机样本中。
 
-```
+```py
  import random
 
 unique_users = train.user_id.unique()
@@ -194,7 +194,7 @@ sel_train = train[train.user_id.isin(sel_user_ids)]
 
 我们现在需要从`sel_train`中挑选新的训练和测试集。我们将这些集合称为`t1`和`t2`。
 
-```
+```py
  t1 = sel_train[((sel_train.year == 2013) | ((sel_train.year == 2014) & (sel_train.month < 8)))]
 t2 = sel_train[((sel_train.year == 2014) & (sel_train.month >= 8))]
 ```
@@ -205,7 +205,7 @@ t2 = sel_train[((sel_train.year == 2014) & (sel_train.month >= 8))]
 
 如果`is_booking`是`0`，代表点击，`1`代表预订。`test`只包含预订事件，所以我们需要对`t2`进行采样，使其也只包含预订。
 
-```
+```py
 t2 = t2[t2.is_booking == True]
 ```
 
@@ -213,7 +213,7 @@ t2 = t2[t2.is_booking == True]
 
 我们可以对这些数据尝试的最简单的技术是找出数据中最常见的聚类，然后将它们用作预测。我们可以再次使用 value_counts 方法来帮助我们:
 
-```
+```py
 most_common_clusters = list(train.hotel_cluster.value_counts().head().index)
 ```
 
@@ -223,7 +223,7 @@ most_common_clusters = list(train.hotel_cluster.value_counts().head().index)
 
 我们可以通过对每一行进行相同的预测，将`most_common_clusters`变成一个预测列表。
 
-```
+```py
 predictions = [most_common_clusters for i in range(t2.shape[0])]
 ```
 
@@ -233,13 +233,13 @@ predictions = [most_common_clusters for i in range(t2.shape[0])]
 
 为了评估误差，我们首先需要弄清楚如何计算平均精度。幸运的是， [Ben Hamner](https://github.com/benhamner) 写了一个实现，可以在[这里](https://github.com/benhamner/Metrics/blob/master/Python/ml_metrics/average_precision.py)找到。它可以作为`ml_metrics`包的一部分安装，你可以在这里找到如何安装它的安装说明[。我们可以用`ml_metrics`中的`mapk`方法计算我们的误差度量:](https://github.com/benhamner/Metrics/tree/master/Python)
 
-```
+```py
  import ml_metrics as metrics
 target = [[l] for l in t2["hotel_cluster"]]
 metrics.mapk(target, predictions, k=5) 
 ```
 
-```
+```py
 0.058020770920711007
 ```
 
@@ -249,11 +249,11 @@ metrics.mapk(target, predictions, k=5)
 
 在我们继续创建一个更好的算法之前，让我们看看是否有什么东西与`hotel_cluster`有很好的关联。这将告诉我们是否应该更深入地研究任何特定的列。我们可以使用 [corr](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.corr.html) 方法在训练集中找到线性相关性:
 
-```
+```py
 train.corr()["hotel_cluster"]
 ```
 
-```
+```py
  site_name                   -0.022408
 posa_continent               0.014938
 user_location_country       -0.010477
@@ -302,7 +302,7 @@ Destinations 包含一个对应于`srch_destination_id`的 id，以及关于该�
 *   指定我们希望数据中只有`3`列。
 *   将列`d1-d149`转换为`3`列。
 
-```
+```py
  from sklearn.decomposition import PCA
 
 pca = PCA(n_components=3)
@@ -322,7 +322,7 @@ dest_small["srch_destination_id"] = destinations["srch_destination_id"]
 *   添加来自`dest_small`的功能。
 *   用`-1`替换任何缺失值。
 
-```
+```py
  def calc_fast_features(df):
     df["date_time"] = pd.to_datetime(df["date_time"])
     df["srch_ci"] = pd.to_datetime(df["srch_ci"], format='%Y-%m-%d', errors="coerce")
@@ -358,7 +358,7 @@ df.fillna(-1, inplace=True)
 
 现在我们有了训练数据的特征，我们可以尝试机器学习。我们将在训练集中使用`3-fold` [交叉验证](https://en.wikipedia.org/wiki/Cross-validation)来生成可靠的误差估计。交叉验证将训练设置分割成`3`个部分，然后使用其他部分预测每个部分的`hotel_cluster`进行训练。我们将使用[随机森林](https://en.wikipedia.org/wiki/Random_forest)算法生成预测。随机森林建立树，可以适应数据中的非线性趋势。这将使我们能够做出预测，即使我们的列没有线性相关。我们将首先初始化模型并计算交叉验证分数:
 
-```
+```py
  predictors = [c for c in df.columns if c not in ["hotel_cluster"]]
 from sklearn import cross_validation
 from sklearn.ensemble import RandomForestClassifier
@@ -367,7 +367,7 @@ scores = cross_validation.cross_val_score(clf, df[predictors], df['hotel_cluster
 scores
 ```
 
-```
+```py
 array([ 0.06203556,  0.06233452,  0.06392277])
 ```
 
@@ -384,7 +384,7 @@ array([ 0.06203556,  0.06233452,  0.06392277])
 *   对于每一行，找出最大的`5`个概率，并将这些`hotel_cluster`个值指定为预测值。
 *   使用`mapk`计算精度。
 
-```
+```py
  from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import KFold
 from itertools import chain
@@ -417,7 +417,7 @@ for index, row in prediction_frame.iterrows():
 metrics.mapk([[l] for l in t2.iloc["hotel_cluster"]], preds, k=5)
 ```
 
-```
+```py
 0.041083333333333326
 ```
 
@@ -435,7 +435,7 @@ metrics.mapk([[l] for l in t2.iloc["hotel_cluster"]], preds, k=5)
 
 下面是完成上述步骤的代码:
 
-```
+```py
  def make_key(items):
     return "_".join([str(i) for i in items])
 
@@ -457,7 +457,7 @@ for name, group in groups:
 
 最后，我们将有一个字典，其中每个键都是一个`srch_destination_id`。字典中的每个值都是另一个字典，包含酒店集群作为键，分数作为值。它看起来是这样的:
 
-```
+```py
 {'39331': {20: 1.15, 30: 0.15, 81: 0.3},
 '511': {17: 0.15, 34: 0.15, 55: 0.15, 70: 0.15}}
 ```
@@ -470,7 +470,7 @@ for name, group in groups:
 
 代码如下:
 
-```
+```py
  import operator
 
 cluster_dict = {}
@@ -491,7 +491,7 @@ for n in top_clusters:
 
 代码如下:
 
-```
+```py
  preds = []
 for index, row in t2.iterrows():
     key = make_key( `for m in match_cols])
@@ -508,7 +508,7 @@ for index, row in t2.iterrows():
    [25, 78, 64, 90, 60],
    ...
 ]
-```
+```py
 
 ### 计算误差
 
@@ -516,11 +516,11 @@ for index, row in t2.iterrows():
 
 ```
 metrics.mapk([[l] for l in t2["hotel_cluster"]], preds, k=5)
-```
+```py
 
 ```
 0.22388136288998359
-```
+```py
 
 我们做得很好！与最好的机器学习方法相比，我们的准确率提高了 4 倍，而且我们采用了一种更快、更简单的方法。您可能已经注意到，这个值比排行榜上的准确度低很多。本地测试比提交测试的准确度低，所以这种方法在排行榜上表现相当好。排行榜分数和本地分数的差异可以归结为几个因素:
 
@@ -582,7 +582,7 @@ for i in range(t2.shape[0]):
 
 我们可以这样做:
 
-```
+```py
  def f5(seq, idfun=None): 
     if idfun is None:
         def idfun(x): return x
@@ -599,7 +599,7 @@ full_preds = [f5(exact_matches[p] + preds[p] + most_common_clusters)[:5] for p i
 mapk([[l] for l in t2["hotel_cluster"]], full_preds, k=5) 
 ```
 
-```
+```py
 0.28400041050903119
 ```
 
@@ -609,7 +609,7 @@ mapk([[l] for l in t2["hotel_cluster"]], full_preds, k=5)
 
 幸运的是，由于我们编写代码的方式，我们所要做的就是将`train`赋给变量`t1`，将`test`赋给变量`t2`。然后，我们只需重新运行代码来进行预测。在`train`和`test`场景中重新运行代码应该不到一个小时。一旦我们有了预测，我们只需要把它们写到一个文件中:
 
-```
+```py
  write_p = [" ".join([str(l) for l in p]) for p in full_preds]
 write_frame = ["{0},{1}".format(t2["id"][i], write_p[i]) for i in range(len(full_preds))]
 write_frame = ["id,hotel_clusters"] + write_frame
@@ -663,6 +663,6 @@ with open("predictions.csv", "w+") as f:
 
 我希望你在这次比赛中玩得开心！我很乐意听到您的任何反馈。如果你想在参加比赛之前了解更多，请查看我们在 [Dataquest](https://www.dataquest.io) 上的课程，了解数据操作、统计学、机器学习、如何使用 Spark 等。
 
-```
+```py
 
 ```

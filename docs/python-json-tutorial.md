@@ -8,7 +8,7 @@ March 1, 2016
 
 当数据存储在 SQL 数据库中时，它往往遵循一种看起来像表的严格结构。下面是一个来自 SQLite 数据库的示例:
 
-```
+```py
 id|code|name|area|area_land|area_water|population|population_growth|birth_rate|death_rate|migration_rate|created_at|updated_at1|af|Afghanistan|652230|652230|0|32564342|2.32|38.57|13.89|1.51|2015-11-01 13:19:49.461734|2015-11-01 13:19:49.4617342|al|Albania|28748|27398|1350|3029278|0.3|12.92|6.58|3.3|2015-11-01 13:19:54.431082|2015-11-01 13:19:54.4310823|ag|Algeria|2381741|2381741|0|39542166|1.84|23.67|4.31|0.92|2015-11-01 13:19:59.961286|2015-11-01 13:19:59.961286
 ```
 
@@ -16,7 +16,7 @@ id|code|name|area|area_land|area_water|population|population_growth|birth_rate|d
 
 但是，随着我们捕获的数据量的增加，我们往往不知道数据在存储时的确切结构。这就是所谓的非结构化数据。一个很好的例子是网站上访问者的事件列表。以下是发送到服务器的事件列表示例:
 
-```
+```py
 {'event_type': 'started-lesson', 'keen': {'created_at': '2015-06-12T23:09:03.966Z', 'id': '557b668fd2eaaa2e7c5e916b', 'timestamp': '2015-06-12T23:09:07.971Z'}, 'sequence': 1} {'event_type': 'started-screen', 'keen': {'created_at': '2015-06-12T23:09:03.979Z', 'id': '557b668f90e4bd26c10b6ed6', 'timestamp': '2015-06-12T23:09:07.987Z'}, 'lesson': 1, 'sequence': 4, 'type': 'code'} {'event_type': 'started-screen', 'keen': {'created_at': '2015-06-12T23:09:22.517Z', 'id': '557b66a246f9a7239038b1e0', 'timestamp': '2015-06-12T23:09:24.246Z'}, 'lesson': 1, 'sequence': 3, 'type': 'code'},
 ```
 
@@ -41,11 +41,11 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 尽管 JSON 文件只有 600MB，但我们会把它当作大得多的文件来处理，这样我们就可以研究如何分析一个不适合内存的 JSON 文件。我们要做的第一件事是看一下`md_traffic.json`文件的前几行。JSON 文件只是一个普通的文本文件，因此我们可以使用所有标准的命令行工具与它进行交互:
 
-```
+```py
 %%bashhead md_traffic.json
 ```
 
-```
+```py
 <codeclass="language-bash">
 { "meta" : {
 "view" : {
@@ -60,18 +60,18 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 由此，我们可以看出 JSON 数据是一个字典，并且格式良好。`meta`是顶级键，缩进两个空格。我们可以通过使用 [grep](https://en.wikipedia.org/wiki/Grep) 命令打印任何有两个前导空格的行来获得所有顶级密钥:
 
-```
+```py
 %%bashgrep -E '^ {2}"' md_traffic.json
 ```
 
-```
+```py
 "meta" : {"data" : [
 [ 1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050", 1455876689, "498050", null, "2016-02-18T00:00:00", "09:05:00", "MCP", "2nd district, Bethesda", "DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION", "355/TUCKERMAN LN", "-77.105925", "39.03223", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "MD", "02 - Automobile", "2010", "JEEP", "CRISWELL", "BLUE", "Citation", "21-1124.2(d2)", "Transportation Article", "No", "WHITE", "F", "GERMANTOWN", "MD", "MD", "A - Marked Patrol", [ "{\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}", "-77.105925", "39.03223", null, false ] ]
 ```
 
 这表明`meta`和`data`是`md_traffic.json`数据中的顶级键。列表的列表*似乎与`data`相关联，并且这可能包含我们的交通违规数据集中的每个记录。每个内部*列表*都是一条记录，第一条记录出现在`grep`命令的输出中。这与我们在操作 CSV 文件或 SQL 表时习惯使用的结构化数据非常相似。以下是数据的部分视图:*
 
-```
+```py
 [ [1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050"], [1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050"], ...]
 ```
 
@@ -79,11 +79,11 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 `meta`通常指关于数据本身的信息。让我们更深入地研究一下`meta`，看看那里包含了什么信息。从`head`命令中，我们知道至少有`3`级按键，其中`meta`包含一个按键`view`，包含`id`、`name`、`averageRating`等按键。我们可以通过使用 grep 打印出任何带有`2-6`前导空格的行来打印出 JSON 文件的完整密钥结构:
 
-```
+```py
 %%bashgrep -E '^ {2,6}"' md_traffic.json
 ```
 
-```
+```py
 "meta" : { "view" : { "id" : "4mse-ku6q", "name" : "Traffic Violations", "averageRating" : 0, "category" : "Public Safety", "createdAt" : 1403103517, "description" : "This dataset contains traffic violation information from all electronic traffic violations issued in the County. Any information that can be used to uniquely identify the vehicle, the vehicle owner or the officer issuing the violation will not be published.\r\n\r\nUpdate Frequency: Daily", "displayType" : "table", "downloadCount" : 2851, "iconUrl" : "fileId:r41tDc239M1FL75LFwXFKzFCWqr8mzMeMTYXiA24USM", "indexUpdatedAt" : 1455885508, "newBackend" : false, "numberOfComments" : 0, "oid" : 8890705, "publicationAppendEnabled" : false, "publicationDate" : 1411040702, "publicationGroup" : 1620779, "publicationStage" : "published", "rowClass" : "", "rowsUpdatedAt" : 1455876727, "rowsUpdatedBy" : "ajn4-zy65", "state" : "normal", "tableId" : 1722160, "totalTimesRated" : 0, "viewCount" : 6910, "viewLastModified" : 1434558076, "viewType" : "tabular", "columns" : [ { "disabledFeatureFlags" : [ "allow_comments" ], "grants" : [ { "metadata" : { "owner" : { "query" : { "rights" : [ "read" ], "sortBys" : [ { "tableAuthor" : { "tags" : [ "traffic", "stop", "violations", "electronic issued." ], "flags" : [ "default" ]"data" : [ [ 1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050", 1455876689, "498050", null, "2016-02-18T00:00:00", "09:05:00", "MCP", "2nd district, Bethesda", "DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION", "355/TUCKERMAN LN", "-77.105925", "39.03223", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "MD", "02 - Automobile", "2010", "JEEP", "CRISWELL", "BLUE", "Citation", "21-1124.2(d2)", "Transportation Article", "No", "WHITE", "F", "GERMANTOWN", "MD", "MD", "A - Marked Patrol", [ "{\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}", "-77.105925", "39.03223", null, false ] ]
 ```
 
@@ -95,7 +95,7 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 我们可以使用 [ijson](https://pypi.python.org/pypi/ijson/) 包来完成这个任务。ijson 将迭代解析 json 文件，而不是一次读入所有内容。这比直接读入整个文件要慢，但它使我们能够处理内存中容纳不下的大文件。要使用 ijson，我们指定一个要从中提取数据的文件，然后指定一个要提取的关键路径:
 
-```
+```py
 import ijson
 filename = "md_traffic.json"
 with open(filename, 'r') as f:
@@ -105,21 +105,21 @@ with open(filename, 'r') as f:
 
 在上面的代码中，我们打开了`md_traffic.json`文件，然后我们使用 ijson 中的`items`方法从文件中提取一个列表。我们使用`meta.view.columns`符号指定列表的路径。回想一下`meta`是一个顶级键，里面包含`view`，里面包含`columns`。然后，我们指定`meta.view.columns.item`来表示我们应该提取`meta.view.columns`列表中的每一项。`items`函数将返回一个[生成器](https://wiki.python.org/moin/Generators)，所以我们使用 list 方法将生成器转换成一个 Python 列表。我们可以打印出清单中的第一项:
 
-```
+```py
 print(columns[0])
 ```
 
-```
+```py
 {'renderTypeName': 'meta_data', 'name': 'sid', 'fieldName': ':sid', 'position': 0, 'id': -1, 'format': {}, 'dataTypeName': 'meta_data'}
 ```
 
 从上面的输出来看，`columns`中的每一项都是一个字典，包含了每一列的信息。为了得到我们的头，看起来`fieldName`是要提取的相关键。要获得我们的列名，我们只需从`columns`中的每一项提取`fieldName`键:
 
-```
+```py
 column_names = [col["fieldName"] for col in columns]column_names
 ```
 
-```
+```py
 [':sid', ':id', ':position', ':created_at', ':created_meta', ':updated_at', ':updated_meta', ':meta', 'date_of_stop', 'time_of_stop', 'agency', 'subagency', 'description', 'location', 'latitude', 'longitude', 'accident', 'belts', 'personal_injury', 'property_damage', 'fatal', 'commercial_license', 'hazmat', 'commercial_vehicle', 'alcohol', 'work_zone', 'state', 'vehicle_type', 'year', 'make', 'model', 'color', 'violation_type', 'charge', 'article', 'contributed_to_accident', 'race', 'gender', 'driver_city', 'driver_state', 'dl_state', 'arrest_type', 'geolocation']
 ```
 
@@ -129,7 +129,7 @@ column_names = [col["fieldName"] for col in columns]column_names
 
 您可能还记得数据被锁在`data`键中的列表的*列表中。我们需要将这些数据读入内存来操作它。幸运的是，我们可以使用刚刚提取的列名来只获取相关的列。这将节省大量空间。如果数据集更大，您可以迭代地处理成批的行。所以读取第一个`10000000`行，做一些处理，然后是下一个`10000000`，以此类推。在这种情况下，我们可以定义我们关心的列，并再次使用`ijson`迭代处理 JSON 文件:*
 
-```
+```py
 good_columns = [
     "date_of_stop",
     "time_of_stop",
@@ -163,11 +163,11 @@ with open(filename, 'r') as f:
 
 既然我们已经读入了数据，我们可以打印出`data`中的第一项:
 
-```
+```py
 data[0]
 ```
 
-```
+```py
 ['2016-02-18T00:00:00', '09:05:00', 'MCP', '2nd district, Bethesda', 'DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION', '355/TUCKERMAN LN', '-77.105925', '39.03223', '02 - Automobile', '2010', 'JEEP', 'CRISWELL', 'BLUE', 'Citation', 'WHITE', 'F', 'MD', 'GERMANTOWN', 'MD', 'A - Marked Patrol']
 ```
 
@@ -175,18 +175,18 @@ data[0]
 
 现在我们有了作为列表的*列表的数据，以及作为*列表*的列标题，我们可以创建一个[熊猫](https://pandas.pydata.org/)数据框架来分析数据。如果您对 Pandas 不熟悉，它是一个数据分析库，使用一种称为 Dataframe 的高效表格数据结构来表示您的数据。Pandas 允许您将一个列表转换成一个数据框架，并单独指定列名。*
 
-```
+```py
 import pandas as pd
 stops = pd.DataFrame(data, columns=good_columns)
 ```
 
 现在我们有了数据框架中的数据，我们可以做一些有趣的分析。这是一个根据汽车颜色划分的停靠站数量表:
 
-```
+```py
 stops["color"].value_counts()
 ```
 
-```
+```py
 BLACK 161319
 SILVER 150650
 WHITE 122887
@@ -219,11 +219,11 @@ dtype: int64
 
 迷彩似乎是一种*非常*流行的汽车颜色。下表列出了是哪种警察部门创造了这一记录:
 
-```
+```py
 stops["arrest_type"].value_counts()
 ```
 
-```
+```py
 A - Marked Patrol 671165
 Q - Marked Laser 87929
 B - Unmarked Patrol 25478
@@ -252,7 +252,7 @@ dtype: int64
 
 我们现在几乎准备好进行一些基于时间和位置的分析，但是我们需要首先将`longitude`、`latitude`和`date`列从字符串转换为浮点。我们可以使用下面的代码来转换`latitude`和`longitude`:
 
-```
+```py
 import numpy as np
 def parse_float(x):
     try:
@@ -266,7 +266,7 @@ stops["latitude"] = stops["latitude"].apply(parse_float)
 
 奇怪的是，一天中的时间和停止的日期存储在两个单独的列中，`time_of_stop`和`date_of_stop`。我们将对两者进行解析，并将它们转换成一个日期时间列:
 
-```
+```py
 import datetime
 def parse_full_date(row):
     date = datetime.datetime.strptime(row["date_of_stop"], "%Y-%m-%dT%H:%M:%S")
@@ -278,12 +278,12 @@ stops["date"] = stops.apply(parse_full_date, axis=1)
 
 我们现在可以画出哪一天的交通堵塞最多:
 
-```
+```py
 import matplotlib.pyplot as plt
 %matplotlib inline plt.hist(stops["date"].dt.weekday, bins=6)
 ```
 
-```
+```py
 (array([ 112816., 142048., 133363., 127629., 131735., 181476.]), array([ 0., 1., 2., 3., 4., 5., 6.]), <a list of 6 Patch objects>)
 ```
 
@@ -293,11 +293,11 @@ import matplotlib.pyplot as plt
 
 我们还可以绘制出最常见的交通停车时间:
 
-```
+```py
 plt.hist(stops["date"].dt.hour, bins=24)
 ```
 
-```
+```py
 (array([ 44125., 35866., 27274., 18048., 11271., 7796., 11959., 29853., 46306., 42799., 43775., 37101., 34424., 34493., 36006., 29634., 39024., 40988., 32511., 28715., 31983.,  43957., 60734., 60425.]), array([ 0\. , 0.95833333, 1.91666667, 2.875 , 3.83333333, 4.79166667, 5.75 , 6.70833333, 7.66666667, 8.625 , 9.58333333, 10.54166667, 11.5 , 12.45833333, 13.41666667, 14.375 , 15.33333333, 16.29166667, 17.25 , 18.20833333, 19.16666667, 20.125 , 21.08333333, 22.04166667, 23\. ]), <a list of 24 Patch objects>)
 ```
 
@@ -309,28 +309,28 @@ plt.hist(stops["date"].dt.hour, bins=24)
 
 现在我们已经转换了位置和日期列，我们可以绘制出交通站点。因为映射在 CPU 资源和内存方面非常密集，所以我们需要首先过滤掉从`stops`开始使用的行:
 
-```
+```py
 last_year = stops[stops["date"] > datetime.datetime(year=2015, month=2, day=18)]
 ```
 
 在上面的代码中，我们选择了过去一年中出现的所有行。我们可以进一步缩小范围，只选择发生在高峰时间(每个人都去上班的早晨)的行:
 
-```
+```py
 morning_rush = last_year[(last_year["date"].dt.weekday < 5) & (last_year["date"].dt.hour > 5) & (last_year["date"].dt.hour < 10)]
 print(morning_rush.shape)last_year.shape
 ```
 
-```
+```py
 (29824, 21)
 ```
 
-```
+```py
 (234582, 21)
 ```
 
 使用优秀的[叶子](https://github.com/python-visualization/folium)包，我们现在可以看到所有的停止发生在哪里。通过利用[传单](https://leafletjs.com/)，Folium 允许你用 Python 轻松地创建交互式地图。为了保持性能，我们将只显示`morning_rush`的前`1000`行:
 
-```
+```py
 import folium
 from folium import plugins
 stops_map = folium.Map(location=[39.0836, -77.1483], zoom_start=11)
@@ -344,7 +344,7 @@ stops_map.create_map('stops.html')stops_map
 
 这说明很多交通站点都集中在县城右下方周围。我们可以通过热图进一步扩展我们的分析:
 
-```
+```py
 stops_heatmap = folium.Map(location=[39.0836, -77.1483], zoom_start=11)stops_heatmap.add_children(plugins.HeatMap([`, row["latitude"]] for name, row in morning_rush.iloc[:1000].iterrows()]))stops_heatmap.save("heatmap.html")stops_heatmap`
 
 处理大型 JSON 数据集可能是一件痛苦的事情，尤其是当它们太大而无法放入内存时。在这种情况下，命令行工具和 Python 的结合可以提供一种有效的方式来探索和分析数据。在这篇关注学习 python 编程的文章中，我们将看看如何利用像 Pandas 这样的工具来探索和绘制马里兰州蒙哥马利县的警察活动。我们将从查看 JSON 数据开始，然后继续用 Python 探索和分析 JSON。
@@ -353,7 +353,7 @@ stops_heatmap = folium.Map(location=[39.0836, -77.1483], zoom_start=11)stops_hea
 
 ```
 id|code|name|area|area_land|area_water|population|population_growth|birth_rate|death_rate|migration_rate|created_at|updated_at1|af|Afghanistan|652230|652230|0|32564342|2.32|38.57|13.89|1.51|2015-11-01 13:19:49.461734|2015-11-01 13:19:49.4617342|al|Albania|28748|27398|1350|3029278|0.3|12.92|6.58|3.3|2015-11-01 13:19:54.431082|2015-11-01 13:19:54.4310823|ag|Algeria|2381741|2381741|0|39542166|1.84|23.67|4.31|0.92|2015-11-01 13:19:59.961286|2015-11-01 13:19:59.961286
-```
+```py
 
 如您所见，数据由行和列组成，其中每一列都映射到一个定义的属性，如`id`或`code`。在上面的数据集中，每行代表一个国家，每列代表该国的一些事实。
 
@@ -361,7 +361,7 @@ id|code|name|area|area_land|area_water|population|population_growth|birth_rate|d
 
 ```
 {'event_type': 'started-lesson', 'keen': {'created_at': '2015-06-12T23:09:03.966Z', 'id': '557b668fd2eaaa2e7c5e916b', 'timestamp': '2015-06-12T23:09:07.971Z'}, 'sequence': 1} {'event_type': 'started-screen', 'keen': {'created_at': '2015-06-12T23:09:03.979Z', 'id': '557b668f90e4bd26c10b6ed6', 'timestamp': '2015-06-12T23:09:07.987Z'}, 'lesson': 1, 'sequence': 4, 'type': 'code'} {'event_type': 'started-screen', 'keen': {'created_at': '2015-06-12T23:09:22.517Z', 'id': '557b66a246f9a7239038b1e0', 'timestamp': '2015-06-12T23:09:24.246Z'}, 'lesson': 1, 'sequence': 3, 'type': 'code'},
-```
+```py
 
 如您所见，上面列出了三个独立的事件。每个事件都有不同的字段，一些字段*嵌套在其他字段*中。这种类型的数据很难存储在常规 SQL 数据库中。这种非结构化数据通常以一种叫做[JavaScript Object Notation](https://json.org/)(JSON)的格式存储。JSON 是一种将列表和字典等数据结构编码成字符串的方法，可以确保它们易于被机器读取。尽管 JSON 以单词 Javascript 开头，但它实际上只是一种格式，可以被任何语言读取。
 
@@ -389,7 +389,7 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 ```
 %%bashhead md_traffic.json
-```
+```py
 
 ```
 <codeclass="language-bash">
@@ -402,24 +402,24 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 "createdAt" : 1403103517,
 "description" : "This dataset contains traffic violation information from all electronic traffic violations issued in the County. Any information that can be used to uniquely identify the vehicle, the vehicle owner or the officer issuing the violation will not be published.\r\n\r\nUpdate Frequency: Daily",
 "displayType" : "table",
-```
+```py
 
 由此，我们可以看出 JSON 数据是一个字典，并且格式良好。`meta`是顶级键，缩进两个空格。我们可以通过使用 [grep](https://en.wikipedia.org/wiki/Grep) 命令打印任何有两个前导空格的行来获得所有顶级密钥:
 
 ```
 %%bashgrep -E '^ {2}"' md_traffic.json
-```
+```py
 
 ```
 "meta" : {"data" : [
 [ 1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050", 1455876689, "498050", null, "2016-02-18T00:00:00", "09:05:00", "MCP", "2nd district, Bethesda", "DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION", "355/TUCKERMAN LN", "-77.105925", "39.03223", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "MD", "02 - Automobile", "2010", "JEEP", "CRISWELL", "BLUE", "Citation", "21-1124.2(d2)", "Transportation Article", "No", "WHITE", "F", "GERMANTOWN", "MD", "MD", "A - Marked Patrol", [ "{\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}", "-77.105925", "39.03223", null, false ] ]
-```
+```py
 
 这表明`meta`和`data`是`md_traffic.json`数据中的顶级键。列表的列表*似乎与`data`相关联，并且这可能包含我们的交通违规数据集中的每个记录。每个内部*列表*都是一条记录，第一条记录出现在`grep`命令的输出中。这与我们在操作 CSV 文件或 SQL 表时习惯使用的结构化数据非常相似。以下是数据的部分视图:*
 
 ```
 [ [1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050"], [1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050"], ...]
-```
+```py
 
 这看起来很像我们习惯使用的行和列。我们只是缺少了告诉我们每一列的含义的标题。我们也许能在`meta`键下找到这个信息。
 
@@ -427,11 +427,11 @@ Python 有很好的 JSON 支持，有 [json](https://docs.python.org/3/library/j
 
 ```
 %%bashgrep -E '^ {2,6}"' md_traffic.json
-```
+```py
 
 ```
 "meta" : { "view" : { "id" : "4mse-ku6q", "name" : "Traffic Violations", "averageRating" : 0, "category" : "Public Safety", "createdAt" : 1403103517, "description" : "This dataset contains traffic violation information from all electronic traffic violations issued in the County. Any information that can be used to uniquely identify the vehicle, the vehicle owner or the officer issuing the violation will not be published.\r\n\r\nUpdate Frequency: Daily", "displayType" : "table", "downloadCount" : 2851, "iconUrl" : "fileId:r41tDc239M1FL75LFwXFKzFCWqr8mzMeMTYXiA24USM", "indexUpdatedAt" : 1455885508, "newBackend" : false, "numberOfComments" : 0, "oid" : 8890705, "publicationAppendEnabled" : false, "publicationDate" : 1411040702, "publicationGroup" : 1620779, "publicationStage" : "published", "rowClass" : "", "rowsUpdatedAt" : 1455876727, "rowsUpdatedBy" : "ajn4-zy65", "state" : "normal", "tableId" : 1722160, "totalTimesRated" : 0, "viewCount" : 6910, "viewLastModified" : 1434558076, "viewType" : "tabular", "columns" : [ { "disabledFeatureFlags" : [ "allow_comments" ], "grants" : [ { "metadata" : { "owner" : { "query" : { "rights" : [ "read" ], "sortBys" : [ { "tableAuthor" : { "tags" : [ "traffic", "stop", "violations", "electronic issued." ], "flags" : [ "default" ]"data" : [ [ 1889194, "92AD0076-5308-45D0-BDE3-6A3A55AD9A04", 1889194, 1455876689, "498050", 1455876689, "498050", null, "2016-02-18T00:00:00", "09:05:00", "MCP", "2nd district, Bethesda", "DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION", "355/TUCKERMAN LN", "-77.105925", "39.03223", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "MD", "02 - Automobile", "2010", "JEEP", "CRISWELL", "BLUE", "Citation", "21-1124.2(d2)", "Transportation Article", "No", "WHITE", "F", "GERMANTOWN", "MD", "MD", "A - Marked Patrol", [ "{\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip\":\"\"}", "-77.105925", "39.03223", null, false ] ]
-```
+```py
 
 这向我们展示了与`md_traffic.json`相关的完整密钥结构，并告诉我们 JSON 文件的哪些部分与我们相关。在这种情况下，`columns`键看起来很有趣，因为它可能包含关于`data`键中的列表的*列表中的列的信息。*
 
@@ -447,27 +447,27 @@ filename = "md_traffic.json"
 with open(filename, 'r') as f:
     objects = ijson.items(f, 'meta.view.columns.item')
     columns = list(objects)
-```
+```py
 
 在上面的代码中，我们打开了`md_traffic.json`文件，然后我们使用 ijson 中的`items`方法从文件中提取一个列表。我们使用`meta.view.columns`符号指定列表的路径。回想一下`meta`是一个顶级键，里面包含`view`，里面包含`columns`。然后，我们指定`meta.view.columns.item`来表示我们应该提取`meta.view.columns`列表中的每一项。`items`函数将返回一个[生成器](https://wiki.python.org/moin/Generators)，所以我们使用 list 方法将生成器转换成一个 Python 列表。我们可以打印出清单中的第一项:
 
 ```
 print(columns[0])
-```
+```py
 
 ```
 {'renderTypeName': 'meta_data', 'name': 'sid', 'fieldName': ':sid', 'position': 0, 'id': -1, 'format': {}, 'dataTypeName': 'meta_data'}
-```
+```py
 
 从上面的输出来看，`columns`中的每一项都是一个字典，包含了每一列的信息。为了得到我们的头，看起来`fieldName`是要提取的相关键。要获得我们的列名，我们只需从`columns`中的每一项提取`fieldName`键:
 
 ```
 column_names = [col["fieldName"] for col in columns]column_names
-```
+```py
 
 ```
 [':sid', ':id', ':position', ':created_at', ':created_meta', ':updated_at', ':updated_meta', ':meta', 'date_of_stop', 'time_of_stop', 'agency', 'subagency', 'description', 'location', 'latitude', 'longitude', 'accident', 'belts', 'personal_injury', 'property_damage', 'fatal', 'commercial_license', 'hazmat', 'commercial_vehicle', 'alcohol', 'work_zone', 'state', 'vehicle_type', 'year', 'make', 'model', 'color', 'violation_type', 'charge', 'article', 'contributed_to_accident', 'race', 'gender', 'driver_city', 'driver_state', 'dl_state', 'arrest_type', 'geolocation']
-```
+```py
 
 太好了！现在我们已经有了列名，我们可以开始提取数据本身了。
 
@@ -505,17 +505,17 @@ with open(filename, 'r') as f:
         for item in good_columns:
             selected_row.append(row[column_names.index(item)])
             data.append(selected_row)
-```
+```py
 
 既然我们已经读入了数据，我们可以打印出`data`中的第一项:
 
 ```
 data[0]
-```
+```py
 
 ```
 ['2016-02-18T00:00:00', '09:05:00', 'MCP', '2nd district, Bethesda', 'DRIVER USING HANDS TO USE HANDHELD TELEPHONE WHILEMOTOR VEHICLE IS IN MOTION', '355/TUCKERMAN LN', '-77.105925', '39.03223', '02 - Automobile', '2010', 'JEEP', 'CRISWELL', 'BLUE', 'Citation', 'WHITE', 'F', 'MD', 'GERMANTOWN', 'MD', 'A - Marked Patrol']
-```
+```py
 
 ## 将数据读入熊猫
 
@@ -524,13 +524,13 @@ data[0]
 ```
 import pandas as pd
 stops = pd.DataFrame(data, columns=good_columns)
-```
+```py
 
 现在我们有了数据框架中的数据，我们可以做一些有趣的分析。这是一个根据汽车颜色划分的停靠站数量表:
 
 ```
 stops["color"].value_counts()
-```
+```py
 
 ```
 BLACK 161319
@@ -561,13 +561,13 @@ PINK 137
 CHROME 21
 CAMOUFLAGE 17
 dtype: int64
-```
+```py
 
 迷彩似乎是一种*非常*流行的汽车颜色。下表列出了是哪种警察部门创造了这一记录:
 
 ```
 stops["arrest_type"].value_counts()
-```
+```py
 
 ```
 A - Marked Patrol 671165
@@ -590,7 +590,7 @@ H - Unmarked Moving Radar (Stationary) 72
 K - Aircraft Assist 41
 J - Unmarked Moving Radar (Moving) 35
 dtype: int64
-```
+```py
 
 随着闯红灯相机和高速激光的兴起，有趣的是，巡逻车仍然是迄今为止最主要的引用来源。
 
@@ -608,7 +608,7 @@ def parse_float(x):
     return x
 stops["longitude"] = stops["longitude"].apply(parse_float)
 stops["latitude"] = stops["latitude"].apply(parse_float)
-```
+```py
 
 奇怪的是，一天中的时间和停止的日期存储在两个单独的列中，`time_of_stop`和`date_of_stop`。我们将对两者进行解析，并将它们转换成一个日期时间列:
 
@@ -620,18 +620,18 @@ def parse_full_date(row):
     date = date.replace(hour=int(time[0]), minute = int(time[1]), second = int(time[2]))
     return date
 stops["date"] = stops.apply(parse_full_date, axis=1)
-```
+```py
 
 我们现在可以画出哪一天的交通堵塞最多:
 
 ```
 import matplotlib.pyplot as plt
 %matplotlib inline plt.hist(stops["date"].dt.weekday, bins=6)
-```
+```py
 
 ```
 (array([ 112816., 142048., 133363., 127629., 131735., 181476.]), array([ 0., 1., 2., 3., 4., 5., 6.]), <a list of 6 Patch objects>)
-```
+```py
 
 ![](img/b9befb22f6ef8990058494a0b8d203ae.png)
 
@@ -641,11 +641,11 @@ import matplotlib.pyplot as plt
 
 ```
 plt.hist(stops["date"].dt.hour, bins=24)
-```
+```py
 
 ```
 (array([ 44125., 35866., 27274., 18048., 11271., 7796., 11959., 29853., 46306., 42799., 43775., 37101., 34424., 34493., 36006., 29634., 39024., 40988., 32511., 28715., 31983.,  43957., 60734., 60425.]), array([ 0\. , 0.95833333, 1.91666667, 2.875 , 3.83333333, 4.79166667, 5.75 , 6.70833333, 7.66666667, 8.625 , 9.58333333, 10.54166667, 11.5 , 12.45833333, 13.41666667, 14.375 , 15.33333333, 16.29166667, 17.25 , 18.20833333, 19.16666667, 20.125 , 21.08333333, 22.04166667, 23\. ]), <a list of 24 Patch objects>)
-```
+```py
 
 ![](img/45eb9e6123cb64fdc139e9b940942f31.png)
 
@@ -657,22 +657,22 @@ plt.hist(stops["date"].dt.hour, bins=24)
 
 ```
 last_year = stops[stops["date"] > datetime.datetime(year=2015, month=2, day=18)]
-```
+```py
 
 在上面的代码中，我们选择了过去一年中出现的所有行。我们可以进一步缩小范围，只选择发生在高峰时间(每个人都去上班的早晨)的行:
 
 ```
 morning_rush = last_year[(last_year["date"].dt.weekday < 5) & (last_year["date"].dt.hour > 5) & (last_year["date"].dt.hour < 10)]
 print(morning_rush.shape)last_year.shape
-```
+```py
 
 ```
 (29824, 21)
-```
+```py
 
 ```
 (234582, 21)
-```
+```py
 
 使用优秀的[叶子](https://github.com/python-visualization/folium)包，我们现在可以看到所有的停止发生在哪里。通过利用[传单](https://leafletjs.com/)，Folium 允许你用 Python 轻松地创建交互式地图。为了保持性能，我们将只显示`morning_rush`的前`1000`行:
 
@@ -684,7 +684,7 @@ marker_cluster = folium.MarkerCluster().add_to(stops_map)
 for name, row in morning_rush.iloc[:1000].iterrows():
     folium.Marker([row["longitude"], row["latitude"]], popup=row["description"]).add_to(marker_cluster)
 stops_map.create_map('stops.html')stops_map
-```
+```py
 
 [https://www.dataquest.io/blog/large_files/json_folium.html](https://www.dataquest.io/blog/large_files/json_folium.html)
 
@@ -704,7 +704,7 @@ stops_heatmap = folium.Map(location=[39.0836, -77.1483], zoom_start=11)stops_hea
 *   人口密度如何与停靠点数量相关联？
 *   午夜前后什么类型的停车最常见？
 
-```
+```py
 
 ## 后续步骤
 

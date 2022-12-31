@@ -28,7 +28,7 @@ Pandas 附带了一些绘图功能，适用于使用 Matplotlib 库的 DataFrame
 
 在本教程中，我们将研究过去几个月脸书、微软和苹果股票的周收盘价。以下代码导入可视化所需的必要库和数据集，然后在输出中显示 DataFrame 的内容。代码中还添加了`%matplotlib inline` magic 命令，以确保绘制的图形正确出现在笔记本单元格中:
 
-```
+```py
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,7 +39,7 @@ pd.set_option('display.max.columns', None)
 print(df.head())
 ```
 
-```
+```py
  MSFT          FB        AAPL
 Date                                          
 2021-05-24  249.679993  328.730011  124.610001
@@ -57,11 +57,11 @@ Date
 
 让我们绘制一个线图，看看微软在过去 12 个月的表现如何:
 
-```
+```py
 df.plot(y='MSFT', figsize=(9,6))
 ```
 
-```
+```py
 <xlabel>
 ```
 
@@ -77,11 +77,11 @@ df.plot(y='MSFT', figsize=(9,6))
 
 我们可以通过提供列名列表并将其分配给 y 轴，从数据中绘制多条线。例如，让我们看看这三家公司在过去一年的表现:
 
-```
+```py
 df.plot.line(y=['FB', 'AAPL', 'MSFT'], figsize=(10,6))
 ```
 
-```
+```py
 <xlabel>
 ```
 
@@ -89,11 +89,11 @@ df.plot.line(y=['FB', 'AAPL', 'MSFT'], figsize=(10,6))
 
 我们可以使用由`plot()`方法提供的其他参数来为一个图添加更多的细节，就像这样:
 
-```
+```py
 df.plot(y='FB', figsize=(10,6), title='Facebook Stock', ylabel='USD')
 ```
 
-```
+```py
 <title stock="" xlabel="Date" ylabel="USD">
 ```
 
@@ -107,12 +107,12 @@ df.plot(y='FB', figsize=(10,6), title='Facebook Stock', ylabel='USD')
 
 在下面的示例中，我们将基于月平均股价创建一个条形图，以比较特定月份中每家公司与其他公司的平均股价。为此，首先，我们需要按月末对数据进行重新采样，然后使用`mean()`方法计算每个月的平均股价。我们还选择了最近三个月的数据，如下所示:
 
-```
+```py
 df_3Months = df.resample(rule='M').mean()[-3:]
 print(df_3Months)
 ```
 
-```
+```py
                  MSFT          FB        AAPL
 Date                                          
 2022-03-31  298.400002  212.692505  166.934998
@@ -122,7 +122,7 @@ Date
 
 现在，我们准备好通过将`bar`字符串值赋给`kind`参数来创建一个基于聚合数据的条形图:
 
-```
+```py
 df_3Months.plot(kind='bar', figsize=(10,6), ylabel='Price')
 ```
 
@@ -130,7 +130,7 @@ df_3Months.plot(kind='bar', figsize=(10,6), ylabel='Price')
 
 我们可以通过将`barh`字符串值赋给`kind`参数来创建水平条形图。让我们开始吧:
 
-```
+```py
 df_3Months.plot(kind='barh', figsize=(9,6))
 ```
 
@@ -138,7 +138,7 @@ df_3Months.plot(kind='barh', figsize=(9,6))
 
 我们还可以在堆叠的垂直或水平条形图上绘制数据，这些条形图代表不同的组。结果栏的高度显示了各组的综合结果。要创建堆叠条形图，我们需要将`True`赋给`stacked`参数，如下所示:
 
-```
+```py
 df_3Months.plot(kind='bar', stacked=True, figsize=(9,6))
 ```
 
@@ -148,7 +148,7 @@ df_3Months.plot(kind='bar', stacked=True, figsize=(9,6))
 
 直方图是一种条形图，表示数字数据的分布，其中 x 轴表示条柱范围，而 y 轴表示特定间隔内的数据频率。
 
-```
+```py
 df[['MSFT', 'FB']].plot(kind='hist', bins=25, alpha=0.6, figsize=(9,6))
 ```
 
@@ -158,7 +158,7 @@ df[['MSFT', 'FB']].plot(kind='hist', bins=25, alpha=0.6, figsize=(9,6))
 
 直方图也可以堆叠。让我们试一试:
 
-```
+```py
 df[['MSFT', 'FB']].plot(kind='hist', bins=25, alpha=0.6, stacked=True, figsize=(9,6))
 ```
 
@@ -168,7 +168,7 @@ df[['MSFT', 'FB']].plot(kind='hist', bins=25, alpha=0.6, stacked=True, figsize=(
 
 箱线图由三个四分位数和两个须条组成，它们以一组指标概括数据:最小值、第一个四分位数、中值、第三个四分位数和最大值。箱线图传达了有用的信息，如每个数据组的四分位距(IQR)、中位数和异常值。让我们看看它是如何工作的:
 
-```
+```py
 df.plot(kind='box', figsize=(9,6))
 ```
 
@@ -176,7 +176,7 @@ df.plot(kind='box', figsize=(9,6))
 
 我们可以通过将`False`赋给`vert`参数来创建水平盒图，就像水平条形图一样。像这样:
 
-```
+```py
 df.plot(kind='box', vert=False, figsize=(9,6))
 ```
 
@@ -186,7 +186,7 @@ df.plot(kind='box', vert=False, figsize=(9,6))
 
 面积图是折线图的扩展，它用颜色填充折线图和 x 轴之间的区域。如果在同一个绘图中显示多个面积图，不同的颜色会区分不同的面积图。让我们试一试:
 
-```
+```py
 df.plot(kind='area', figsize=(9,6))
 ```
 
@@ -194,7 +194,7 @@ df.plot(kind='area', figsize=(9,6))
 
 默认情况下，Pandas `plot()`方法创建堆叠面积图。通过将`False`分配给`stacked`参数来拆分面积图是一个常见的任务:
 
-```
+```py
 df.plot(kind='area', stacked=False, figsize=(9,6))
 ```
 
@@ -204,7 +204,7 @@ df.plot(kind='area', stacked=False, figsize=(9,6))
 
 如果我们对比率感兴趣，饼图是一列中数字数据的很好的比例表示。以下示例显示了苹果公司过去三个月的平均股价分布:
 
-```
+```py
 df_3Months.index=['March', 'April', 'May']
 df_3Months.plot(kind='pie', y='AAPL', legend=False, autopct='%.f')
 ```
@@ -217,11 +217,11 @@ df_3Months.plot(kind='pie', y='AAPL', legend=False, autopct='%.f')
 
 如果我们想将多个饼图中所有列的数据表示为子图，我们可以将`True`赋给`subplots`参数，如下所示:
 
-```
+```py
 df_3Months.plot(kind='pie', legend=False, autopct='%.f', subplots=True, figsize=(14,8))
 ```
 
-```
+```py
 array([, ,
        ], dtype=object)
 ```
@@ -232,7 +232,7 @@ array([, ,
 
 散点图在 x 轴和 y 轴上绘制数据点，以显示两个变量之间的相关性。像这样:
 
-```
+```py
 df.plot(kind='scatter', x='MSFT', y='AAPL', figsize=(9,6), color='Green')
 ```
 
@@ -244,7 +244,7 @@ df.plot(kind='scatter', x='MSFT', y='AAPL', figsize=(9,6), color='Green')
 
 当数据非常密集时，六边形柱图(也称为六边形柱图)可以替代散点图。换句话说，当数据点的数量非常巨大，并且每个数据点无法单独绘制时，最好使用这种以蜂巢形式表示数据的绘图。此外，每个六边形的颜色定义了该范围内数据点的密度。
 
-```
+```py
 df.plot(kind='hexbin', x='MSFT', y='AAPL', gridsize=10, figsize=(10,6))
 ```
 
@@ -256,7 +256,7 @@ df.plot(kind='hexbin', x='MSFT', y='AAPL', gridsize=10, figsize=(10,6))
 
 本教程中我们要讨论的最后一个图是核密度估计，也称为 KDE，它可视化了连续的非参数数据变量的概率密度。该图使用高斯核在内部估计概率密度函数(PDF)。让我们试一试:
 
-```
+```py
 df.plot(kind='kde')
 ```
 
@@ -264,13 +264,13 @@ df.plot(kind='kde')
 
 我们还可以在 KDE 图中指定影响图平滑度的带宽，如下所示:
 
-```
+```py
 df.plot(kind='kde', bw_method=0.1)
 ```
 
 ![](img/06535b3251e1a7b45123ab2a7f7e39b8.png)
 
-```
+```py
 df.plot(kind='kde', bw_method=1)
 ```
 

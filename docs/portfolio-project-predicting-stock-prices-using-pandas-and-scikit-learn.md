@@ -39,7 +39,7 @@ December 16, 2021![Predicting Stock Prices Using Pandas](img/e9822b93d6e74fe4bef
 
 我们将使用一只股票(微软)从开始交易到现在的数据。
 
-```
+```py
 import yfinance as yf
 
 msft = yf.Ticker("MSFT")
@@ -50,7 +50,7 @@ msft_hist = msft.history(period="max")
 
 我们需要安装`pandas`来做到这一点。
 
-```
+```py
 import os
 import pandas as pd
 
@@ -82,7 +82,7 @@ else:
 
 数据帧的行索引是股票交易的日期。股票不是每天都交易(周末和节假日不交易)，所以漏了一些日期。
 
-```
+```py
 msft_hist.head(5)
 ```
 
@@ -98,7 +98,7 @@ msft_hist.head(5)
 
 在我们可以绘图之前，请确保安装了`matplotlib`。
 
-```
+```py
 # Visualize microsoft stock prices
 msft_hist.plot.line(y="Close", use_index=True)
 ```
@@ -133,7 +133,7 @@ msft_hist.plot.line(y="Close", use_index=True)
 
 这是我们希望我们的机器学习模型预测的！
 
-```
+```py
 # Ensure we know the actual closing price
 data = msft_hist[["Close"]]
 data = data.rename(columns = {'Close':'Actual_Close'})
@@ -142,7 +142,7 @@ data = data.rename(columns = {'Close':'Actual_Close'})
 data["Target"] = msft_hist.rolling(2).apply(lambda x: x.iloc[1] > x.iloc[0])["Close"]
 ```
 
-```
+```py
 data.head()
 ```
 
@@ -162,13 +162,13 @@ data.head()
 
 如果我们不这样做，我们将使用来自`03-14`的数据来预测`03-14`的价格。相反，我们需要使用来自`03-13`的数据来预测`03-14`的价格。如果我们不这样做，我们的模型在测试时会看起来很神奇，但在现实世界中根本不会工作。在现实世界中，我们实际上不知道明天的价格，所以我们不能用它来做预测。
 
-```
+```py
 # Shift stock prices forward one day, so we're predicting tomorrow's stock prices from today's prices.
 msft_prev = msft_hist.copy()
 msft_prev = msft_prev.shift(1)
 ```
 
-```
+```py
 msft_prev.head()
 ```
 
@@ -188,13 +188,13 @@ msft_prev.head()
 
 最好明确地使用`predictors`来避免意外地使用你的目标来预测它自己。这将使你的模型在训练中看起来非常好，但在现实世界中根本行不通。
 
-```
+```py
 # Create our training data
 predictors = ["Close", "Volume", "Open", "High", "Low"]
 data = data.join(msft_prev[predictors]).iloc[1:]
 ```
 
-```
+```py
 data.head()
 ```
 
@@ -230,7 +230,7 @@ data.head()
 *   min _ samples _ split–这是任何决策树应该分割的最小样本数。这个值越低，树木就越容易过度生长。将它设置得更高也会使它运行得更快。
 *   random _ state–这是一个很好的设置，这样对相同的数据运行两次算法会返回相同的结果。
 
-```
+```py
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 
@@ -244,7 +244,7 @@ model = RandomForestClassifier(n_estimators=100, min_samples_split=200, random_s
 
 拟合方法将使用我们的预测器来训练模型，以预测`Target`。
 
-```
+```py
 # Create a train and test set
 train = data.iloc[:-100]
 test = data.iloc[-100:]
@@ -269,7 +269,7 @@ Precision 将告诉我们算法预测价格会上涨的天数百分比，它实�
 
 下面可以看到，我们的精度只有`.51`，不算很大。这意味着当模型预测价格会上涨时，它们只上涨了`51%`的时间。
 
-```
+```py
 from sklearn.metrics import precision_score
 
 # Evaluate error of predictions
@@ -288,7 +288,7 @@ Zero point five one
 
 正如我们所见，模型预测价格每天都会上涨。这并不理想，但是我们已经建立了模型，现在可以继续回溯测试了。
 
-```
+```py
 combined = pd.concat({"Target": test["Target"],"Predictions": preds}, axis=1)
 combined.plot()
 ```
@@ -314,7 +314,7 @@ combined.plot()
 
 这与我们之前所做的类似，但是我们改变了我们正在查看的行:
 
-```
+```py
 i = 1000
 step = 750
 
@@ -341,14 +341,14 @@ preds = model.predict(test[predictors])
 
 如您所见，`preds`给出了模型每天的预测。
 
-```
+```py
 preds = model.predict_proba(test[predictors])[:,1]
 preds = pd.Series(preds, index=test.index)
 preds[preds > .6] = 1
 preds[preds<=.6] = 0
 ```
 
-```
+```py
 preds.head()
 ```
 
@@ -373,7 +373,7 @@ dtype:float 64
 
 如您所见，查看`predictions`列表的第一个元素向我们展示了实际的`Target`和我们的模型制作的`Predictions`。
 
-```
+```py
 predictions = []
 # Loop over the dataset in increments
 for i in range(1000, data.shape[0], step):
@@ -396,7 +396,7 @@ for i in range(1000, data.shape[0], step):
     predictions.append(combined)
 ```
 
-```
+```py
 predictions[0].head()
 ```
 
@@ -422,7 +422,7 @@ predictions[0].head()
 
 该函数将使我们能够随时在整个数据集上创建预测。
 
-```
+```py
 def backtest(data, model, predictors, start=1000, step=750):
     predictions = []
     # Loop over the dataset in increments
@@ -452,7 +452,7 @@ def backtest(data, model, predictors, start=1000, step=750):
 
 既然我们已经创建了回溯测试函数，我们可以调用它来生成整个数据集的预测。
 
-```
+```py
 predictions = backtest(data, model, predictors)
 ```
 
@@ -462,7 +462,7 @@ predictions = backtest(data, model, predictors)
 
 这是因为我们使用`.6`作为价格是否上涨的阈值。如果我们使用较低的阈值，我们会增加`recall`，但精度会降低。因为我们想要最小化我们的风险，我们想要最大化精确度。所以如果算法只预测价格会在很少的几天内上涨也没关系。
 
-```
+```py
 predictions["Predictions"].value_counts()
 ```
 
@@ -470,7 +470,7 @@ predictions["Predictions"].value_counts()
 1.0 739
 名称:预测，数据类型:int64
 
-```
+```py
 predictions["Target"].value_counts()
 ```
 
@@ -482,7 +482,7 @@ predictions["Target"].value_counts()
 
 看起来我们的精度也很低。这是因为算法限制了`predictors`来帮助它确定价格是上涨还是下跌。接下来，我们将添加更多的预测器，以帮助算法做出更好的决策。
 
-```
+```py
 precision_score(predictions["Target"], predictions["Predictions"])
 ```
 
@@ -502,7 +502,7 @@ precision_score(predictions["Target"], predictions["Predictions"])
 
 为了计算[滚动](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html?highlight=rolling#pandas.DataFrame.rolling)平均值，我们将再次使用 pandas 滚动方法来寻找不同时间范围的`Close`列的滚动平均值。
 
-```
+```py
 weekly_mean = data.rolling(7).mean()["Close"]
 quarterly_mean = data.rolling(90).mean()["Close"]
 annual_mean = data.rolling(365).mean()["Close"]
@@ -513,7 +513,7 @@ annual_mean = data.rolling(365).mean()["Close"]
 我们将向前移动数据，所以我们不会将当天的信息合并到我们的预测中。如果我们不使用 shift，那么算法将知道实际的目标。
 求目标的 7 天滚动总和。如果价格连续 7 天上涨，这将是 `7`。如果涨了 0 天，这就是`0`。
 
-```
+```py
 weekly_trend = data.shift(1).rolling(7).sum()["Target"]
 ```
 
@@ -521,7 +521,7 @@ weekly_trend = data.shift(1).rolling(7).sum()["Target"]
 
 首先，我们将把周、季度和年平均值之间的比率加到收盘价上:
 
-```
+```py
 data["weekly_mean"] = weekly_mean / data["Close"]
 data["quarterly_mean"] = quarterly_mean / data["Close"]
 data["annual_mean"] = annual_mean / data["Close"]
@@ -529,20 +529,20 @@ data["annual_mean"] = annual_mean / data["Close"]
 
 接下来，我们将添加不同滚动方式之间的比率。这有助于算法理解相对于年度趋势的周趋势。
 
-```
+```py
 data["annual_weekly_mean"] = data["annual_mean"] / data["weekly_mean"]
 data["annual_quarterly_mean"] = data["annual_mean"] / data["quarterly_mean"]
 ```
 
 接下来，我们将把我们的周趋势添加到预测数据框架中。
 
-```
+```py
 data["weekly_trend"] = weekly_trend
 ```
 
 然后，我们将添加一些日内开盘价、最低价和最高价与收盘价之间的比率。这有助于算法理解前一天的价格趋势。例如，如果高点比收盘价高得多，这可能意味着股票在一天结束时处于下降趋势。
 
-```
+```py
 data["open_close_ratio"] = data["Open"] / data["Close"]
 data["high_close_ratio"] = data["High"] / data["Close"]
 data["low_close_ratio"] = data["Low"] / data["Close"]
@@ -550,7 +550,7 @@ data["low_close_ratio"] = data["Low"] / data["Close"]
 
 最后，我们将使用添加的所有新预测值来更新预测值列表。这确保我们在训练模型时使用所有新的预测器。
 
-```
+```py
 full_predictors = predictors + ["weekly_mean", "quarterly_mean", "annual_mean", "annual_weekly_mean", "annual_quarterly_mean", "open_close_ratio", "hig
 ```
 
@@ -560,11 +560,11 @@ full_predictors = predictors + ["weekly_mean", "quarterly_mean", "annual_mean", 
 
 可以看到，我们的预测比以前准确多了！
 
-```
+```py
 predictions = backtest(data.iloc[365:], model, full_predictors)
 ```
 
-```
+```py
 precision_score(predictions["Target"], predictions["Predictions"])
 ```
 
@@ -576,7 +576,7 @@ precision_score(predictions["Target"], predictions["Predictions"])
 
 如你所见，我们已经使用这个算法进行了`194`交易。当我们的算法认为价格上涨时，我们有接近于 T1 的机会。这是一个不错的开始，但是我们可以采取很多后续步骤来进一步改进算法！
 
-```
+```py
 # Show how many trades we would make
 
 predictions["Predictions"].value_counts()
@@ -586,7 +586,7 @@ predictions["Predictions"].value_counts()
 1.0 194
 名称:预测，数据类型:int64
 
-```
+```py
 # Look at trades we would have made in the last 100 days
 
 predictions.iloc[-100:].plot()

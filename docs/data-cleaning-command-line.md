@@ -16,7 +16,7 @@ December 10, 2015The Museum of Modern Art is one of the most influential museums
 
 [`csvkit`](https://csvkit.readthedocs.org/en/0.9.1/) 是一个优化处理 CSV 文件的库。它是用 Python 写的，但是主要接口是命令行。您可以使用`pip`安装`csvkit`:
 
-```
+```py
 pip install csvkit
 ```
 
@@ -28,7 +28,7 @@ MOMA 艺术品数据集可以在[博物馆的 Github repo](https://github.com/Mu
 
 最后，我们将使用`>`操作符将来自`curl`的输出重定向到一个名为`artworks.csv`的文件。
 
-```
+```py
 curl https://raw.githubusercontent.com/MuseumofModernArt/collection/master/Artworks.csv > artworks.csv
 ```
 
@@ -36,12 +36,12 @@ curl https://raw.githubusercontent.com/MuseumofModernArt/collection/master/Artwo
 
 我们可以使用`head`命令显示文件的前`n`行(默认为 10 行)。要显示前 3 行，这两个命令都可以:
 
-```
+```py
  head -n 3 artworks.csv
 head -3 artworks.csv 
 ```
 
-```
+```py
  Title,Artist,ArtistBio,Date,Medium,Dimensions,CreditLine,MoMANumber,Classification,Department,DateAcquired,CuratorApproved,ObjectID,URL
 "Ferdinandsbrücke Project, Vienna, Austria , Elevation, preliminary version",Otto Wagner,"(Austrian, 1841–1918)",1896,Ink and cut-and-pasted painted pages on paper,"19 1/8 x 66 1/2"" (48.6 x 168.9 cm)",Fractional and promised gift of Jo Carole and Ronald S. Lauder,885.1996,A&D Architectural Drawing,Architecture & Design,1996-04-09,Y,2,https://www.moma.org/collection/works/2
 "City of Music, National Superior Conservatory of Music and Dance, Paris, France, View from interior courtyard",Christian de Portzamparc,"(French, born 1944)",1987,Paint and colored pencil on print,"16 x 11 3/4"" (40.6 x 29.8 cm)",Gift of the architect in honor of Lily Auchincloss,1.1995,A&D Architectural Drawing,Architecture & Design,1995-01-17,Y,3,https://www.moma.org/collection/works/3 
@@ -53,11 +53,11 @@ head -3 artworks.csv
 
 `csvlook`是`csvkit`中的一个工具，允许你以表格的形式显示和预览 CSV 文件。`csvlook artworks.csv`将显示整个数据集，这是繁琐的探索。让我们用管道将`head -5 artworks.csv`的`stdout`连接到`csvlook`来探索前 5 行:
 
-```
+```py
 head -5 artworks.csv | csvlook
 ```
 
-```
+```py
  | ﻿Title                                                                                                        | Artist                   | ArtistBio                                 | Date | Medium                                                         | Dimensions                         | CreditLine                                                              | MoMANumber | Classification            | Department            | DateAcquired | CuratorApproved | ObjectID | URL                                     
 | Ferdinandsbrücke Project, Vienna, Austria , Elevation, preliminary version                                    | Otto Wagner              | (Austrian, 1841–1918)                     | 1896 | Ink and cut-and-pasted painted pages on paper                  | 19 1/8 x 66 1/2" (48.6 x 168.9 cm) | Fractional and promised gift of Jo Carole and Ronald S. Lauder          | 885.1996   | A&D Architectural Drawing | Architecture & Design | 1996-04-09   | Y               | 2        | https://www.moma.org/collection/works/2  |
 | City of Music, National Superior Conservatory of Music and Dance, Paris, France, View from interior courtyard | Christian de Portzamparc | (French, born 1944)                       | 1987 | Paint and colored pencil on print                              | 16 x 11 3/4" (40.6 x 29.8 cm)      | Gift of the architect in honor of Lily Auchincloss                      | 1.1995     | A&D Architectural Drawing | Architecture & Design | 1995-01-17   | Y               | 3        | https://www.moma.org/collection/works/3  |
@@ -73,11 +73,11 @@ head -5 artworks.csv | csvlook
 
 [`csvcut`](https://csvkit.readthedocs.org/en/0.9.1/tutorial/1_getting_started.html#csvcut-data-scalpel) 是`csvkit`中的一个工具，被称为数据手术刀，因为它允许你分割和修改 CSV 中的列。让我们首先列出所有使用`-n`标志的列:
 
-```
+```py
 csvcut -n artworks.csv
 ```
 
-```
+```py
  1: ﻿Title
 2: Artist
 3: ArtistBio
@@ -106,11 +106,11 @@ csvcut -n artworks.csv
 *   使用`csvcut`仅过滤前`3`列
 *   使用`csvlook`以简洁的方式显示
 
-```
+```py
 head -10 artworks.csv | csvcut -c 1,2,3 | csvlook
 ```
 
-```
+```py
 |  ﻿Title                                                                                                        | Artist                   | ArtistBio                                  |
 |  Ferdinandsbrücke Project, Vienna, Austria , Elevation, preliminary version                                    | Otto Wagner              | (Austrian, 1841–1918)                      |
 |  City of Music, National Superior Conservatory of Music and Dance, Paris, France, View from interior courtyard | Christian de Portzamparc | (French, born 1944)                        |
@@ -127,11 +127,11 @@ head -10 artworks.csv | csvcut -c 1,2,3 | csvlook
 
 在处理历史数据集时，我们需要确保日期和时间列的格式正确(否则即使是基本的时间序列图也无法工作)。让我们探索一下`Date`和`DateAcquired`列:
 
-```
+```py
 head -20 artworks.csv | csvcut -c Date,DateAcquired | csvlook
 ```
 
-```
+```py
  |----------+---------------|
 |  Date    | DateAcquired  |
 |----------+---------------|
@@ -163,17 +163,17 @@ head -20 artworks.csv | csvcut -c Date,DateAcquired | csvlook
 
 因为我们正在搜索`Date`列上的模式实例，所以我们编写了以下代码:
 
-```
+```py
 csvgrep --c Date --regex "^([0-9]*-[0-9]*)"
 ```
 
 让我们修改并运行我们构建的管道来合并`csvgrep`:
 
-```
+```py
 head -10 artworks.csv | csvcut -c Date | csvgrep --c Date --regex "^([0-9]*-[0-9]*)" | csvlook
 ```
 
-```
+```py
  |-----------|
 |  Date     |
 |-----------|
@@ -190,11 +190,11 @@ head -10 artworks.csv | csvcut -c Date | csvgrep --c Date --regex "^([0-9]*-[0-9
 
 我们也可以删除`csvcut`、`head`和`csvlook`，因为我们不需要显示输出。
 
-```
+```py
  csvgrep --c Date --regex "^([0-9]*-[0-9]*)" artworks.csv | csvstat --count 
 ```
 
-```
+```py
  Row count: 18073
 ```
 
@@ -205,21 +205,21 @@ head -10 artworks.csv | csvcut -c Date | csvgrep --c Date --regex "^([0-9]*-[0-9
 
 我们可以使用 regex ( `^[0-9]{4}$`)来查找所有 4 位数的年份值，并将结果传送到`csvstat`:
 
-```
+```py
  csvgrep --c Date --regex "[0-9]{4} 
 ```
 
-```
+```py
  Row count: 76263 
 ```
 
 最后，为了获得数据集的总行数，我们可以使用带有`-l`标志的 [`wc`](https://ss64.com/bash/wc.html) 命令(只显示行数):
 
-```
+```py
  wc -l artworks.csv 
 ```
 
-```
+```py
  137382 artworks.csv 
 ```
 

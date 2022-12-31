@@ -28,7 +28,7 @@ Python 中的`subprocess`模块的`run`函数是在后台运行命令的好方�
 
 所以它看起来像这样:
 
-```
+```py
 import subprocess
 
 subprocess.run(["python", "my_script.py"])
@@ -36,7 +36,7 @@ subprocess.run(["python", "my_script.py"])
 
 也可以将 Python 代码直接写到函数中，而不是传递一个`.py`文件。下面是运行此类子流程的一个示例:
 
-```
+```py
 result = subprocess.run(["/usr/local/bin/python", "-c", "print('This is a subprocess')"])
 ```
 
@@ -52,7 +52,7 @@ result = subprocess.run(["/usr/local/bin/python", "-c", "print('This is a subpro
 
 然而，如果您在机器上找不到 Python 可执行文件的路径，您可以让`sys`模块帮您找到。这个模块与`subprocess`交互得很好，一个很好的用例是替换可执行文件的路径，如下所示:
 
-```
+```py
 import sys
 
 result = subprocess.run([sys.executable, "-c", "print('This is a subprocess')"])
@@ -62,7 +62,7 @@ run 函数然后返回一个`CompletedProcess`类的对象，它代表一个完�
 
 如果我们打印`result`，我们会得到这样的结果:
 
-```
+```py
 CompletedProcess(args=['/usr/bin/python3', '-c', "print('This is a subprocess')"], returncode=0)
 ```
 
@@ -78,24 +78,24 @@ CompletedProcess(args=['/usr/bin/python3', '-c', "print('This is a subprocess')"
 
 所以如果我们运行这个。。。
 
-```
+```py
 result = subprocess.run(["python", "-c", "print('This is a subprocess')"], capture_output=True)
 ```
 
 我们会得到这个。。。
 
-```
+```py
 CompletedProcess(args=['/usr/bin/python3', '-c', "print('This is a subprocess')"], returncode=0, stdout=b'This is a subprocess\n', stderr=b'')
 ```
 
 现在我们在返回的对象中也有了`stdout`和`stderr`。如果我们将它们都打印出来，我们会得到以下结果:
 
-```
+```py
 print(result.stdout)
 print(result.stderr)
 ```
 
-```
+```py
 b'This is a subprocess\n'
 b''
 ```
@@ -104,13 +104,13 @@ b''
 
 但是，如果脚本中有错误，`stdout`将为空，`stderr`将包含错误消息，如下所示:
 
-```
+```py
 result = subprocess.run(["python", "-c", "print(subprocess)"], capture_output=True, text=True)
 print('output: ', result.stdout)
 print('error: ', result.stderr)
 ```
 
-```
+```py
 output:  
 error:  Traceback (most recent call last):   File "<string>", line 1, in <module> NameError: name 'subprocess' is not defined
 ```
@@ -125,13 +125,13 @@ error:  Traceback (most recent call last):   File "<string>", line 1, in <module
 
 下面，我们使用与上一节相同的例子，但是使用了`check=True`:
 
-```
+```py
 result = subprocess.run(["pyhon", "-c", "print(subprocess)"], capture_output=True, text=True, check=True)
 print('output: ', result.stdout)
 print('error: ', result.stderr)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 CalledProcessError                        Traceback (most recent call last)
 <ipython-input-7-5b9e69e8fef6> in <module>()
@@ -153,17 +153,17 @@ CalledProcessError: Command '['python', '-c', 'print(subprocess)']' returned non
 
 例如，下面子流程中的代码需要五秒钟来运行:
 
-```
+```py
 subprocess.run(["python", "-c", "import time; time.sleep(5)"], capture_output=True, text=True)
 ```
 
 但是如果我们将`timeout`参数设置为小于 5，我们会有一个异常:
 
-```
+```py
 subprocess.run(["python", "-c", "import time; time.sleep(5)"], capture_output=True, text=True, timeout=2)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 TimeoutExpired                            Traceback (most recent call last)
 <ipython-input-9-93e2b7acaf10> in <module>()
@@ -185,12 +185,12 @@ TimeoutExpired: Command '['python', '-c', 'import time; time.sleep(5)']' timed o
 
 这里有一个例子:
 
-```
+```py
 result = subprocess.run(["python", "-c", "import sys; my_input=sys.stdin.read(); print(my_input)"], capture_output=True, text=True, input='my_text')
 print(result.stdout)
 ```
 
-```
+```py
 my_text
 ```
 
@@ -198,7 +198,7 @@ my_text
 
 但是，我们也可以通过`args`输入值，并使用`sys.argv`在子代码内部读取它们。例如，假设我们在一个名为`my_script.py`的脚本中有以下代码:
 
-```
+```py
 # ../subprocess/my_script.py 
 
 import sys
@@ -214,14 +214,14 @@ if __name__=="__main__":
 
 下面的`run`函数中的`args`位于将成为上面的子进程的父进程的脚本中，它包含另外两个值，这两个值将由`sys.argv`访问，然后在`my_script.py`中累加。
 
-```
+```py
 # ../subprocess/main.py 
 
 result = subprocess.run(["python", "my_script.py", "2", "4"], capture_output=True, text=True)
 print(result.stdout)
 ```
 
-```
+```py
 6
 ```
 

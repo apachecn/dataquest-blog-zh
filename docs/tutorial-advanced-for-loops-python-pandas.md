@@ -12,7 +12,7 @@ July 16, 2019![](img/96b5e9dc6f5fe324cabc280c7443ed22.png)
 
 for 循环是一个编程语句，它告诉 Python 遍历一个对象集合，依次对每个对象执行相同的操作。基本语法是:
 
-```
+```py
 for object in collection_of_objects:
     # code you want to execute on each object 
 ```
@@ -29,13 +29,13 @@ for object in collection_of_objects:
 
 不考虑这些差异，遍历元组非常类似于列表。
 
-```
+```py
 x = (10,20,30,40,50)
 for var in x:
     print("index "+ str(x.index(var)) + ":",var) 
 ```
 
-```
+```py
 index 0: 10
 index 1: 20
 index 2: 30
@@ -45,14 +45,14 @@ index 4: 50
 
 如果我们有一个元组列表，我们可以访问列表中每个元组的单个元素，方法是将它们作为变量包含在 for 循环中，如下所示:
 
-```
+```py
 x = [(1,2), (3,4), (5,6)]
 
 for a, b in x:
     print(a, "plus", b, "equals", a+b) 
 ```
 
-```
+```py
 1 plus 2 equals 3
 3 plus 4 equals 7
 5 plus 6 equals 11 
@@ -66,7 +66,7 @@ Python 字典由键值对组成，因此在每个循环中，我们需要访问�
 
 例如，假设我们有一个名为`stocks`的字典，其中包含股票代码和相应的股票价格。我们将使用字典上的`.items()`方法为每次迭代生成一个键和值:
 
-```
+```py
 stocks = {
         'AAPL': 187.31,
         'MSFT': 124.06,
@@ -77,7 +77,7 @@ for key, value in stocks.items() :
     print(key + " : " + str(value)) 
 ```
 
-```
+```py
 AAPL : 187.31
 MSFT : 124.06
 FB : 183.5 
@@ -89,13 +89,13 @@ FB : 183.5
 
 正如介绍性教程中提到的，for 循环还可以遍历字符串中的每个字符。快速回顾一下，这是如何工作的:
 
-```
+```py
 print("data science")  
 for c in "data science":
     print(c) 
 ```
 
-```
+```py
 data science
 d
 a
@@ -117,7 +117,7 @@ e
 
 我们将从如何使用带有`numpy`数组的 for 循环开始，所以让我们从创建一些随机数数组开始。
 
-```
+```py
 import numpy as np
 np.random.seed(0)  # seed for reproducibility
 x = np.random.randint(10, size=6)
@@ -126,12 +126,12 @@ y = np.random.randint(10, size=6)
 
 迭代一维 numpy 数组与迭代列表非常相似:
 
-```
+```py
 for val in x:
     print(val) 
 ```
 
-```
+```py
 5
 0
 3
@@ -142,7 +142,7 @@ for val in x:
 
 现在，如果我们想遍历一个二维数组呢？如果我们像上面一样使用相同的语法来迭代二维数组，那么每次迭代只能迭代整个数组。
 
-```
+```py
 # creating our 2-dimensional array
 z = np.array([x, y])
 
@@ -150,7 +150,7 @@ for val in z:
     print(val) 
 ```
 
-```
+```py
 [5 0 3 3 7 9]
 [3 5 2 4 7 6] 
 ```
@@ -159,12 +159,12 @@ for val in z:
 
 在下面的代码中，我们将编写一个 for 循环，通过传递二维数组`z`作为`nditer()`的参数来遍历每个元素:
 
-```
+```py
 for val in np.nditer(z):
     print(val) 
 ```
 
-```
+```py
 5
 0
 3
@@ -191,7 +191,7 @@ for val in np.nditer(z):
 
 Pandas 的工作方式与 numpy 有点不同，所以我们不能简单地重复我们已经学过的 numpy 过程。如果我们像对 numpy 数组那样迭代 pandas DataFrame，这只会打印出列名:
 
-```
+```py
 import pandas as pd
 df = pd.read_csv('gdp.csv', index_col=0)
 
@@ -199,7 +199,7 @@ for val in df:
     print(val) 
 ```
 
-```
+```py
 Capital
 GDP ($US Trillion)
 Population 
@@ -207,13 +207,13 @@ Population
 
 相反，我们需要明确指出我们想要迭代数据帧的行。我们通过调用 DataFrame 上的`iterrows()`方法来实现这一点，并打印行标签和行数据，其中一行是整个 pandas 系列。
 
-```
+```py
 for label, row in df.iterrows():
     print(label)
     print(row) 
 ```
 
-```
+```py
 Ireland
 Capital                Dublin
 GDP ($US Trillion)     0.3337
@@ -248,12 +248,12 @@ Name: Germany, dtype: object
 
 我们还可以访问熊猫系列中的特定值。假设我们只想打印出每个国家的首都。我们可以指定只需要“Capital”列的输出，如下所示:
 
-```
+```py
 for label, row in df.iterrows():
     print(label + " : " + row["Capital"]) 
 ```
 
-```
+```py
 Ireland : Dublin
 United Kingdom : London
 United States : Washington, D.C.
@@ -264,13 +264,13 @@ Germany : Berlin
 
 为了比简单的打印输出更进一步，让我们使用 for 循环添加一列。我们再加一个人均 GDP 一栏。记住`.loc[]`是基于标签的。在下面的代码中，我们将添加列，并通过将每个国家的总 GDP 除以其人口，然后将结果乘以一万亿来计算其内容(因为 GDP 数字是以万亿为单位列出的)。
 
-```
+```py
 for label, row in df.iterrows():
     df.loc[label,'gdp_per_cap'] = row['GDP ($US Trillion)']/row['Population '] * 1000000000000
 print(df) 
 ```
 
-```
+```py
  Capital  GDP ($US Trillion)  Population   \
 Country                                                             
 Ireland                   Dublin              0.3337      4784000   
@@ -308,12 +308,12 @@ Germany         44413.576519
 
 range(stop)有一个参数，当我们想要迭代一系列数字时使用，这些数字从 0 开始，包括所有数字，但*不包括*我们设置为停止的数字。
 
-```
+```py
 for i in range(3):
     print(i) 
 ```
 
-```
+```py
 0
 1
 2 
@@ -323,12 +323,12 @@ for i in range(3):
 
 range(start，stop)有两个参数，我们不仅可以设置系列的结束，还可以设置开始。您可以使用 range()生成从 A 到 B 的一系列数字，使用范围为(A，B)。
 
-```
+```py
 for i in range(1, 8):
     print(i) 
 ```
 
-```
+```py
 1
 2
 3
@@ -342,12 +342,12 @@ for i in range(1, 8):
 
 range(开始、停止、步进)有三个参数。除了最小值和最大值，我们还可以设置序列中一个数字与下一个数字之间的差值。如果没有提供步长值，则默认步长值为 1。
 
-```
+```py
 for i in range(3, 16, 3):
     print(i) 
 ```
 
-```
+```py
 3
 6
 9
@@ -359,14 +359,14 @@ for i in range(3, 16, 3):
 
 我们也可以使用序列中元素的索引进行迭代。关键思想是首先计算列表的长度，然后在这个长度的范围内对序列进行迭代。让我们来看一个例子:
 
-```
+```py
 languages = ['Spanish', 'English',  'French', 'German', 'Irish', 'Chinese']
 
 for index in range(len(languages)):
    print('Language:', languages[index]) 
 ```
 
-```
+```py
 Language: Spanish
 Language: English
 Language: French
@@ -379,12 +379,12 @@ Language: Chinese
 
 对于每次迭代，我们都执行我们的 print 语句。因此，对于 len(languages)范围内的每个索引，我们希望打印一种语言。因为我们的*语言*序列的长度是 6(这是`len(langauges)`评估的值)，我们可以将语句重写如下:
 
-```
+```py
 for index in range(6):
     print('Language:', languages[index]) 
 ```
 
-```
+```py
 Language: Spanish
 Language: English
 Language: French
@@ -399,14 +399,14 @@ Language: Chinese
 
 (如果你对 Matplotlib 或 Seaborn 不熟悉，可以查看一下 Kyso 的这些初学者指南: [Matplotlib](https://kyso.io/KyleOS/matplotlib-intro) ， [Seaborn](https://kyso.io/KyleOS/seaborn-intro) 。Dataquest 还提供关于 [Python 数据可视化](https://www.dataquest.io/course/exploratory-data-visualization/)的互动课程。
 
-```
+```py
 import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv('iris.csv') 
 ```
 
-```
+```py
 # create a figure and axis
 fig, ax = plt.subplots()
 
@@ -418,7 +418,7 @@ ax.set_xlabel('sepal_length')
 ax.set_ylabel('sepal_width') 
 ```
 
-```
+```py
 Text(0,0.5,'sepal_width') 
 ```
 
@@ -426,7 +426,7 @@ Text(0,0.5,'sepal_width')
 
 上面，我们已经绘制了每个萼片的长度和宽度，但是我们可以通过每个花的种类在每个数据点上着色来赋予图表更多的意义。一种方法是使用 for 循环分散每个点，并传入各自的颜色。
 
-```
+```py
 # create color dictionary
 colors = {'setosa':'r', 'versicolor':'g', 'virginica':'b'}
 
@@ -443,7 +443,7 @@ ax.set_xlabel('sepal_length')
 ax.set_ylabel('sepal_width') 
 ```
 
-```
+```py
 Text(0,0.5,'sepal_width') 
 ```
 
@@ -451,7 +451,7 @@ Text(0,0.5,'sepal_width')
 
 如果我们想要可视化我们的虹膜数据集的某些特征的单变量分布呢？我们可以用`plt.subplot()`来做这件事，它在一个网格中创建一个单独的子情节，我们可以设置它的行数和列数。
 
-```
+```py
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(8, 6))
 fig.subplots_adjust(hspace=0.8)
 fig.suptitle('Distributions of Iris Features')
@@ -478,7 +478,7 @@ Python 允许我们在一个循环中使用另一个循环。这涉及到一个�
 
 考虑以下结构:
 
-```
+```py
 for iterator_var in sequence: 
     for iterator_var in sequence: 
         # statements(s) 
@@ -487,28 +487,28 @@ for iterator_var in sequence:
 
 嵌套的 for 循环对于遍历由列表组成的列表中的项非常有用。在由列表组成的列表中，如果我们只使用一个 for 循环，程序会将每个内部列表作为一个项目输出:
 
-```
+```py
 languages = [['Spanish', 'English',  'French', 'German'], ['Python', 'Java', 'Javascript', 'C++']]
 
 for lang in languages:
     print(lang) 
 ```
 
-```
+```py
 ['Spanish', 'English', 'French', 'German']
 ['Python', 'Java', 'Javascript', 'C++'] 
 ```
 
 为了访问内部列表的每一项，我们定义了一个嵌套的 for 循环:
 
-```
+```py
 for x in languages:
     print("------")
     for lang in x:
         print(lang) 
 ```
 
-```
+```py
 ------
 Spanish
 English
@@ -531,7 +531,7 @@ C++
 
 如果我们想在我们的内部循环中过滤掉一种特定的语言呢？我们可以使用一个 *continue 语句*来做到这一点，这允许我们在外部条件被触发时跳过循环的特定部分。
 
-```
+```py
 for x in languages:
     print("------")
     for lang in x:
@@ -540,7 +540,7 @@ for x in languages:
         print(lang) 
 ```
 
-```
+```py
 ------
 Spanish
 English
@@ -556,7 +556,7 @@ C++
 
 让我们看看下面的一个数值例子:
 
-```
+```py
 from math import sqrt
 number = 0
 
@@ -569,7 +569,7 @@ for i in range(10):
    print(str(round(sqrt(number))) + ' squared is equal to ' + str(number)) 
 ```
 
-```
+```py
 1 squared is equal to 1
 3 squared is equal to 9
 5 squared is equal to 25
@@ -581,7 +581,7 @@ for i in range(10):
 
 那么一个 *break 语句*呢？这允许我们在满足外部条件时完全退出循环。让我们使用与上面相同的示例来看看这是如何工作的简单演示:
 
-```
+```py
 number = 0
 
 for i in range(10):
@@ -593,7 +593,7 @@ for i in range(10):
    print(str(round(sqrt(number))) + ' squared is equal to ' + str(number)) 
 ```
 
-```
+```py
 0 squared is equal to 0
 1 squared is equal to 1
 2 squared is equal to 4

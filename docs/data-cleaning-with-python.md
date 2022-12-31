@@ -12,7 +12,7 @@ Python 是一种编程语言，从政府机构(如 SEC)到互联网公司(如 Dr
 
 在这篇文章中，我们将只处理数据集的前 100 行。我们首先需要将 Pandas 库导入到我们的环境中，然后将数据集读入 Pandas 数据帧。DataFrame 是我们数据集的速度优化表示，内置于 Pandas 中，我们可以使用它来快速浏览和分析我们的数据。一旦我们将数据集读入 DataFrame 对象`artworks_100`，我们将:
 
-```
+```py
  import pandas
 artworks_100 = pandas.read_csv("MOMA_Artworks.csv")
 artworks_100.head(10) 
@@ -35,11 +35,11 @@ artworks_100.head(10)
 
 如果仔细观察`Date`列，您可能会注意到一些值是年份范围(`1976-77`)，而不是个别年份(`1976`)。年份范围很难处理，我们不能像绘制单个年份那样简单地绘制它们。让我们利用熊猫的`value_counts()`功能来寻找任何其他奇怪之处。首先，要选择一个列，使用括号符号并在引号中指定列名`artworks_100['Date']`，然后附加`.value_counts()`以使用`artworks_100['Date'].value_counts()`获得值的分布。
 
-```
+```py
 artworks_100['Date'].value_counts()
 ```
 
-```
+```py
 1976-77    25
 1980-81    15
 1979       12
@@ -86,7 +86,7 @@ dtype: int64
 
 由于年份范围包含一个分隔两年的连字符`-`，我们可以在每一行的`Date`值中寻找`-`并将它分成两个独立的年份。核心 Python 库包含一个名为`.split()`的函数，在这种情况下，如果找到连字符，它将返回两年的列表，如果没有找到，则返回原始值。因为我们只寻找第一年，我们可以在每一行的`Date`上调用`.split("-")`，检查结果列表是否包含两个元素，如果包含，则返回第一个元素。让我们写一个函数`clean_split_dates(row)`来完成这个任务:
 
-```
+```py
  def clean_split_dates(row):
     # Initial date contains the current value for the Date column
     initial_date = str(row['Date'])
@@ -105,7 +105,7 @@ artworks_100['Date'] = artworks.apply(lambda row: clean_split_dates(row), axis=1
 artworks_100['Date'].value_counts()
 ```
 
-```
+```py
  1976       25
 1980       20
 1979       12

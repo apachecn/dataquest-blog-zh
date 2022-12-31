@@ -18,7 +18,7 @@ data.world python 库允许您将存储在 data.world 数据集中的数据直�
 
 您需要做的第一件事是安装库，这可以通过 pip 完成:
 
-```
+```py
 pip install git+git://github.com/datadotworld/data.world-py.git
 ```
 
@@ -30,7 +30,7 @@ pip install git+git://github.com/datadotworld/data.world-py.git
 
 如果您在 virtualenv 或 Conda env 中安装了 python 库，您将需要激活该环境。然后只需运行`dw configure`，它会提示您输入令牌:
 
-```
+```py
  ~ (datadotworld) $ dw configure
 API token (obtained at: https://data.world/settings/advanced): _ 
 ```
@@ -54,7 +54,7 @@ API token (obtained at: https://data.world/settings/advanced): _
 
 首先，让我们导入`datadotworld`库:
 
-```
+```py
 import datadotworld as dw
 ```
 
@@ -67,7 +67,7 @@ import datadotworld as dw
 
 `load_dataset()`有一个必需的参数`dataset_key`，您可以从 data.world 上数据集的 URL 中提取这个参数。例如，我们的 simpsons 数据集有一个 URL `https://data.world/data-society/the-simpsons-by-the-data`，它的 ID 为`data-society/the-simpsons-by-the-data`。
 
-```
+```py
 lds = dw.load_dataset('data-society/the-simpsons-by-the-data')
 ```
 
@@ -75,12 +75,12 @@ lds = dw.load_dataset('data-society/the-simpsons-by-the-data')
 
 为了更仔细地查看我们的`LocalDataset`对象，我们可以使用`LocalDataset.describe()`方法，它返回一个 JSON 对象。
 
-```
+```py
  # We use pprint as it makes our output easier to read
 pp.pprint(lds.describe()) 
 ```
 
-```
+```py
  {
    'homepage': 'https://data.world/data-society/the-simpsons-by-the-data',
     'name': 'data-society_the-simpsons-by-the-data',
@@ -104,12 +104,12 @@ pp.pprint(lds.describe())
 
 这些属性的工作方式相同，但返回的数据格式不同。
 
-```
+```py
  for i in [lds.dataframes, lds.tables, lds.raw_data]:
     print(i,'n') # pprint does not work on lazy-loaded dicts
 ```
 
-```
+```py
  {'simpsons_characters': LazyLoadedValue(<pandas.DataFrame>), 'simpsons_episodes': LazyLoadedValue(<pandas.DataFrame>), 'simpsons_locations': LazyLoadedValue(<pandas.DataFrame>), 'simpsons_script_lines': LazyLoadedValue(<pandas.DataFrame>)} 
 
 {'simpsons_characters': LazyLoadedValue(<list of rows>), 'simpsons_episodes': LazyLoadedValue(<list of rows>), 'simpsons_locations': LazyLoadedValue(<list of rows>), 'simpsons_script_lines': LazyLoadedValue(<list of rows>)} 
@@ -121,13 +121,13 @@ pp.pprint(lds.describe())
 
 由于 pandas 库的强大功能，让我们使用`LocalDataset.dataframes`来探索和享受我们的数据吧！
 
-```
+```py
  simpsons_eps = lds.dataframes['simpsons_episodes']
 print(simpsons_eps.info())
 simpsons_eps.head() 
 ```
 
-```
+```py
  <class 'pandas.core.frame.dataframe'="">
 RangeIndex: 600 entries, 0 to 599
 Data columns (total 13 columns):
@@ -159,7 +159,7 @@ None
 
 我们可以使用`original_air_date`栏来查看剧集随时间的变化趋势。首先，让我们从该列中提取年份，然后使用数据透视表来直观显示 IMDB 评级随时间变化的趋势:
 
-```
+```py
  simpsons_eps['original_air_date'] = pd.to_datetime(simpsons_eps['original_air_date'])
 simpsons_eps['original_air_year'] = simpsons_eps['original_air_date'].dt.year
 
@@ -185,7 +185,7 @@ plt.show()
 1.  在处理 pandas 中的数据之前，将数据从一个新的`LocalDataset`对象读入 pandas。
 2.  使用`QueryResults.query()`获取 data.world 的查询工具处理数据，然后将结果返回给我们。
 
-```
+```py
  def pandas_lines_by_characters():
     simpsons_script = lds.dataframes['simpsons_script_lines']
     simpsons_script = simpsons_script[simpsons_script['raw_character_text'] != '']
@@ -194,13 +194,13 @@ plt.show()
     plt.show() 
 ```
 
-```
+```py
 1 loop, best of 1: 33.6 s per loop 
 ```
 
 ![](img/34776e9266af007f1e9c887201f2aebf.png)
 
-```
+```py
  def query_lines_by_characters():
     lds = dw.load_dataset('data-society/the-simpsons-by-the-data',force_update=True)
     q ='''
@@ -218,7 +218,7 @@ plt.show()
     plt.show() 
 ```
 
-```
+```py
  1 loop, best of 1: 2.38 s per loop 
 ```
 
@@ -228,7 +228,7 @@ plt.show()
 
 我们的查询还可以用于连接单个数据集中多个表的数据，甚至是多个数据集中的数据。让我们修改我们的角色查询来比较前 5 季中我们的主要角色的角色线:
 
-```
+```py
  q =
 '''
 select
@@ -267,7 +267,7 @@ plt.show()
 
 我们将从从网上下载一个黑板游戏列表开始，清理它们以准备加入到主桌上。
 
-```
+```py
  # create a list of dataframes from the tables listed on simpsons.wikia.co,
 chalkboard_dfs = pd.read_html('https://simpsons.wikia.com/wiki/List_of_chalkboard_gags',match='Gag')
 # remove the simpsons movie from the list
@@ -284,7 +284,7 @@ chalkboard_dfs[0].head()
 | three | three | 1990 年 1 月 21 日 | 圆盘烤饼 | 我不会在大厅里玩滑板 | 荷马的奥德赛 |
 | four | four | 1990 年 1 月 28 日 | 圆盘烤饼 | 我不会在课堂上打嗝 | 没有比家更丢脸的了 |
 
-```
+```py
  # the first row contains the column names, let's create a function to fix this
 def cb_cleanup(df):
     df.columns = df.iloc[0]
@@ -300,7 +300,7 @@ print(chalkboards.shape)
 chalkboards.head() 
 ```
 
-```
+```py
  (605,5) 
 ```
 
@@ -312,7 +312,7 @@ chalkboards.head()
 | three | four | 1990 年 1 月 28 日 | 圆盘烤饼 | 我不会在课堂上打嗝 | 没有比家更丢脸的了 |
 | four | five | 1990 年 2 月 4 日 | 圆盘烤饼 | 没有插科打诨——由于时间原因，开幕式缩短了 | 巴特将军 |
 
-```
+```py
  # remove extra columns and normalize column names
 chalkboards = chalkboards[['#','Gag']]
 chalkboards.columns = ['id','chalkboard_gag']
@@ -333,7 +333,7 @@ chalkboards.head()
 
 让我们将黑板引用加入到原始表格中，并将其导出为 CSV 格式。
 
-```
+```py
  lds = dw.load_dataset('data-society/the-simpsons-by-the-data')
 simpsons_episodes = lds.dataframes['simpsons_episodes']
 simpsons_episodes = simpsons_episodes.merge(chalkboards,how='left',on='id')
@@ -354,7 +354,7 @@ simpsons_episodes.head()
 *   启动 data.world API 客户端对象
 *   上传我们修改过的 CSV 文件，覆盖原始文件。
 
-```
+```py
  simpsons_episodes.to_csv('simpsons_episodes.csv',index=False)
 client = dw.api_client()
 client.upload_files('data-society/the-simpsons-by-the-data',files='simpsons_episodes.csv') 

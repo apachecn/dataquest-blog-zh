@@ -44,7 +44,7 @@ September 5, 2018
 
 调查数据在[GitHub 知识库](https://github.com/freeCodeCamp/2017-new-coder-survey)中公开。下面，我们将快速浏览一下存储在我们刚刚提到的存储库的`clean-data`文件夹中的`2017-fCC-New-Coders-Survey-Data.csv`文件。我们将使用直接链接[在这里](https://raw.githubusercontent.com/freeCodeCamp/2017-new-coder-survey/master/clean-data/2017-fCC-New-Coders-Survey-Data.csv)读取文件。
 
-```
+```py
 # Read in the dataimport pandas as pd
 direct_link = 'https://raw.githubusercontent.com/freeCodeCamp/2017-new-coder-survey/master/clean-data/2017-fCC-New-Coders-Survey-Data.csv'
 fcc = pd.read_csv(direct_link, low_memory = 0) 
@@ -54,7 +54,7 @@ print(fcc.shape)
 pd.options.display.max_columns = 150 # to avoid truncated output fcc.head()
 ```
 
-```
+```py
 (18175, 136)
 ```
 
@@ -76,13 +76,13 @@ pd.options.display.max_columns = 150 # to avoid truncated output fcc.head()
 
 我们首先需要澄清数据集是否有我们需要的类别。`JobRoleInterest`列描述了每个参与者感兴趣的角色。如果一个参与者对某个领域的工作感兴趣，我们可以假设他们也对学习那个领域感兴趣。所以让我们看看这个专栏的频率分布表，确定我们掌握的数据是否相关。
 
-```
+```py
 
 # Frequency distribution table for 'JobRoleInterest
 'fcc['JobRoleInterest'].value_counts(normalize = True) * 100
 ```
 
-```
+```py
  Full-Stack Web Developer                                                                                                                                                                                                                                     11.770595
   Front-End Web Developer                                                                                                                                                                                                                                     6.435927
   Data Scientist                                                                                                                                                                                                                                              2.173913
@@ -158,7 +158,7 @@ Game Developer,   Mobile Developer, Back-End Web Developer,   Front-End Web Deve
     *   我们将首先删除空值，因为我们不能拆分`Nan`值。
 *   为描述选项数量的变量生成频率表。
 
-```
+```py
 # Split each string in the 'JobRoleInterest' column
 interests_no_nulls = fcc['JobRoleInterest'].dropna()
 splitted_interests = interests_no_nulls.str.split(',')
@@ -167,7 +167,7 @@ n_of_options = splitted_interests.apply(lambda x: len(x)) # x is a list of job o
 n_of_options.value_counts(normalize = True).sort_index() * 100
 ```
 
-```
+```py
 
 1     31.650458
 2     10.883867
@@ -189,7 +189,7 @@ Name: JobRoleInterest, dtype: float64
 
 我们课程的重点是 web 和移动开发，所以让我们看看有多少受访者至少选择了这两个选项中的一个。
 
-```
+```py
 
 # Frequency table
 web_or_mobile = interests_no_nulls.str.contains(
@@ -212,7 +212,7 @@ plt.ylim([0,100])
 plt.show()
 ```
 
-```
+```py
 
 True     86.241419
 False    13.758581
@@ -231,7 +231,7 @@ Name: JobRoleInterest, dtype: float64
 
 我们可以从检查`CountryLive`变量的频率分布表开始，它描述了每个参与者居住在哪个国家(不是他们的原籍国)。我们将只考虑那些回答了他们对什么角色感兴趣的参与者，以确保我们的工作具有代表性。
 
-```
+```py
 
 # Isolate the participants that answered what role they'd be interested in
 fcc_good = fcc[fcc['JobRoleInterest'].notnull()].copy()
@@ -328,7 +328,7 @@ pd.DataFrame(data = {'Absolute frequency': absolute_frequencies,
 
 让我们从创建一个新列开始，该列描述学生到目前为止每月花费的金额。为此，我们需要将`MoneyForLearning`列分成`MonthsProgramming`列。问题是有同学回答说学习编码 0 个月了(可能是刚开始)。为了避免被 0 除，我们将在`MonthsProgramming`列中用 1 替换 0。
 
-```
+```py
 
 # Replace 0s with 1s to avoid division by 0fcc_good['MonthsProgramming'].replace(0,1, inplace = True)
 
@@ -338,13 +338,13 @@ fcc_good['money_per_month'].isnull().sum()
 
 ```
 
-```
+```py
 675
 ```
 
 让我们只保留那些对于`money_per_month`列没有空值的行。
 
-```
+```py
 
 # Keep only the rows with non-nulls in the money_per_month column 
 fcc_good = fcc_good[fcc_good['money_per_month'].notnull()]
@@ -352,7 +352,7 @@ fcc_good = fcc_good[fcc_good['money_per_month'].notnull()]
 
 我们希望按国家对数据进行分组，然后测量每个国家学生每月花费的平均金额。首先，让我们删除对于`CountryLive`列为空值的行，并检查我们是否仍然有足够的关于我们感兴趣的四个国家的数据。
 
-```
+```py
 
 # Remove the rows with null values in 'CountryLive'
 fcc_good = fcc_good[fcc_good['CountryLive'].notnull()]
@@ -361,7 +361,7 @@ fcc_good = fcc_good[fcc_good['CountryLive'].notnull()]
 fcc_good['CountryLive'].value_counts().head()
 ```
 
-```
+```py
 
 United States of America    2933
 India                        463
@@ -373,7 +373,7 @@ Name: CountryLive, dtype: int64
 
 这应该足够了，所以让我们来计算一个学生在每个国家每月花费的平均值。我们将使用平均值计算平均值。
 
-```
+```py
 
 # Mean sum of money spent by students each month
 countries_mean = fcc_good.groupby('CountryLive').mean()
@@ -382,7 +382,7 @@ countries_mean['money_per_month'][['United States of America',
                             'Canada']]
 ```
 
-```
+```py
  CountryLive
 United States of America    227.997996
 India                       135.100982
@@ -399,7 +399,7 @@ Name: money_per_month, dtype: float64
 
 让我们用箱线图来形象化每个国家的`money_per_month`变量的分布。
 
-```
+```py
 
 # Isolate only the countries of interest
 only_4 = fcc_good[fcc_good['CountryLive'].str.contains(
@@ -420,7 +420,7 @@ plt.show()
 
 从上面的图表中很难看出英国、印度或加拿大的数据是否有问题，但我们可以立即看出美国确实有问题:图表显示，两个人每月花费 5 万美元或更多用于学习。这并非不可能，但似乎极不可能，因此我们将删除每月超过 20，000 美元的所有值。
 
-```
+```py
 
 # Isolate only those participants who spend less than 10000 per month
 fcc_good = fcc_good[fcc_good['money_per_month'] < 20000]
@@ -428,7 +428,7 @@ fcc_good = fcc_good[fcc_good['money_per_month'] < 20000]
 
 现在让我们重新计算平均值，并再次绘制箱线图。
 
-```
+```py
 
 # Recompute mean sum of money spent by students each month
 countries_mean = fcc_good.groupby('CountryLive').mean()
@@ -437,7 +437,7 @@ countries_mean['money_per_month'][['United States of America',
                             'Canada']]
 ```
 
-```
+```py
 CountryLive
 United States of America    183.800110
 India                       135.100982
@@ -446,7 +446,7 @@ Canada                      113.510961
 Name: money_per_month, dtype: float64
 ```
 
-```
+```py
 
 # Isolate again the countries of interest
 only_4 = fcc_good[fcc_good['CountryLive'].str.contains(
@@ -466,7 +466,7 @@ plt.xticks(range(4), ['US', 'UK', 'India', 'Canada'])
 
 我们可以看到印度的一些极端异常值(价值超过每月 2500 美元)，但不清楚这是否是好数据。也许这些人参加了几个训练营，这往往非常昂贵。让我们检查这两个数据点，看看是否能找到相关的东西。
 
-```
+```py
 
 # Inspect the extreme outliers for India
 india_outliers = only_4[
@@ -486,7 +486,7 @@ india_outliers
 
 似乎两个参与者都没有参加训练营。总的来说，很难从数据中看出这些人是否真的在学习上花了那么多钱。调查的实际问题是*“除了大学学费，到目前为止你在学习编程上花了多少钱(以美元计)？”*，所以他们可能误会了，以为大学学费包含在内。去掉这两排似乎更安全。
 
-```
+```py
 
 # Remove the outliers for India
 only_4 = only_4.drop(india_outliers.index) # using the row labels
@@ -494,7 +494,7 @@ only_4 = only_4.drop(india_outliers.index) # using the row labels
 
 回头看上面的方框图，我们还可以看到美国更多的极端异常值(每月超过 6000 美元的值)。让我们更详细地检查一下这些参与者。
 
-```
+```py
 
 # Examine the extreme outliers for the US
 us_outliers = only_4[
@@ -527,7 +527,7 @@ us_outliers
 *   没有参加训练营。
 *   当他们完成调查时，已经编程三个月或更少。
 
-```
+```py
 
 # Remove the respondents who didn't attendent a bootcamp
 no_bootcamp = only_4[
@@ -550,7 +550,7 @@ only_4 = only_4.drop(less_than_3_months.index)
 
 再次看上面的最后一个方框图，我们还可以看到加拿大的一个极端异常值——一个每月花费大约 5000 美元的人。让我们更深入地研究一下这个人。
 
-```
+```py
 
 # Examine the extreme outliers for Canada
 canada_outliers = only_4[
@@ -566,7 +566,7 @@ canada_outliers
 
 这里，情况类似于一些美国受访者——这位参与者在完成调查时，编程时间不超过两个月。他似乎在开始时花了一大笔钱参加训练营，然后在调查后的几个月里，他可能没有花任何钱。我们将采取与美国相同的方法，去除这个异常值。
 
-```
+```py
 
 # Remove the extreme outliers for Canada
 only_4 = only_4.drop(canada_outliers.index)
@@ -574,13 +574,13 @@ only_4 = only_4.drop(canada_outliers.index)
 
 让我们重新计算平均值并生成最终的箱线图。
 
-```
+```py
 
 # Recompute mean sum of money spent by students each month
 only_4.groupby('CountryLive').mean()['money_per_month']
 ```
 
-```
+```py
  CountryLive
 Canada                       93.065400
 India                        65.758763
@@ -589,7 +589,7 @@ United States of America    142.654608
 Name: money_per_month, dtype: float64
 ```
 
-```
+```py
 
 # Visualize the distributions again
 sns.boxplot(y = 'money_per_month', x = 'CountryLive',
@@ -615,13 +615,13 @@ plt.show()
 *   \ ' 59 美元对印度人来说并不算贵，因为他们每月平均花费 66 美元。
 *   我们在印度的潜在客户几乎是加拿大的两倍:
 
-```
+```py
 
 # Frequency table for the 'CountryLive' column
 only_4['CountryLive'].value_counts(normalize = True) * 100
 ```
 
-```
+```py
  United States of America    74.967908
 India                       11.732991
 United Kingdom               7.163030

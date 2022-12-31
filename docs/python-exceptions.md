@@ -12,12 +12,12 @@ June 7, 2022![Python exceptions](img/06a09a06714ab9f85d27c68bfa89cde2.png)
 
 当运行 Python 代码时遇到意外情况时，程序会停止执行并抛出错误。Python 中基本上有两类错误:**语法错误**和**异常**。为了理解这两种类型之间的区别，让我们运行下面这段代码:
 
-```
+```py
 print(x
 print(1)
 ```
 
-```
+```py
  File "C:\Users\Utente\AppData\Local\Temp/ipykernel_4732/4217672763.py", line 2
     print(1)
     ^
@@ -28,12 +28,12 @@ SyntaxError: invalid syntax
 
 让我们修复这个错误并重新运行代码:
 
-```
+```py
 print(x)
 print(1)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
@@ -55,11 +55,11 @@ Python 提供了在各种情况下抛出的多种类型的异常。让我们看�
 
 *   **`NameError`**–当名字不存在于局部或全局变量中时引发:
 
-```
+```py
 print(x)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
@@ -72,11 +72,11 @@ NameError: name 'x' is not defined
 
 *   **`TypeError`**–对不适用的数据类型运行操作时引发:
 
-```
+```py
 print(1+'1')
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 TypeError                                 Traceback (most recent call last)
@@ -89,11 +89,11 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 
 *   **`ValueError`**–当操作或函数接受无效的参数值时引发:
 
-```
+```py
 print(int('a'))
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
@@ -106,11 +106,11 @@ ValueError: invalid literal for int() with base 10: 'a'
 
 *   **`IndexError`**–在 iterable 中不存在索引时引发:
 
-```
+```py
 print('dog'[3])
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 IndexError                                Traceback (most recent call last)
@@ -123,12 +123,12 @@ IndexError: string index out of range
 
 *   **`IndentationError`**–缩进不正确时引发:
 
-```
+```py
 for i in range(3):
 print(i)
 ```
 
-```
+```py
  File "C:\Users\Utente\AppData\Local\Temp/ipykernel_4732/3296739069.py", line 2
     print(i)
     ^
@@ -137,11 +137,11 @@ IndentationError: expected an indented block
 
 *   **`ZeroDivisionError`**–在试图将一个数除以零时引发:
 
-```
+```py
 print(1/0)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ZeroDivisionError                         Traceback (most recent call last)
@@ -154,11 +154,11 @@ ZeroDivisionError: division by zero
 
 *   **`ImportError`**–导入语句不正确时引发:
 
-```
+```py
 from numpy import pandas
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ImportError                               Traceback (most recent call last)
@@ -171,11 +171,11 @@ ImportError: cannot import name 'pandas' from 'numpy' (C:\Users\Utente\anaconda3
 
 *   **`AttributeError`**–在试图分配或引用不适用于给定 Python 对象的属性时引发:
 
-```
+```py
 print('a'.sum())
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 AttributeError                            Traceback (most recent call last)
@@ -188,12 +188,12 @@ AttributeError: 'str' object has no attribute 'sum'
 
 *   **`KeyError`**–字典中没有该键时引发:
 
-```
+```py
 animals = {'koala': 1, 'panda': 2}
 print(animals['rabbit'])
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 KeyError                                  Traceback (most recent call last)
@@ -219,7 +219,7 @@ Python 中用于检测和处理异常的最基本命令是`try`和`except`。
 
 让我们通过我们最初的一小段代码`print(x)`的例子来看看它是如何工作的，它在前面提出了一个`NameError`:
 
-```
+```py
 try:
     print(x)
 except:
@@ -228,7 +228,7 @@ except:
 print(1)
 ```
 
-```
+```py
 Please declare the variable x first
 1
 ```
@@ -237,14 +237,14 @@ Please declare the variable x first
 
 在上面的例子中，我们只预测和处理了一种类型的异常，更具体地说，是一个`NameError`。这种方法的缺点是，`except`子句中的这段代码将以相同的方式对待**所有类型的异常**，并输出相同的消息`Please declare the variable x first`。为了避免这种混淆，我们可以在`except`命令之后明确指出需要捕捉和处理的异常类型:
 
-```
+```py
 try:
     print(x)
 except NameError:
     print('Please declare the variable x first')
 ```
 
-```
+```py
 Please declare the variable x first
 ```
 
@@ -254,7 +254,7 @@ Please declare the variable x first
 
 为了理解这个概念，我们来看一个简单的函数，它总结了一个输入字典的值:
 
-```
+```py
 def print_dict_sum(dct):
     print(sum(dct.values()))
 
@@ -262,17 +262,17 @@ my_dict = {'a': 1, 'b': 2, 'c': 3}
 print_dict_sum(my_dict)
 ```
 
-```
+```py
 6
 ```
 
 尝试运行这个函数时，如果我们不小心向它传递了一个错误的输入，我们可能会遇到不同的问题。例如，我们可以在字典名称中犯一个错误，导致一个不存在的变量:
 
-```
+```py
 print_dict_sum(mydict)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 NameError                                 Traceback (most recent call last)
@@ -285,12 +285,12 @@ NameError: name 'mydict' is not defined
 
 输入字典的某些值可以是字符串而不是数字:
 
-```
+```py
 my_dict = {'a': '1', 'b': 2, 'c': 3}
 print_dict_sum(my_dict)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 TypeError                                 Traceback (most recent call last)
@@ -311,12 +311,12 @@ TypeError: unsupported operand type(s) for +: 'int' and 'str'
 
 另一个选项允许我们为此函数传入一个不合适的数据类型的参数:
 
-```
+```py
 my_dict = 'a'
 print_dict_sum(my_dict)
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 AttributeError                            Traceback (most recent call last)
@@ -337,7 +337,7 @@ AttributeError: 'str' object has no attribute 'values'
 
 因此，我们至少有三种不同类型的异常应该被不同地处理:`NameError`、`TypeError`和`AttributeError`。为此，我们可以在单个`try`块之后添加多个`except`块(每个异常类型一个，在我们的例子中是三个):
 
-```
+```py
 try: 
     print_dict_sum(mydict)
 except NameError:
@@ -348,7 +348,7 @@ except AttributeError:
     print('You should provide a Python dictionary with numeric values')
 ```
 
-```
+```py
 Please check the spelling of the dictionary name
 ```
 
@@ -356,7 +356,7 @@ Please check the spelling of the dictionary name
 
 我们也可以在函数定义中处理异常。**重要:**我们不能为任何函数参数处理`NameError`异常，因为在这种情况下，异常发生在函数体开始之前。例如，在下面的代码中:
 
-```
+```py
 def print_dict_sum(dct):
     try:
         print(sum(dct.values()))
@@ -372,7 +372,7 @@ print_dict_sum('a')
 print_dict_sum(mydict)
 ```
 
-```
+```py
 It seems that some of the dictionary values are not numeric
 You should provide a Python dictionary with numeric values
 
@@ -392,7 +392,7 @@ NameError: name 'mydict' is not defined
 
 如果以相同的方式处理，可以将几个异常组合成一个元组放在一个`except`子句中:
 
-```
+```py
 def print_dict_sum(dct):
     try:
         print(sum(dct.values()))
@@ -403,7 +403,7 @@ print_dict_sum({'a': '1', 'b': 2, 'c': 3})
 print_dict_sum('a')
 ```
 
-```
+```py
 You should provide a Python DICTIONARY with NUMERIC values
 You should provide a Python DICTIONARY with NUMERIC values
 ```
@@ -414,7 +414,7 @@ You should provide a Python DICTIONARY with NUMERIC values
 
 例如，在下面的代码中，我们尝试除以零:
 
-```
+```py
 try:
     print(3/0)
 except ZeroDivisionError:
@@ -423,13 +423,13 @@ else:
     print('The division is successfully performed')
 ```
 
-```
+```py
 You cannot divide by zero
 ```
 
 异常在`except`块中被捕获并处理，因此`else`子句被跳过。让我们看看如果我们提供一个非零数字会发生什么:
 
-```
+```py
 try:
     print(3/2)
 except ZeroDivisionError:
@@ -438,7 +438,7 @@ else:
     print('The division is successfully performed')
 ```
 
-```
+```py
 1.5
 The division is successfully performed
 ```
@@ -452,7 +452,7 @@ The division is successfully performed
 
 让我们将`finally`块添加到前面的两段代码中，观察结果:
 
-```
+```py
 try:
     print(3/0)
 except ZeroDivisionError:
@@ -463,12 +463,12 @@ finally:
     print('This message is always printed')
 ```
 
-```
+```py
 You cannot divide by zero
 This message is always printed
 ```
 
-```
+```py
 try:
     print(3/2)
 except ZeroDivisionError:
@@ -479,7 +479,7 @@ finally:
     print('This message is always printed')
 ```
 
-```
+```py
 1.5
 The division is successfully performed
 This message is always printed
@@ -491,7 +491,7 @@ This message is always printed
 
 有时，我们可能需要故意引发一个异常，并在某个条件发生时停止程序。为此，我们需要`raise`关键字和以下语法:
 
-```
+```py
 raise ExceptionClass(exception_value)
 ```
 
@@ -499,13 +499,13 @@ raise ExceptionClass(exception_value)
 
 让我们看看它是如何工作的:
 
-```
+```py
 x = 'blue'
 if x not in ['red', 'yellow', 'green']:
     raise ValueError
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)
@@ -519,13 +519,13 @@ ValueError:
 
 在上面这段代码中，我们没有为异常提供任何参数，因此代码没有输出任何消息(默认情况下，异常值为`None`)。
 
-```
+```py
 x = 'blue'
 if x not in ['red', 'yellow', 'green']:
     raise ValueError('The traffic light is broken')
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 ValueError                                Traceback (most recent call last)

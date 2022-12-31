@@ -10,7 +10,7 @@ April 13, 2017NumPy is the library that gives Python its ability to work with da
 
 `arr` |一个 numpy 数组对象你还需要导入 NumPy 来开始:
 
-```
+```py
 import numpy as np
 ```
 

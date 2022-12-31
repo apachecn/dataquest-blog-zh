@@ -4,7 +4,7 @@
 
 February 9, 2015![dataquest-learn-data-science-logo](img/0dd1f1180c6b8343e661035bcf2cf2dd.png)
 
-```
+```py
  How do I learn more about data science?
 What can I do to start analyzing data?
 Where do I get started with machine learning?

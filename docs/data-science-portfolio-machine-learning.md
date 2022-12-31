@@ -87,7 +87,7 @@ July 5, 2016Companies are increasingly looking at data science portfolios when m
 
 让我们快速看一下原始数据文件。以下是从第`1`季度到第`2012`季度的前几行采集数据:
 
-```
+```py
 100000853384|R|OTHER|4.625|280000|360|02/2012|04/2012|31|31|1|23|801|N|C|SF|1|I|CA|945||FRM|
 100003735682|R|SUNTRUST MORTGAGE INC.|3.99|466000|360|01/2012|03/2012|80|80|2|30|794|N|P|SF|1|P|MD|208||FRM|788
 100006367485|C|PHH MORTGAGE CORPORATION|4|229000|360|02/2012|04/2012|67|67|2|36|802|N|R|SF|1|P|CA|959||FRM|794 
@@ -97,7 +97,7 @@ July 5, 2016Companies are increasingly looking at data science portfolios when m
 
 `2012`的`1`:
 
-```
+```py
  100000853384|03/01/2012|OTHER|4.625||0|360|359|03/2042|41860|0|N||||||||||||||||
 100000853384|04/01/2012||4.625||1|359|358|03/2042|41860|0|N||||||||||||||||
 100000853384|05/01/2012||4.625||2|358|357|03/2042|41860|0|N||||||||||||||||
@@ -150,7 +150,7 @@ July 5, 2016Companies are increasingly looking at data science portfolios when m
 
 我们的文件结构很快就会变成这样:
 
-```
+```py
  loan-prediction
 ├── data
 ├── processed
@@ -168,14 +168,14 @@ July 5, 2016Companies are increasingly looking at data science portfolios when m
 
 我们还想忽略数据文件，因为它们非常大，而且房利美条款禁止我们重新分发它们，所以我们应该在文件末尾添加两行:
 
-```
+```py
 data
 processed 
 ```
 
 这里是这个项目的一个示例文件。接下来，我们需要创建`README.md`，这将帮助人们理解项目。`.md`表示文件为降价格式。Markdown 使您能够编写纯文本，但如果您愿意，也可以添加一些有趣的格式。这里有一个降价指南。如果你上传一个名为`README.md`的文件到 Github，Github 会自动处理 markdown，并显示给任何查看该项目的人。这里有一个例子。现在，我们只需要在`README.md`中放一个简单的描述:
 
-```
+```py
  Loan Prediction
 -----------------------
 
@@ -184,7 +184,7 @@ Predict whether or not loans acquired by Fannie Mae will go into foreclosure.  F
 
 现在，我们可以创建一个`requirements.txt`文件。这将使其他人很容易安装我们的项目。我们还不知道我们将使用什么样的库，但这里是一个很好的起点:
 
-```
+```py
  pandas
 matplotlib
 scikit-learn
@@ -203,7 +203,7 @@ scipy
 
 这些文件是 zip 格式的，解压缩后相当大。为了这篇博文的目的，我们将下载从`Q1 2012`到`Q1 2015`的所有内容。然后我们需要解压缩所有的文件。解压文件后，删除原来的`.zip`文件。最后，`loan-prediction`文件夹应该是这样的:
 
-```
+```py
  loan-prediction
 ├── data
 │   ├── Acquisition_2012Q1.txt
@@ -231,7 +231,7 @@ scipy
 
 这里的一个问题是性能数据非常大，所以如果可能的话，我们应该尝试修剪一些列。第一步是向`settings.py`添加一些变量，这些变量将包含我们的原始数据和处理后的数据的路径。我们还将添加一些其他设置，这些设置在以后会很有用:
 
-```
+```py
  DATA_DIR = "data"
 PROCESSED_DIR = "processed"
 MINIMUM_TRACKING_QUARTERS = 4
@@ -246,7 +246,7 @@ CV_FOLDS = 3
 
 我们首先需要定义每个文件的标题，因此我们需要查看列名的 [pdf，并创建每个采集和性能文件中的列列表:](https://s3.amazonaws.com/dq-blog-files/lppub_file_layout.pdf)
 
-```
+```py
  HEADERS = {
     "Acquisition": [
         "id",
@@ -307,7 +307,7 @@ CV_FOLDS = 3
 
 下一步是定义我们想要保留的列。因为我们正在进行的关于贷款的测量是它是否曾经被取消抵押品赎回权，我们可以丢弃性能数据中的许多列。但是，我们需要保留收购数据中的所有列，因为我们希望最大化我们所拥有的关于贷款何时被收购的信息(毕竟，我们预测贷款在收购时是否会被取消赎回权)。丢弃列将使我们能够节省磁盘空间和内存，同时也加快我们的代码。
 
-```
+```py
  SELECT = {
     "Acquisition": HEADERS["Acquisition"],
     "Performance": [
@@ -332,7 +332,7 @@ CV_FOLDS = 3
     *   将所有数据帧连接在一起。
     *   将连接的数据帧写回文件。
 
-```
+```py
  import os
 import settings
 import pandas as pd
@@ -360,7 +360,7 @@ def concatenate(prefix="Acquisition"):
     *   `processed/Acquisition.txt`
     *   `processed/Performance.txt`
 
-```
+```py
  if __name__ == "__main__":
     concatenate("Acquisition")
     concatenate("Performance") 
@@ -370,7 +370,7 @@ def concatenate(prefix="Acquisition"):
 
 当您在处理较大的项目时，这样做是一个好主意，因为这样可以更容易地更改单个部分，而不会对项目的不相关部分产生意想不到的后果。一旦我们完成了`assemble.py`脚本，我们就可以运行`python assemble.py`。你可以在这里找到完整的`assemble.py`文件。这将在`processed`目录中产生两个文件:
 
-```
+```py
  loan-prediction
 ├── data
 │   ├── Acquisition_2012Q1.txt
@@ -421,7 +421,7 @@ def concatenate(prefix="Acquisition"):
         *   给定的`loan_id`增加`performance_count`，因为我们在包含它的行上。
         *   如果`date`不是`None`，那么我们知道贷款被取消抵押品赎回权，所以适当地设置`foreclosure_status`。
 
-```
+```py
  import os
 import settings
 import pandas as pd
@@ -450,7 +450,7 @@ def count_performance_rows():
 
 一旦我们创建了计数字典，我们就可以创建一个函数，如果传入了一个`loan_id`和一个`key`，该函数将从字典中提取值:
 
-```
+```py
  def get_performance_summary_value(loan_id, key, counts):
     value = counts.get(loan_id, {
         "foreclosure_status": False,
@@ -494,7 +494,7 @@ def count_performance_rows():
     *   最后，我们将有`first_payment_month`、`first_payment_year`、`origination_month`和`origination_year`。
 *   用`-1`填充`acquisition`中任何缺失的值。
 
-```
+```py
  def annotate(acquisition, counts):
     acquisition["foreclosure_status"] = acquisition["id"].apply(lambda x: get_performance_summary_value(x, "foreclosure_status", counts))
     acquisition["performance_count"] = acquisition["id"].apply(lambda x: get_performance_summary_value(x, "performance_count", counts))
@@ -549,7 +549,7 @@ if __name__ == "__main__":
     counts = count_performance_rows()
     acquisition = annotate(acquisition, counts)
     write(acquisition) 
-```
+```py
 
 一旦你完成了文件的更新，确保用`python annotate.py`运行它，生成`train.csv`文件。你可以在这里找到完整的`annotate.py`文件[。该文件夹现在应该如下所示:](https://github.com/dataquestio/loan-prediction/blob/master/annotate.py)
 
@@ -571,7 +571,7 @@ if __name__ == "__main__":
 ├── README.md
 ├── requirements.txt
 ├── settings.py
-```
+```py
 
 ## 为我们的机器学习项目寻找一个误差度量
 
@@ -585,13 +585,13 @@ import settings
 
 train = pd.read_csv(os.path.join(settings.PROCESSED_DIR, "train.csv"))
 train["foreclosure_status"].value_counts()
-```
+```py
 
 ```
  False    4635982
 True        1585
 Name: foreclosure_status, dtype: int64 
-```
+```py
 
 由于很少贷款被取消抵押品赎回权，仅仅检查正确预测的标签的百分比将意味着我们可以建立一个机器学习模型来预测每一行的`False`，并且仍然获得非常高的准确性。相反，我们希望使用一个考虑到阶级不平衡的指标，确保我们准确预测止赎。
 
@@ -652,7 +652,7 @@ def cross_validate(train):
 
     predictions = cross_validation.cross_val_predict(clf, train[predictors], train[settings.TARGET], cv=settings.CV_FOLDS)
     return predictions 
-```
+```py
 
 ## 预测误差
 
@@ -689,7 +689,7 @@ def compute_false_negatives(target, predictions):
 def compute_false_positives(target, predictions):
     df = pd.DataFrame({"target": target, "predictions": predictions})
     return df[(df["target"] == 0) & (df["predictions"] == 1)].shape[0] / (df[(df["target"] == 0)].shape[0] + 1) 
-```
+```py
 
 ## 把所有的放在一起
 
@@ -717,7 +717,7 @@ if __name__ == "__main__":
     print("Accuracy Score: {}".format(error))
     print("False Negatives: {}".format(fn))
     print("False Positives: {}".format(fp)) 
-```
+```py
 
 一旦添加了代码，就可以运行`python predict.py`来生成预测。运行一切显示我们的假阴性率是`.26`，这意味着在止赎贷款中，我们错过了预测它们的`26%`。
 
@@ -742,7 +742,7 @@ if __name__ == "__main__":
 ├── README.md
 ├── requirements.txt
 ├── settings.py 
-```
+```py
 
 ## 撰写自述文件
 

@@ -36,7 +36,7 @@ January 29, 2019
 *   [数据集](https://www.kaggle.com/lava18/google-play-store-apps/home)包含来自 Google Play 的大约一万个 Android 应用程序的数据
 *   [一个数据集](https://www.kaggle.com/ramamet4/app-store-apple-data-set-10k-apps/home)包含来自 App Store 的大约 7，000 个 iOS 应用程序的数据，让我们首先打开这两个数据集，然后继续研究这些数据。
 
-```
+```py
 from csv import reader
 
 ### The Google Play data set ###
@@ -56,7 +56,7 @@ ios = ios[1:]
 
 为了更容易地浏览这两个数据集，我们将首先编写一个名为`explore_data()`的函数，我们可以重复使用该函数，以更可读的方式浏览行。我们还将为函数添加一个选项，以显示任何数据集的行数和列数。
 
-```
+```py
 ### The explore_data() function ###
 def explore_data(dataset, start, end, rows_and_columns=False):
     dataset_slice = dataset[start:end]
@@ -74,7 +74,7 @@ print('\n')
 explore_data(android, 0, 3, True)
 ```
 
-```
+```py
 ['App', 'Category', 'Rating', 'Reviews', 'Size', 'Installs', 'Type', 'Price', 'Content Rating', 'Genres', 'Last Updated', 'Current Ver', 'Android Ver']
 
 ['Photo Editor & Candy Camera & Grid & ScrapBook', 'ART_AND_DESIGN', '4.1', '159', '19M', '10,000+', 'Free', '0', 'Everyone', 'Art & Design', 'January 7, 2018', '1.0.0', '4.0.3 and up']
@@ -89,13 +89,13 @@ Number of columns: 13
 
 我们看到 Google Play 数据集有 10841 个应用和 13 个栏目。快速浏览一下，可能对我们的分析有用的列有`'App'`、`'Category'`、`'Reviews'`、`'Installs'`、`'Type'`、`'Price'`和`'Genres'`。现在我们来看看 App Store 的数据集。
 
-```
+```py
 print(ios_header)
 print('\n')
 explore_data(ios, 0, 3, True)
 ```
 
-```
+```py
 ['id', 'track_name', 'size_bytes', 'currency', 'price', 'rating_count_tot', 'rating_count_ver', 'user_rating', 'user_rating_ver', 'ver', 'cont_rating', 'prime_genre', 'sup_devices.num', 'ipadSc_urls.num', 'lang.num', 'vpp_lic']
 
 ['284882215', 'Facebook', '389879808', 'USD', '0.0', '2974676', '212', '3.5', '3.5', '95.0', '4+', 'Social Networking', '37', '1', '29', '1']
@@ -114,7 +114,7 @@ Number of columns: 16
 
 Google Play 数据集有一个专门的[讨论区](https://www.kaggle.com/lava18/google-play-store-apps/discussion)，我们可以看到[的一个讨论](https://www.kaggle.com/lava18/google-play-store-apps/discussion/66015)为第 10472 行概述了一个错误。让我们打印这一行，并将其与标题和正确的另一行进行比较。
 
-```
+```py
 print(android[10472])  # incorrect row
 print('\n')
 print(android_header)  # header
@@ -122,7 +122,7 @@ print('\n')
 print(android[0])      # correct row
 ```
 
-```
+```py
 ['Life Made WI-Fi Touchscreen Photo Frame', '1.9', '19', '3.0M', '1,000+', 'Free', '0', 'Everyone', '', 'February 11, 2018', '1.0.19', '4.0 and up']
 
 ['App', 'Category', 'Rating', 'Reviews', 'Size', 'Installs', 'Type', 'Price', 'Content Rating', 'Genres', 'Last Updated', 'Current Ver', 'Android Ver']
@@ -132,7 +132,7 @@ print(android[0])      # correct row
 
 第 10472 行对应 app *Life Made WI-Fi 触屏相框*，我们可以看到评分是 19。这显然是关闭的，因为 Google Play 应用程序的最高评级是 5。因此，我们将删除这一行。
 
-```
+```py
 print(len(android))
 
 del android[10472]  # don't run this more than once
@@ -140,7 +140,7 @@ del android[10472]  # don't run this more than once
 print(len(android))
 ```
 
-```
+```py
 10841
 10840
 ```
@@ -149,14 +149,14 @@ print(len(android))
 
 如果我们探索 Google Play 数据集足够长的时间，我们会发现一些应用程序有不止一个条目。例如，应用程序 Instagram 有四个条目:
 
-```
+```py
 for app in android:
     name = app[0]
     if name == 'Instagram':
         print(app)
 ```
 
-```
+```py
 ['Instagram', 'SOCIAL', '4.5', '66577313', 'Varies with device', '1,000,000,000+', 'Free', '0', 'Teen', 'Social', 'July 31, 2018', 'Varies with device', 'Varies with device']
 ['Instagram', 'SOCIAL', '4.5', '66577446', 'Varies with device', '1,000,000,000+', 'Free', '0', 'Teen', 'Social', 'July 31, 2018', 'Varies with device', 'Varies with device']
 ['Instagram', 'SOCIAL', '4.5', '66577313', 'Varies with device', '1,000,000,000+', 'Free', '0', 'Teen', 'Social', 'July 31, 2018', 'Varies with device', 'Varies with device']
@@ -165,7 +165,7 @@ for app in android:
 
 总的来说，一个应用程序出现不止一次的情况有 1，181 个:
 
-```
+```py
 ### Counting the duplicate apps ###
 duplicate_apps = []
 unique_apps = []
@@ -180,7 +180,7 @@ print(len(duplicate_apps))
 print(duplicate_apps[:15])
 ```
 
-```
+```py
 1181
 ['Quick PDF Scanner + OCR FREE', 'Box', 'Google My Business', 'ZOOM Cloud Meetings', 'join.me - Simple Meetings', 'Box', 'Zenefits', 'Google Ads', 'Google My Business', 'Slack', 'FreshBooks Classic', 'Insightly CRM', 'QuickBooks Accounting: Invoicing & Expenses', 'HipChat - Chat Built for Teams', 'Xero Accounting Software']
 ```
@@ -190,7 +190,7 @@ print(duplicate_apps[:15])
 *   创建一个字典，其中每个键是一个唯一的应用程序名称，值是该应用程序的最高评论数
 *   使用字典创建一个新的数据集，每个应用程序只有一个条目(我们只选择评论数最高的应用程序)。让我们从构建字典开始。
 
-```
+```py
 ### Building a dictionary {'app_name': max_number_of reviews, ...} ###
 reviews_max = {}
 
@@ -207,12 +207,12 @@ for app in android:
 
 在之前的代码单元中，我们发现有 1，181 种情况下，一个应用程序出现不止一次，因此我们的字典(唯一应用程序)的长度应该等于我们的数据集长度与 1，181 的差。
 
-```
+```py
 print('Expected length:', len(android) - 1181)
 print('Actual length:', len(reviews_max))
 ```
 
-```
+```py
 Expected length: 9659
 Actual length: 9659
 ```
@@ -223,7 +223,7 @@ Actual length: 9659
 *   我们遍历`android`数据集，对于每次迭代:
 *   我们分离出应用程序的名称和评论数量。*我们将当前行(`app`)添加到`android_clean`列表，将应用名称(`name`)添加到`already_cleaned`列表，如果:*当前应用的评论数与`reviews_max`字典中描述的那个应用的评论数匹配；以及*应用程序的名称不在`already_added`列表中。我们需要添加这个补充条件，以考虑重复应用的最高评论数对于多个条目相同的情况(例如，盒子应用有三个条目，评论数相同)。如果我们只检查`reviews_max[name] == n_reviews`，我们仍然会以一些应用程序的重复条目而告终。
 
-```
+```py
 android_clean = []
 already_added = []
 
@@ -238,11 +238,11 @@ for app in android:
 
 现在让我们快速浏览新的数据集，并确认行数为 9，659。
 
-```
+```py
 explore_data(android_clean, 0, 3, True)
 ```
 
-```
+```py
 ['Photo Editor & Candy Camera & Grid & ScrapBook', 'ART_AND_DESIGN', '4.1', '159', '19M', '10,000+', 'Free', '0', 'Everyone', 'Art & Design', 'January 7, 2018', '1.0.0', '4.0.3 and up']
 
 ['U Launcher Lite – FREE Live Cool Themes, Hide Apps', 'ART_AND_DESIGN', '4.7', '87510', '8.7M', '5,000,000+', 'Free', '0', 'Everyone', 'Art & Design', 'August 1, 2018', '1.2.4', '4.0.3 and up']
@@ -259,7 +259,7 @@ Number of columns: 13
 
 如果你对数据集进行了足够的研究，你会注意到一些应用的名字表明它们并不面向说英语的用户。下面，我们看到两个数据集的几个例子:
 
-```
+```py
 print(ios[813][1])
 print(ios[6731][1])
 
@@ -267,7 +267,7 @@ print(android_clean[4412][0])
 print(android_clean[7940][0])
 ```
 
-```
+```py
 爱奇艺 PPS -《欢乐颂 2》电视剧热播
 【脱出ゲーム】絶対に最後までプレイしないで 〜謎解き＆ブロックパズル〜
 中国語 AQリスニング
@@ -276,7 +276,7 @@ print(android_clean[7940][0])
 
 我们对保留这类应用不感兴趣，因此我们将删除它们。一种方法是删除其名称包含英语文本中不常用的符号的每个应用程序——英语文本通常包括英语字母表中的字母、由 0 到 9 的数字组成的数字、标点符号(。, !, ?, ;等。)，以及其他符号(+、*、/等。).所有这些特定于英文文本的字符都使用 ASCII 标准进行编码。每个 ASCII 字符都有一个 0 到 127 之间的对应数字与之关联，我们可以利用这一点构建一个函数来检查应用程序名称，并告诉我们它是否包含非 ASCII 字符。下面我们构建了这个函数，我们使用内置的`ord()`函数来找出每个字符对应的编码号。
 
-```
+```py
 def is_English(string):
 
     for character in string:
@@ -289,14 +289,14 @@ print(is_English('Instagram'))
 print(is_English('爱奇艺 PPS -《欢乐颂 2》电视剧热播'))
 ```
 
-```
+```py
 True
 False
 ```
 
 该功能似乎工作正常，但一些英文应用程序名称使用表情符号或其他符号(、—(长破折号)、–(短破折号)等。)不在 ASCII 范围内。因此，如果我们以当前形式使用该功能，我们将删除有用的应用程序。
 
-```
+```py
 print(is_English('Docs To Go™ Free Office Suite'))
 print(is_English('Instachat " src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">'))
 
@@ -304,7 +304,7 @@ print(ord('™'))
 print(ord('" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">'))
 ```
 
-```
+```py
 False
 False
 8482
@@ -313,7 +313,7 @@ False
 
 为了最大限度地减少数据丢失的影响，我们将只移除名称中包含三个以上非 ASCII 字符的应用:
 
-```
+```py
 def is_English(string):
     non_ascii = 0
 
@@ -330,14 +330,14 @@ print(is_English('Docs To Go™ Free Office Suite'))
 print(is_English('Instachat " src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">" src="https://s.w.oimg/core/emoji/11.2.0/svg/1f61c.svg">'))
 ```
 
-```
+```py
 True
 True
 ```
 
 该功能仍不完善，极少数非英语应用可能会通过我们的过滤，但在我们的分析中，这一点似乎已经足够好了——我们不应该在这一点上花太多时间进行优化。下面，我们使用`is_English()`函数过滤掉两个数据集的非英语应用程序:
 
-```
+```py
 ### The lists that will store the new data sets ###
 android_english = []
 ios_english = []
@@ -360,7 +360,7 @@ print('\n')
 explore_data(ios_english, 0, 3, True)
 ```
 
-```
+```py
 ['Photo Editor & Candy Camera & Grid & ScrapBook', 'ART_AND_DESIGN', '4.1', '159', '19M', '10,000+', 'Free', '0', 'Everyone', 'Art & Design', 'January 7, 2018', '1.0.0', '4.0.3 and up']
 
 ['U Launcher Lite – FREE Live Cool Themes, Hide Apps', 'ART_AND_DESIGN', '4.7', '87510', '8.7M', '5,000,000+', 'Free', '0', 'Everyone', 'Art & Design', 'August 1, 2018', '1.2.4', '4.0.3 and up']
@@ -386,7 +386,7 @@ Number of columns: 16
 
 正如我们在简介中提到的，我们只构建免费下载和安装的应用，我们的主要收入来源包括应用内广告。我们的数据集包含免费和非免费应用程序，我们只需要分离出免费应用程序进行分析。下面，我们分离出两个数据集的免费应用。
 
-```
+```py
 ### These two lists will store the new data sets ###
 android_final = []
 ios_final = []
@@ -408,7 +408,7 @@ print(len(android_final))
 print(len(ios_final))
 ```
 
-```
+```py
 8864
 3222
 ```
@@ -428,7 +428,7 @@ print(len(ios_final))
 *   一个生成显示百分比的频率表的函数
 *   另一个我们可以用来以降序显示百分比的函数
 
-```
+```py
 ### Frequency tables with percentages ###
 def freq_table(dataset, index):
     table = {}
@@ -464,11 +464,11 @@ def display_table(dataset, index):
 
 我们首先检查 App Store 数据集的`prime_genre`列的频率表。
 
-```
+```py
 display_table(ios_final, -5)
 ```
 
-```
+```py
 Games : 58.16263190564867
 Entertainment : 7.883302296710118
 Photo & Video : 4.9658597144630665
@@ -496,11 +496,11 @@ Catalogs : 0.12414649286157665
 
 我们可以看到，在免费的英文 app 中，超过一半(58.16%)是游戏。娱乐应用接近 8%，其次是照片和视频应用，接近 5%。只有 3.66%的应用是为教育设计的，其次是社交网络应用，占我们数据集中应用的 3.29%。总的印象是，App Store(至少是包含免费英文应用的部分)被那些为娱乐而设计的应用(游戏、娱乐、照片和视频、社交网络、体育、音乐等)所主导。)，而具有实用目的(教育、购物、实用、生产力、生活方式等)的 app。)都比较少见。然而，有趣的应用程序数量最多的事实并不意味着它们也拥有最多的用户——需求可能与提供的不一样。让我们继续检查 Google Play 数据集的`Genres`和`Category`列(这两列似乎是相关的)。
 
-```
+```py
 display_table(android_final, 1) # Category
 ```
 
-```
+```py
 FAMILY : 18.907942238267147
 GAME : 9.724729241877256
 TOOLS : 8.461191335740072
@@ -546,11 +546,11 @@ Google Play 上的情况似乎有很大不同:没有那么多应用程序是为�
 
 即便如此，与 App Store 相比，实用应用似乎在 Google Play 上有更好的表现。我们看到的`Genres`列的频率表也证实了这一点:
 
-```
+```py
 display_table(android_final, -4)
 ```
 
-```
+```py
 Tools : 8.449909747292418
 Entertainment : 6.069494584837545
 Education : 5.347472924187725
@@ -673,7 +673,7 @@ Adventure;Education : 0.01128158844765343
 
 找出哪种类型最受欢迎(拥有最多用户)的一种方法是计算每种应用类型的平均安装次数。对于 Google Play 数据集，我们可以在`Installs`列中找到这些信息，但是对于 App Store 数据集，却缺少这些信息。作为一种变通方法，我们将用户评级的总数作为代理，这可以在`rating_count_tot`应用程序中找到。下面，我们计算了 App Store 上每个应用类型的平均用户评分数:
 
-```
+```py
 ### Generating a frequency table to get the unique app genres ###
 genres_ios = freq_table(ios_final, -5)
 
@@ -695,7 +695,7 @@ for genre in genres_ios:
     print(genre, ':', avg_n_ratings)
 ```
 
-```
+```py
 Social Networking : 71548.34905660378
 Photo & Video : 28441.54375
 Games : 22788.6696905016
@@ -723,13 +723,13 @@ Medical : 612.0
 
 平均而言，导航应用的用户评论数量最多，但这一数字受到 Waze 和谷歌地图的严重影响，这两家公司的用户评论总数接近 50 万:
 
-```
+```py
 for app in ios_final:
     if app[-5] == 'Navigation':
         print(app[1], ':', app[5]) # print name and number of ratings
 ```
 
-```
+```py
 Waze - GPS Navigation, Maps & Real-time Traffic : 345046
 Google Maps - Navigation & Transit : 154911
 Geocaching® : 12811
@@ -740,13 +740,13 @@ Railway Route Search : 5
 
 同样的模式也适用于社交网络应用，其平均数量受到脸书、Pinterest、Skype 等少数巨头的严重影响。这同样适用于音乐应用，潘多拉、Spotify 和 Shazam 等几家大公司严重影响了平均数量。我们的目标是找到流行类型，但导航、社交网络或音乐应用可能看起来比实际更受欢迎。拥有数十万用户评分的极少数应用似乎扭曲了平均评分数，而其他应用可能很难超过 1 万的门槛。我们可以通过删除每个流派的这些非常受欢迎的应用程序来获得更好的图片，然后重新计算平均值，但我们将把这一级别的细节留到以后。参考应用平均有 74，942 个用户评级，但实际上是《圣经》和[Dictionary.com](https://Dictionary.com)扭曲了平均评级:
 
-```
+```py
 for app in ios_final:
     if app[-5] == 'Reference':
         print(app[1], ':', app[5])
 ```
 
-```
+```py
 Bible : 985920
 Dictionary.com Dictionary & Thesaurus : 200047
 Dictionary.com Dictionary & Thesaurus for iPad : 54175
@@ -777,11 +777,11 @@ Jishokun-Japanese English Dictionary & Translator : 0
 
 对于 Google Play 市场，我们实际上有安装数量的数据，所以我们应该能够更清楚地了解流派的受欢迎程度。然而，安装数量似乎不够精确—我们可以看到大多数值是开放式的(100+，1，000+，5，000+等)。):
 
-```
+```py
 display_table(android_final, 5) # the Installs columns
 ```
 
-```
+```py
 1,000,000+ : 15.726534296028879
 100,000+ : 11.552346570397113
 10,000,000+ : 10.548285198555957
@@ -807,7 +807,7 @@ display_table(android_final, 5) # the Installs columns
 
 这个数据的一个问题是不精确。例如，我们不知道一个超过 100，000 次安装的应用程序有 100，000 次安装、200，000 次安装还是 350，000 次安装。然而，我们不需要非常精确的数据——我们只想知道哪些应用类型吸引了最多的用户，我们不需要关于用户数量的精确数据。我们将保持这些数字不变，这意味着我们将认为一个安装数超过 100，000 的应用程序有 100，000 次安装，一个安装数超过 100，000 的应用程序有 1，000，000 次安装，以此类推。然而，为了执行计算，我们需要将每个安装号转换为`float`——这意味着我们需要删除逗号和加号字符，否则转换将失败并引发错误。我们将在下面的循环中直接这样做，在这里我们也计算每个流派(类别)的平均安装数。
 
-```
+```py
 ### Generating a frequency table to get the unique app genres ###
 categories_android = freq_table(android_final, 1)
 
@@ -831,7 +831,7 @@ for category in categories_android:
     print(category, ':', avg_n_installs)
 ```
 
-```
+```py
 ART_AND_DESIGN : 1986335.0877192982
 AUTO_AND_VEHICLES : 647317.8170731707
 BEAUTY : 513151.88679245283
@@ -869,7 +869,7 @@ MAPS_AND_NAVIGATION : 4056941.7741935486
 
 平均而言，通信应用程序的安装数量最多:38，456，119。这个数字被几个安装量超过 10 亿的应用程序(WhatsApp、Facebook Messenger、Skype、Google Chrome、Gmail 和 Hangouts)和其他几个安装量超过 1 亿和 5 亿的应用程序严重扭曲:
 
-```
+```py
 for app in android_final:
     if app[1] == 'COMMUNICATION' and (app[5] == '1,000,000,000+'
                                       or app[5] == '500,000,000+'
@@ -877,7 +877,7 @@ for app in android_final:
         print(app[0], ':', app[5])
 ```
 
-```
+```py
 WhatsApp Messenger : 1,000,000,000+
 imo beta free calls and text : 100,000,000+
 Android Messages : 100,000,000+
@@ -909,7 +909,7 @@ BBM - Free Calls & Messages : 100,000,000+
 
 如果我们删除所有安装量超过 1 亿的通信应用，平均安装量将减少 10 倍以上:
 
-```
+```py
 under_100_m = []
 
 for app in android_final:
@@ -922,19 +922,19 @@ for app in android_final:
 sum(under_100_m) / len(under_100_m)
 ```
 
-```
+```py
 2821347.6231027693
 ```
 
 视频播放器类别也是如此，以 24，727，872 的安装量位居第二。这个市场被 Youtube、Google Play Movies & TV 和 MX Player 等应用程序所主导。社交应用也是如此(我们有脸书、Instagram、Google+等巨头。)、摄影应用(Google Photos 和其他流行的照片编辑器)，或者生产力应用(Microsoft Word、Dropbox、Google Calendar、Evernote 等)。).同样，主要的担忧是这些应用类型可能看起来比它们实际上更受欢迎。此外，这些利基市场似乎被少数几个难以抗衡的巨头所主导。游戏类型似乎很受欢迎，但之前我们发现这部分市场似乎有点饱和，所以如果可能的话，我们希望提供不同的应用推荐。书籍和参考类书籍看起来也很受欢迎，平均安装次数为 8，767，811 次。更深入地探索这一点很有意思，因为我们发现这种类型在 App Store 上有一些潜力，我们的目标是推荐一种在 App Store 和 Google Play 上都有盈利潜力的应用类型。让我们来看看这一类型的一些应用程序及其安装数量:
 
-```
+```py
 for app in android_final:
     if app[1] == 'BOOKS_AND_REFERENCE':
         print(app[0], ':', app[5])
 ```
 
-```
+```py
 E-Book Read - Read Book for free : 50,000+
 Download free book with green book : 100,000+
 Wikipedia : 10,000,000+
@@ -1129,7 +1129,7 @@ The SCP Foundation DB fr nn5n : 1,000+
 
 书籍和参考类包括各种应用程序:处理和阅读电子书的软件、各种图书馆、字典、编程或语言教程等。似乎仍然有少数非常受欢迎的应用扭曲了平均水平:
 
-```
+```py
 for app in android_final:
     if app[1] == 'BOOKS_AND_REFERENCE' and (app[5] == '1,000,000,000+'
                                             or app[5] == '500,000,000+'
@@ -1137,7 +1137,7 @@ for app in android_final:
         print(app[0], ':', app[5])
 ```
 
-```
+```py
 Google Play Books : 1,000,000,000+
 Bible : 100,000,000+
 Amazon Kindle : 100,000,000+
@@ -1147,7 +1147,7 @@ Audiobooks from Audible : 100,000,000+
 
 然而，看起来只有几个非常受欢迎的应用程序，所以这个市场仍然显示出潜力。让我们根据受欢迎程度居中(下载量在 1，000，000 到 100，000，000 之间)的应用类型，尝试获得一些应用创意:
 
-```
+```py
 for app in android_final:
     if app[1] == 'BOOKS_AND_REFERENCE' and (app[5] == '1,000,000+'
                                             or app[5] == '5,000,000+'
@@ -1156,7 +1156,7 @@ for app in android_final:
         print(app[0], ':', app[5])
 ```
 
-```
+```py
 Wikipedia : 10,000,000+
 Cool Reader : 10,000,000+
 Book store : 1,000,000+

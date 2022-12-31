@@ -54,7 +54,7 @@ April 16, 2019![text-classification-python-spacy-linear-regression](img/80cb94b2
 
 此时，我们的文本已经被标记化了，但是`spaCy`将标记化的文本存储为一个文档，我们希望以列表的形式查看它，所以我们将创建一个`for`循环来遍历我们的文档，将它在我们的文本字符串中找到的每个单词标记添加到一个名为`token_list`的列表中，这样我们可以更好地了解单词是如何被标记化的。
 
-```
+```py
 # Word tokenization
 from spacy.lang.en import English
 
@@ -74,7 +74,7 @@ for token in my_doc:
 print(token_list) 
 ```
 
-```
+```py
 ['When', 'learning', 'data', 'science', ',', 'you', 'should', "n't", 'get', 'discouraged', '!', '\n', 'Challenges', 'and', 'setbacks', 'are', "n't", 'failures', ',', 'they', "'re", 'just', 'part', 'of', 'the', 'journey', '.', 'You', "'ve", 'got', 'this', '!'] 
 ```
 
@@ -86,7 +86,7 @@ print(token_list)
 
 在下面的代码中，`spaCy`标记文本并创建一个 Doc 对象。这个 Doc 对象使用我们的预处理管道的组件标记器、解析器和实体识别器将文本分解成组件。从这个管道中，我们可以提取任何组件，但是这里我们将使用`sentencizer`组件来访问句子标记。
 
-```
+```py
 # sentence tokenization
 
 # Load English tokenizer, tagger, parser, NER and word vectors
@@ -111,7 +111,7 @@ for sent in doc.sents:
 print(sents_list) 
 ```
 
-```
+```py
 ["When learning data science, you shouldn't get discouraged!", "\nChallenges and setbacks aren't failures, they're just part of the journey.", "You've got this!"] 
 ```
 
@@ -123,7 +123,7 @@ print(sents_list)
 
 让我们看看默认情况下包含的停用词`spaCy`。我们将导入`spaCy`并将它的英语语言模型中的停用词赋给一个名为`spacy_stopwords`的变量，这样我们就可以看一看了。
 
-```
+```py
 #Stop words
 #importing stop words from English language.
 import spacy
@@ -136,7 +136,7 @@ print('Number of stop words: %d' % len(spacy_stopwords))
 print('First ten stop words: %s' % list(spacy_stopwords)[:20]) 
 ```
 
-```
+```py
 Number of stop words: 312
 First ten stop words: ['was', 'various', 'fifty', "'s", 'used', 'once', 'because', 'himself', 'can', 'name', 'many', 'seems', 'others', 'something', 'anyhow', 'nowhere', 'serious', 'forty', 'he', 'now'] 
 ```
@@ -151,7 +151,7 @@ First ten stop words: ['was', 'various', 'fifty', "'s", 'used', 'once', 'because
 
 相反，我们将创建一个名为`filtered_sent`的空列表，然后遍历我们的`doc`变量，查看源文本中的每个标记化单词。`spaCy`包括一堆[有用的令牌属性](https://spacy.io/usage/rule-based-matching/#adding-patterns-attributes)，我们将使用其中一个名为`is_stop`的属性来识别*不在停用词表*中的单词，然后将它们添加到我们的`filtered_sent`列表中。
 
-```
+```py
 from spacy.lang.en.stop_words import STOP_WORDS
 
 #Implementation of stop words:
@@ -167,7 +167,7 @@ for word in doc:
 print("Filtered Sentence:",filtered_sent) 
 ```
 
-```
+```py
 Filtered Sentence: [learning, data, science, ,, discouraged, !,
 , Challenges, setbacks, failures, ,, journey, ., got, !] 
 ```
@@ -186,7 +186,7 @@ Filtered Sentence: [learning, data, science, ,, discouraged, !,
 
 由于`spaCy`包含了一种将单词分解成其*词条*的内置方式，我们可以简单地使用它来进行词条化。在下面这个非常简单的例子中，我们将使用`.lemma_`来产生我们正在分析的每个单词的词条。
 
-```
+```py
 # Implementing lemmatization
 lem = nlp("run runs running runner")
 # finding lemma for each word
@@ -194,7 +194,7 @@ for word in lem:
     print(word.text,word.lemma_) 
 ```
 
-```
+```py
 run run
 runs run
 running run
@@ -209,7 +209,7 @@ runner runner
 
 (注意`u"All is well that ends well."`中的 *u* 表示该字符串是 Unicode 字符串。)
 
-```
+```py
 # POS tagging
 
 # importing the model en_core_web_sm of English for vocabluary, syntax & entities
@@ -225,7 +225,7 @@ for word in docs:
     print(word.text,word.pos_) 
 ```
 
-```
+```py
 All DET
 is VERB
 well ADV
@@ -243,7 +243,7 @@ well ADV
 
 让我们使用华盛顿邮报最近的文章[中的几段来尝试一些实体检测。我们将使用`.label`为文本中检测到的每个实体获取一个标签，然后我们将使用`spaCy`的`displaCy`可视化工具以更直观的格式查看这些实体。](https://www.washingtonpost.com/health/2019/04/09/new-york-orders-measles-vaccinations-brooklyn-amid-outbreak-mayor-says/)
 
-```
+```py
 #for visualization of Entity detection importing displacy from spacy:
 
 from spacy import displacy
@@ -258,7 +258,7 @@ entities=[(i, i.label_, i.label) for i in nytimes.ents]
 entities 
 ```
 
-```
+```py
 [(New York City, 'GPE', 384),
  (Tuesday, 'DATE', 391),
  (At least 285, 'CARDINAL', 397),
@@ -277,7 +277,7 @@ entities
 
 使用`displaCy`,我们还可以可视化我们的输入文本，用颜色突出显示每个被识别的实体并贴上标签。我们将使用`style = "ent"`告诉`displaCy`我们想要在这里可视化实体。
 
-```
+```py
 displacy.render(nytimes, style = "ent",jupyter = True) 
 ```
 
@@ -291,7 +291,7 @@ New York City GPE on Tuesday DATE declared a public health emergency and ordered
 
 这样做相当复杂，但谢天谢地`spaCy`会替我们处理这项工作！下面，我们再给`spaCy`一个从新闻标题中拉出来的短句。然后我们将使用另一个名为`noun_chunks`的`spaCy`，它将输入分解为名词和描述它们的单词，并遍历我们的源文本中的每个块，识别单词、其词根、其依存标识以及它属于哪个块。
 
-```
+```py
 docp = nlp (" In pursuit of a wall, President Trump ran into one.")
 
 for chunk in docp.noun_chunks:
@@ -299,7 +299,7 @@ for chunk in docp.noun_chunks:
           chunk.root.head.text) 
 ```
 
-```
+```py
 pursuit pursuit pobj In
 a wall wall pobj of
 President Trump Trump nsubj ran 
@@ -307,7 +307,7 @@ President Trump Trump nsubj ran
 
 这个输出可能有点难以理解，但是因为我们已经导入了`displaCy`可视化工具，我们可以用它来查看使用`style = "dep"`的依赖关系图，这样更容易理解:
 
-```
+```py
 displacy.render(docp, style="dep", jupyter= True) 
 ```
 
@@ -329,7 +329,7 @@ Click to expand
 
 使用`spaCy`的`en_core_web_sm`模型，让我们看看一个单词的向量的长度，以及使用`.vector`和`.shape`的向量是什么样子。
 
-```
+```py
 import en_core_web_sm
 nlp = en_core_web_sm.load()
 mango = nlp(u'mango')
@@ -337,7 +337,7 @@ print(mango.vector.shape)
 print(mango.vector) 
 ```
 
-```
+```py
 (96,)
 [ 1.0466383  -1.5323697  -0.72177905 -2.4700649  -0.2715162   1.1589639
   1.7113379  -0.31615403 -2.0978343   1.837553    1.4681302   2.728043
@@ -371,7 +371,7 @@ print(mango.vector)
 
 我们将从导入这个任务所需的库开始。我们已经导入了`spaCy`，但是我们还需要`pandas`和`scikit-learn`来帮助我们的分析。
 
-```
+```py
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
 from sklearn.base import TransformerMixin
@@ -390,12 +390,12 @@ from sklearn.pipeline import Pipeline
 
 让我们首先将数据读入一个`pandas`数据帧，然后使用 pandas 的内置函数来帮助我们更仔细地查看我们的数据。
 
-```
+```py
 # Loading TSV file
 df_amazon = pd.read_csv ("datasets/amazon_alexa.tsv", sep="\t") 
 ```
 
-```
+```py
 # Top 5 records
 df_amazon.head() 
 ```
@@ -408,21 +408,21 @@ df_amazon.head()
 | three | five | 2018 年 7 月 31 日 | 木炭织物 | 我从这件事情中获得了很多乐趣。我的 4 … | one |
 | four | five | 2018 年 7 月 31 日 | 木炭织物 | 音乐 | one |
 
-```
+```py
 # shape of dataframe
 df_amazon.shape 
 ```
 
-```
+```py
 (3150, 5) 
 ```
 
-```
+```py
 # View data information
 df_amazon.info() 
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 3150 entries, 0 to 3149
 Data columns (total 5 columns):
@@ -435,12 +435,12 @@ dtypes: int64(2), object(3)
 memory usage: 123.1+ KB 
 ```
 
-```
+```py
 # Feedback Value count
 df_amazon.feedback.value_counts() 
 ```
 
-```
+```py
 1    2893
 0     257
 Name: feedback, dtype: int64 
@@ -454,7 +454,7 @@ Name: feedback, dtype: int64
 
 然后，我们将创建一个`spacy_tokenizer()`函数，它接受一个句子作为输入，并将该句子处理成记号，执行词汇化、小写和删除停用词。这类似于我们在本教程前面的例子中所做的，但是现在我们把它们放在一个函数中，用于预处理我们正在分析的每个用户评论。
 
-```
+```py
 import string
 from spacy.lang.en.stop_words import STOP_WORDS
 from spacy.lang.en import English
@@ -488,7 +488,7 @@ def spacy_tokenizer(sentence):
 
 为了进一步清理我们的文本数据，我们还想创建一个自定义的转换器来删除起始和结束空格，并将文本转换成小写。这里，我们将创建一个自定义的`predictors`类，它继承了 TransformerMixin 类。该类覆盖 transform、fit 和 get_parrams 方法。我们还将创建一个`clean_text()`函数，删除空格并将文本转换成小写。
 
-```
+```py
 # Custom transformer using spaCy
 class predictors(TransformerMixin):
     def transform(self, X, **transform_params):
@@ -517,7 +517,7 @@ def clean_text(text):
 
 n 元语法是给定文本中相邻单词的组合，其中 *n* 是记号中包含的单词数。比如在句子“2022 年足球世界杯谁会赢？” *unigrams* 是一系列单词，比如“谁”、“威尔”、“赢”等等。*二元模型*将是两个连续单词的序列，例如“谁将会”、“将会赢”等等。因此，我们将在下面的代码中使用的`ngram_range`参数设置了我们的 ngrams 的下限和上限(我们将使用 unigrams)。然后我们将把 ngrams 分配给`bow_vector`。
 
-```
+```py
 bow_vector = CountVectorizer(tokenizer = spacy_tokenizer, ngram_range=(1,1)) 
 ```
 
@@ -529,7 +529,7 @@ bow_vector = CountVectorizer(tokenizer = spacy_tokenizer, ngram_range=(1,1))
 
 当然，我们不必手动计算！我们可以使用`scikit-learn`的 TfidfVectorizer 自动生成 TF-IDF。同样，我们将告诉它使用我们用`spaCy`构建的自定义标记器，然后我们将结果赋给变量`tfidf_vector`。
 
-```
+```py
 tfidf_vector = TfidfVectorizer(tokenizer = spacy_tokenizer) 
 ```
 
@@ -539,7 +539,7 @@ tfidf_vector = TfidfVectorizer(tokenizer = spacy_tokenizer)
 
 为了方便起见，`scikit-learn`为我们提供了一个内置函数:`train_test_split()`。我们只需要告诉它我们希望它分割的特性集(`X`)、我们希望它测试的标签(`ylabels`)以及我们希望用于测试集的大小(以十进制形式表示为百分比)。
 
-```
+```py
 from sklearn.model_selection import train_test_split
 
 X = df_amazon['verified_reviews'] # the features we want to analyze
@@ -556,7 +556,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, ylabels, test_size=0.3)
 
 一旦这个管道建立起来，我们将使用`fit()`来安装管道组件。
 
-```
+```py
 # Logistic Regression Classifier
 from sklearn.linear_model import LogisticRegression
 classifier = LogisticRegression()
@@ -570,7 +570,7 @@ pipe = Pipeline([("cleaner", predictors()),
 pipe.fit(X_train,y_train) 
 ```
 
-```
+```py
 Pipeline(memory=None,
      steps=[('cleaner', <__main__.predictors object at 0x00000254DA6F8940>), ('vectorizer', CountVectorizer(analyzer='word', binary=False, decode_error='strict',
         dtype=<class 'numpy.int64'>, encoding='utf-8', input='content',
@@ -589,7 +589,7 @@ Pipeline(memory=None,
 
 上面的文档链接提供了每个术语的更多细节和更精确的定义，但底线是所有三个指标都是从 0 到 1 测量的，其中 1 表示预测完全正确。因此，我们的模型的分数越接近 1 越好。
 
-```
+```py
 from sklearn import metrics
 # Predicting with a test dataset
 predicted = pipe.predict(X_test)
@@ -600,7 +600,7 @@ print("Logistic Regression Precision:",metrics.precision_score(y_test, predicted
 print("Logistic Regression Recall:",metrics.recall_score(y_test, predicted)) 
 ```
 
-```
+```py
 Logistic Regression Accuracy: 0.9417989417989417
 Logistic Regression Precision: 0.9528508771929824
 Logistic Regression Recall: 0.9863791146424518 

@@ -42,7 +42,7 @@ Lending Club 提供有关已完成贷款(贷款申请得到 Lending Club 的批�
 
 首先，让我们将 CSV 文件读入 pandas。
 
-```
+```py
 import pandas as pd
 loans_2007 = pd.read_csv('LoanStats3a.csv')
 loans_2007.head(2)
@@ -50,7 +50,7 @@ loans_2007.head(2)
 
 我们得到两个输出，第一个是警告。
 
-```
+```py
 /home/srinify/anaconda3/envs/dq2/lib/python3.6/site-packages/IPython/core/interactiveshell.py:2785: DtypeWarning: Columns (0,1,2,3,4,7,13,18,24,25,27,28,29,30,31,32,34,36,37,38,39,40,41,42,43,44,46,47,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,123,124,125,126,127,128,129,130,131,132,133,134,135,136,142,143,144) have mixed types. Specify dtype option on import or set low_memory=False.  interactivity=interactivity, compiler=compiler, result=result)
 ```
 
@@ -65,36 +65,36 @@ loans_2007.head(2)
 
 第二个输出更成问题，因为数据帧存储数据的方式有问题。JupyterLab 内置了一个终端环境，因此我们可以打开它并使用 bash 命令`head`来观察原始文件的前两行:
 
-```
+```py
 head -2 LoanStats3a.csv
 ```
 
 虽然第二行包含了我们在 CSV 文件中期望的列名，但是当 pandas 试图解析该文件时，第一行似乎抛出了 DataFrame 的格式:
 
-```
+```py
 Notes offered by Prospectus (https://www.lendingclub.com/info/prospectus.action)
 ```
 
 添加一个详述您的观察结果的 Markdown 单元格，并添加一个将观察结果考虑在内的 code 单元格。
 
-```
+```py
  import pandas as pd
 loans_2007 = pd.read_csv('LoanStats3a.csv', skiprows=1, low_memory=False)
 ```
 
 从 [Lending Club 下载页面](https://www.lendingclub.com/info/download-data.action)阅读数据字典，了解哪些栏目不包含有用的功能信息。`desc`和`url`列似乎很符合这个标准。
 
-```
+```py
 loans_2007 = loans_2007.drop(['desc', 'url'],axis=1)
 ```
 
 下一步是删除丢失行超过 50%的任何列。使用一个单元格来研究哪些列符合该条件，使用另一个单元格来实际删除这些列。
 
-```
+```py
 loans_2007.isnull().sum()/len(loans_2007)
 ```
 
-```
+```py
 loans_2007 = loans_2007.dropna(thresh=half_count, axis=1)
 ```
 
@@ -117,7 +117,7 @@ loans_2007 = loans_2007.dropna(thresh=half_count, axis=1)
 
 这是使用单个函数封装数据清理代码的管道的第一次迭代:
 
-```
+```py
  import pandas as pd
 def import_clean(file_list):
     frames = []
@@ -166,7 +166,7 @@ frames = import_clean(['LoanStats3a.csv'])
 
 下面是一个例子，我们调整了函数以适应不同的跌落阈值:
 
-```
+```py
 import pandas as pd
 def import_clean(file_list, threshold=0.5):
     frames = []
@@ -203,7 +203,7 @@ frames = import_clean(['LoanStats3a.csv'], threshold=0.7)
 
 这个管道可以扩展到数据科学工作流的所有阶段。这里有一些框架代码，预览这是什么样子。
 
-```
+```py
  import pandas as pd
 def import_clean(file_list, threshold=0.5):
     ## Code

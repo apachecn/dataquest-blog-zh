@@ -14,7 +14,7 @@ r 是一种用于统计计算的编程语言，对于执行数据科学任务尤
 
 要从 CRAN 安装 R 包，我们可以使用`install.packages()`功能:
 
-```
+```py
 install.packages('readr')
 ```
 
@@ -22,7 +22,7 @@ install.packages('readr')
 
 我们可以用同一个函数一次安装几个 R 包。在这种情况下，我们需要首先应用`c()`函数来创建一个包含所有需要的包作为其项目的字符向量:
 
-```
+```py
 install.packages(c('readr', 'ggplot2', 'tidyr'))
 ```
 
@@ -61,25 +61,25 @@ install.packages(c('readr', 'ggplot2', 'tidyr'))
     *   对于 R (v4.0.0)的新版本，将`PATH='${RTOOLS40_HOME}\usr\bin;${PATH}'`添加到`.Renviron`文件中
 *   从 CRAN 安装 *devtools* 包:
 
-```
+```py
 install.packages('devtools')
 ```
 
 运筹学
 
-```
+```py
 install.packages('devtools', lib='~/R/lib')
 ```
 
 *   Call the `install_github()` function from the *devtools* package (no need to download the whole package) using the following syntax:
 
-    ```
+    ```py
     devtools::install_github(username/repo_name[/subdir])
     ```
 
     例如:
 
-```
+```py
 devtools::install_github('rstudio/shiny')
 ```
 
@@ -89,7 +89,7 @@ devtools::install_github('rstudio/shiny')
 
 如果我们需要安装一个既没有存储在 CRAN 上也没有存储在 GitHub 上，而是存储在另一个外部存储库中的包，我们必须再次使用`install.packages()`函数，这一次有两个可选参数:`repos`表示必要存储库的 URL，`dependencies`设置为`TRUE`或`FALSE`，这取决于我们是否也想安装它们。例如:
 
-```
+```py
 install.packages('furrr', repos='http://cran.us.r-project.org', dependencies=TRUE)
 ```
 
@@ -101,7 +101,7 @@ install.packages('furrr', repos='http://cran.us.r-project.org', dependencies=TRU
 
 如果你有一个 R 包以. zip 或 tar.gz 文件的形式下载到你的本地机器上，你可以使用`install.packages()`函数来安装它，该函数传递 zip 文件的保存路径(这实际上是`pkgs`参数)，将`repos`设置为`NULL`，将`type`设置为`source`。例如:
 
-```
+```py
 install.packages('C:/Users/User/Downloads/abc_2.1.zip', repos=NULL, type='source')
 ```
 
@@ -120,7 +120,7 @@ install.packages('C:/Users/User/Downloads/abc_2.1.zip', repos=NULL, type='source
 
 一旦在我们的计算机上安装了必要的包，下一步就是加载每个包来开始使用它们。虽然我们只需要安装每个包一次(例如，第一次在特定的计算机上使用 R ),但是我们必须为每个新的 R 会话加载每个包。为此，我们使用`library()`函数并传入包名，如下所示:
 
-```
+```py
 library(readr)
 ```
 

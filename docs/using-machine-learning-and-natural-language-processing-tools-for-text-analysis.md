@@ -31,7 +31,7 @@ February 28, 2022![](img/ca7bd0308cc1e6822b1d947812edc0a1.png)
 
 网上有大量的 python 情感分析模型和工具。我们将关注最简单的一个:执行一个基本的情感分析需要两行代码:
 
-```
+```py
 # import the package:
 from pattern.en import sentiment
 # perform the analysis:
@@ -41,33 +41,33 @@ sentiment(x)
 
 输出:
 
-```
+```py
 (0.7000000000000001, 0.825)
 ```
 
 如上所示，导入包后，我们只需调用情感函数，为它提供一个字符串值，瞧！输出是一个元组，第一个值是“极性”(句子在从-1 到 1 的范围内有多积极)。第二个值是主观性，它告诉我们算法对其第一个值的评估有多确定，这次标度从 0 开始，到 1 结束。让我们再看几个例子:
 
-```
+```py
 y = 'plot looks terrible, spines are too small'
 sentiment(y)
 ```
 
 输出:
 
-```
+```py
 (-0.625, 0.7)
 ```
 
 我们得到的是一个相当“低”的第一值，算法对其极性评估仍然很有信心。让我们试试更难的:
 
-```
+```py
 z = 'improve the comment, first line looks bad'
 sentiment(z)
 ```
 
 输出:
 
-```
+```py
 (-0.22499999999999992, 0.5)
 ```
 
@@ -75,7 +75,7 @@ sentiment(z)
 
 让我们将情感函数应用于我们的反馈内容:
 
-```
+```py
 df['sentiment'] = df['feedback_clean2_lem'].apply(lambda x: sentiment(x))
 df['polarity'] = df['sentiment'].str[0]
 df['subjectivity'] = df['sentiment'].str[1]
@@ -84,7 +84,7 @@ df = df.drop(columns='sentiment')
 
 现在，我们已经衡量了每个反馈帖子的极性和主观性，让我们看看每个主题有何不同:
 
-```
+```py
 top15 = df['short_title'].value_counts()[:15].index
 df[df['short_title'].isin(top15)].groupby('short_title')[['polarity','subjectivity']].mean().sort_values('subjectivity')
 ```
@@ -119,7 +119,7 @@ Rake 包提供了从文本中提取的所有 n 元文法及其权重的列表。
 
 请注意，该模型使用停用词来评估句子中哪些词是重要的。如果我们给这个模型输入清除了停用词的文本，我们不会得到任何结果。
 
-```
+```py
 from rake_nltk import Rake
 # set the parameteres (length of keyword phrase):
 r = Rake(include_repeated_phrases=False, min_length=1, max_length=3)
@@ -132,7 +132,7 @@ words_ranks
 
 输出:
 
-```
+```py
 [(9.0, '“ professional ”'),
  (9.0, 'avoiding colloquial language'),
  (8.0, 'nicely structured project'),
@@ -142,7 +142,7 @@ words_ranks
 
 在这个例子中，Rake 认为“专业”或“避免口语化语言”是输入文本中最重要的关键词。为了进一步分析，我们不会对关键字的数值感兴趣。我们只想收到每个帖子的几个热门关键词。我们将设计一个简单的函数，只提取顶部的关键字，并将其应用于“反馈”列:
 
-```
+```py
 def rake_it(text):
     r.extract_keywords_from_text(text)
     r.get_ranked_phrases()
@@ -156,7 +156,7 @@ df['rake_words'] = df['feedback'].apply(lambda x: rake_it(x))
 
 把每个帖子的关键词都提取出来了，我们来看看哪些是最受欢迎的！记住它们是作为一个列表存储在一个单元格中的，所以我们必须处理这个障碍:
 
-```
+```py
 # function from: towardsdatascience.com/dealing-with-list-values-in-pandas-dataframes-a177e534f173
 def to_1D(series):
     return pd.Series([x for _list in series for x in _list])
@@ -166,7 +166,7 @@ to_1D(df['rake_words']).value_counts()[:10]
 
 输出:
 
-```
+```py
 jupyter file menu        24
 guided project use       24
 happy coding :)          22
@@ -188,7 +188,7 @@ dtype: int64
 
 我们将从一个反馈帖子开始。让我们导入必要的包，编译文本并创建所需的字典和矩阵(这是机器学习，因此每个模型都需要特定的输入):
 
-```
+```py
 # Importing:
 import gensim
 from gensim import corpora
@@ -209,7 +209,7 @@ doc_term_matrix = [dictionary.doc2bow(doc) for doc in docs_out]
 
 做了所有的准备工作之后，就该训练我们的模型并提取结果了。您可能已经注意到，我们可以手动设置许多参数。举几个例子:话题的数量，每个话题我们用了多少单词。但是清单还在继续，就像许多 ML 模型一样，你可以花很多时间调整这些参数来完善你的模型。
 
-```
+```py
 # Running and Trainign LDA model on the document term matrix.
 Lda = gensim.models.ldamodel.LdaModel
 ldamodel = Lda(doc_term_matrix, num_topics=5, id2word = dictionary, passes=50, random_state=4)
@@ -220,7 +220,7 @@ ldamodel.print_topics(num_topics=5, num_words=4)
 
 输出:
 
-```
+```py
 [(0, '0.032*"notebook" + 0.032*"look" + 0.032*"process" + 0.032*"month"'),
  (1, '0.032*"notebook" + 0.032*"look" + 0.032*"process" + 0.032*"month"'),
  (2, '0.032*"important" + 0.032*"stay" + 0.032*"datasets" + 0.032*"process"'),
@@ -233,7 +233,7 @@ ldamodel.print_topics(num_topics=5, num_words=4)
 
 让我们继续将该模型应用于每个反馈帖子。为了简化我们的生活，我们将只提取主题词，而不是“权重”值。这样，我们可以轻松地对提取的主题执行 value_counts，并查看哪些主题是最受欢迎的(根据模型)。为了对列中的每个单元格进行主题建模，我们将设计一个函数。作为输入值，我们将使用单元格的内容(文本)和主题的字数:
 
-```
+```py
 def get_topic(x,n):
     """
     extract list of topics given text(x) and number(n) of words for topic
@@ -257,14 +257,14 @@ def get_topic(x,n):
 
 让我们看看最大长度为 4 个单词的主题是什么样子的:
 
-```
+```py
 df['topic_4'] = df['feedback_clean2_lem'].apply(lambda x: get_topic(x,4))
 to_1D(df['topic_4']).value_counts()[:10]
 ```
 
 输出:
 
-```
+```py
 [keep, nice]                                               8
 [nice, perform]                                            4
 [nice]                                                     4
@@ -280,14 +280,14 @@ dtype: int64
 
 现在，让我们检查最多 3 个词的主题:
 
-```
+```py
 df['topic_3'] = df['feedback_clean2_lem'].apply(lambda x: get_topic(x,3))
 to_1D(df['topic_3']).value_counts()[:10]
 ```
 
 输出:
 
-```
+```py
 [keep, nice]                       8
 [share, thank, please]             4
 [nan]                              4
@@ -310,7 +310,7 @@ dtype: int64
 
 Kmeans 模型可以基于各种输入对数据进行聚类，这可能是最流行的无监督机器学习模型。只需选择您希望数据分配到多少个集群，基于什么功能和瞧。作为一个 ML 模型，我们不能只给它提供原始文本，我们必须对文本数据进行矢量化，然后给模型提供原始文本。本质上，我们将文本数据转换成数字数据。我们如何做取决于我们自己，有许多方法可以对数据进行矢量化，让我们试试 TfidfVectorizer:
 
-```
+```py
 # imports:
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
@@ -327,13 +327,13 @@ df['label'] = Kmean.labels_
 
 现在，让我们看看不同的集群是否有很大的极性差异:
 
-```
+```py
 df.groupby('label')['polarity'].mean()
 ```
 
 输出:
 
-```
+```py
 label
 0    0.405397
 1    0.312328
@@ -348,7 +348,7 @@ Name: polarity, dtype: float64
 
 实际上，让我们根据我们的模型分配的集群编号检查一些其他的编号:
 
-```
+```py
  #group data:
 polar = df.groupby('label')['polarity'].mean()
 subj = df.groupby('label')['subjectivity'].mean()
@@ -382,7 +382,7 @@ cluster_df
 
 如前所述:每个反馈帖子的内容是赞美和建设性批评的相当复杂的混合。这就是为什么我们的聚类模型在被要求对帖子进行聚类时表现不佳。但是，如果我们将所有的帖子分成句子，并要求模型将句子聚集起来，我们应该会改善我们的结果。
 
-```
+```py
 from nltk.corpus import stopwords
 stop = set(stopwords.words('english'))
 from nltk import sent_tokenize
@@ -435,13 +435,13 @@ sentences['label'] = Kmean.labels_
 
 现在让我们来看看每个标签最受欢迎的关键词:
 
-```
+```py
 to_1D(sentences[sentences['label'] == 0]['keywords']).value_counts()[:10]
 ```
 
 输出:
 
-```
+```py
 everything looks nice     15
 everything looks good     13
 sql style guide           10
@@ -455,13 +455,13 @@ jupyter notebook file      5
 dtype: int64
 ```
 
-```
+```py
 to_1D(sentences[sentences['label'] == 2]['keywords']).value_counts()[:10]
 ```
 
 输出:
 
-```
+```py
 first code cell            8
 avoid code repetition      7
 items (): spine            4
@@ -479,7 +479,7 @@ dtype: int64
 
 类似于对帖子和句子进行聚类，我们可以对 n 元语法进行聚类:
 
-```
+```py
 from nltk.util import ngrams 
 import collections
 
@@ -507,7 +507,7 @@ trigram_df['label'] = Kmean.labels_
 
 如果我们想检查一个特定的单词在文本中是如何使用的呢？我们想看看这个特定单词前后的单词。在 concordance 的一点帮助下，我们可以很快地看一看:
 
-```
+```py
 from nltk.text import Text 
 text = nltk.Text(word_tokenize(df['feedback'].sum()))
 text.concordance("plot", lines=10)
@@ -515,7 +515,7 @@ text.concordance("plot", lines=10)
 
 输出:
 
-```
+```py
 Displaying 10 of 150 matches:
 ive precision . it is better to make plot titles bigger . about the interactiv
  '' ] what is the point of your last plot ? does it confirm your hypothesis th
@@ -537,7 +537,7 @@ ormat** # end_hour = end hour of the plot **in 24hr format** def plot_traffic_
 *   该模型比较该数字输入，并找到与该输入最相似的内容
 *   就这样，在您成功运行了一个基本模型之后，您应该开始尝试不同的参数和矢量化方法
 
-```
+```py
 # imports:
 from sklearn.metrics import pairwise_distances
 from sklearn.decomposition import TruncatedSVD
@@ -568,7 +568,7 @@ df['feedback'][np.argmin(dist.flatten())]
 
 输出:
 
-```
+```py
 ' processing data inside a function saves memory (the variables you create stay inside the function and are not stored in memory, when you are done with the function) it is important when you are working with larger datasets - if you are interested with experimenting: https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page try cleaning 1 month of this dataset on kaggle notebook (and look at your ram usage) outside the function and inside the function, compare the ram usage in both examples '
 ```
 

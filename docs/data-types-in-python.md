@@ -24,20 +24,20 @@ Python 是一种动态类型语言。这意味着用户在创建变量时不需�
 
 顾名思义，integer 类型用于处理整数，比如年龄、年份、计数等等。
 
-```
+```py
 >>> age = 37
 >>> print(age)
 ```
 
-```
+```py
 37
 ```
 
-```
+```py
 >>> print(type(age))
 ```
 
-```
+```py
 37
 <class 'int'>
 ```
@@ -48,31 +48,31 @@ Python 是一种动态类型语言。这意味着用户在创建变量时不需�
 
 float 类型用于十进制数字，如体重、身高和平均值。
 
-```
+```py
 >>> average_age = 25.5
 >>> print(average_age)
 ```
 
-```
+```py
 25.5
 ```
 
-```
+```py
 >>> print(type(average_age))
 ```
 
-```
+```py
 <class 'float'>
 ```
 
 使用浮点数时，`round()`函数对于舍入小数非常有用:
 
-```
+```py
 >>> average_age = 25.539273
 >>> print(round(average_age, ndigits=1))
 ```
 
-```
+```py
 25.5
 ```
 
@@ -80,21 +80,21 @@ float 类型用于十进制数字，如体重、身高和平均值。
 
 您可以轻松地将 float 转换为 int，反之亦然，但是我们可以看到它的局限性。例如，如果将浮点数转换为整数，得到的数字将只是整数部分:
 
-```
+```py
 >>> print(int(average_age))
 ```
 
-```
+```py
 25
 ```
 
 当转换进行到另一个方向时，变量的值没有变化，只是类型有变化:
 
-```
+```py
 >>> print(float(age))
 ```
 
-```
+```py
 37.0
 ```
 
@@ -102,38 +102,38 @@ float 类型用于十进制数字，如体重、身高和平均值。
 
 string 类型通常用于字符串(但更常用于文本)。字符需要放在引号中。在 Python 中，您可以使用单引号或双引号，只要您使用相同的开始和结束序列。此外，在整个代码中保持引号的选择一致也是一个好习惯。
 
-```
+```py
 >>> name = 'Matt'
 >>> email = '[[email protected]](/cdn-cgi/l/email-protection)'
 >>> website = 'www.matt.com'
 >>> print(name)
 ```
 
-```
+```py
 Matt
 ```
 
-```
+```py
 >>> print(email)
 ```
 
-```
+```py
 [[email protected]](/cdn-cgi/l/email-protection)
 ```
 
-```
+```py
 >>> print(website)
 ```
 
-```
+```py
 www.matt.com
 ```
 
-```
+```py
 >>> print(type(name))
 ```
 
-```
+```py
 <class 'str'>
 ```
 
@@ -141,21 +141,21 @@ Python 中的`str`类带有多个内置方法来执行字符串操作。
 
 例如，`replace()`方法将一个字符串中的任何字符或字符序列替换为另一个:
 
-```
+```py
 >>> print(email.replace('dataquest.io', 'gmail.com'))
 ```
 
-```
+```py
 [[email protected]](/cdn-cgi/l/email-protection)
 ```
 
 `split()`方法将分割给定字符上的字符串:
 
-```
+```py
 >>> print(website.split('.'))
 ```
 
-```
+```py
 ['www', 'matt', 'com']
 ```
 
@@ -174,52 +174,52 @@ Python 中的`str`类带有多个内置方法来执行字符串操作。
 
 比较两个值时，比较的结果总是布尔值:
 
-```
+```py
 >>> print(name == email)
 ```
 
-```
+```py
 False
 ```
 
 输出显示存储在`name`和`email`变量中的值不相同。但是，如果我们使用一些字符串方法，我们可以改变这个结果:
 
-```
+```py
 >>> print(name.lower() == email.split('@')[0])
 ```
 
-```
+```py
 True
 ```
 
 布尔值也可以为代码设置条件。例如，我们可以将上述操作的结果赋给一个变量，并在 if 语句中使用它:
 
-```
+```py
 >>> my_boolean = name.lower() == email.split('@')[0]
 >>> if my_boolean == True:
 ...     print("My boolean is true")
 ```
 
-```
+```py
 My boolean is true
 ```
 
-```
+```py
 >>> print(type(my_boolean))
 ```
 
-```
+```py
 <class 'bool'>
 ```
 
 或者您可以使用较短的版本:
 
-```
+```py
 >>> if my_boolean:
 ...     print('My boolean is true.')
 ```
 
-```
+```py
 My Boolean is true.
 ```
 
@@ -231,7 +231,7 @@ My Boolean is true.
 
 例如，当一个函数的参数没有返回值，那么它的值就是`None`。此外，当您将不返回任何内容的函数的结果赋给变量时，该变量中的值也将为 None，如下例所示:
 
-```
+```py
 >>> def example(text):
 ...     print(text)
 ...
@@ -239,39 +239,39 @@ My Boolean is true.
 >>> print(variable)
 ```
 
-```
+```py
 test
 None
 ```
 
 如果你检查`variable`的类型。。。
 
-```
+```py
 >>> print(type(variable))
 ```
 
-```
+```py
 <class 'NoneType'>
 ```
 
 尽管我们可以将`None`赋给一个变量，但是我们不能创建 NoneType 类的新实例。这很好:
 
-```
+```py
 >>> a = None
 >>> print(a)
 ```
 
-```
+```py
 None
 ```
 
 但这引发了一个错误:
 
-```
+```py
 a = NoneType()
 ```
 
-```
+```py
 NameError: name 'NoneType' is not defined
 ```
 
@@ -283,18 +283,18 @@ NameError: name 'NoneType' is not defined
 
 这里有一个例子:
 
-```
+```py
 >>> matts_list = ['Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True]
 >>> print(matts_list)
 ```
 
-```
+```py
 ['Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com, 37, True]
 ```
 
 您可以创建一个如上所示的已填充列表，也可以创建一个空列表并填充它。要向列表中添加值，`append()`方法很有用。下面的代码与上面的代码产生相同的输出:
 
-```
+```py
 >>> matts_list = []
 >>> matts_list.append('Matt')
 >>> matts_list.append('[[email protected]](/cdn-cgi/l/email-protection)')
@@ -304,29 +304,29 @@ NameError: name 'NoneType' is not defined
 >>> print(matts_list)
 ```
 
-```
+```py
 ['Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True]
 ```
 
 要访问一个元素，你可以使用括号并告知元素的索引。与 Python 中的所有内容一样，第一个元素的索引为零。例如，下面是访问 Matt 电子邮件的代码:
 
-```
+```py
 >>> matts_email = matts_list[1]
 >>> print(matts_email)
 ```
 
-```
+```py
 [[email protected]](/cdn-cgi/l/email-protection)
 ```
 
 访问多个有序元素叫做切片，语法是`my_list[index_of_first_element: index_of_last_element + 1]`。因此，要同时访问电子邮件和网站，我们需要做的是:
 
-```
+```py
 >>> email_website = matts_list[1:3]
 >>> print(email_website)
 ```
 
-```
+```py
 ['[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com']
 ```
 
@@ -347,12 +347,12 @@ NameError: name 'NoneType' is not defined
 
 元组通常还用于存储相关的信息片段，例如点的坐标或对象的尺寸。与列表不同，元组是通过将值括在括号中创建的。这里有一个例子:
 
-```
+```py
 >>> matts_tuple = ('Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True)
 >>> print(matts_tuple)
 ```
 
-```
+```py
 ('Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True)
 ```
 
@@ -363,12 +363,12 @@ NameError: name 'NoneType' is not defined
 
 您可以轻松地将列表存储在元组中，或者将元组存储在列表中:
 
-```
+```py
 >>> matts_list = ['Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True, (39.759991, -86.163712)]
 >>> print(matts_list)
 ```
 
-```
+```py
 ['Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True, (39.759991, -86.163712)]
 ```
 
@@ -382,14 +382,14 @@ NameError: name 'NoneType' is not defined
 
 但是在字典中，您可以将每个变量与一个键配对存储，这个键使您能够知道那个变量是什么，并通过它的名称检索它。这里有一个字典的例子:
 
-```
+```py
 >>> matts_dict = {'first_name': 'Matt', 'email':    
 ...              '[[email protected]](/cdn-cgi/l/email-protection)','website': 'www.matt.com', 'age': 37, 
 ...              'married': True,'house_coordinates': (39.759991, -86.163712)}
 >>> print(matts_dict)
 ```
 
-```
+```py
 {'first_name': 'Matt', 'email': '[[email protected]](/cdn-cgi/l/email-protection)', 'website': 'www.matt.com', 'age': 37, 'married': True, 'house_coordinates': (39.759991, -86.163712)}
 ```
 
@@ -397,52 +397,52 @@ NameError: name 'NoneType' is not defined
 
 如果您想要访问任何数据，您可以通过其键的名称来调用它:
 
-```
+```py
 >>> matts_age = matts_dict['age']
 >>> print(matts_age)
 ```
 
-```
+```py
 37
 ```
 
 改变变量值的过程是相似的:
 
-```
+```py
 >>> matts_dict['first_name'] = 'Matthew'
 >>> print(matts_dict['first_name'])
 ```
 
-```
+```py
 Matthew
 ```
 
 还可以添加更多的变量:
 
-```
+```py
 >>> matts_dict['nickname'] = 'Matt'
 >>> print(matts_dict)
 ```
 
-```
+```py
 {'first_name': 'Matt', 'email': '[[email protected]](/cdn-cgi/l/email-protection)', 'website': 'www.matt.com', 'age': 37, 'married': True, 'house_coordinates': (39.759991, -86.163712), 'nickname': 'Matt'}
 ```
 
 字典有几个内置的方法，比如`keys(`和`values()`，它们允许你像这样访问字典中的数据:
 
-```
+```py
 >>> print(matts_dict.keys())
 ```
 
-```
+```py
 dict_keys(['first_name', 'email', 'website', 'age', 'married', 'house_coordinates', 'nickname'])
 ```
 
-```
+```py
 >>> print(matts_dict.values())
 ```
 
-```
+```py
 dict_values(['Matthew', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True, (39.759991, -86.163712), 'Matt'])
 ```
 
@@ -452,12 +452,12 @@ dict_values(['Matthew', '[[email protected]](/cdn-cgi/l/email-protection)', 'ww
 
 我们可以使用集合来执行数学集合运算，如并、交和差。我们把它们写在大括号里:
 
-```
+```py
 >>> matts_set = {'Matt', '[[email protected]](/cdn-cgi/l/email-protection)', 'www.matt.com', 37, True, (39.759991, -86.163712)}
 >>> print(matts_set)
 ```
 
-```
+```py
 {True, 37, 'www.matt.com', '[[email protected]](/cdn-cgi/l/email-protection)', 'Matt', (39.759991, -86.163712)}
 ```
 
@@ -465,14 +465,14 @@ dict_values(['Matthew', '[[email protected]](/cdn-cgi/l/email-protection)', 'ww
 
 我们还使用集合来删除列表中的重复项。一旦您将一个有重复项的列表转换成一个集合，它将丢失重复项，然后您可以将它转换回一个列表，得到一个没有重复项的列表:
 
-```
+```py
 >>> duplicates_list = ['Matt', 'Matt', 37]
 >>> set_from_list = set(duplicates_list)
 >>> new_list = list(set_from_list)
 >>> print(new_list)
 ```
 
-```
+```py
 [37, 'Matt']
 ```
 

@@ -22,7 +22,7 @@ May 21, 2018![climate-spirals-data-science](img/606b0deef6317d1cd56f7e729521a658
 
 [此处](https://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.6.0.0.monthly_ns_avg.txt)。Github 上的 [openclimatedata](https://github.com/openclimatedata) repo 在[这个笔记本](https://github.com/openclimatedata/climate-spirals/blob/master/data/Climate%20Spirals%20Data.ipynb)中包含了一些有用的数据清理代码。你需要向下滚动到标题为**全球温度**的部分。以下代码将文本文件读入 pandas 数据框:
 
-```
+```py
 hadcrut = pd.read_csv(
     "HadCRUT.4.5.0.0.monthly_ns_avg.txt",
     delim_whitespace=True,
@@ -36,7 +36,7 @@ hadcrut = pd.read_csv(
 *   将`1`列重命名为`value`
 *   选择并保存除第一列(`0`)以外的所有列
 
-```
+```py
 hadcrut['year'] = hadcrut.iloc[:, 0].apply(lambda x: x.split("/")[0]).astype(int)
 hadcrut['month'] = hadcrut.iloc[:, 0].apply(lambda x: x.split("/")[1]).astype(int)
 hadcrut = hadcrut.rename(columns={1: "value"})hadcrut = hadcrut.iloc[:, 1:]
@@ -54,7 +54,7 @@ hadcrut.head()
 
 [整理](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html)，让我们删除包含 2018 年数据的行(因为这是唯一一年有 3 个月的数据，而不是所有 12 个月)。
 
-```
+```py
 hadcrut = hadcrut.drop(hadcrut[hadcrut['year'] == 2018].index)
 ```
 
@@ -62,7 +62,7 @@ hadcrut = hadcrut.drop(hadcrut[hadcrut['year'] == 2018].index)
 
 [使用`year`和`month`列的多索引](https://pandas.pydata.org/pandas-docs/stable/advanced.html):
 
-```
+```py
 hadcrut = hadcrut.set_index(['year', 'month'])
 ```
 
@@ -70,7 +70,7 @@ hadcrut = hadcrut.set_index(['year', 'month'])
 
 值栏(实际温度值)。最后，计算并减去 1850 年至 1900 年的平均温度，并将指数重置回之前的水平。
 
-```
+```py
 hadcrut -= hadcrut.loc[1850:1900].mean()
 hadcrut = hadcrut.reset_index()
 hadcrut.head()
@@ -120,7 +120,7 @@ hadcrut.head()
 
 [探索性数据可视化课程](https://www.dataquest.io/course/exploratory-data-visualization)。要生成使用极坐标系统的 matplotlib Axes 对象，我们需要在创建它时将参数`projection`设置为`"polar"`。
 
-```
+```py
 fig = plt.figure(figsize=(8,8))
 ax1 = plt.subplot(111, projection='polar')
 ```
@@ -129,11 +129,11 @@ ax1 = plt.subplot(111, projection='polar')
 
 ![polar_one](img/7fd5010d01204c6a9888cc4174ec2fd8.png)要调整数据使其不包含负温度值，我们需要首先计算最低温度值:
 
-```
+```py
 hadcrut['value'].min()
 ```
 
-```
+```py
 -0.66055882352941175
 ```
 
@@ -145,7 +145,7 @@ hadcrut['value'].min()
 
 让我们也生成从 0 到 2*pi 的 12 个均匀间隔的值，并将前 12 个用作`theta`值:
 
-```
+```py
 import numpy as np
 hc_1850 = hadcrut[hadcrut['year'] == 1850]
 fig = plt.figure(figsize=(8,8))
@@ -158,7 +158,7 @@ theta = np.linspace(0, 2*np.pi, 12)
 
 `Axes.plot()`方法，但是现在第一个值对应于`theta`值的列表，第二个值对应于 r 值的列表。
 
-```
+```py
 ax1.plot(theta, r)
 ```
 
@@ -172,7 +172,7 @@ ax1.plot(theta, r)
 
 `theta`为`x`，`r`为`y`。要查看实际情况，我们可以使用以下方法隐藏两个轴的所有刻度标签:
 
-```
+```py
 ax1.axes.get_yaxis().set_ticklabels([])
 ax1.axes.get_xaxis().set_ticklabels([])
 ```
@@ -188,7 +188,7 @@ ax1.axes.get_xaxis().set_ticklabels([])
 
 `fig.set_facecolor()`设置前景色，`Axes.set_axis_bgcolor()`设置绘图的背景色:
 
-```
+```py
 fig.set_facecolor("#323331")
 ax1.set_axis_bgcolor('#000100')
 ```
@@ -197,7 +197,7 @@ ax1.set_axis_bgcolor('#000100')
 
 `Axes.set_title()`:
 
-```
+```py
 ax1.set_title("Global Temperature Change (1850-2017)", color='white', fontdict={'fontsize': 30})
 ```
 
@@ -205,7 +205,7 @@ ax1.set_title("Global Temperature Change (1850-2017)", color='white', fontdict={
 
 `(0,0)`，我们希望文本是白色的，有一个大的字体，并且水平居中对齐。
 
-```
+```py
 ax1.text(0,0,"1850", color='white', size=30, ha='center')
 ```
 
@@ -219,11 +219,11 @@ ax1.text(0,0,"1850", color='white', size=30, ha='center')
 
 `r`(或 matplotlib 中的`y`)。这是因为 matplotlib 会根据使用的数据自动缩放绘图的大小。这就是为什么在最后一步中，我们发现只有 1850 年的数据显示在绘图区域的边缘。让我们计算整个数据集中的最高温度值，并添加大量填充(以匹配 Ed 所做的)。
 
-```
+```py
 hadcrut['value'].max()
 ```
 
-```
+```py
 1.4244411764705882
 ```
 
@@ -231,13 +231,13 @@ hadcrut['value'].max()
 
 `Axes.set_ylim()`
 
-```
+```py
 ax1.set_ylim(0, 3.25)
 ```
 
 现在，我们可以使用 for 循环来生成其余的数据。让我们暂时忽略生成中心文本的代码(否则每年都会在同一点生成文本，这将非常混乱):
 
-```
+```py
 fig = plt.figure(figsize=(14,14))
 ax1 = plt.subplot(111, projection='polar')
 
@@ -269,7 +269,7 @@ for year in years:
 
 这种配色方案被称为[顺序色图](https://matplotlib.org/tutorials/colors/colormaps.html#sequential)，因为颜色的渐变反映了数据的一些含义。虽然在 matplotlib 中创建散点图时很容易指定颜色图(使用来自`Axes.scatter()`的`cm`参数)，但是在创建线图时没有直接的参数来指定颜色图。Tony Yu 有一篇关于如何在生成散点图时使用色图的精彩短文，我们将在这里使用。本质上，我们在调用`Axes.plot()`方法时使用`color`(或`c`)参数，并从`plt.cm.(index)`绘制颜色。下面是我们如何使用`viridis`颜色图:
 
-```
+```py
 ax1.plot(theta, r, c=plt.cm.viridis(index)) # Index is a counter variable
 ```
 
@@ -277,13 +277,13 @@ ax1.plot(theta, r, c=plt.cm.viridis(index)) # Index is a counter variable
 
 `2`:
 
-```
+```py
 ax1.plot(theta, r, c=plt.cm.viridis(index*2))
 ```
 
 让我们重新格式化我们的代码来合并这个顺序色图。
 
-```
+```py
 fig = plt.figure(figsize=(14,14))
 ax1 = plt.subplot(111, projection='polar')
 
@@ -314,7 +314,7 @@ for index, year in enumerate(years):
 
 对于每个温度值，我们在绘制这些均匀的环时也需要做同样的事情。蓝色的环最初是在 0.0 摄氏度，所以我们需要在`r=1`处生成一个环。第一个红圈原来在 1.5，所以我们需要在 2.5 出图。最后一个是 2.0，所以应该是 3.0。
 
-```
+```py
 full_circle_thetas = np.linspace(0, 2*np.pi, 1000)
 blue_line_one_radii = [1.0]*1000
 red_line_one_radii = [2.5]*1000
@@ -327,7 +327,7 @@ ax1.plot(full_circle_thetas, red_line_two_radii, c='red')
 
 最后，我们可以添加指定环的温度值的文本。所有这 3 个文本值都位于 0.5 *π角度，距离值各不相同:
 
-```
+```py
 ax1.text(np.pi/2, 1.0, "0.0 C", color="blue", ha='center', fontdict={'fontsize': 20})
 ax1.text(np.pi/2, 2.5, "1.5 C", color="red", ha='center', fontdict={'fontsize': 20})
 ax1.text(np.pi/2, 3.0, "2.0 C", color="red", ha='center', fontdict={'fontsize': 20})
@@ -357,7 +357,7 @@ ax1.text(np.pi/2, 3.0, "2.0 C", color="red", ha='center', fontdict={'fontsize': 
 
 对象，它有一个我们可以用来将动画写到 GIF 文件的方法。下面是一些反映我们将使用的工作流的框架代码:
 
-```
+```py
 # To be able to write out the animation as a GIF file
 import sysfrom matplotlib.animation import FuncAnimation
 # Create the base plot

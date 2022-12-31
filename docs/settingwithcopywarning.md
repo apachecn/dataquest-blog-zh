@@ -10,7 +10,7 @@ July 5, 2017
 
 为了探究`SettingWithCopyWarning`，我们将使用《建模在线拍卖一书[中易贝 3 天拍卖中售出的 Xboxes 价格数据集。让我们来看看:](https://www.modelingonlineauctions.com/datasets)
 
-```
+```py
  import pandas as pd
 data = pd.read_csv('xbox-3-day-auctions.csv')
 data.head()
@@ -69,7 +69,7 @@ Pandas 在检测到一种叫做链式分配的东西时会发出警告。让我�
 
 链式赋值是链接和赋值的组合。让我们快速看一个例子，它包含了我们之前加载的数据集。我们稍后将更详细地讨论这一点。为了这个例子，假设我们被告知用户`'parakeet2004'`的投标人评级不正确，我们必须更新它。让我们从当前值开始。
 
-```
+```py
 data[data.bidder == 'parakeet2004']
 ```
 
@@ -81,11 +81,11 @@ data[data.bidder == 'parakeet2004']
 
 我们有三行来更新`bidderrate`字段；让我们继续做那件事。
 
-```
+```py
 data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 ```
 
-```
+```py
 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/ipykernel/__main__.py:1: SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy if __name__ == '__main__':
 ```
 
@@ -93,7 +93,7 @@ data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 
 如果我们看一下，我们可以看到在这种情况下，值没有改变:
 
-```
+```py
 data[data.bidder == 'parakeet2004']
 ```
 
@@ -112,14 +112,14 @@ data[data.bidder == 'parakeet2004']
 
 解决方案很简单:使用`loc`将链接的操作组合成一个操作，这样 pandas 就可以确保原来的`DataFrame`被设置。熊猫将始终确保不被束缚的集合操作(如下所示)正常工作。
 
-```
+```py
  # Setting the new value
 data.loc[data.bidder == 'parakeet2004', 'bidderrate'] = 100
 # Taking a look at the result
 data[data.bidder == 'parakeet2004']['bidderrate'] 
 ```
 
-```
+```py
  6 100
 7 100
 8 100
@@ -132,7 +132,7 @@ Name: bidderrate, dtype: int64
 
 接下来是人们遇到的第二种最常见的方式。让我们调查中标情况。我们将创建一个新的数据框架来处理它们，注意使用`loc`,因为我们已经学习了关于链式赋值的课程。
 
-```
+```py
  winners = data.loc[data.bid == data.price]
 winners.head()
 ```
@@ -147,7 +147,7 @@ winners.head()
 
 我们可能会用 winners 变量写几行后续代码。
 
-```
+```py
  mean_win_time = winners.bidtime.mean()
 ... # 20 lines of code
 mode_open_bid = winners.openbid.mode() 
@@ -155,31 +155,31 @@ mode_open_bid = winners.openbid.mode()
 
 一个偶然的机会，我们在`DataFrame`中遇到了另一个错误。这一次，标签为`304`的行中缺少了`bidder`值。
 
-```
+```py
 winners.loc[304, 'bidder']
 ```
 
-```
+```py
 nan
 ```
 
 为了我们的例子，让我们说，我们知道这个投标人的真实用户名，并更新我们的数据。
 
-```
+```py
 winners.loc[304, 'bidder'] = 'therealname'
 ```
 
-```
+```py
 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/indexing.py:517: SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy self.obj[item] = s
 ```
 
 又一个`SettingWithCopyWarning`！但是我们用了`loc`，怎么又出现这种情况了？为了进行研究，让我们看看代码的结果:
 
-```
+```py
 print(winners.loc[304, 'bidder'])
 ```
 
-```
+```py
 therealname
 ```
 
@@ -193,14 +193,14 @@ therealname
 
 为了防止在这种情况下出现警告，解决方案是明确地告诉 pandas 在我们创建新的数据帧时制作一个副本:
 
-```
+```py
  winners = data.loc[data.bid == data.price].copy()
 winners.loc[304, 'bidder'] = 'therealname'
 print(winners.loc[304, 'bidder'])
 print(data.loc[304, 'bidder'])
 ```
 
-```
+```py
 therealname
 nan
 ```
@@ -225,19 +225,19 @@ nan
 
 例如，让我们关闭警告:
 
-```
+```py
  pd.set_option('mode.chained_assignment', None)
 data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 ```
 
 因为这不会给我们任何警告，所以除非你完全明白自己在做什么，否则不推荐这样做。如果你感到一丝怀疑，这是不可取的。一些开发人员非常认真地对待`SettingWithCopy`，并选择将其提升为一个例外，就像这样:
 
-```
+```py
 pd.set_option('mode.chained_assignment', 'raise')
 data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 ```
 
-```
+```py
 ---------------------------------------------------------------------------SettingWithCopyError Traceback (most recent call last)<ipython-input-13-80e3669cab86> in <module>() 1 pd.set_option('mode.chained_assignment', 'raise')----> 2 data[data.bidder == 'parakeet2004']['bidderrate'] = 100/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/frame.py in __setitem__(self, key, value) 2427 else: 2428 # set column-> 2429 self._set_item(key, value) 2430 2431 def _setitem_slice(self, key, value):/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/frame.py in _set_item(self, key, value) 2500 # value exception to occur first 2501 if len(self):-> 2502 self._check_setitem_copy() 2503 2504 def insert(self, loc, column, value, allow_duplicates=False):/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/generic.py in _check_setitem_copy(self, stacklevel, t, force) 1758 1759 if value == 'raise':-> 1760 raise SettingWithCopyError(t) 1761 elif value == 'warn': 1762 warnings.warn(t, SettingWithCopyWarning, stacklevel=stacklevel)SettingWithCopyError: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
 ```
 
@@ -245,7 +245,7 @@ data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 
 使用这个设置的更精确的方法是使用一个[上下文管理器](https://www.geeksforgeeks.org/context-manager-in-python/)。
 
-```
+```py
  # resets the option we set in the previous code segment
 pd.reset_option('mode.chained_assignment')
 with pd.option_context('mode.chained_assignment', None):
@@ -258,7 +258,7 @@ with pd.option_context('mode.chained_assignment', None):
 
 另一个可以用来避免警告的技巧是修改熊猫用来解释`SettingWithCopy`场景的工具之一。每个`DataFrame`都有一个默认为`None`的`is_copy`属性，但是如果是副本，则使用一个 [`weakref`](https://docs.python.org/3/library/weakref.html) 来引用源`DataFrame`。通过将`is_copy`设置为`None`，可以避免生成警告。
 
-```
+```py
 winners = data.loc[data.bid == data.price]
 winners.is_copy = None
 winners.loc[304, 'bidder'] = 'therealname'
@@ -270,14 +270,14 @@ winners.loc[304, 'bidder'] = 'therealname'
 
 值得强调的另一点是单数据类型和多数据类型对象之间的区别。如果一个`DataFrame`的所有列都是相同的数据类型，那么它就是单数据类型的；例如:
 
-```
+```py
  import numpy as np
 single_dtype_df = pd.DataFrame(np.random.rand(5,2), columns=list('AB'))
 print(single_dtype_df.dtypes)
 single_dtype_df
 ```
 
-```
+```py
  A float64
 B float64dtype: object
 ```
@@ -292,13 +292,13 @@ B float64dtype: object
 
 而如果一个`DataFrame`的列不具有相同的数据类型，那么它就是多数据类型的，例如:
 
-```
+```py
  multiple_dtype_df = pd.DataFrame({'A': np.random.rand(5),'B': list('abcde')})
 print(multiple_dtype_df.dtypes)
 multiple_dtype_df
 ```
 
-```
+```py
  A float64
 B object
 dtype: object
@@ -320,7 +320,7 @@ dtype: object
 
 使用用于[的当前列的值向`DataFrame`添加一个新列会产生一个警告](https://stackoverflow.com/q/42105859/604687)，但是这个问题已经被修复。
 
-```
+```py
  data['bidtime_hours'] = data.bidtime.map(lambda x: x * 24)
 data.head(2)
 ```
@@ -332,7 +332,7 @@ data.head(2)
 
 直到最近，当在一个`DataFrame`的片上使用`apply`方法设置时，一个假阳性[也发生了](https://stackoverflow.com/q/42190175/604687)，尽管这个问题也已经被修复。
 
-```
+```py
  data.loc[:, 'bidtime_hours'] = data.bidtime.apply(lambda x: x * 24)
 data.head(2)
 ```
@@ -344,7 +344,7 @@ data.head(2)
 
 最后，直到版本 0.17.0，在 [`DataFrame.sample`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.sample.html) 方法中有一个导致虚假`SettingWithCopy`警告的 bug。`sample`方法现在每次都返回一个副本。
 
-```
+```py
  sample = data.sample(2)
 sample.loc[:, 'price'] = 120
 sample.head()
@@ -359,11 +359,11 @@ sample.head()
 
 让我们重新使用之前的例子，我们试图用`'parakeet2004'`的`bidder`值来更新`data`中每一行的`bidderrate`列。
 
-```
+```py
 data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 ```
 
-```
+```py
 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/ipykernel/__main__.py:1: SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy if __name__ == '__main__':
 ```
 
@@ -380,7 +380,7 @@ pandas 用这个`SettingWithCopyWarning`真正告诉我们的是，我们代码�
 
 为了更清楚地说明视图、副本和这种模糊性，让我们创建一个简单的`DataFrame`并将其编入索引:
 
-```
+```py
 df1 = pd.DataFrame(np.arange(6).reshape((3,2)), columns=list('AB'))
 df1
 ```
@@ -393,7 +393,7 @@ df1
 
 让我们将`df1`的子集分配给`df2`:
 
-```
+```py
 df2 = df1.loc[:1]
 df2
 ```
@@ -407,14 +407,14 @@ df2
 
 在我们着手解决这个问题之前，我们还需要再看一看链式索引。用`'parakeet2004'`扩展我们的例子，我们将两个索引操作链接在一起:
 
-```
+```py
  data[data.bidder == 'parakeet2004']
 __intermediate__['bidderrate'] = 100
 ```
 
 其中`__intermediate__`代表第一次调用的输出，对我们完全隐藏。请记住，如果我们使用属性访问，也会得到同样有问题的结果:
 
-```
+```py
 data[data.bidder == 'parakeet2004'].bidderrate = 100
 ```
 
@@ -422,7 +422,7 @@ data[data.bidder == 'parakeet2004'].bidderrate = 100
 
 实际上，链式索引意味着不止一次调用`__getitem__`或`__setitem__`来完成一个操作。这些是[特殊的 Python 方法](https://docs.python.org/3/reference/datamodel.html#special-method-names)，通过在实现它们的类的实例上使用方括号来调用，这是所谓的[语法糖](https://en.wikipedia.org/wiki/Syntactic_sugar)的一个例子。让我们看看 Python 解释器将在我们的例子中执行什么。
 
-```
+```py
  # Our code
 data[data.bidder == 'parakeet2004']['bidderrate'] = 100
 # Code executed
@@ -437,7 +437,7 @@ data.__getitem__(data.__getitem__('bidder') == 'parakeet2004').__setitem__('bidd
 
 我们确实想修改原始操作，警告建议的解决方案是使用`loc`将这两个独立的、链接的操作转换成一个赋值操作。这将从我们的代码中删除链式索引，我们将不再收到警告。我们的固定代码及其扩展版本将如下所示:
 
-```
+```py
  # Our code
 data.loc[data.bidder == 'parakeet2004', 'bidderrate'] = 100
 # Code executeddata.loc.__setitem__((data.__getitem__('bidder') == 'parakeet2004', 'bidderrate'), 100)
@@ -449,7 +449,7 @@ data.loc[data.bidder == 'parakeet2004', 'bidderrate'] = 100
 
 使用`loc`并不能解决我们的问题，因为使用`loc`的 get 操作仍然可以返回视图或副本。让我们快速检查一个有点复杂的例子。
 
-```
+```py
 data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 ```
 
@@ -461,7 +461,7 @@ data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 
 这次我们抽出了两列，而不是一列。让我们尝试设置所有的`bid`值。
 
-```
+```py
 data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]['bid'] = 5.0
 data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 ```
@@ -476,7 +476,7 @@ data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 
 正确的做法如下:
 
-```
+```py
  data.loc[data.bidder == 'parakeet2004', 'bid'] = 5.0
 data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 ```
@@ -493,12 +493,12 @@ data.loc[data.bidder == 'parakeet2004', ('bidderrate', 'bid')]
 
 让我们再看看前面的隐藏链接示例，我们试图从我们的`winners`变量中标有`304`的行中设置`bidder`值。
 
-```
+```py
  winners = data.loc[data.bid == data.price]
 winners.loc[304, 'bidder'] = 'therealname'
 ```
 
-```
+```py
 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/indexing.py:517: SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy self.obj[item] = s
 ```
 
@@ -506,11 +506,11 @@ winners.loc[304, 'bidder'] = 'therealname'
 
 但是想想`winners`这个变量。到底是什么？假设我们通过`data.loc[data.bid == data.price]`实例化了它，我们无法知道它是视图还是原始`data`T3 的副本(因为 get 操作要么返回视图，要么返回副本)。将实例化与生成警告的代码行结合起来，可以清楚地看出我们的错误。
 
-```
+```py
 data.loc[data.bid == data.price].loc[304, 'bidder'] = 'therealname'
 ```
 
-```
+```py
 /Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/pandas/core/indexing.py:517: SettingWithCopyWarning: A value is trying to be set on a copy of a slice from a DataFrame.Try using .loc[row_indexer,col_indexer] = value insteadSee the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy self.obj[item] = s
 ```
 
@@ -520,21 +520,21 @@ data.loc[data.bid == data.price].loc[304, 'bidder'] = 'therealname'
 
 我们如何解决这个问题在很大程度上取决于我们自己的意图。如果我们乐于使用原始数据的副本，解决方案就是简单地强迫熊猫制作一个副本。
 
-```
+```py
  winners = data.loc[data.bid == data.price].copy()
 winners.loc[304, 'bidder'] = 'therealname'
 print(data.loc[304, 'bidder']) # Original
 print(winners.loc[304, 'bidder']) # Copy
 ```
 
-```
+```py
 nan
 therealname
 ```
 
 另一方面，如果您要求更新原始的`DataFrame`,那么您应该使用原始的`DataFrame`,而不是实例化具有未知行为的其他变量。我们之前的代码会变成:
 
-```
+```py
  # Finding the winners
 winner_mask = data.bid == data.price
 # Taking a peek
@@ -549,7 +549,7 @@ data.loc[304, 'bidder'] = 'therealname'
 
 在更复杂的情况下，比如修改一个`DataFrame`子集的一个子集，而不是使用链式索引，你可以通过在原始`DataFrame`上的`loc`来修改你正在制作的切片。例如，您可以更改上面的新`winner_mask`变量，或者创建一个新变量来选择获胜者的子集，如下所示:
 
-```
+```py
  high_winner_mask = winner_mask & (data.price > 150)
 data.loc[high_winner_mask].head()
 ```

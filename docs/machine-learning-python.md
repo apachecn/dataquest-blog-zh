@@ -26,7 +26,7 @@ October 21, 2015As you learn Python programming, you’ll become aware of a grow
 
 *数据帧*。数据帧是矩阵的扩展，所以在回到数据帧之前，我们将讨论什么是矩阵。我们的数据文件如下所示(为了便于查看，我们删除了一些列):
 
-```
+```py
 id,type,name,yearpublished,minplayers,maxplayers,playingtime
 12333,boardgame,Twilight Struggle,2005,2,2,180
 120677,boardgame,Terra Mystica,2012,2,5,150
@@ -36,7 +36,7 @@ id,type,name,yearpublished,minplayers,maxplayers,playingtime
 
 *csv* ，或者逗号分隔的值，你可以在这里阅读更多关于[的内容。数据的每一行都是一个不同的棋盘游戏，每一个棋盘游戏的不同数据点都用逗号分隔。第一行是标题行，描述每个数据点是什么。一个数据点的整个集合向下是一列。我们可以很容易地将 csv 文件概念化为矩阵:](https://en.wikipedia.org/wiki/Comma-separated_values)
 
-```
+```py
  _   1       2           3                   4
 1   id      type        name                yearpublished
 2   12333   boardgame   Twilight Struggle   2005
@@ -53,7 +53,7 @@ id,type,name,yearpublished,minplayers,maxplayers,playingtime
 
 `read_csv`法。
 
-```
+```py
  # Import the pandas library.
 import pandas
 # Read in the data.
@@ -62,18 +62,18 @@ games = pandas.read_csv("board_games.csv")
 print(games.columns)
 ```
 
-```
+```py
 Index(['id', 'type', 'name', 'yearpublished', 'minplayers', 'maxplayers','playingtime', 'minplaytime', 'maxplaytime', 'minage', 'users_rated', 'average_rating', 'bayes_average_rating', 'total_owners',       'total_traders', 'total_wanters', 'total_wishers', 'total_comments',       'total_weights', 'average_weight'],
       dtype='object')
 ```
 
 上面的代码读入数据，并向我们显示所有的列名。数据中没有在上面列出的列应该是不言自明的。
 
-```
+```py
 print(games.shape)
 ```
 
-```
+```py
 (81312, 20)
 ```
 
@@ -87,7 +87,7 @@ print(games.shape)
 
 `average_rating`列，这是一个棋盘游戏的所有用户评级的平均值。举例来说，预测这个专栏可能对那些正在考虑下一步该做什么游戏的桌游制造商有用。我们可以使用`games["average_rating"]`来访问一个包含熊猫的数据帧。这将从数据帧中提取一个单独的列。让我们绘制这个栏目的[直方图](https://en.wikipedia.org/wiki/Histogram)，这样我们就可以直观地看到收视率的分布。我们将使用 Matplotlib 来生成可视化。当你学习 Python 编程时，你会发现 Matplotlib 是主要的绘图基础设施，大多数其他绘图库，如 [seaborn](https://seaborn.pydata.org) 和 [ggplot2](https://github.com/yhat/ggplot) 都是建立在 Matplotlib 之上的。我们用`import matplotlib.pyplot as plt`导入 Matplotlib 的绘图函数。然后我们可以画出并展示图表。
 
-```
+```py
  # Import matplotlib
 import matplotlib.pyplot as plt
 
@@ -105,7 +105,7 @@ plt.hist(games["average_rating"])
 
 `0`评级？还是发生了其他事情？我们需要更深入地研究数据来检查这一点。对于 Pandas，我们可以使用布尔[序列](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.html)选择数据子集(向量，或一列/一行数据，在 Pandas 中称为序列)。这里有一个例子:
 
-```
+```py
 games[games["average_rating"] == 0]
 ```
 
@@ -113,7 +113,7 @@ games[games["average_rating"] == 0]
 
 `games`其中`average_rating`列的值等于`0`。然后我们可以*索引*得到的数据帧来得到我们想要的值。在 Pandas 中有两种索引方式——我们可以根据行或列的名称进行索引，也可以根据位置进行索引。按名称索引看起来像`games["average_rating"]`——这将返回整个`games`的`average_rating`列。按位置索引看起来像`games.iloc[0]` —这将返回数据帧的整个第一行。我们也可以一次传入多个索引值— `games.iloc[0,0]`将返回`games`第一行的第一列。点击阅读更多关于熊猫索引[的信息。](https://pandas.pydata.org/pandas-docs/stable/indexing.html)
 
-```
+```py
  # Print the first row of all the games with zero scores.
 # The .iloc method on dataframes allows us to index by position.
 print(games[games["average_rating"] == 0].iloc[0])
@@ -121,7 +121,7 @@ print(games[games["average_rating"] == 0].iloc[0])
 print(games[games["average_rating"] > 0].iloc[0])
 ```
 
-```
+```py
 id                             318
 type                     boardgame
 name                    Looney Leo
@@ -144,7 +144,7 @@ Name: 0, dtype: object
 
 ## 移除没有评论的游戏
 
-```
+```py
  # Remove any rows without user reviews.
 games = games[games["users_rated"] > 0]
 # Remove any rows with missing values.
@@ -161,7 +161,7 @@ games = games.dropna(axis=0)
 
 [聚类](https://en.wikipedia.org/wiki/Cluster_analysis)。聚类通过将相似的行(在本例中为游戏)组合在一起，使您能够轻松地找到数据中的模式。我们将使用一种叫做[的特殊类型的聚类，k-means 聚类](https://en.wikipedia.org/wiki/K-means_clustering)。Scikit-learn 有一个很好的 k 均值聚类实现，我们可以使用它。Scikit-learn 是 Python 中主要的机器学习库，包含最常见算法的实现，包括随机森林、支持向量机和逻辑回归。Scikit-learn 有一个一致的 API 来访问这些算法。
 
-```
+```py
  # Import the kmeans clustering model.
 from sklearn.cluster import KMeans
 
@@ -185,7 +185,7 @@ labels = kmeans_model.labels_
 
 [主成分分析](https://en.wikipedia.org/wiki/Principal_component_analysis)，或称 PCA。PCA 采用多列，将它们变成较少的列，同时试图保留每列中的唯一信息。为了简化，假设我们有两列，`total_owners`和`total_traders`。这两列之间有一些关联，并且有一些重叠的信息。PCA 会将这些信息压缩到一个包含新数字的列中，同时尽量不丢失任何信息。我们将尝试把我们的棋盘游戏数据转换成二维或列，这样我们就可以很容易地绘制出来。
 
-```
+```py
  # Import the PCA model.
 from sklearn.decomposition import PCA
 
@@ -213,11 +213,11 @@ plt.show()
 
 让我们看看哪些列可能对我们的预测感兴趣。一种方法是找出`average_rating`和其他每一列之间的相关性。这将向我们展示哪些其他栏目可能预测`average_rating`最好。我们可以在熊猫数据框架上使用 [corr](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.corr.html) 方法来轻松找到相关性。这将为我们提供每列和其他列之间的相关性。因为这样做的结果是一个数据帧，所以我们可以对它进行索引，并且只获得`average_rating`列的相关性。
 
-```
+```py
 games.corr()["average_rating"]
 ```
 
-```
+```py
  id                      0.304201
 yearpublished           0.108461
 minplayers             -0.032701
@@ -249,7 +249,7 @@ Name: average_rating, dtype: float64
 
 [过度拟合](https://en.wikipedia.org/wiki/Overfitting)，你的模型在训练集中表现良好，但不能很好地推广到未来数据。在某种程度上，`bayes_average_rating`列似乎是从`average_rating`派生出来的，所以让我们删除它。
 
-```
+```py
  # Get all the columns from the dataframe.
 columns = games.columns.tolist()
 # Filter the columns to remove ones we don't want.
@@ -265,7 +265,7 @@ target = "average_rating"
 
 `1+1=2`和`2+2=4`，你将能够完美地回答任何关于`1+1`和`2+2`的问题。你会有`0`错误。然而，一旦有人问你一些你知道答案的训练之外的问题，比如`3+3`，你将无法解答。另一方面，如果你能够归纳和学习加法，你会偶尔犯错误，因为你没有记住答案——也许你会得到一个`3453 + 353535`,但你将能够解决任何抛给你的加法问题。如果你在训练机器学习算法时，你的错误看起来出奇地低，你应该总是检查一下，看看你是否过度拟合了。为了防止过度拟合，我们将在由数据的`80%`组成的集合上训练我们的算法，并在由数据的`20%`组成的另一个集合上测试它。为此，我们首先随机抽取`80%`行放入训练集中，然后将所有其他的放入测试集中。
 
-```
+```py
  # Import a convenience function to split the sets.
 from sklearn.cross_validation import train_test_split
 
@@ -278,7 +278,7 @@ print(train.shape)
 print(test.shape) 
 ```
 
-```
+```py
  (45515, 20)
 (11379, 20) 
 ```
@@ -289,7 +289,7 @@ print(test.shape)
 
 [线性回归](https://en.wikipedia.org/wiki/Linear_regression)是一种强大且常用的机器学习算法。它使用预测变量的线性组合来预测目标变量。假设我们有两个值，`3`和`4`。线性组合将是`3 * .5 + 4 * .5`。线性组合包括将每个数字乘以一个常数，然后将结果相加。这里可以阅读更多[。只有当预测变量和目标变量线性相关时，线性回归才有效。正如我们前面看到的，一些预测因素与目标相关，所以线性回归对我们来说应该很好。我们可以在 Scikit-learn 中使用线性回归实现，就像我们之前使用 k-means 实现一样。](https://en.wikipedia.org/wiki/Linear_combination)
 
-```
+```py
  # Import the linearregression model.
 from sklearn.linear_model import LinearRegression
 
@@ -305,7 +305,7 @@ model.fit(train[columns], train[target])
 
 训练完模型后，我们可以用它对新数据进行预测。这些新数据必须与训练数据的格式完全相同，否则模型不会做出准确的预测。我们的测试集与训练集相同(除了各行包含不同的棋盘游戏)。我们从测试集中选择相同的列子集，然后对其进行预测。
 
-```
+```py
  # Import the scikit-learn function to compute error.
 from sklearn.metrics import mean_squared_error
 # Generate our predictions for the test set.
@@ -314,7 +314,7 @@ predictions = model.predict(test[columns])
 mean_squared_error(predictions, test[target]) 
 ```
 
-```
+```py
 1.8239281903519875
 ```
 
@@ -326,7 +326,7 @@ Scikit-learn 的一个好处是，它使我们能够非常容易地尝试更强�
 
 [随机森林](https://en.wikipedia.org/wiki/Random_forest)。随机森林算法可以发现线性回归无法发现的数据非线性。比方说，如果一个游戏的`minage`，小于 5，则等级低，如果是`5-10`，则等级高，如果在`10-15`之间，则等级低。线性回归算法无法发现这一点，因为预测值和目标值之间没有线性关系。用随机森林做出的预测通常比用线性回归做出的预测误差更小。
 
-```
+```py
  # Import the random forest model.
 from sklearn.ensemble import RandomForestRegressor
 
@@ -340,7 +340,7 @@ predictions = model.predict(test[columns])
 mean_squared_error(predictions, test[target]) 
 ```
 
-```
+```py
 1.4144905030983794
 ```
 

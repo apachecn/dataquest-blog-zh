@@ -12,18 +12,18 @@ August 3, 2022![Dictionary comprehension](img/b7acef470d7fdb42fcd2567d9744fd63.p
 
 让我们直截了当地做一个简单的例子！我们将创建一个字典，包含一些人的年龄。
 
-```
+```py
 d = {"Alex": 29, "Katherine": 24, "Jonathan": 22}
 print(d)
 ```
 
-```
+```py
  {'Alex': 29, 'Katherine': 24, 'Jonathan': 22}
 ```
 
 如果我们想给每个年龄加一年，然后把结果保存在一个新的字典里呢？我们可以用一个`for`循环来完成。
 
-```
+```py
 # Dictionary to store new ages
 new_d = {}
 
@@ -33,20 +33,20 @@ for name, age in d.items(): # .items() method displays dictionary keys and value
 print(new_d)
 ```
 
-```
+```py
  {'Alex': 30, 'Katherine': 25, 'Jonathan': 23}
 ```
 
 然而，`for`循环可以使用字典理解用一行代码重写。
 
-```
+```py
 # Add one year to each age in the dictionary using comprehension
 new_d = {name: age + 1 for name, age in d.items()}
 
 print(new_d)
 ```
 
-```
+```py
  {'Alex': 30, 'Katherine': 25, 'Jonathan': 23}
 ```
 
@@ -64,7 +64,7 @@ print(new_d)
 
 我们将使用一个包含 1995-2021 年在 [Metacritic](https://www.metacritic.com/) 上热门视频游戏的[数据集](https://www.kaggle.com/datasets/deepcontractor/top-video-games-19952021-metacritic)。
 
-```
+```py
 from csv import reader
 
 # Open and read the dataset
@@ -84,7 +84,7 @@ all_games = list(all_games)
 
 比方说，我们有兴趣创建一个以名称为键、以平台为值的字典。
 
-```
+```py
 # Dictionary to store video game platforms
 platform_dict = {}
 
@@ -98,13 +98,13 @@ for game in all_games[1:]:  # Do not include the header
 print(list(platform_dict.items())[:5])
 ```
 
-```
+```py
  [('The Legend of Zelda: Ocarina of Time', ' Nintendo 64'), ("Tony Hawk's Pro Skater 2", ' Nintendo 64'), ('Grand Theft Auto IV', ' PC'), ('SoulCalibur', ' Xbox 360'), ('Super Mario Galaxy', ' Wii')]
 ```
 
 请注意，每个平台的名称前都有一个空格，所以让我们删除它。这可以通过`for`循环或字典理解来实现。
 
-```
+```py
 # Using a for loop
 for name, platform in platform_dict.items():
     platform_dict[name] = platform.strip()
@@ -112,7 +112,7 @@ for name, platform in platform_dict.items():
 
 以上是从值中删除空格的一种方法。我们使用了 [`str.strip`](https://docs.python.org/3/library/stdtypes.html#str.strip) 方法，如果没有给定参数，它会删除我们指定的前导和尾随字符或空格。现在，在阅读答案之前，尝试使用字典理解重写代码。
 
-```
+```py
 platform_dict = {name: platform.strip() for name, platform in platform_dict.items()}
 ```
 
@@ -120,7 +120,7 @@ platform_dict = {name: platform.strip() for name, platform in platform_dict.item
 
 有时我们可能需要提取数据集的每一列，将它们转换成列表，然后将一个列表中的每个元素用作字典键，将另一个列表中的每个元素用作字典值。这个过程允许以一种简单的方式访问字典元素，过滤和操作它们。这可能吗？是的，但是让我们先把每一列转换成一个单独的列表。
 
-```
+```py
 # Initialize empty lists to store column values
 name = []
 platform = []
@@ -141,7 +141,7 @@ for game in all_games[1:]:
 
 现在我们有了所有不同的列表，我们可以用其中的两个创建一个字典。我们已经有了一个平台字典，但是现在让我们提取发布**年**(不是日期！).我们将使用 [`zip()`](https://docs.python.org/3/library/functions.html#zip) 函数，该函数允许同时迭代多个可迭代对象。
 
-```
+```py
 # Dictionary to store dates
 year_dict = {}
 
@@ -153,13 +153,13 @@ for key, value in zip(name, date):
 print(f"Grand Theft Auto IV was released in {year_dict['Grand Theft Auto IV']}.")
 ```
 
-```
+```py
  Grand Theft Auto IV was released in 2008.
 ```
 
 现在试着做同样的事情，但是在看答案之前用字典理解。
 
-```
+```py
 # Dictionary with game's names and release years using dictionary comprehension
 year_dict = {key: value[-4:] for key, value in zip(name, date)}
 
@@ -167,7 +167,7 @@ year_dict = {key: value[-4:] for key, value in zip(name, date)}
 print(f"Red Dead Redemption 2 was released in {year_dict['Red Dead Redemption 2']}.")
 ```
 
-```
+```py
  Red Dead Redemption 2 was released in 2019.
 ```
 
@@ -179,7 +179,7 @@ print(f"Red Dead Redemption 2 was released in {year_dict['Red Dead Redemption 2'
 
 我们可以在创建字典之前使用[条件语句](https://www.dataquest.io/blog/tutorial-using-if-statements-in-python/)过滤一些信息！让我们重新创建 2014 年后发布的电子游戏词典。
 
-```
+```py
 # Video games released after 2014
 after_2014 = {key: value[-4:] for key, value in zip(name, date) if int(value[-4:]) > 2014}
 
@@ -187,7 +187,7 @@ after_2014 = {key: value[-4:] for key, value in zip(name, date) if int(value[-4:
 print(list(after_2014.items())[:5])
 ```
 
-```
+```py
  [('Red Dead Redemption 2', '2019'), ('Disco Elysium: The Final Cut', '2021'), ('The Legend of Zelda: Breath of the Wild', '2017'), ('Super Mario Odyssey', '2017'), ('The House in Fata Morgana - Dreams of the Revenants Edition -', '2021')]
 ```
 
@@ -195,7 +195,7 @@ print(list(after_2014.items())[:5])
 
 当然，我们可以通过引入一个逻辑运算符(`and`、`or`、`not`)来使逻辑变得更加复杂。例如，如果我们想要 2012 年到 2018 年(含)之间发布的所有游戏，那么代码如下。
 
-```
+```py
 # Video games released between 2014 and 2018 (both inclusive)
 y_2012_2018 = {
     key: value[-4:]
@@ -207,7 +207,7 @@ y_2012_2018 = {
 print(list(y_2012_2018.items())[:5])
 ```
 
-```
+```py
  [('Red Dead Redemption 2', '2018'), ('Grand Theft Auto V', '2015'), ('The Legend of Zelda: Breath of the Wild', '2017'), ('Super Mario Odyssey', '2017'), ('The Last of Us Remastered', '2014')]
 ```
 
@@ -215,7 +215,7 @@ print(list(y_2012_2018.items())[:5])
 
 让我们再举一个例子，通过低于 25 或高于 97 的元分数进行过滤。
 
-```
+```py
 # Games with meta score below 25 or above 97
 meta_25_or_97 = {
     key: value
@@ -225,7 +225,7 @@ meta_25_or_97 = {
 print(meta_25_or_97)
 ```
 
-```
+```py
  {'The Legend of Zelda: Ocarina of Time': 99.0, "Tony Hawk's Pro Skater 2": 98.0, 'Grand Theft Auto IV': 98.0, 'SoulCalibur': 98.0, 'NBA Unrivaled': 24.0, 'Terrawars: New York Invasion': 24.0, 'Gravity Games Bike: Street Vert Dirt': 24.0, 'Postal III': 24.0, 'Game Party Champions': 24.0, 'Legends of Wrestling II': 24.0, 'Pulse Racer': 24.0, 'Fighter Within': 23.0, 'FlatOut 3: Chaos & Destruction': 23.0, 'Homie Rollerz': 23.0, "Charlie's Angels": 23.0, 'Rambo: The Video Game': 23.0, 'Fast & Furious: Showdown': 22.0, 'Drake of the 99 Dragons': 22.0, 'Afro Samurai 2: Revenge of Kuma Volume One': 21.0, 'Infestation: Survivor Stories (The War Z)': 20.0, 'Leisure Suit Larry: Box Office Bust': 20.0}
 ```
 
@@ -244,7 +244,7 @@ print(meta_25_or_97)
 
 有时，我们需要使用嵌套字典，也就是说，当一个字典在另一个字典中时。让我们首先创建一个嵌套字典。
 
-```
+```py
 # Create a nested dictionary
 nested_d = {}
 for n, p, dt in zip(name, platform, date):
@@ -254,7 +254,7 @@ for n, p, dt in zip(name, platform, date):
 print(list(nested_d.items())[:5])
 ```
 
-```
+```py
  [('The Legend of Zelda: Ocarina of Time', {'platform': 'Nintendo64', 'date': 'November 23, 1998'}), ("Tony Hawk's Pro Skater 2", {'platform': 'Nintendo64', 'date': 'August 21, 2001'}), ('Grand Theft Auto IV', {'platform': 'PC', 'date': 'December 2, 2008'}), ('SoulCalibur', {'platform': 'Xbox360', 'date': 'July 2, 2008'}), ('Super Mario Galaxy', {'platform': 'Wii', 'date': 'November 12, 2007'})]
 ```
 
@@ -262,7 +262,7 @@ print(list(nested_d.items())[:5])
 
 为了不使事情复杂化，我们将只使用平台的内在价值。通常，这是数据通过 [API](https://www.dataquest.io/blog/python-api-tutorial/) 传递给我们的格式。
 
-```
+```py
 # Create another nested dictionary
 nested_d = {}
 for n, dt in zip(name, date):
@@ -272,13 +272,13 @@ for n, dt in zip(name, date):
 print(list(nested_d.items())[:5])
 ```
 
-```
+```py
  [('The Legend of Zelda: Ocarina of Time', {'date': 'November 23, 1998'}), ("Tony Hawk's Pro Skater 2", {'date': 'August 21, 2001'}), ('Grand Theft Auto IV', {'date': 'December 2, 2008'}), ('SoulCalibur', {'date': 'July 2, 2008'}), ('Super Mario Galaxy', {'date': 'November 12, 2007'})]
 ```
 
 假设我们想要提取年份并将其转换为整数，同时保持相同的嵌套字典格式。一种方法是使用一个`for`循环。
 
-```
+```py
 # Extract release years and transform them into integers inside the nested dictionary
 for (title, outer_value) in nested_d.items():
     for (inner_key, date) in outer_value.items():
@@ -292,13 +292,13 @@ nested_d.update({title: outer_value})
 print(list(nested_d.items())[:5])
 ```
 
-```
+```py
  [('The Legend of Zelda: Ocarina of Time', {'date': 1998}), ("Tony Hawk's Pro Skater 2", {'date': 2001}), ('Grand Theft Auto IV', {'date': 2008}), ('SoulCalibur', {'date': 2008}), ('Super Mario Galaxy', {'date': 2007})]
 ```
 
 当然，使用字典理解重写上面的`for`循环是可能的。为了避免错误，下面的代码单元将在运行字典理解之前重新创建列表和嵌套字典。
 
-```
+```py
 # Initialize empty lists to store column values
 name = []
 platform = []
@@ -322,7 +322,7 @@ for n, dt in zip(name, date):
     nested_d[n] = {"date": dt}
 ```
 
-```
+```py
 # The previous for loop using nested dictionary comprehension
 dict_comprehension = {
     title: {inner_key: int(date[-4:]) for (inner_key, date) in outer_value.items()}
@@ -333,7 +333,7 @@ dict_comprehension = {
 print(list(dict_comprehension.items())[:5])
 ```
 
-```
+```py
  [('The Legend of Zelda: Ocarina of Time', {'date': 1998}), ("Tony Hawk's Pro Skater 2", {'date': 2001}), ('Grand Theft Auto IV', {'date': 2008}), ('SoulCalibur', {'date': 2008}), ('Super Mario Galaxy', {'date': 2007})]
 ```
 
@@ -343,7 +343,7 @@ print(list(dict_comprehension.items())[:5])
 
 Python 中字典理解的另一个用途是字典排序。比如说我们要把字典按游戏标题和年份从第一年到最近一年排序？我们先把 years 从`str`数据类型转换成`int`数据类型(使用 comprehension！).
 
-```
+```py
 # Convert years from strings into intergers
 year_dict_int = {key: int(value) for key, value in year_dict.items()}
 
@@ -354,7 +354,7 @@ sorted_year = {key: value for key, value in sorted(year_dict_int.items(), key=la
 print(list(sorted_year.items())[:5])
 ```
 
-```
+```py
  [('Full Throttle', 1995), ("Sid Meier's Civilization II", 1996), ('Diablo', 1996), ('Super Mario 64', 1996), ('Wipeout XL', 1996)]
 ```
 
@@ -364,7 +364,7 @@ print(list(sorted_year.items())[:5])
 
 有时我们面对一系列字典，我们想要一本字典。也可以用字典理解来完成。
 
-```
+```py
 # Generate list of dictionaries
 list_d = [
     {"Full Throttle": 1995},
@@ -381,13 +381,13 @@ list_d_flat = {
 print(list_d_flat)
 ```
 
-```
+```py
  {'Full Throttle': 1995, "Sid Meier's Civilization II": 1996, 'Diablo': 1996}
 ```
 
 当然，我们也可以在上面的代码中添加一些条件语句，就像我们对前面的字典理解所做的那样。例如，在下面，我们过滤掉所有不是 1996 年的年份。
 
-```
+```py
 # Flatten list of dictionary
 list_d_flat_1996 = {
     title: year
@@ -400,7 +400,7 @@ list_d_flat_1996 = {
 print(list_d_flat_1996)
 ```
 
-```
+```py
  {"Sid Meier's Civilization II": 1996, 'Diablo': 1996}
 ```
 
@@ -410,7 +410,7 @@ print(list_d_flat_1996)
 
 自然语言处理中的一个步骤是对文本中出现的单词进行计数。表示这些数据的一种自然方式是使用字典，其中的键是单词，值是这个单词在文本中出现的次数。也是字典理解的工作！
 
-```
+```py
 # Quote by Henry Van Dyke
 quote = """time is too slow for those who wait too swift for those who fear too long for 
 those who grieve too short for those who rejoicebut for those who love, time is eternity"""
@@ -421,7 +421,7 @@ frequency_dict = {word: quote.split(" ").count(word) for word in quote.split(" "
 print(frequency_dict)
 ```
 
-```
+```py
  {'time': 2, 'is': 2, 'too': 4, 'slow': 1, 'for': 5, 'those': 4, 'who': 5, 'wait': 1, 'swift': 1, 'fear': 1, 'long': 1, '\nthose': 1, 'grieve': 1, 'short': 1, 'rejoicebut': 1, 'love,': 1, 'eternity': 1}
 ```
 

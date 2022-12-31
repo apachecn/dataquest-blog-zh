@@ -16,7 +16,7 @@ January 19, 2022![](img/97a16b3fe9cc60b2a3eb25b184a74827.png)
 
 首先，我们来看数据集。
 
-```
+```py
 # Imports
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,7 +28,7 @@ netflix_movies.head()
 
 我们有大量的列，我们可以很容易地可视化。我们的一个问题可能是*网飞有多少部电影和电视剧？*
 
-```
+```py
 netflix_movies["type"].value_counts()
 ```
 
@@ -36,7 +36,7 @@ netflix_movies["type"].value_counts()
 
 好了，开始出图吧。表示分类数据的一个好方法是使用简单的条形图。
 
-```
+```py
 netflix_movies["type"].value_counts().plot.bar()
 ```
 
@@ -48,7 +48,7 @@ netflix_movies["type"].value_counts().plot.bar()
 
 我已经看到了第一个问题:我们仍然有纯数字。我认为显示这些数据中有趣的东西的最好方法是显示相对百分比。
 
-```
+```py
 netflix_movies["type"].value_counts(normalize=True).mul(100).plot.bar()
 ```
 
@@ -56,7 +56,7 @@ netflix_movies["type"].value_counts(normalize=True).mul(100).plot.bar()
 
 这样好多了。但是如果我们想确定电影和节目的确切比例呢？我们可以从每个条形到 y 轴来回猜测，但这不是一件容易的事情。我们应该把数字直接标在条形的上方！
 
-```
+```py
 # Label bars with percentages
 ax = netflix_movies["type"].value_counts(normalize=True).mul(100).plot.bar()
 for p in ax.patches:
@@ -88,7 +88,7 @@ ax.get_yaxis().set_visible(False)
 
 下一步是使用 figsize 参数增加绘图的大小。让我们也把脊骨去掉。
 
-```
+```py
 # Increase the size of the plot
 ax = netflix_movies["type"].value_counts(normalize=True).mul(100).plot.bar(figsize=(12, 7))
 
@@ -127,7 +127,7 @@ ax.get_yaxis().set_visible(False)
 
 将以下代码行添加到前面的代码中:
 
-```
+```py
 # Increase x ticks label size, rotate them by 90 degrees, and remove tick lines
 plt.tick_params(axis="x", labelsize=18, rotation=0, length=0)
 
@@ -147,7 +147,7 @@ plt.xticks(alpha=0.75)
 
 像前面一样，将以下代码行添加到前面的代码中:
 
-```
+```py
 # Font for title
 title_font = {
 	"size": 22,
@@ -183,7 +183,7 @@ plt.text(
 
 颜色呢？首先，默认的蓝色看起来很好看！然而，我们可以选择其他颜色来补充我们的品牌或传达一种情感。不要使用非常强烈的默认颜色(“红色”、“绿色”等)。).这些不是我们在自然界中常见的颜色。而是在谷歌上看一些大自然的照片，挑一个你最喜欢的颜色。我正在使用 ColorZilla 扩展来挑选颜色的十六进制代码。在这种情况下，我会选择另一种蓝色
 
-```
+```py
 ## Complete code to generate the plot below. Note that the only difference is the color parameter in the first line
 
 # Increase the size of the plot
@@ -258,7 +258,7 @@ plt.text(
 
 我们可以创建一个水平条形图，并对齐所有文本数据！让我们看一看。
 
-```
+```py
 # Increase the size of the plot
 ax = netflix_movies["type"].value_counts(normalize=True).mul(100).plot.barh(figsize=(12, 7), color="#0C476E")
 

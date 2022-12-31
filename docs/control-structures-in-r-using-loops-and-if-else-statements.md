@@ -53,7 +53,7 @@ September 1, 2020![if-else-statements-r-rstats](img/3847ef7aec57bb57be73b97fe8c5
 
 了解了这一点，让我们来看一个 if 语句的例子，它打印获胜队的名字。
 
-```
+```py
 team_A <- 3 # Number of goals scored by Team A
 team_B <- 1 # Number of goals scored by Team B
 if (team_A > team_B){
@@ -61,7 +61,7 @@ if (team_A > team_B){
 }
 ```
 
-```
+```py
 "Team A wins" 
 ```
 
@@ -71,7 +71,7 @@ if (team_A > team_B){
 
 在前面的练习中，我们根据我们的表情打印了将进入季后赛的球队的名称。让我们来看一场新的比分对决。如果 A 队 1 球，B 队 3 球呢？我们的 team_A > team_B 条件将评估为`FALSE`。因此，如果我们运行我们的代码，什么都不会被打印出来。因为 if 语句的计算结果为 false，所以不执行 if 语句中的代码块:
 
-```
+```py
 team_A <- 1 # Number of goals scored by Team A
 team_B <- 3 # Number of goals scored by Team B
 if (team_A > team_B){
@@ -99,7 +99,7 @@ if (team_A > team_B){
 
 因此，在我们的例子中，我们需要添加一段代码，如果我们的条件表达式`team_A > team_B`返回`FALSE`，这段代码就会运行。我们可以通过在 r 中添加一个`else`语句来做到这一点。如果我们的比较运算符评估为 FALSE，让我们打印“B 队将进入季后赛”
 
-```
+```py
  team_A <- 1 # Number of goals scored by Team A
 team_B <- 3# Number of goals scored by Team B
 if (team_A > team_B){
@@ -109,7 +109,7 @@ if (team_A > team_B){
 } 
 ```
 
-```
+```py
 "Team B will make the playoffs" 
 ```
 
@@ -126,7 +126,7 @@ if (team_A > team_B){
 
 假设我们正在观看一场可能以平局收场的体育比赛。我们上一个例子中的控制结构没有考虑到这一点。幸运的是，R 提供了一种方法，可以用关键字`else if`在一个`if`语句中合并两个以上的分支。else if 关键字提供了另一个在`if`语句中使用的代码块，我们可以有任意多个合适的代码块。这看起来是这样的:
 
-```
+```py
  team_A <- 2 # Number of goals scored by Team A
 team_B <- 2# Number of goals scored by Team B
 if (team_A > team_B){
@@ -138,7 +138,7 @@ if (team_A > team_B){
 } 
 ```
 
-```
+```py
 "Team A & B tied" 
 ```
 
@@ -154,7 +154,7 @@ if (team_A > team_B){
 
 假设团队 A 的目标列在第一位(向量的第一个索引)，团队 B 的目标列在第二位，我们可以在 R 中使用 if-else 找到结果，如下所示:
 
-```
+```py
  if (matches[[1]][1] > matches[[1]][2]){
     print ("Win")
 } else {
@@ -176,7 +176,7 @@ if (matches[[3]][1] > matches[[3]][2]){
 
 这将打印:
 
-```
+```py
 "Win"
 "Win"
 "Win" 
@@ -198,14 +198,14 @@ if (matches[[3]][1] > matches[[3]][2]){
 
 我们来看一个具体的例子。我们将编写一个快速循环来打印列表中项目的值，我们将创建一个包含两个项目的短列表:Team A 和 Team B。
 
-```
+```py
  teams <- c("team_A","team_B")
 for (value in teams){
     print(value)
 } 
 ```
 
-```
+```py
 "team_A" 
 "team_B" 
 ```
@@ -218,7 +218,7 @@ for (value in teams){
 
 总的来说，最终结果将如下所示:
 
-```
+```py
 "team_A" 
 "team_B" 
 ```
@@ -231,7 +231,7 @@ for (value in teams){
 
 我们从这个 for 循环开始:
 
-```
+```py
  for (match in matches){
     print(match)
 } 
@@ -239,7 +239,7 @@ for (value in teams){
 
 现在，假设我们想得到一场比赛中的总进球数，并将它们存储在 vector 中。我们需要做的第一步是将列表中的每个分数加在一起，这可以使用`sum()`函数来完成。我们将让代码循环通过`matches`来计算每场比赛的总进球数。
 
-```
+```py
  matches <- list(c(2,1),c(5,2),c(6,3))
 for (match in matches){
     sum(match)
@@ -248,7 +248,7 @@ for (match in matches){
 
 但是我们实际上还没有在任何地方保存这些进球总数！如果我们想保存每场比赛的总目标，我们可以初始化一个新的向量，然后将每个额外的计算附加到该向量上，如下所示:
 
-```
+```py
  matches <- list(c(2,1),c(5,2),c(6,3))
 total_goals <- c()
 for (match in matches){
@@ -264,13 +264,13 @@ for (match in matches){
 
 我们从 team_A 的比赛结果开始:
 
-```
+```py
 matches <- list(c(2,1),c(5,2),c(6,3)) 
 ```
 
 然后我们将创建一个 for 循环来遍历它:
 
-```
+```py
 for (match in matches){
 } 
 ```
@@ -281,7 +281,7 @@ for (match in matches){
 
 当索引到 iterable 变量 match 时，我们可以使用`[]`或`[[]]`，因为 iterable 是一个向量，而不是一个列表。
 
-```
+```py
  matches <- list(c(2,1),c(5,2),c(6,3))
 for (match in matches){
     if (match[1] > match[2]){
@@ -292,7 +292,7 @@ for (match in matches){
 } 
 ```
 
-```
+```py
 "Win"
 "Win"
 "Win" 
@@ -304,7 +304,7 @@ for (match in matches){
 
 使用我们上面写的 for 循环，我们可以在 if-else 语句中插入 break 语句。
 
-```
+```py
  matches <- list(c(2,1),c(5,2),c(6,3))
 for (match in matches){
     if (match[1] > match[2]){
@@ -316,7 +316,7 @@ for (match in matches){
 }
 ```
 
-```
+```py
 "Win" 
 ```
 
@@ -328,7 +328,7 @@ for (match in matches){
 
 R 中的 while 循环是 R 中 for 循环的近亲，然而，while 循环将检查逻辑条件，并且只要条件为真就继续运行循环。while 循环的语法如下所示:
 
-```
+```py
 while(condition){
     expression
 }
@@ -342,7 +342,7 @@ while(condition){
 
 让我们以一支赛季初零胜的球队为例。他们需要赢得 10 场比赛才能进入季后赛。我们可以编写一个 while 循环来告诉我们球队是否进入了季后赛:
 
-```
+```py
 wins <- 0
 while (wins < 10){
     print ("Does not make playoffs")
@@ -350,7 +350,7 @@ while (wins < 10){
 }
 ```
 
-```
+```py
 "Does not make playoffs"
 "Does not make playoffs"
 "Does not make playoffs"
@@ -377,7 +377,7 @@ while (wins < 10){
 
 if-else 条件将放在 while 循环的括号之间，与我们之前将它放入 for 循环的位置相同。
 
-```
+```py
  wins <- 0
 while (wins <= 10){
     if (wins < 10){
@@ -389,7 +389,7 @@ while (wins <= 10){
 }
 ```
 
-```
+```py
 "does not make playoffs"
 "does not make playoffs"
 "does not make playoffs"
@@ -408,7 +408,7 @@ while (wins <= 10){
 
 为此，我们可以使用另一个`break`语句。同样，这在 while 循环中的作用与在 for 循环中的作用相同；一旦满足条件并执行`break`，循环结束。
 
-```
+```py
  wins <- 0
 playoffs <- c()
 while (wins <= 15){
@@ -424,7 +424,7 @@ while (wins <= 15){
 }
 ```
 
-```
+```py
 "does not make playoffs"
 "does not make playoffs"
 "does not make playoffs"

@@ -32,7 +32,7 @@ June 13, 2018Python generators are a powerful, but misunderstood tool. They’re
 
 `for`循环给了我们一个简单的方法来对不同的对象进行*迭代*。通常，您会迭代一个列表，但是我们也可以迭代其他 Python 对象，比如字符串和字典。
 
-```
+```py
  # Iterating over a list
 ez_list = [1, 2, 3]
 for i in ez_list:
@@ -69,7 +69,7 @@ Iterables 支持一种叫做
 
 **迭代器协议**迭代器协议的技术定义超出了本文的范围，但是它可以被认为是一组用于`for`循环的*需求*。也就是说:列表、字符串和字典都遵循迭代器协议，因此我们可以在 for 循环中使用它们。相反，不遵循协议的对象不能在`for`循环中使用。不遵循协议的对象的一个例子是整数。如果我们试图给一个`for`循环一个整数，Python 会抛出一个错误。
 
-```
+```py
  number = 12345
 for n in number:
     print(n)
@@ -110,7 +110,7 @@ for n in number:
 
 `yield`关键字替换`return`。
 
-```
+```py
  # Regular function
 def function_a():
     return "a"
@@ -122,7 +122,7 @@ def generator_a():
 
 上面的两个函数执行完全相同的操作(返回/产生相同的字符串)。但是，如果您尝试检查生成器函数，它不会与常规函数显示的内容相匹配。
 
-```
+```py
  function_a()
 >>> "a"
 
@@ -135,7 +135,7 @@ generator_a()
 
 `next()`功能。`next()`是一个特殊的函数，它询问“迭代中的下一项是什么？”事实上，`next()`就是运行`for`循环时调用的精确函数！列表、字典、字符串等等都实现了`next()`，所以这就是为什么你可以首先将它们合并到循环中。
 
-```
+```py
  # Asking the generator what the next item is
 next(a())
 >>> "a"
@@ -148,7 +148,7 @@ next(a)
 
 `next()`一个功能*名*。正如所料，一旦我们调用`next()`函数，生成器函数将`yield`“a”。这个例子不能完全代表生成器的用途。请记住，生成器生成一个值流，所以使用单个值并不真正符合流的条件。为此，我们实际上可以将多个`yield`语句放入一个生成器函数中。这些`yield`语句构成了发生器将输出的序列。我们将创建一个生成器，并将其绑定到一个变量`mg`。然后，如果我们继续将`mg`传递到`next()`，我们将到达下一个`yield`。如果我们继续走过去，我们将得到一个`StopIteration`错误，告诉我们生成器没有更多的值可以给出。`StopIteration`错误实际上是`for`循环如何知道何时停止迭代。
 
-```
+```py
  def multi_generate():
     yield "a"
     yield "b"
@@ -172,7 +172,7 @@ next(mg)
 
 `multi_generate`到`mg`是使用发生器功能的关键步骤。将生成器绑定到`mg`允许我们创建一个可以引用的生成器的单个实例。我们可以继续将`mg`传递给`next()`，并获得其他的`yield`语句。观察如果我们一直试图传入`multi_generate`本身会发生什么。
 
-```
+```py
  next(multi_generate())
 >>> "a"
 next(multi_generate())
@@ -183,7 +183,7 @@ next(multi_generate())
 
 `next()`。一旦你在生成器上调用`next()`，它将按顺序分配下一个值。否则，你不能用发电机做更多的事情。下图将我们的生成器表示为一台简单的机器。![Generators 1](img/b3c806a68affe303bd5df499a16e35a8.png)我们继续得到第一个`yield`语句的结果。这背后的原因很微妙。当我们将生成器函数本身传递给`next()`时，Python 假设你正在传递一个`multi_generate`的*新*实例给它，所以它总是给你第一个`yield`结果。通过将生成器绑定到一个变量，Python 知道当您将它传递给`next()`时，您正试图对同一事物进行操作。我们已经注意到，随着我们不断将`mg`传递给 next，我们会得到其他`yield`结果。只有当发电机以某种方式*记得它最后做了什么，这才有可能。这个内存就是生成器函数区别于常规函数的地方！一旦你使用了一个函数，它就一劳永逸了。一旦你从函数中得到这个值。发电机将保持`yield` ing 值，直到它退出。这给我们带来了发电机的另一个重要性质。一旦我们完成了对它们的迭代，我们就不能再使用它们了。一旦我们通过了`mg`中的所有三个`yield`值，它就不能再为我们提供任何东西了。我们必须存储另一个`multi_generate`生成器的实例，以便再次开始查询它的`next()`语句。我们的数据还没有被读入，所以让我们用一个生成器函数来完成。该数据称为`recipeData.csv`，包含在一个 CSV 文件中。我们将使用`open()`函数来读取它，并且我们将开始使用`next()`函数来读取 CSV 的前几行。*
 
-```
+```py
  # Creating a generator that will generate the data row by row
 def beerDataGenerator():
     file = "recipeData.csv"
@@ -202,7 +202,7 @@ def beerDataGenerator():
 
 `file`用您电脑上文件所在的确切路径。这将使 Python 能够在您想要`open()`它时找到它。
 
-```
+```py
  # Remember to store an instance of the generator so we can refer back to it
 beer = beerDataGenerator()
 next(beer)
@@ -228,7 +228,7 @@ next(beer)
 
 **列举理解**。
 
-```
+```py
  lc_example = [n**2 for n in [1, 2, 3, 4, 5]]
 
 genex_example = (n**2 for n in [1, 2, 3, 4, 5])
@@ -236,7 +236,7 @@ genex_example = (n**2 for n in [1, 2, 3, 4, 5])
 
 `lc_example`是我们的列表理解，而`genex_example`是我们执行*几乎*相同任务的生成器表达式。请注意，两者之间的唯一区别是生成器表达式是用圆括号括起来的，而不是方括号。如果我们在一个`for`循环中使用这些迭代器中的任何一个，它们将产生相同的结果，并且无法区分。然而，如果我们试图在我们的解释器中检查这些变量，它们会产生不同的结果。
 
-```
+```py
  lc_example
 >>> [1, 4, 9, 16, 25]
 
@@ -248,7 +248,7 @@ genex_example
 
 `genex_example`是生成器表达式形式中的一个生成器(`<genexpr>`)。由于`lc_example`是一个列表，我们可以执行它们支持的所有操作:索引、切片、变异等。我们不能用生成器表达式做到这一点。生成器被专门化为一次容易产生一个输出，所以它们不支持这些操作。然而，像列表理解一样，如果需要的话，我们可以在生成器表达式中实现逻辑来形成过滤器。
 
-```
+```py
  genex_example2 = (n**2 for n in [1, 2, 3, 4, 5] if n >= 3)
 next(genex_example2)
 >>> 9
@@ -258,7 +258,7 @@ next(genex_example2)
 
 开始获取它将产生的价值。一旦我们遍历了生成器表达式可以生成的所有值，我们就不能再使用它了。这与列表理解形成了对比，我们可以尽可能多地重复使用列表理解。
 
-```
+```py
  next(genex_example)
 >>> 1
 
@@ -274,7 +274,7 @@ next(genex_example)
 
 *一旦*被捆绑到自己*消费的想法。回想一下，当我们迭代一些迭代器时，我们对其中的每个值执行一些操作。然后我们使用这些处理过的值继续我们的分析，这意味着通常我们可能不需要原始的迭代器。生成器非常适合这种需求，它允许我们构造一个迭代器，我们可以使用一次，然后不用担心它在使用后会占用空间(例如，在一个`for`循环中)。我们谈到了用`next()`从生成器中获取值的方法，但是在`for`循环中使用生成器通常更好。使用`next()`迫使我们必须自己处理`StopIteration`，但是`for`循环使用这个来知道什么时候停止！*
 
-```
+```py
  # Using a for loop to consume a generator is better than using next()
 for ge in genex_example:
     print(ge)
@@ -287,7 +287,7 @@ for ge in genex_example:
 
 生成器表达式与函数的一个区别是它们的简洁。生成器函数占用多行，而我们可以将生成器表达式放在一行中。多行本身并不坏，但是它使函数变得更加复杂，可能会在以后引入错误。我们将把生成器函数重写为一个单行表达式，读入啤酒数据。这种简洁性在本文后面会派上用场。
 
-```
+```py
  beer_data = "recipeData.csv"
 
 # This one line perfoms the same action as beerDataGenerator()!
@@ -323,7 +323,7 @@ lines =  (line for line in open(beer_data, encoding="ISO-8859-1"))
 
 ![Generators 2](img/c4c5f838b28d55c2589714723fd1651e.png)发电机又来救援了！到目前为止，在本文中，我们已经向生成器传递了其他结构，特别是迭代器，以指示我们希望从哪个序列生成。然而，生成器本身也是迭代器——为什么我们不创建另一个生成器，将另一个生成器的输出？我们的`lines`生成器输出完整的行，所以我们将制作第二个生成器来为我们做一些格式化。
 
-```
+```py
 beer_data = "recipeData.csv"
 lines = (line for line in open(beer_data, encoding="ISO-8859-1"))
 lists = (l.split(",") for l in lines) 
@@ -333,7 +333,7 @@ lists = (l.split(",") for l in lines)
 
 我们将能够轻松访问其中的数据元素，并执行我们需要的分析！我们已经有效地为我们的数据集制作了一个**管道**，从原始数据集开始，通过 2 个生成器将其发送到熟悉的形式。请记住，生成器本身并不是列表，它们只是生成序列中的一个元素，并且只占用该元素所需的数量。通过将生成器连接在一起，我们创建了一种快速、易读的方式来读取通过正常方式无法访问的数据。这种方法有一些真正的力量，它的重要性不可低估。在处理中间值时，我们不需要创建任何临时列表来保存它们。有了管道中的额外生成器，我们的代码可能看起来像这样:![Generators 3](img/00550864969b44d12c669fafe3d67bf2.png)在这个管道中，每个生成器负责一个操作，该操作最终将应用于数据集的所有*行。虽然拥有每个列表是好的，但在我们进行任何有意义的分析之前，仍然有一些小问题需要解决。首先，我们希望获取列名，因为它们不是数据，然后将它们转换成一个字典，使任何进一步的代码更容易阅读。*注意*:如果你在自己的机器上运行这段代码，你必须记住你只能使用一次生成器。如果您在一个`for`循环中使用生成器来查看输出，您将需要再次运行数据和整个管道。谢天谢地，这里的发电机运转很快。*
 
-```
+```py
  beer_data = "recipeData.csv"
 lines = (line for line in open(beer_data, encoding="ISO-8859-1"))
 lists = (l.split(",") for l in lines)
@@ -349,7 +349,7 @@ beerdicts = (dict(zip(columns, data)) for data in lists)
 
 做一些简单的格式化，这让我们的管道更加强大！![Generators 4](img/b2fc55916bba5b1153a90693f5154403.png)这是一个开始查询我们未来啤酒酿造选择数据的好地方。现在我们已经有了生成器管道，我们可以开始*消费*由生成器生成的数据并创建一些洞察。我们通常使用`for`循环消耗发电机，所以我们将使用一个来计算最受欢迎的自制啤酒类型。
 
-```
+```py
  beer_counts = {}
 for bd in beerdicts:
     if bd["Style"] not in beer_counts:
@@ -372,7 +372,7 @@ most_popular_type
 
 *酒精按体积*键。既然我们使用字典作为生成器流的输出，我们为什么不添加另一个生成器来研究我们想要输出的确切值。
 
-```
+```py
  abv = (float(bd["ABV"]) for bd in beerdicts if bd["Style"] == "American IPA")
 
 # Get the average ABV for an American IPAsum(abv)/most_popular
@@ -387,7 +387,7 @@ most_popular_type
 
 假设您第一次对啤酒数据集进行分析已经有几年了。你用你的分析创造了一个成功的美国投资促进机构，你只能感谢发电机。您每天生产数千瓶啤酒，您需要一种方法来分析每批啤酒的质量。你回到你的旧笔记本电脑启动 Python 解释器。你开始编写一个函数来计算和检查你生产的啤酒批次的各种质量，但是你停下来了。你事先不知道你要做多少啤酒。按天分析批次可以为我们提供离散的点，但是如果我们想要连续的数据呢？常规函数在这里不起作用！它们需要一些参数，并且总是返回一个离散的对象。你不可能给一个常规函数一个数据流，然后返回一个连续的值流。但是你可以用发电机！发电机非常适合这种类型的任务。我们已经讨论了生成器如何一次产生一个值，直到它被告知停止。如果我们不给一个发生器一个停止信号，它将愉快地无限地产生这些值。以下面的例子为例。
 
-```
+```py
  function alwaysBeer():
     while True:
         yield "Beer"

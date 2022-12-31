@@ -16,7 +16,7 @@ January 26, 2022![Using Classes in Python](img/1db0d0a4704de8d86d721261d41c8828.
 
 从 Python 3 开始，Python 原生对象的术语类和类型是相同的，这意味着对于任何对象`x`,`x.**class**`和`type(x)`的值都是相等的。让我们确认一下:
 
-```
+```py
 a = 5
 b = 'Hello World'
 c = [1, 2, 3]
@@ -25,7 +25,7 @@ for var in [a, b, c]:
     print(type(var)==var.__class__)
 ```
 
-```
+```py
 True
 True
 True
@@ -33,7 +33,7 @@ True
 
 Python 中有几个内置类(数据类型):整型、浮点型、字符串型、布尔型、列表型、范围型、元组型、集合型、冷冻集型、字典型，以及其他一些很少使用的类型:
 
-```
+```py
 a = 5.2
 b = 'Hello World'
 c = [1, 2, 3]
@@ -46,7 +46,7 @@ for var in [a, b, c, d, e, f, g]:
     print(var.__class__)
 ```
 
-```
+```py
 <class 'float'>
 <class 'str'>
 <class 'list'>
@@ -58,7 +58,7 @@ for var in [a, b, c, d, e, f, g]:
 
 内置和用户定义的函数有自己的类/类型:
 
-```
+```py
 def my_func():
     pass
 
@@ -66,14 +66,14 @@ print(my_func.__class__)
 print(min.__class__)
 ```
 
-```
+```py
 <class 'function'>
 <class 'builtin_function_or_method'>
 ```
 
 当我们使用额外的 Python 库时，比如 [pandas](https://app.dataquest.io/m/291) 或 [NumPy](https://app.dataquest.io/m/289) ，我们可以创建只与那些库相关的类/类型的对象:
 
-```
+```py
 import pandas as pd
 import numpy as np
 
@@ -86,7 +86,7 @@ print(df.__class__)
 print(arr.__class__)
 ```
 
-```
+```py
 <class 'pandas.core.series.Series'>
 <class 'pandas.core.frame.DataFrame'>
 <class 'numpy.ndarray'>
@@ -98,14 +98,14 @@ print(arr.__class__)
 
 要定义一个 Python 类，使用`class`关键字，后跟新类的名称和冒号。让我们创建一个非常简单的空类:
 
-```
+```py
 class MyClass:
     pass
 ```
 
 注意 Python 对类的命名约定:使用 **camel case** 样式，其中每个单词都以大写字母开头，单词写在一起，没有任何分隔符。另一个强烈推荐的约定是添加一个 **docstring** :简单描述类用途的类构造函数中的第一个字符串。让我们给我们的类添加一个 docstring:
 
-```
+```py
 class MyClass:
     '''This is a new class'''
     pass
@@ -113,12 +113,12 @@ class MyClass:
 
 上面的代码创建了一个名为`MyClass`的新类对象。有趣的是，因为 Python 中的每个对象都与某个类(类型)相关，所以我们的新类(以及所有其他 Python 类，包括内置类)的类/类型是 type:
 
-```
+```py
 print(MyClass.__class__)
 print(type(MyClass))
 ```
 
-```
+```py
 <class 'type'>
 <class 'type'>
 ```
@@ -127,7 +127,7 @@ print(type(MyClass))
 
  **要访问类属性，请使用点(`.`)运算符:
 
-```
+```py
 class TrafficLight:
     '''This is a traffic light class'''
     color = 'green'
@@ -143,7 +143,7 @@ print(TrafficLight.action)
 
 这是一堂交通灯课
 
-```
+```py
 <class 'type'>
 green
 <function TrafficLight.action at 0x00000131CD046160>
@@ -163,7 +163,7 @@ green
 
 让我们将`TrafficLight`类的一个类对象赋给一个变量`traffic`:
 
-```
+```py
 class TrafficLight:
     '''This is a traffic light class'''
     color = 'green'
@@ -182,7 +182,7 @@ print(traffic.action())
 
 这是一堂交通灯课
 
-```
+```py
 <class '__main__.TrafficLight'>
 green
 <bound method TrafficLight.action of <__main__.TrafficLight object at 0x00000131CD0313D0>>
@@ -218,11 +218,11 @@ class TrafficLight:
 
 yellow = TrafficLight('yellow')
 yellow.action()
-```
+```py
 
 ```
 Prepare to stop
-```
+```py
 
 我们使用`****init**()**` **方法**(又名`class constructor`)来初始化对象的状态(即在对象实例化的时候分配所有的类变量)。在这种情况下，我们创建了一个新的 Python 类`TrafficLight`，它有两个方法:`**init**()`初始化交通灯的颜色，`action()`根据交通灯的颜色建议相应的动作。
 
@@ -238,11 +238,11 @@ green.next_color = 'red'
 
 print(green.next_color)
 print(yellow.next_color)
-```
+```py
 
 ```
 red
-```
+```py
 
 ```
 ---------------------------------------------------------------------------
@@ -253,7 +253,7 @@ AttributeError                            Traceback (most recent call last)
 ----> 7 print(yellow.next_color)
 
 AttributeError: 'TrafficLight' object has no attribute 'next_color'
-```
+```py
 
 在上面的代码中，我们为`green`对象创建了一个新属性`next_color`，并将其赋给“red”由于这个属性不在`TrafficLightclass`定义中，当我们试图检查另一个对象(`yellow`)时，我们得到一个`AttributeError`。
 
@@ -263,11 +263,11 @@ AttributeError: 'TrafficLight' object has no attribute 'next_color'
 print(yellow.color)
 del yellow.color
 print(yellow.color)
-```
+```py
 
 ```
 yellow
-```
+```py
 
 ```
 ---------------------------------------------------------------------------
@@ -278,11 +278,11 @@ AttributeError                            Traceback (most recent call last)
 ----> 3 print(yellow.color)
 
 AttributeError: 'TrafficLight' object has no attribute 'color'
-```
+```py
 
 ```
 <__main__.TrafficLight object at 0x00000131CAD50610>
-```
+```py
 
 ```
 ---------------------------------------------------------------------------
@@ -293,7 +293,7 @@ NameError                                 Traceback (most recent call last)
 ----> 3 print(yellow)
 
 NameError: name 'yellow' is not defined
-```
+```py
 
 ## 类和实例变量
 
@@ -338,7 +338,7 @@ for c in ['red', 'yellow', 'green', 'fuchsia']:
     c.action()
     print(c.next_color)
     print('\n')
-```
+```py
 
 ```
 NYC_Cranberry_Hicks

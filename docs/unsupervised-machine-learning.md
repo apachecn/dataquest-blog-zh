@@ -42,7 +42,7 @@ K-means 算法是一种迭代算法，设计用于在给定用户设置的多个
 
 现在让我们来看一个 K-means 算法的例子。我们有一个客户的[数据集，我们将根据他们的年收入和支出分数对这些客户进行细分。下面是代表这两个变量的曲线图:](https://dq-blog.s3.amazonaws.com/introduction-to-unsupervised-machine-learning/mall_customers.csv)
 
-```
+```py
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -60,7 +60,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-```
+```py
 /usr/local/lib/python3.7/dist-packages/seaborn/_decorators.py:43: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
   FutureWarning
 ```
@@ -69,7 +69,7 @@ plt.show()
 
 然后，我们将数据集分成五个集群:
 
-```
+```py
 # Using KMeans
 from sklearn.cluster import KMeans
 
@@ -81,7 +81,7 @@ df['CLUSTER'] = y
 
 现在，我们有了按刚刚创建的集群分组的相同图:
 
-```
+```py
 # Plotting the clustered data
 fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -91,7 +91,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-```
+```py
 /usr/local/lib/python3.7/dist-packages/seaborn/_decorators.py:43: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
   FutureWarning
 ```
@@ -115,7 +115,7 @@ plt.show()
 
 自底向上的方法远比自顶向下的方法更常见，所以让我们来看一个使用它的例子。我们使用 K-means 示例中使用的同一数据集的样本。下图被称为[树状图](https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.dendrogram.html)，这是我们可视化层次聚类的方式:
 
-```
+```py
 # Creating a dendogram with scipy
 import scipy.cluster.hierarchy as shc
 
@@ -133,7 +133,7 @@ plt.grid(False)
 
 我们现在需要设置一个截止点。没有正确的方法可以做到这一点，决定聚类的数量可能是任何聚类过程中最棘手的一步。有几个工具可以帮助你确定这个数字，比如[剪影](https://en.wikipedia.org/wiki/Silhouette_(clustering))和[肘](https://en.wikipedia.org/wiki/Elbow_method_(clustering))方法。在我们的例子中，我们创建了两个集群，树状图如下所示:
 
-```
+```py
 import scipy.cluster.hierarchy as shc
 
 plt.figure(figsize=(12,6))
@@ -155,7 +155,7 @@ plt.grid(False)
 
 我们有一个[数据集，包含在杂货店](https://dq-blog.s3.amazonaws.com/introduction-to-unsupervised-machine-learning/Groceries+data.csv)购买的数千次商品的信息。在每一行中，我们都有一个属于购买的项目。它看起来是这样的:
 
-```
+```py
 # Reading the initial data
 df = pd.read_csv('Groceries data.csv')
 df.sort_values(['Member_number', 'Date']).head()
@@ -173,7 +173,7 @@ df.sort_values(['Member_number', 'Date']).head()
 
 然后，我们以这样一种方式操作这个数据集(这不是本文的重点),即每一行都变成一个完整的事务。对于数据集中被视为`True`或`False`的每个唯一项目，我们都有一列，这取决于它是否是该行中表示的事务的一部分:
 
-```
+```py
 # Reading data after manipulation
 transactions = pd.read_csv('transactions.csv')
 transactions = transactions.astype(bool)
@@ -194,7 +194,7 @@ transactions.head()
 
 有了这些数据，我们将使用[先验](http://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/)算法。例如，这是一个著名的算法，用于识别频繁出现在一个购物篮中的多组商品。这些集合从一个项目到我们设定的所有项目。在我们的案例中，我们不希望器械包包含三件以上的物品:
 
-```
+```py
 # Using the apriori algorithm
 from mlxtend.frequent_patterns import apriori
 
@@ -222,7 +222,7 @@ frequent_itemsets
 
 我们现在将使用一个函数来查找数据中的规则。该函数将检查 apriori 算法创建的集合，以识别经常一起购买的产品，并确定它们是否在同一个集合中。
 
-```
+```py
 # Using association rules
 from mlxtend.frequent_patterns import association_rules
 
@@ -240,7 +240,7 @@ print(f"Number of rules: {len(rules)}")
 | three | (超高温牛奶) | (法兰克福) | 0.016691 | 0.031950 | 0.001431 | 0.085714 | 2.682729 | 0.000897 | 1.058804 |
 | four | (人造黄油) | (超高温牛奶) | 0.032427 | 0.016691 | 0.001431 | 0.044118 | 2.643277 | 0.000889 | 1.028693 |
 
-```
+```py
 Number of rules: 2388
 ```
 
@@ -286,7 +286,7 @@ Scikit-learn 为异常检测实现了一些不同的算法。在这里，我们�
 
 下面的代码使用算法在数据集中创建一个新列，其中-1 表示异常，1 表示非异常。散点图让我们可以看到这些类是如何分布的:
 
-```
+```py
 # using the Isolation Forest algorithm
 from sklearn.ensemble import IsolationForest
 
@@ -303,7 +303,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-```
+```py
 /usr/local/lib/python3.7/dist-packages/seaborn/_decorators.py:43: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
   FutureWarning
 ```
@@ -324,7 +324,7 @@ plt.show()
 
 让我们在运行隔离林的同一数据集中运行 DBSCAN。例如，我们将半径设置为 12，邻居数量设置为 5:
 
-```
+```py
 # Using DBSCAN
 from sklearn.cluster import DBSCAN
 
@@ -341,7 +341,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-```
+```py
 /usr/local/lib/python3.7/dist-packages/seaborn/_decorators.py:43: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
   FutureWarning
 ```
@@ -358,7 +358,7 @@ plt.show()
 
 使用 Scikit-learn 的实现并创建散点图，我们可以看到异常不仅位于图的边缘，而且分布在整个图中。这是因为我们根据它们的位置和与近邻的距离来决定它们是否是异常。
 
-```
+```py
 # Usinsg Local Outlier Factor
 from sklearn.neighbors import LocalOutlierFactor
 model = LocalOutlierFactor(n_neighbors=2)
@@ -374,7 +374,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-```
+```py
 /usr/local/lib/python3.7/dist-packages/seaborn/_decorators.py:43: FutureWarning: Pass the following variables as keyword args: x, y. From version 0.12, the only valid positional argument will be `data`, and passing other arguments without an explicit keyword will result in an error or misinterpretation.
   FutureWarning
 ```

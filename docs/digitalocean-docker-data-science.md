@@ -85,7 +85,7 @@ IP 地址应该在左上角
 
 最后一步是设置 nginx 配置。首先，我们将通过键入`sudo rm /etc/nginx/sites-enabled/default`删除默认的 nginx 欢迎消息。然后，我们将创建自己的配置文件。类型`sudo nano /etc/nginx/sites-enabled/ds`。这将打开一个文本编辑器。将以下内容粘贴到文本编辑器中:
 
-```
+```py
  server {
        listen
          80;

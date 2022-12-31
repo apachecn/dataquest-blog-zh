@@ -34,7 +34,7 @@ Python PostgreSQL 连接器的一个完全重写的实现目前正在积极开�
 
 要使用 Psycopg2，您需要先安装它。最简单的方法是使用 pip。与其他 [Python 项目](https://www.dataquest.io/blog/python-projects-for-beginners/)一样，建议使用虚拟环境来安装库:
 
-```
+```py
 virtualenv env && source env/bin/activate
 pip install psycopg2-binary
 ```
@@ -45,7 +45,7 @@ pip install psycopg2-binary
 
 您可能已经注意到了，我们安装了`psycopg2-binary`包，这是 Psycopg2 的二进制版本。这意味着这个版本的库自带了自己版本的 C 库，即 liboq 和 libssl。对于 Psycopg2 初学者和大多数用户来说，这个版本非常好。另一方面，如果您希望 psycop 2 使用您系统的 C 库，您需要从源代码构建 psycop 2:
 
-```
+```py
 pip install psycopg2
 ```
 
@@ -68,7 +68,7 @@ Psycopg2 通常用于 AWS Lambda 函数或其他无服务器环境中。因为 P
 
 首先，您需要导入 Psycopg2 模块并创建一个连接对象:
 
-```
+```py
 import psycopg2
 
 conn = psycopg2.connect(database="db_name",
@@ -90,13 +90,13 @@ conn = psycopg2.connect(database="db_name",
 
 游标对象将帮助您在数据库上执行任何查询和检索数据。下面是创建光标对象的方法:
 
-```
+```py
 cursor = conn.cursor()
 ```
 
 现在让我们使用刚刚创建的游标来查询数据库:
 
-```
+```py
 cursor.execute("SELECT * FROM example_table")
 ```
 
@@ -114,11 +114,11 @@ cursor.execute("SELECT * FROM example_table")
 
 这里有一个例子:
 
-```
+```py
 print(cursor.fetchone())
 ```
 
-```
+```py
 (1, 'Budapest', 'newly-built', 'after 2011', 30, 1)
 ```
 
@@ -130,11 +130,11 @@ print(cursor.fetchone())
 
 如果您需要数据库中不止一行数据，该怎么办？如果您需要 10、100、1000 或更多行呢？您可以使用`fetchall()` Psycopg2 函数，它的工作方式与`fetchone()`相同，只是它返回的结果不是一行，而是所有行。
 
-```
+```py
 print(cursor.fetchall())
 ```
 
-```
+```py
 [(1, 'Budapest', 'newly-built', 'after 2011', 30, 1),
  (2, 'Budapest', 'newly-built', 'after 2011', 45, 2),
  (3, 'Budapest', 'newly-built', 'after 2011', 32, 2),
@@ -154,11 +154,11 @@ print(cursor.fetchall())
 
 使用`fetchmany()`，您可以从数据库中检索多条记录，并对检索的确切行数有更多的控制。
 
-```
+```py
 print(cursor.fetchmany(size=5))
 ```
 
-```
+```py
 [(1, 'Budapest', 'newly-built', 'after 2011', 30, 1),
  (2, 'Budapest', 'newly-built', 'after 2011', 45, 2),
  (3, 'Budapest', 'newly-built', 'after 2011', 32, 2),

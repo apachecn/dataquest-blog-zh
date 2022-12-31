@@ -22,38 +22,38 @@ September 14, 2022![Copies of Lists](img/343648570e9d9a818eea9b78b1d1446a.png)
 
 假设我们有列表变量`org_list`，定义如下:
 
-```
+```py
 org_list = [1, 2, ['a', 'b', 'c'], 3]
 ```
 
 然后，我们将它赋给一个新变量`cpy_list`，希望能复制一份供将来使用:
 
-```
+```py
 cpy_list = org_list
 ```
 
 然而，您需要知道变量`cpy_list`不是原始列表的真实副本。你可能会问，“为什么它不是原始列表的真实副本？”这是一个很好的问题，因为正如您将在下面看到的，打印这两个变量将返回完全相同的值。
 
-```
+```py
 print('Original List:', org_list)
 print('Copied List:', cpy_list)
 ```
 
-```
+```py
 Original List: [1, 2, ['a', 'b', 'c'], 3]
 Copied List: [1, 2, ['a', 'b', 'c'], 3]
 ```
 
 正如所料，这些列表包含相同的值。但是，让我们看看修改原始列表会发生什么。
 
-```
+```py
 org_list.append('Dataquest')
 
 print('Original List:', org_list)
 print('Copied List:', cpy_list)
 ```
 
-```
+```py
 Original List: [1, 2, ['a', 'b', 'c'], 3, 'Dataquest']
 Copied List: [1, 2, ['a', 'b', 'c'], 3, 'Dataquest']
 ```
@@ -88,52 +88,52 @@ Copied List: [1, 2, ['a', 'b', 'c'], 3, 'Dataquest']
 
 为了理解浅层拷贝的概念，让我们从一个例子开始。假设我们有一个复合列表，如下所示:
 
-```
+```py
 org_list = [1, 2, ['a', 'b', 'c'], 3]
 ```
 
 然后，我们可以使用列表切片语法创建它的浅层副本:
 
-```
+```py
 cpy_list = org_list[:]
 ```
 
 如果我们运行下面的打印语句，我们可以看到，两者返回完全相同的值。
 
-```
+```py
 print('Original List:', org_list)
 print('Copied List:', cpy_list)
 ```
 
-```
+```py
 Original List: [1, 2, ['a', 'b', 'c'], 3]
 Copied List: [1, 2, ['a', 'b', 'c'], 3]
 ```
 
 现在，让我们向原始列表添加一个新项目，并再次运行 print 语句:
 
-```
+```py
 org_list.append('Dataquest')
 
 print('Original List:', org_list)
 print('Copied List:', cpy_list)
 ```
 
-```
+```py
 Original List: [1, 2, ['a', 'b', 'c'], 3, 'Dataquest']
 Copied List: [1, 2, ['a', 'b', 'c'], 3]
 ```
 
 修改不会影响复制的列表。但是，这并不是故事的全部。让我们尝试另一个场景，更改嵌套列表中的一项，看看会发生什么:
 
-```
+```py
 org_list[2][0] = 'X'
 
 print('Original List:', org_list)
 print('Copied List:', cpy_list)
 ```
 
-```
+```py
 Original List: [1, 2, ['X', 'b', 'c'], 3, 'Dataquest']
 Copied List: [1, 2, ['X', 'b', 'c'], 3]
 ```
@@ -146,7 +146,7 @@ Copied List: [1, 2, ['X', 'b', 'c'], 3]
 
 前面，我们讨论了通过切片语法创建浅层副本。在这一节中，我们将了解 Python 程序员通常用来复制列表的内置方法。Python `copy()`方法返回列表的浅层副本，不带任何参数。让我们试一试:
 
-```
+```py
 org_list = [1, 2, ['a', 'b', 'c'], 3]
 
 cpy_list = org_list.copy()
@@ -155,21 +155,21 @@ print('Original List: ', org_list, ' @', id(org_list))
 print('Copied List: ', cpy_list, ' @', id(cpy_list))
 ```
 
-```
+```py
 Original List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024657920
 Copied List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024657600
 ```
 
 尽管`org_list`和`cpy_list`有相同的值，正如`id()`函数的输出所示，它们在内存中的不同位置结束。然而，在原始列表和复制列表中公开内部列表的内存地址会发现它们指向内存中的同一个位置，这意味着我们对原始列表进行了浅层复制。
 
-```
+```py
 org_list[2][0] = 'X'
 
 print('Inner List in Original: ', org_list[2],' @', id(org_list[2]))
 print('Inner List in Shallow Copied: ', cpy_list[2], ' @', id(cpy_list[2]))
 ```
 
-```
+```py
 Inner List in Original:  ['X', 'b', 'c']  @ 140532024655936
 Inner List in Shallow Copied:  ['X', 'b', 'c']  @ 140532024655936
 ```
@@ -178,7 +178,7 @@ Inner List in Shallow Copied:  ['X', 'b', 'c']  @ 140532024655936
 
 另一个制作列表浅层副本的有用方法是`copy.copy()`函数。为了使用它，我们导入`copy`模块，然后将我们想要复制的列表传递给`copy.copy()`函数。让我们试一试:
 
-```
+```py
 import copy
 
 org_list = [1, 2, ['a' ,'b' ,'c'], 3]
@@ -189,35 +189,35 @@ print('Original List: ', org_list, ' @', id(org_list))
 print('Copied List: ', cpy_list, ' @', id(cpy_list))
 ```
 
-```
+```py
 Original List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024760320
 Copied List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024402048
 ```
 
 现在，让我们向原始列表追加一个新项，再次打印两个列表，并检查输出；然而，我们可以在运行下面的代码之前预测输出。
 
-```
+```py
 org_list.append('Dataquest')
 
 print('Original List: ', org_list, ' @', id(org_list))
 print('Copied List: ', cpy_list, ' @', id(cpy_list))
 ```
 
-```
+```py
 Original List:  [1, 2, ['a', 'b', 'c'], 3, 'Dataquest']  @ 140532024760320
 Copied List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024402048
 ```
 
 `copy.copy()`方法制作了原始列表的真实副本。然而，它仍然是一个浅层拷贝，嵌套列表指向完全相同的内存位置。换句话说，`copy.copy()`函数只制作顶层副本，不复制嵌套对象。因此，原始列表或复制列表的嵌套对象中的任何修改都会反映在另一个列表的嵌套对象中。
 
-```
+```py
 org_list[2][0] = 'X'
 
 print('Inner List in Original: ', org_list[2], ' @', id(org_list[2]))
 print('Inner List in Shallow Copied: ', cpy_list[2], ' @', id(cpy_list[2]))
 ```
 
-```
+```py
 Inner List in Original:  ['X', 'b', 'c']  @ 140532024760128
 Inner List in Shallow Copied:  ['X', 'b', 'c']  @ 140532024760128
 ```
@@ -230,7 +230,7 @@ Inner List in Shallow Copied:  ['X', 'b', 'c']  @ 140532024760128
 
 和`copy.copy()`函数一样，`copy.deepcopy()`函数也属于`copy`模块。让我们试一试:
 
-```
+```py
 import copy
 
 org_list = [1, 2, ['a', 'b', 'c'], 3]
@@ -241,21 +241,21 @@ print('Original List: ', org_list, ' @', id(org_list))
 print('Copied List: ', cpy_list, ' @', id(cpy_list))
 ```
 
-```
+```py
 Original List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024761408
 Copied List:  [1, 2, ['a', 'b', 'c'], 3]  @ 140532024405760
 ```
 
 上面代码的输出清楚的显示了`copy.deepcopy()`对原列表做了真实的复制，即使我们修改了原列表的内部列表，也不会在深度复制的列表中体现出来。
 
-```
+```py
 org_list[2][0] = 'X'
 
 print('Inner List in Original: ', org_list[2], ' @', id(org_list[2]))
 print('Inner List in Deep Copied: ', cpy_list[2], ' @', id(cpy_list[2]))
 ```
 
-```
+```py
 Inner List in Original:  ['X', 'b', 'c']  @ 140532024404736
 Inner List in Deep Copied:  ['a', 'b', 'c']  @ 140532024405248
 ```

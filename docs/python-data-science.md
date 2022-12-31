@@ -30,14 +30,14 @@ January 11, 2016Python is becoming an increasingly popular language for data sci
 
 *单元格*，可以在其中运行代码或编写解释。您的笔记本最初只有一个*单元*，但是您可以添加更多:
 
-```
+```py
  # This is a code cell.
 Any output we generate here will show up below.
 print(10)
 b = 10 
 ```
 
-```
+```py
  # You can have multiple cells, and re-run each cell as many times as you want to refine your analysis.
 # The power of Jupyter notebook is that the results of each cell you run are cached.
 # So you can run code in cells that depends on other cells.
@@ -52,20 +52,20 @@ print(b * 10)
 
 [Pandas](https://pandas.pydata.org/) 是 Python 的数据分析库。它使我们能够读入各种格式的数据，包括 csv，然后高效地分析这些数据。我们可以使用以下代码读入数据:
 
-```
+```py
  import pandas as pd
 donations = pd.read_csv("political_donations.csv")
 ```
 
-```
+```py
 donations.shape
 ```
 
-```
+```py
 (384885, 18)
 ```
 
-```
+```py
 donations.head(2)
 ```
 
@@ -84,7 +84,7 @@ donations.head(2)
 
 [groupby()](https://pandas.pydata.org/pandas-docs/stable/groupby.html) 法。我们可以首先使用 groupby 方法根据`cand_nm`将`donations`分割成子集。然后，我们可以分别计算每个候选人的统计数据。我们计算的第一个汇总统计数据是捐款总额。为了得到这个，我们只需要对每个候选人的`contb_receipt_amount`列求和。
 
-```
+```py
  donations.groupby("cand_nm").sum().sort("contb_receipt_amt") 
 ```
 
@@ -124,7 +124,7 @@ donations.head(2)
 
 [matplotlib](https://matplotlib.org/) ，主要的 Python 数据可视化库，进行绘图。Jupyter notebook 甚至支持内联渲染 matplotlib 图。为此，我们需要激活 matplotlib 的*内联*模式。我们可以使用 [Jupyter magics](https://ipython.org/ipython-doc/dev/interactive/tutorial.html#magics-explained) 让 matplotlib 数字显示在笔记本上。魔术是以`%`或`%%`开头的命令，影响 Jupyter notebook 的行为。它们是用来改变 Jupyter 配置的一种方式，不会将命令与 Python 代码混淆。为了使 matplotlib 的数字能够内联显示，我们需要在单元格中运行`%matplotlib inline`。点击阅读更多关于 Jupyter [绘图的信息。这里我们导入`matplotlib`库并激活内联模式:](https://ipython.org/ipython-doc/3/notebook/notebook.html#plotting)
 
-```
+```py
  import matplotlib.pyplot as plt 
 ```
 
@@ -132,15 +132,15 @@ Pandas 数据框架有内置的可视化支持，您可以调用
 
 [plot()](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.plot.html) 方法从数据帧生成`matplotlib`图。这通常比直接使用`matplotlib`要快得多。首先，我们将前面的数据帧赋给一个变量`total_donations`。然后，我们使用[索引](https://pandas.pydata.org/pandas-docs/stable/indexing.html)来选择数据帧的单个列`contb_receipt_amt`。这就产生了熊猫系列。Pandas 系列的大多数方法与 DataFrames 相同，但它们存储一维数据，就像单行或单列一样。然后，我们可以调用序列上的 [plot()](https://pandas.pydata.org/pandas-docs/version/0.17.1/generated/pandas.Series.plot.html) 方法来生成每个候选人捐款总额的条形图。
 
-```
+```py
 total_donations = donations.groupby("cand_nm").sum().sort("contb_receipt_amt") 
 ```
 
-```
+```py
  total_donations["contb_receipt_amt"].plot(kind="bar") 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x108892208>
 ```
 
@@ -156,12 +156,12 @@ total_donations = donations.groupby("cand_nm").sum().sort("contb_receipt_amt")
 
 `sum()`法为[手段()](https://pandas.pydata.org/pandas-docs/version/0.17.1/generated/pandas.DataFrame.mean.html)法。
 
-```
+```py
  avg_donations = donations.groupby("cand_nm").mean().sort("contb_receipt_amt")
 avg_donations["contb_receipt_amt"].plot(kind="bar") 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x108d82c50>
 ```
 
@@ -173,7 +173,7 @@ avg_donations["contb_receipt_amt"].plot(kind="bar")
 
 `contbr_st`)、职业(`contbr_occupation`)和首选候选人(`cand_nm`)。第一步是用这些列和我们想要预测的`contb_receipt_amt`列制作一个单独的数据框架。
 
-```
+```py
 pdonations = donations[["contbr_st", "contbr_occupation", "cand_nm", "contb_receipt_amt"]] 
 ```
 
@@ -181,11 +181,11 @@ pdonations = donations[["contbr_st", "contbr_occupation", "cand_nm", "contb_rece
 
 `pdonations`。当 Pandas 读入一个 csv 文件时，它会自动为每一列分配一个数据类型。我们只能使用数据类型为*数字*的列进行预测。
 
-```
+```py
  pdonations.dtypes 
 ```
 
-```
+```py
  contbr_st             object
 contbr_occupation     object
 cand_nm               object
@@ -197,16 +197,16 @@ dtype: object
 
 *对象*数据类型(字符串)。这是因为它们是分类数据。每列都有几个选项，但它们显示为文本，而不是使用数字代码。我们可以将每一列转换成数字数据，方法是先转换成*分类*数据类型，然后再转换成数字。[下面是关于分类数据类型的更多内容。本质上，分类数据类型在后台为列中的每个唯一值分配一个*数字*代码。我们可以用这些代码替换列，完全转换成数字。](https://pandas-docs.github.io/pandas-docs-travis/categorical.html)
 
-```
+```py
  pdonations["contbr_st"] = pdonations["contbr_st"].astype('category')
 pdonations["contbr_st"] = pdonations["contbr_st"].cat.codes 
 ```
 
-```
+```py
  pdonations["contbr_st"] 
 ```
 
-```
+```py
  0     1
 1     1
 2     1
@@ -245,7 +245,7 @@ Name: contbr_st, Length: 384885, dtype: int8
 
 `contbr_st`列为数值。我们需要对`contbr_occupation`和`cand_nm`列重复相同的过程。
 
-```
+```py
  for column in ["contbr_st", "contbr_occupation", "cand_nm"]:
     pdonations `= pdonations``.astype('category')
     pdonations` `= pdonations``.cat.codes` 
@@ -260,7 +260,7 @@ Name: contbr_st, Length: 384885, dtype: int8
  from sklearn.cross_validation import train_test_split
 
 train, test, y_train, y_test = train_test_split(pdonations[["contbr_st", "contbr_occupation", "cand_nm"]], pdonations["contb_receipt_amt"], test_size=0.33, random_state=1) 
-```
+```py
 
 上面的代码拆分了我们要用来为算法定型的列，以及我们要对其进行预测的列(
 
@@ -277,11 +277,11 @@ train, test, y_train, y_test = train_test_split(pdonations[["contbr_st", "contbr
 model = RandomForestRegressor(n_estimators=100, min_samples_leaf=10)
 
 model.fit(train, y_train) 
-```
+```py
 
 ```
 RandomForestRegressor(bootstrap=True, compute_importances=None, criterion='mse', max_depth=None, max_features='auto', max_leaf_nodes=None, min_density=None, min_samples_leaf=10, min_samples_split=2, n_estimators=100, n_jobs=1, oob_score=False, random_state=None, verbose=0) 
-```
+```py
 
 scikit-learn 的一个伟大之处在于，它对它实现的所有算法都有一个一致的 API。您可以像训练随机森林一样训练线性回归。我们现在有一个合适的模型，所以我们可以用它来做预测。
 
@@ -291,7 +291,7 @@ scikit-learn 的一个伟大之处在于，它对它实现的所有算法都有�
 
 ```
  predictions = model.predict(test) 
-```
+```py
 
 现在我们有了预测，我们可以计算误差。我们的错误将让我们知道我们的模型执行得有多好，并在我们进行调整时给我们一个评估它的方法。我们将使用
 
@@ -302,11 +302,11 @@ scikit-learn 的一个伟大之处在于，它对它实现的所有算法都有�
 import math
 
 mean_squared_error(predictions, y_test) 
-```
+```py
 
 ```
  756188.21680533944 
-```
+```py
 
 如果你想了解更多关于 scikit-learn 的知识，请查看我们的教程
 

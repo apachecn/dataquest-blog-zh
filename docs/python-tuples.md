@@ -31,29 +31,29 @@ March 28, 2022![](img/668b8aba74546b90ac9e5bb361120873.png)
 
 此外，列表和元组等其他对象可以组成一个元组，如下所示:
 
-```
+```py
 a_tuple = (0, [1, 2, 3], (4, 5, 6), 7.0)
 ```
 
 上面的代码创建了一个包含整数、列表、元组和浮点数的元组。下面的代码返回整个元组及其数据类型。
 
-```
+```py
 print(a_tuple)
 print(type(a_tuple))
 ```
 
-```
+```py
 (0, [1, 2, 3], (4, 5, 6), 7.0)
 <class>
 ```
 
 但是，`('A')`不是元组。让我们看看它的数据类型:
 
-```
+```py
 print(type(('A')))
 ```
 
-```
+```py
 <class>
 ```
 
@@ -65,13 +65,13 @@ print(type(('A')))
 
 如前所述，因为元组是一个对象序列，所以我们可以通过索引来访问这些对象。与字符串一样，第一个元素的索引是 0，第二个元素的索引是 1，依此类推。让我们尝试索引一个元组:
 
-```
+```py
 print('The first element:', a_tuple[0])
 print('The last element:', a_tuple[-1])
 print('The data type of the second element:', type(a_tuple[1]))
 ```
 
-```
+```py
 The first element: 0
 The last element: 7.0
 The data type of the second element: <class>
@@ -81,11 +81,11 @@ The data type of the second element: <class>
 
 此外，下面这段代码显示了如何在索引 2 处检索内部元组的第二个元素。
 
-```
+```py
 print(a_tuple[2][1])
 ```
 
-```
+```py
 5
 ```
 
@@ -95,7 +95,7 @@ print(a_tuple[2][1])
 
 让我们来看一些例子:
 
-```
+```py
 num_tuple = 2, 4, 5, 7, 8, 10
 print(num_tuple[:3])
 print(num_tuple[4:])
@@ -103,7 +103,7 @@ print(num_tuple[-3:])
 print(num_tuple[2:5])
 ```
 
-```
+```py
 (2, 4, 5)
 (8, 10)
 (7, 8, 10)
@@ -122,24 +122,24 @@ print(num_tuple[2:5])
 
 要连接两个或更多元组，我们可以像字符串一样使用`+`符号。例如，以下代码连接两个元组:
 
-```
+```py
 tuple_1 = (1, 2)
 tuple_2 = (3, 4)
 print(tuple_1 + tuple_2)
 ```
 
-```
+```py
 (1, 2, 3, 4)
 ```
 
 此外，将一个元组乘以一个整数会产生一个包含重复多次的原始元组的元组。让我们来试试:
 
-```
+```py
 my_tuple = (1, 7, 9, 8)
 print(my_tuple * 2)
 ```
 
-```
+```py
 (1, 7, 9, 8, 1, 7, 9, 8)
 ```
 
@@ -149,7 +149,7 @@ print(my_tuple * 2)
 
 假设我们有三个不同的元组，包含四个客户的个人详细信息。我们希望创建一个元组，以单独元组的形式保存每个客户的相应数据，包括他们的名字、姓氏和年龄:
 
-```
+```py
 first_names = ('Simon', 'Sarah', 'Mehdi', 'Fatime')
 last_names = ('Sinek', 'Smith', 'Lotfinejad', 'Lopes')
 ages = (49, 55, 39, 33)
@@ -159,12 +159,12 @@ print(zipped)
 
 我们在上面的代码中声明了`first_name`、`last_name`和`ages`元组。`zip()`方法接受三元组并返回一个 zip 对象，这是一个迭代器。要使用迭代器对象，我们需要将它转换为列表或元组，如下所示:
 
-```
+```py
 customers = tuple(zipped)
 print(customers)
 ```
 
-```
+```py
 (('Simon', 'Sinek', 49), ('Sarah', 'Smith', 55), ('Mehdi', 'Lotfinejad', 39), ('Fatime', 'Lopes', 33))
 ```
 
@@ -174,12 +174,12 @@ print(customers)
 
 解包元组允许我们提取元组元素并将它们分配给命名变量。让我们来试试:
 
-```
+```py
 first_name, last_name, age = customers[2]
 print(first_name, last_name, ',', age, 'years old')
 ```
 
-```
+```py
 Mehdi Lotfinejad , 39 years old
 ```
 
@@ -191,7 +191,7 @@ Mehdi Lotfinejad , 39 years old
 
 列表比元组更适合作为可迭代对象的第一个区别是列表对象提供了更多的方法。但是额外的功能是有代价的。让我们先看看下面代码中每个对象占用内存的大小，然后讨论为什么元组在某些情况下是更好的选择。
 
-```
+```py
 import sys
 a_list = ['abc', 'xyz', 123, 231, 13.31, 0.1312]
 a_tuple = ('abc', 'xyz', 123, 231, 13.31, 0.1312)
@@ -199,7 +199,7 @@ print('The list size:', sys.getsizeof(a_list), 'bytes')
 print('The tuple size:', sys.getsizeof(a_tuple), 'bytes')
 ```
 
-```
+```py
 The list size: 104 Bytes
 The tuple size: 88 Bytes
 ```
@@ -214,7 +214,7 @@ The tuple size: 88 Bytes
 
 只有当变量是元组元素时，我们才能使用元组来交换与变量相关联的值。让我们试一试:
 
-```
+```py
 x = 19
 y = 91
 print('Before swapping:')
@@ -224,7 +224,7 @@ print('After swapping:')
 print(f'x = {x}, y = {y}')
 ```
 
-```
+```py
 Before swapping:
 x = 19, y = 91
 After swapping:
@@ -237,7 +237,7 @@ x = 91, y = 19
 
 函数只能返回一个值。然而，我们可以使用一个 tuple，并在其中放入我们需要的任意多的值，然后返回 tuple 对象作为函数的返回值。让我们看看如何使用元组从下面的代码中的函数返回多个值:
 
-```
+```py
 def sum_and_avg(x, y, z):
     s = x + y + z
     a = s/3
@@ -247,7 +247,7 @@ print('Sum =', S)
 print('Avg =', A)
 ```
 
-```
+```py
 Sum = 16
 Avg = 5.333333333333333
 ```

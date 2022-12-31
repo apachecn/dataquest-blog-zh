@@ -77,7 +77,7 @@ API 允许我们从服务器请求检索数据。API 在很多方面都很有用
 
 在我们开始之前，请记住，我们需要提供一个用户代理头，以便在发出请求时标识我们自己。对于 Python 请求库，我们使用 [`headers`参数](https://requests.readthedocs.io/en/master/user/quickstart/#custom-headers)和如下所示的头字典来指定头:
 
-```
+```py
 headers = {
     'user-agent': 'Dataquest'
 }
@@ -88,14 +88,14 @@ r = requests.get('https://my-api-url', headers=headers)
 
 我们将从定义 API 键和用户代理开始(本教程中显示的 API 键不是真正的 API 键！)
 
-```
+```py
 API_KEY = '54686973206973206d7920415049204b6579'
 USER_AGENT = 'Dataquest'
 ```
 
 接下来，我们将导入请求库，为我们的头和参数创建一个字典，并发出我们的第一个请求！
 
-```
+```py
 import requests
 
 headers = {
@@ -112,7 +112,7 @@ r = requests.get('https://ws.audioscrobbler.com/2.0/', headers=headers, params=p
 r.status_code
 ```
 
-```
+```py
 200
 ```
 
@@ -129,7 +129,7 @@ r.status_code
 
 让我们看看这个函数是什么样子的:
 
-```
+```py
 def lastfm_get(payload):
     # define headers and URL
     headers = {'user-agent': USER_AGENT}
@@ -145,7 +145,7 @@ def lastfm_get(payload):
 
 让我们看看它简化了我们之前的请求:
 
-```
+```py
 r = lastfm_get({
     'method': 'chart.gettopartists'
 })
@@ -153,7 +153,7 @@ r = lastfm_get({
 r.status_code
 ```
 
-```
+```py
 200
 ```
 
@@ -161,7 +161,7 @@ r.status_code
 
 让我们重新使用我们在该教程中创建的`jprint()`函数，并从 API 中打印我们的响应:
 
-```
+```py
 import json
 
 def jprint(obj):
@@ -172,7 +172,7 @@ def jprint(obj):
 jprint(r.json())
 ```
 
-```
+```py
 {
     "artists": {
         "@attr": {
@@ -1696,11 +1696,11 @@ JSON 响应的结构是:
 
 让我们看一下`'@attr'`(属性)键本身:
 
-```
+```py
 jprint(r.json()['artists']['@attr'])
 ```
 
-```
+```py
 {
     "page": "1",
     "perPage": "50",
@@ -1725,7 +1725,7 @@ jprint(r.json()['artists']['@attr'])
 
 让我们看一个如何构建代码的例子:
 
-```
+```py
 # initialize list for results
 results = []
 
@@ -1755,7 +1755,7 @@ while page > total_pages:
 
 例如，以下代码将在两个 print 语句之间等待四分之一秒:
 
-```
+```py
 import time
 
 print("one")
@@ -1779,14 +1779,14 @@ print("two")
 
 您可以使用 pip 安装请求缓存:
 
-```
+```py
 pip install requests-cache
 
 ```
 
 然后我们需要做的就是导入这个库，调用 [`requests_cache.install_cache()`函数](https://requests-cache.readthedocs.io/en/latest/api.html#requests_cache.core.install_cache)，这个库就会透明地缓存新的 API 请求，每当我们重复调用的时候就使用缓存。
 
-```
+```py
 import requests_cache
 
 requests_cache.install_cache()
@@ -1796,7 +1796,7 @@ requests_cache.install_cache()
 
 我们开始吧！
 
-```
+```py
 import time
 from IPython.core.display import clear_output
 
@@ -1840,7 +1840,7 @@ while page < = total_pages:
     page += 1
 ```
 
-```
+```py
 Requesting page 5803/5803
 
 ```
@@ -1851,7 +1851,7 @@ Requesting page 5803/5803
 
 让我们用熊猫来看看我们的`responses`列表中第一个响应的数据:
 
-```
+```py
 import pandas as pd
 
 r0 = responses[0]
@@ -1873,7 +1873,7 @@ r0_df.head()
 
 ![Converting a list of lists into a pandas dataframe](img/deeb7208c7303f0c00fcd63591454783.png)
 
-```
+```py
 frames = [pd.DataFrame(r.json()['artists']['artist']) for r in responses]
 artists = pd.concat(frames)
 artists.head()
@@ -1889,7 +1889,7 @@ artists.head()
 
 我们的下一步将是删除 image 列，它包含艺术家图像的 URL，从分析的角度来看，这些图像对我们并没有真正的帮助。
 
-```
+```py
 artists = artists.drop('image', axis=1)
 artists.head()
 ```
@@ -1904,12 +1904,12 @@ artists.head()
 
 现在，让我们用  和  来稍微了解一下数据:
 
-```
+```py
 artists.info()
 artists.describe()
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 Int64Index: 10500 entries, 0 to 499
 Data columns (total 6 columns):
@@ -1935,12 +1935,12 @@ memory usage: 574.2+ KB
 
 让我们看看我们的响应对象列表中艺术家列表的长度，看看我们是否能更好地理解哪里出了问题。
 
-```
+```py
 artist_counts = [len(r.json()['artists']['artist']) for r in responses]
 pd.Series(artist_counts).value_counts()
 ```
 
-```
+```py
 0       5783
 500       19
 1000       1
@@ -1949,11 +1949,11 @@ dtype: int64
 
 看起来我们的请求中只有 20 个有回应列表——让我们按顺序看看前 50 个，看看是否有某种模式。
 
-```
+```py
 print(artist_counts[:50])
 ```
 
-```
+```py
 [500, 1000, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 ```
@@ -1962,7 +1962,7 @@ print(artist_counts[:50])
 
 这不是世界末日，因为 10，000 名艺术家仍然是一个很大的数据量。让我们去掉之前检测到的重复项。
 
-```
+```py
 artists = artists.drop_duplicates().reset_index(drop=True)
 artists.describe()
 ```
@@ -1982,7 +1982,7 @@ Last.fm 允许其用户创建“标签”来对艺术家进行分类。通过使
 
 让我们以我们的一位艺术家为例，看看来自该端点的响应:
 
-```
+```py
 r = lastfm_get({
     'method': 'artist.getTopTags',
     'artist':  'Lana Del Rey'
@@ -1991,7 +1991,7 @@ r = lastfm_get({
 jprint(r.json())
 ```
 
-```
+```py
 {
     "toptags": {
         "@attr": {
@@ -2251,22 +2251,22 @@ jprint(r.json())
 
 我们只对标签名感兴趣，而且只对最流行的标签感兴趣。让我们使用列表理解来创建前三个标签名的列表:
 
-```
+```py
 tags = [t['name'] for t in r.json()['toptags']['tag'][:3]]
 tags
 ```
 
-```
+```py
 ['female vocalists', 'indie', 'indie pop']
 ```
 
 然后我们可以用 [`str.join()`方法](https://docs.python.org/3/library/stdtypes.html#str.join)把这个列表变成一个字符串:
 
-```
+```py
 ', '.join(tags)
 ```
 
-```
+```py
 'female vocalists, indie, indie pop'
 ```
 
@@ -2274,7 +2274,7 @@ tags
 
 请记住，这个函数会被连续使用很多次，所以我们将重用前面的`time.sleep()`逻辑。
 
-```
+```py
 def lookup_tags(artist):
     response = lastfm_get({
         'method': 'artist.getTopTags',
@@ -2297,11 +2297,11 @@ def lookup_tags(artist):
 
 让我们在另一位艺术家身上测试我们的功能:
 
-```
+```py
 lookup_tags("Billie Eilish")
 ```
 
-```
+```py
 'pop, indie pop, indie'
 ```
 
@@ -2309,21 +2309,21 @@ lookup_tags("Billie Eilish")
 
 不幸的是，当用熊猫 应用一个函数时，手动打印输出不是我们可以使用的方法。取而代之的是，我们将使用 [tqdm](https://tqdm.github.io/) 包来自动完成这项工作。
 
-```
+```py
 from tqdm import tqdm
 tqdm.pandas()
 
 artists['tags'] = artists['name'].progress_apply(lookup_tags)
 ```
 
-```
+```py
 100%|██████████| 10000/10000 [00:33<00:00, 295.25it/s]
 
 ```
 
 让我们看看我们操作的结果:
 
-```
+```py
 artists.head()
 ```
 
@@ -2339,11 +2339,11 @@ artists.head()
 
 在导出数据之前，我们可能希望对数据进行排序，使最受欢迎的艺术家位于顶部。到目前为止，我们只是将数据存储为文本，而没有转换任何类型:
 
-```
+```py
 artists.info()
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 10000 entries, 0 to 9999
 Data columns (total 7 columns):
@@ -2361,13 +2361,13 @@ memory usage: 547.0+ KB
 
 让我们从将 listeners 和 playcount 列转换成数字开始。
 
-```
+```py
 artists[["playcount", "listeners"]] = artists[["playcount", "listeners"]].astype(int)
 ```
 
 现在，让我们按听众人数排序
 
-```
+```py
 artists = artists.sort_values("listeners", ascending=False)
 artists.head(10)
 ```
@@ -2387,7 +2387,7 @@ artists.head(10)
 
 最后，我们可以将数据集导出为 CSV 文件。
 
-```
+```py
 artists.to_csv('artists.csv', index=False)
 ```
 

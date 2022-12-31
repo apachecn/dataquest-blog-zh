@@ -26,7 +26,7 @@ October 23, 2019![photograph of tacos](img/d6dfa350908ba9a0a7da5e0a8e9c6040.png)
 
 让我们从读入 CSV 文件开始，查看文件的前几行:
 
-```
+```py
 import csv
 
 f = open('tacos.csv')
@@ -35,7 +35,7 @@ tacos = list(csv.reader(f))
 print(tacos[:5])
 ```
 
-```
+```py
 [['name', 'department', 'given', 'received'],
  ['Amanda', 'content', '4', '3'],
  ['Angela', 'engineering', '7', '20'],
@@ -54,13 +54,13 @@ print(tacos[:5])
 
 删除列名后，让我们再次查看数据的前五行:
 
-```
+```py
 tacos = tacos[1:]
 
 print(tacos[:5])
 ```
 
-```
+```py
 [['Amanda', 'content', '4', '3'],
  ['Angela', 'engineering', '7', '20'],
  ['Brandon', 'marketing', '31', '26'],
@@ -76,7 +76,7 @@ print(tacos[:5])
 
 让我们使用一个`for`循环来遍历数据的每一行，并将第 3 列和第 4 列(位于索引 2 和 3 处)转换为整数类型:
 
-```
+```py
 for person in tacos:
     person[2] = int(person[2])
     person[3] = int(person[3])
@@ -84,7 +84,7 @@ for person in tacos:
 print(tacos[:5])
 ```
 
-```
+```py
 [['Amanda', 'content', 4, 3],
  ['Angela', 'engineering', 7, 20],
  ['Brandon', 'marketing', 31, 26],
@@ -100,7 +100,7 @@ print(tacos[:5])
 
 为此，我们将把 given 和 received 列提取到单独的列表中，这样我们可以更容易地进行计算:
 
-```
+```py
 given = []
 received = []
 
@@ -111,14 +111,14 @@ for person in tacos:
 print(given[:5])
 ```
 
-```
+```py
 [4, 7, 31, 13, 38]
 
 ```
 
 接下来，我们将这两个列表相加，然后除以长度(或值的数量)来求平均值:
 
-```
+```py
 given_avg = sum(given) / len(given)
 received_avg = sum(received) / len(received)
 
@@ -126,7 +126,7 @@ print("Avg tacos given: ", given_avg)
 print("Avg tacos received: ", received_avg)
 ```
 
-```
+```py
 Avg tacos given:  16.322580645161292
 Avg tacos received:  16.322580645161292
 
@@ -148,22 +148,22 @@ Avg tacos received:  16.322580645161292
 
 让我们看看如何使用 Python `if`处理两个单独的行。首先，让我们打印第一行和第二行，这样我们可以提醒自己它们的值:
 
-```
+```py
 first_row = tacos[0]
 print(first_row)
 ```
 
-```
+```py
 ['Amanda', 'content', 4, 3]
 
 ```
 
-```
+```py
 second_row = tacos[1]
 print(second_row)
 ```
 
-```
+```py
 ['Angela', 'engineering', 7, 20]
 
 ```
@@ -180,14 +180,14 @@ print(second_row)
 *   `>=`:大于或等于
 *   `<=`:小于或等于
 
-```
+```py
 team = first_row[1]
 
 if team == 'content':
     print("This person comes from the content team.")
 ```
 
-```
+```py
 This person comes from the content team.
 
 ```
@@ -202,7 +202,7 @@ This person comes from the content team.
 
 现在我们对代码有了更好的理解，让我们对第二行尝试同样的代码，看看会发生什么:
 
-```
+```py
 team = second_row[1]
 
 if team == 'content':
@@ -217,7 +217,7 @@ if team == 'content':
 
 现在我们已经了解了 Python `if`的基本工作原理，让我们在一个循环中使用它来获取内容团队的“给定”和“接收”值:
 
-```
+```py
 given_content = []
 received_content = []
 
@@ -230,14 +230,14 @@ for person in tacos:
 print(given_content)
 ```
 
-```
+```py
 [4, 25, 10, 6, 0, 16, 8, 32]
 
 ```
 
 我们打印了上面的`given_content`列表，我们可以看到内容团队的 8 名成员的值已经收集在一起。现在让我们来计算团队平均值:
 
-```
+```py
 given_content_avg = sum(given_content) / len(given_content)
 received_content_avg = sum(received_content) / len(received_content)
 
@@ -245,7 +245,7 @@ print("Avg tacos given, content team: ", given_content_avg)
 print("Avg tacos received, content team: ", received_content_avg)
 ```
 
-```
+```py
 Avg tacos given, content team:  12.625
 Avg tacos received, content team:  6.0
 
@@ -268,18 +268,18 @@ Avg tacos received, content team:  6.0
 
 让我们修改前面只查看第二行的代码，添加一个`else`子句。在我们开始之前，让我们快速提醒自己第二行的内容
 
-```
+```py
 print(second_row)
 ```
 
-```
+```py
 ['Angela', 'engineering', 7, 20]
 
 ```
 
 好，我们来添加`else`子句:
 
-```
+```py
 team = second_row[1]
 
 if team == 'content':
@@ -288,7 +288,7 @@ else:
     print("This person doesn't come from the content team.")
 ```
 
-```
+```py
 This person doesn't come from the content team.
 
 ```
@@ -301,7 +301,7 @@ This person doesn't come from the content team.
 
 最后，让我们在循环中添加一个`else`子句，并计算两组的平均值:
 
-```
+```py
 given_content = []
 received_content = []
 
@@ -328,7 +328,7 @@ print("Avg tacos received, content team: ", received_content_avg)
 print("Avg tacos received, other teams: ", received_other_avg)
 ```
 
-```
+```py
 Avg tacos given, content team:  12.625
 Avg tacos given, other teams:  17.608695652173914
 Avg tacos received, content team:  6.0
@@ -354,18 +354,18 @@ Avg tacos received, other teams:  19.91304347826087
 
 让我们在独立代码中添加一个`elif`来检查某人是在内容团队还是在工程团队。首先，让我们再次快速提醒自己第二行的内容:
 
-```
+```py
 print(second_row)
 ```
 
-```
+```py
 ['Angela', 'engineering', 7, 20]
 
 ```
 
 让我们添加`elif`子句:
 
-```
+```py
 team = second_row[1]
 
 if team == 'content':
@@ -376,7 +376,7 @@ else:
     print("This person doesn't come from the content or engineering teams.")
 ```
 
-```
+```py
 This person comes from the engineering team.
 
 ```
@@ -389,7 +389,7 @@ This person comes from the engineering team.
 
 最后，让我们在循环中添加一个`elif`子句，并计算所有三组的平均值:
 
-```
+```py
 given_content = []
 received_content = []
 
@@ -429,7 +429,7 @@ print("Avg tacos received, engineering team: ", received_engineering_avg)
 print("Avg tacos received, other teams: ", received_other_avg)
 ```
 
-```
+```py
 Avg tacos given, content team:  12.625
 Avg tacos given, engineering team:  20.166666666666668
 Avg tacos given, other teams:  16.705882352941178

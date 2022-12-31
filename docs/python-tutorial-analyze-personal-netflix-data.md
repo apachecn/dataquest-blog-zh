@@ -88,7 +88,7 @@ Python 可以更流畅地处理像这样的大型数据集和计算，因为它�
 
 打开笔记本后，我们将导入 pandas 库，并将我们的网飞数据 CSV 读入 pandas 数据帧，我们称之为`df`:
 
-```
+```py
 import pandas as pd
 
 df = pd.read_csv('ViewingActivity.csv')
@@ -96,11 +96,11 @@ df = pd.read_csv('ViewingActivity.csv')
 
 现在，让我们快速预览一下数据，确保一切正常。我们将从`df.shape`开始，它将告诉我们刚刚创建的数据帧中的行数和列数。
 
-```
+```py
 df.shape
 ```
 
-```
+```py
 (27354, 10)
 ```
 
@@ -108,7 +108,7 @@ df.shape
 
 为了保护隐私，我将在`.head()`括号内添加额外的参数`1`，这样在这篇博文中只有一行打印出来。然而，在您自己的分析中，您可以使用默认的`.head()`来打印前五行。
 
-```
+```py
 df.head(1)
 ```
 
@@ -135,7 +135,7 @@ df.head(1)
 
 它看起来是这样的:
 
-```
+```py
 df = df.drop(['Profile Name', 'Attributes', 'Supplemental Video Type', 'Device Type', 'Bookmark', 'Latest Bookmark', 'Country'], axis=1)
 df.head(1)
 ```
@@ -150,11 +150,11 @@ df.head(1)
 
 我们的两个与时间相关的列中的数据看起来当然是正确的，但是这些数据实际上是以什么格式存储的呢？我们可以使用`df.dtypes`获得数据帧中每一列的数据类型的快速列表:
 
-```
+```py
 df.dtypes
 ```
 
-```
+```py
 Start Time    object
 Duration      object
 Title         object
@@ -175,12 +175,12 @@ dtype: object
 
 然后，我们将再次运行`df.dtypes`来确认这是否如预期的那样工作。
 
-```
+```py
 df['Start Time'] = pd.to_datetime(df['Start Time'], utc=True)
 df.dtypes
 ```
 
-```
+```py
 Start Time    datetime64[ns, UTC]
 Duration                   object
 Title                      object
@@ -197,7 +197,7 @@ dtype: object
 
 将所有这些放在一起看起来像这样:
 
-```
+```py
 # change the Start Time column into the dataframe's index
 df = df.set_index('Start Time')
 
@@ -223,12 +223,12 @@ df.head(1)
 
 我们将再次使用`df.dtypes`来快速检查我们的工作。
 
-```
+```py
 df['Duration'] = pd.to_timedelta(df['Duration'])
 df.dtypes
 ```
 
-```
+```py
 Start Time    datetime64[ns, US/Eastern]
 Duration                 timedelta64[ns]
 Title                             object
@@ -248,7 +248,7 @@ dtype: object
 
 实际情况是这样的:
 
-```
+```py
 # create a new dataframe called office that that takes from df
 # only the rows in which the Title column contains 'The Office (U.S.)'
 office = df[df['Title'].str.contains('The Office (U.S.)', regex=False)]
@@ -258,11 +258,11 @@ office = df[df['Title'].str.contains('The Office (U.S.)', regex=False)]
 
 不过，为了在本教程中保留一点隐私，我将运行`office.shape`来检查新数据帧的大小。由于这个数据帧应该只包含*的*我对*办公室*的看法，我们应该期望它的行数比 27，000+行`df`的数据集少得多。
 
-```
+```py
 office.shape
 ```
 
-```
+```py
 (5479, 3)
 ```
 
@@ -274,12 +274,12 @@ office.shape
 
 同样，`office.head()`或`office.sample()`是检查我们工作的好方法，但是为了保持一些隐私，我将再次使用`df.shape`来确认一些行已经从数据帧中删除。
 
-```
+```py
 office = office[(office['Duration'] > '0 days 00:01:00')]
 office.shape
 ```
 
-```
+```py
 (5005, 3)
 ```
 
@@ -297,11 +297,11 @@ office.shape
 
 因为我们已经有了熊猫可以计算的格式的`Duration`栏，回答这个问题相当简单。我们可以使用`.sum()`来合计总持续时间:
 
-```
+```py
 office['Duration'].sum()
 ```
 
-```
+```py
 Timedelta('58 days 14:03:33')
 ```
 
@@ -322,7 +322,7 @@ Timedelta('58 days 14:03:33')
 
 我们可以使用`Start Time`列上的`.dt.weekday`和`.dt.hour`方法来实现这一点，并将结果分配给名为`weekday`和`hour`的新列:
 
-```
+```py
 office['weekday'] = office['Start Time'].dt.weekday
 office['hour'] = office['Start Time'].dt.hour
 
@@ -336,7 +336,7 @@ office.head(1)
 
 现在，我们来做一点分析！这些结果在视觉上更容易理解，所以我们将开始使用`%matplotlib inline`魔法让我们的图表显示在我们的 Jupyter 笔记本上。然后，我们再导入`matplotlib`。
 
-```
+```py
 %matplotlib inline
 import matplotlib
 ```
@@ -351,7 +351,7 @@ import matplotlib
 
 让我们一步一步来看看它是怎样的:
 
-```
+```py
 # set our categorical and define the order so the days are plotted Monday-Sunday
 office['weekday'] = pd.Categorical(office['weekday'], categories=
     [0,1,2,3,4,5,6],
@@ -378,7 +378,7 @@ office_by_day.plot(kind='bar', figsize=(20,10), title='Office Episodes Watched b
 
 现在，让我们按小时来看一下同样的数据。这里的过程与我们刚才所做的非常相似:
 
-```
+```py
 # set our categorical and define the order so the hours are plotted 0-23
 office['hour'] = pd.Categorical(office['hour'], categories=
     [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23],

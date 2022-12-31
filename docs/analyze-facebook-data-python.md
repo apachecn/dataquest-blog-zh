@@ -35,7 +35,7 @@ August 28, 2020![facebook-personal-post-data-chart](img/65687a4b9b8727adfc4402ba
 
 内置的`pd.read_json()`函数将能够自动解释数据帧中的 JSON 数据。(正如您将看到的那样，它并不完美，但它对我们这里的目的是有用的)。
 
-```
+```py
 import pandas as pd
 
 # read the json file into a dataframe
@@ -56,7 +56,7 @@ df.head(3)
 
 接下来，我们将确保时间戳列的格式正确，方法是使用`to_datetime()`将其转换为 datetime 对象。为了清楚起见，我们还将它重命名为`'date'`,并删除一些不必要的列——这一步并不是绝对必要的，但它有助于让我们看起来更简单。
 
-```
+```py
 # rename the timestamp column
 df.rename(columns={'timestamp': 'date'}, inplace=True)
 
@@ -79,12 +79,12 @@ df.head(3)
 
 使用`df.tail()`检查我们的数据帧的结尾也是一个好主意，只是为了确保它确实覆盖了我们整个脸书的使用:
 
-```
+```py
 print(df.shape)
 df.tail(3)
 ```
 
-```
+```py
 (4407, 2)
 ```
 
@@ -116,7 +116,7 @@ df.tail(3)
 
 实际情况是这样的:
 
-```
+```py
 date
 2005-03-01    1
 2005-04-01    0
@@ -148,7 +148,7 @@ Freq: MS, Name: data, Length: 186, dtype: int64
 
 (由于这不是一个关于 data viz 的教程，我们不会在本教程中深入讨论它是如何工作的，但如果你想了解更多关于如何用 Python 制作出色的数据可视化的信息，我们有[探索性数据可视化](https://www.dataquest.io/course/exploratory-data-visualization/)和[通过数据可视化讲述故事](https://www.dataquest.io/course/storytelling-data-visualization/)课程，你可以免费试用)。
 
-```
+```py
 %matplotlib inline
 import matplotlib.pyplot as plt
 import seaborn as sns

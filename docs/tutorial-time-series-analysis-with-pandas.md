@@ -49,40 +49,40 @@ January 10, 2019![](img/af384f561139b62f4e3b8a3ec80b3564.png)
 
 在我们深入研究 OPSD 数据之前，让我们简要介绍一下用于处理日期和时间的主要 pandas 数据结构。在熊猫中，单个时间点被表示为一个**时间戳**。我们可以使用`to_datetime()`函数从各种日期/时间格式的字符串中创建时间戳。让我们导入 pandas 并将一些日期和时间转换成时间戳。
 
-```
+```py
 import pandas as pd
 pd.to_datetime('2018-01-15 3:45pm') 
 ```
 
-```
+```py
  Timestamp('2018-01-15 15:45:00') 
 ```
 
-```
+```py
  pd.to_datetime('7/8/1952') 
 ```
 
-```
+```py
  Timestamp('1952-07-08 00:00:00') 
 ```
 
 正如我们所见，`to_datetime()`根据输入自动推断日期/时间格式。在上面的例子中，不明确的日期`'7/8/1952'`被假定为*月/日/年*，并被解释为 1952 年 7 月 8 日。或者，我们可以使用`dayfirst`参数告诉熊猫将日期解释为 1952 年 8 月 7 日。
 
-```
+```py
 pd.to_datetime('7/8/1952, dayfirst=True) 
 ```
 
-```
+```py
  Timestamp('1952-08-07 00:00:00')
 ```
 
 如果我们提供一个字符串列表或数组作为对`to_datetime()`的输入，它将在一个 **DatetimeIndex** 对象中返回一系列日期/时间值，这是一个核心数据结构，为 pandas 的大部分时间序列功能提供支持。
 
-```
+```py
  pd.to_datetime(['2018-01-05', '7/8/1952', 'Oct 10, 1995']) 
 ```
 
-```
+```py
  DatetimeIndex(['2018-01-05', '1952-07-08', '1995-10-10'], dtype='datetime64[ns]', freq=None)
 ```
 
@@ -90,11 +90,11 @@ pd.to_datetime('7/8/1952, dayfirst=True)
 
 如果我们正在处理一系列日期/时间格式相同的字符串，我们可以用`format`参数显式地指定它。对于非常大的数据集，与默认行为相比，这可以大大提高`to_datetime()`的性能，在默认行为中，格式是为每个单独的字符串单独推断的。可以使用 Python 内置 datetime 模块中的`strftime()`和`strptime()`函数中的任意[格式代码](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)。下面的示例使用格式代码`%m`(数字月份)、`%d`(月份中的某一天)和`%y`(两位数的年份)来指定格式。
 
-```
+```py
 pd.to_datetime(['2/25/10', '8/6/17', '12/15/12'], format='%m/%d/%y') 
 ```
 
-```
+```py
  DatetimeIndex(['2010-02-25', '2017-08-06', '2012-12-15'], dtype='datetime64[ns]', freq=None) 
 ```
 
@@ -104,18 +104,18 @@ pd.to_datetime(['2/25/10', '8/6/17', '12/15/12'], format='%m/%d/%y')
 
 为了在 pandas 中处理时间序列数据，我们使用 DatetimeIndex 作为数据帧(或序列)的索引。让我们看看如何用我们的 OPSD 数据集做到这一点。首先，我们使用`read_csv()`函数将数据读入 DataFrame，然后显示它的形状。
 
-```
+```py
  opsd_daily = pd.read_csv('opsd_germany_daily.csv')
 opsd_daily.shape 
 ```
 
-```
+```py
  (4383, 5) 
 ```
 
 DataFrame 有 4383 行，涵盖从 2006 年 1 月 1 日到 2017 年 12 月 31 日的时间段。为了查看数据的样子，让我们使用`head()`和`tail()`方法来显示前三行和后三行。
 
-```
+```py
 opsd_daily.head(3) 
 ```
 
@@ -125,7 +125,7 @@ opsd_daily.head(3)
 | one | 2006-01-02 | One thousand three hundred and eighty point five two one | 圆盘烤饼 | 圆盘烤饼 | 圆盘烤饼 |
 | Two | 2006-01-03 | One thousand four hundred and forty-two point five three three | 圆盘烤饼 | 圆盘烤饼 | 圆盘烤饼 |
 
-```
+```py
 opsd_daily.tail(3) 
 ```
 
@@ -137,11 +137,11 @@ opsd_daily.tail(3)
 
 接下来，让我们检查每一列的数据类型。
 
-```
+```py
  opsd_daily.dtypes 
 ```
 
-```
+```py
  Date datetime64[ns]
 Consumption float64
 Wind float64
@@ -152,7 +152,7 @@ dtype: object
 
 既然`Date`列是正确的数据类型，让我们将其设置为数据帧的索引。
 
-```
+```py
  opsd_daily = opsd_daily.set_index('Date')
 opsd_daily.head(3) 
 ```
@@ -165,11 +165,11 @@ opsd_daily.head(3)
 | 2006-01-02 | One thousand three hundred and eighty point five two one | 圆盘烤饼 | 圆盘烤饼 | 圆盘烤饼 |
 | 2006-01-03 | One thousand four hundred and forty-two point five three three | 圆盘烤饼 | 圆盘烤饼 | 圆盘烤饼 |
 
-```
+```py
  opsd_daily.index 
 ```
 
-```
+```py
  DatetimeIndex(['2006-01-01', '2006-01-02', '2006-01-03', '2006-01-04',
 '2006-01-05', '2006-01-06', '2006-01-07', '2006-01-08',
 '2006-01-09', '2006-01-10',
@@ -182,7 +182,7 @@ dtype='datetime64[ns]', name='Date', length=4383, freq=None)
 
 或者，我们可以使用`read_csv()`函数的`index_col`和`parse_dates`参数将上述步骤合并成一行。这通常是一种有用的捷径。
 
-```
+```py
  opsd_daily = pd.read_csv('opsd_germany_daily.csv', index_col=0, parse_dates=True) 
 ```
 
@@ -190,7 +190,7 @@ dtype='datetime64[ns]', name='Date', length=4383, freq=None)
 
 DatetimeIndex 的另一个有用的方面是，[的各个日期/时间组件](https://pandas.pydata.org/pandas-docs/stable/timeseries.html#time-date-components)都可以作为属性使用，例如`year`、`month`、`day`等等。让我们给`opsd_daily`再添加几列，包含年、月和工作日名称。
 
-```
+```py
  # Add columns with year, month, and weekday name
 opsd_daily['Year'] = opsd_daily.index.year
 opsd_daily['Month'] = opsd_daily.index.month
@@ -215,11 +215,11 @@ opsd_daily.sample(5, random_state=0)
 
 例如，我们可以使用诸如`'2017-08-10'`这样的字符串来选择某一天的数据。
 
-```
+```py
  opsd_daily.loc['2017-08-10'] 
 ```
 
-```
+```py
  Consumption 1351.49
 Wind 100.274
 Solar 71.16
@@ -232,7 +232,7 @@ Name: 2017-08-10 00:00:00, dtype: object
 
 我们也可以选择一段日子，比如`'2014-01-20':'2014-01-22'`。与使用`loc`的常规基于标签的索引一样，切片包含两个端点。
 
-```
+```py
  opsd_daily.loc['2014-01-20':'2014-01-22'] 
 ```
 
@@ -246,7 +246,7 @@ Name: 2017-08-10 00:00:00, dtype: object
 
 pandas 时间序列的另一个非常方便的特性是**部分字符串索引**，在这里我们可以选择与给定字符串部分匹配的所有日期/时间。例如，我们可以用`opsd_daily.loc['2006']`选择整个 2006 年，或者用`opsd_daily.loc['2012-02']`选择整个 2012 年 2 月。
 
-```
+```py
  opsd_daily.loc['2012-02'] 
 ```
 
@@ -288,14 +288,14 @@ pandas 时间序列的另一个非常方便的特性是**部分字符串索引**
 
 通过 pandas 和 matplotlib，我们可以轻松地可视化我们的时间序列数据。在这一节中，我们将介绍几个例子和一些对我们的时间序列图有用的定制。首先，我们导入 matplotlib。
 
-```
+```py
  import matplotlib.pyplot as plt
 # Display figures inline in Jupyter notebook 
 ```
 
 我们将为我们的图使用 seaborn 样式，让我们将默认的图形大小调整为适合时间序列图的形状。
 
-```
+```py
  import seaborn as sns
 # Use seaborn style defaults and set the default figure size
 sns.set(rc={'figure.figsize':(11, 4)}) 
@@ -303,7 +303,7 @@ sns.set(rc={'figure.figsize':(11, 4)})
 
 让我们使用 DataFrame 的`plot()`方法，创建一个德国日常用电量全时间序列的线图。
 
-```
+```py
  opsd_daily['Consumption'].plot(linewidth=0.5); 
 ```
 
@@ -311,7 +311,7 @@ sns.set(rc={'figure.figsize':(11, 4)})
 
 我们可以看到,`plot()`方法为 x 轴选择了非常好的刻度位置(每两年)和标签(年份),这很有帮助。但是，这么多的数据点，线图很拥挤，很难读懂。让我们将数据绘制成点，同时看看`Solar`和`Wind`时间序列。
 
-```
+```py
  cols_plot = ['Consumption', 'Solar', 'Wind']
 axes = opsd_daily[cols_plot].plot(marker='.', alpha=0.5, linestyle='None', figsize=(11, 9), subplots=True)
 for ax in axes:
@@ -332,7 +332,7 @@ for ax in axes:
 
 季节性也可能发生在其他时间尺度上。上图表明，德国的电力消耗可能存在一定的周季节性，与工作日和周末相对应。让我们画出一年的时间序列来进一步研究。
 
-```
+```py
  ax = opsd_daily.loc['2017', 'Consumption'].plot()
 ax.set_ylabel('Daily Consumption (GWh)'); 
 ```
@@ -343,7 +343,7 @@ ax.set_ylabel('Daily Consumption (GWh)');
 
 让我们进一步放大，只看一月和二月。
 
-```
+```py
  ax = opsd_daily.loc['2017-01':'2017-02', 'Consumption'].plot(marker='o', linestyle='-')
 ax.set_ylabel('Daily Consumption (GWh)'); 
 ```
@@ -356,13 +356,13 @@ ax.set_ylabel('Daily Consumption (GWh)');
 
 为了更好地显示上图中电力消耗的每周季节性，最好在每周时间刻度上(而不是在每月的第一天)显示垂直网格线。我们可以用 [matplotlib.dates](https://matplotlib.org/api/dates_api.html) 定制我们的绘图，所以让我们导入那个模块。
 
-```
+```py
  import matplotlib.dates as mdates 
 ```
 
 因为与 DataFrame 的`plot()`方法相比，matplotlib.dates 对日期/时间刻度的处理稍有不同，所以让我们直接在 matplotlib 中创建绘图。然后我们使用`mdates.WeekdayLocator()`和`mdates.MONDAY`将 x 轴刻度设置为每周的第一个星期一。我们还使用`mdates.DateFormatter()`来改进刻度标签的格式，使用我们之前看到的[格式代码](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)。
 
-```
+```py
 fig, ax = plt.subplots()
 ax.plot(opsd_daily.loc['2017-01':'2017-02', 'Consumption'], marker='o', linestyle='-')
 ax.set_ylabel('Daily Consumption (GWh)')
@@ -383,7 +383,7 @@ ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %d'));
 
 接下来，让我们用[箱线图](https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51)进一步探索我们数据的季节性，使用 seaborn 的`boxplot()`函数按不同时间段对数据进行分组，并显示每组的分布。我们将首先按月对数据进行分组，以显示每年的季节性。
 
-```
+```py
  fig, axes = plt.subplots(3, 1, figsize=(11, 10), sharex=True)
 for name, ax in zip(['Consumption', 'Solar', 'Wind'], axes):
 sns.boxplot(data=opsd_daily, x='Month', y=name, ax=ax)
@@ -402,7 +402,7 @@ if ax != axes[-1]:
 
 接下来，让我们按一周中的每一天对电力消耗时间序列进行分组，以探究每周的季节性。
 
-```
+```py
  sns.boxplot(data=opsd_daily, x='Weekday Name', y='Consumption'); 
 ```
 
@@ -418,11 +418,11 @@ if ax != axes[-1]:
 
 当时间序列的数据点在时间上均匀间隔时(例如，每小时、每天、每月等)。)，时间序列可以与熊猫的**频率**联系起来。例如，让我们使用`date_range()`函数以每天的频率创建一个从`1998-03-10`到`1998-03-15`的等间距日期序列。
 
-```
+```py
  pd.date_range('1998-03-10', '1998-03-15', freq='D') 
 ```
 
-```
+```py
  DatetimeIndex(['1998-03-10', '1998-03-11', '1998-03-12', '1998-03-13',
 '1998-03-14', '1998-03-15'],
 dtype='datetime64[ns]', freq='D') 
@@ -432,11 +432,11 @@ dtype='datetime64[ns]', freq='D')
 
 作为另一个例子，让我们以每小时的频率创建一个日期范围，指定开始日期和周期数，而不是开始日期和结束日期。
 
-```
+```py
  pd.date_range('2004-09-20', periods=8, freq='H') 
 ```
 
-```
+```py
  DatetimeIndex(['2004-09-20 00:00:00', '2004-09-20 01:00:00',
 '2004-09-20 02:00:00', '2004-09-20 03:00:00',
 '2004-09-20 04:00:00', '2004-09-20 05:00:00',
@@ -446,11 +446,11 @@ dtype='datetime64[ns]', freq='H')
 
 现在让我们再来看看我们的`opsd_daily`时间序列的 DatetimeIndex。
 
-```
+```py
  opsd_daily.index 
 ```
 
-```
+```py
  DatetimeIndex(['2006-01-01', '2006-01-02', '2006-01-03', '2006-01-04',
 '2006-01-05', '2006-01-06', '2006-01-07', '2006-01-08',
 '2006-01-09', '2006-01-10',
@@ -467,7 +467,7 @@ dtype='datetime64[ns]', name='Date', length=4383, freq=None)
 
 为了了解这是如何工作的，让我们创建一个新的 DataFrame，它只包含 2013 年 2 月 3 日、6 日和 8 日的`Consumption`数据。
 
-```
+```py
  # To select an arbitrary sequence of date/time values from a pandas time series,
 # we need to use a DatetimeIndex, rather than simply a list of date/time strings
 times_sample = pd.to_datetime(['2013-02-03', '2013-02-06', '2013-02-08'])
@@ -484,7 +484,7 @@ consum_sample
 
 现在我们使用`asfreq()`方法将数据帧转换为日频率，一列为未填充的数据，一列为向前填充的数据。
 
-```
+```py
  # Convert the data to daily frequency, without filling any missings
 consum_freq = consum_sample.asfreq('D')
 # Create a column with missings forward filled
@@ -513,7 +513,7 @@ consum_freq
 
 例如，让我们将数据重新采样为每周平均时间序列。
 
-```
+```py
  # Specify the data columns we want to include (i.e. exclude Year, Month, Weekday Name)
 data_columns = ['Consumption', 'Wind', 'Solar', 'Wind+Solar']
 # Resample to weekly frequency, aggregating with mean
@@ -533,19 +533,19 @@ opsd_weekly_mean.head(3)
 
 通过构建，我们的每周时间序列的数据点是每日时间序列的 1/7。我们可以通过比较两个数据帧的行数来证实这一点。
 
-```
+```py
  print(opsd_daily.shape[0])
 print(opsd_weekly_mean.shape[0]) 
 ```
 
-```
+```py
  4383
 627 
 ```
 
 让我们一起绘制一个六个月期间的每日和每周时间序列来比较它们。
 
-```
+```py
  # Start and end of the date range to extract
 start, end = '2017-01', '2017-06'
 # Plot daily and weekly resampled time series together
@@ -564,7 +564,7 @@ ax.legend();
 
 现在，让我们按月频率对数据进行重新采样，用总和而不是平均值进行合计。与使用`mean()`聚合不同，聚合会将所有缺失数据的任意时段的输出设置为`NaN`,`sum()`的默认行为将返回`0`的输出作为缺失数据的总和。我们使用`min_count`参数来改变这种行为。
 
-```
+```py
  # Compute the monthly sums, setting the value to NaN for any month which has
 # fewer than 28 days of data
 opsd_monthly = opsd_daily[data_columns].resample('M').sum(min_count=28)
@@ -583,7 +583,7 @@ opsd_monthly.head(3)
 
 现在，让我们通过将耗电量绘制为线形图，将风能和太阳能发电量一起绘制为堆积面积图，来探索月度时间序列。
 
-```
+```py
  fig, ax = plt.subplots()
 ax.plot(opsd_monthly['Consumption'], color='black', label='Consumption')
 opsd_monthly[['Wind', 'Solar']].plot.area(ax=ax, linewidth=0)
@@ -598,7 +598,7 @@ ax.set_ylabel('Monthly Total (GWh)');
 
 让我们通过对年频率进行重新采样并计算每年的`Wind+Solar`与`Consumption`之比来进一步探究这一点。
 
-```
+```py
  # Compute the annual sums, setting the value to NaN for any year which has
 # fewer than 360 days of data
 opsd_annual = opsd_daily[data_columns].resample('A').sum(min_count=360)
@@ -622,7 +622,7 @@ opsd_annual.tail(3)
 
 最后，让我们把风能+太阳能在年用电量中所占的份额绘制成柱状图。
 
-```
+```py
  # Plot from 2012 onwards, because there is no solar production data in earlier years
 ax = opsd_annual.loc[2012:, 'Wind+Solar/Consumption'].plot.bar(color='C0')
 ax.set_ylabel('Fraction')
@@ -648,7 +648,7 @@ plt.xticks(rotation=0);
 *   `2006-01-03`到`2006-01-09` —标注为`2006-01-06`
 *   诸如此类…
 
-```
+```py
  # Compute the centered 7-day rolling mean
 opsd_7d = opsd_daily[data_columns].rolling(7, center=True).mean()
 opsd_7d.head(10) 
@@ -673,7 +673,7 @@ opsd_7d.head(10)
 
 为了直观显示滚动平均值和重采样之间的差异，让我们更新我们之前的 2017 年 1 月至 6 月太阳能发电量图，以包括 7 天的滚动平均值以及每周平均重采样时间序列和原始每日数据。
 
-```
+```py
  # Start and end of the date range to extract
 start, end = '2017-01', '2017-06'
 # Plot daily, weekly resampled, and 7-day rolling mean time series together
@@ -700,7 +700,7 @@ ax.legend();
 
 我们已经计算了 7 天的滚动平均值，现在让我们来计算 OPSD 数据的 365 天的滚动平均值。
 
-```
+```py
  # The min_periods=360 argument accounts for a few isolated missing days in the
 # wind and solar production time series
 opsd_365d = opsd_daily[data_columns].rolling(window=365, center=True, min_periods=360).mean() 
@@ -708,7 +708,7 @@ opsd_365d = opsd_daily[data_columns].rolling(window=365, center=True, min_period
 
 让我们绘制 7 天和 365 天的滚动平均用电量，以及每日时间序列。
 
-```
+```py
  # Plot daily, 7-day rolling mean, and 365-day rolling mean time series
 fig, ax = plt.subplots()
 ax.plot(opsd_daily['Consumption'], marker='.', markersize=2, color='0.6',
@@ -732,7 +732,7 @@ ax.set_title('Trends in Electricity Consumption');
 
 现在让我们看看风能和太阳能生产的趋势。
 
-```
+```py
  # Plot 365-day rolling mean time series of wind and solar power
 fig, ax = plt.subplots()
 for nm in ['Wind', 'Solar', 'Wind+Solar']:

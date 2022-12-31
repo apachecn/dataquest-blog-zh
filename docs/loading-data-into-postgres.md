@@ -16,7 +16,7 @@ September 30, 2017![tutorial-sql-python-postgres](img/b304a62788cc56bf83d23b490a
 
 接下来，您应该确保安装了`psycopg2`库。如果没有，您可以运行:
 
-```
+```py
 pip install psycopg2
 ```
 
@@ -42,7 +42,7 @@ pip install psycopg2
 
 以下面的例子为例，使用 [psycopg2](http://initd.org/psycopg/) 连接到 Postgres 数据库
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 ```
@@ -61,7 +61,7 @@ conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 
 要在 Postgres 数据库上执行命令，可以用一个字符串化的 SQL 命令调用`Cursor`对象上的`execute`方法。下面是一个如何在假的`notes`表上运行的例子:
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()
@@ -70,7 +70,7 @@ cur.execute('SELECT * FROM notes')
 
 在这个例子中，`cur`对象调用`execute`方法，如果成功，将返回`None`。要从查询中获得返回值，需要调用两个方法之一:`fetchone()`或`fetchall()`。`fetchone()`方法返回第一行结果或`None`，而`fetchall()`方法返回表中每一行的列表，如果没有行，则返回空列表`[]`。
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()
@@ -85,7 +85,7 @@ all = cur.fetchall()
 
 现在我们已经对如何连接和执行数据库查询有了基本的了解，是时候创建您的第一个 Postgres 表了。从 [Postgres 文档](https://www.postgresql.org/docs/9.1/static/sql-createtable.html)中，可以看到如何在 Postgres 中创建表格:
 
-```
+```py
  CREATE TABLE tableName(
     column1 dataType1 PRIMARY KEY,
     column2 dataType2,
@@ -105,7 +105,7 @@ all = cur.fetchall()
 
 为了创建一个适合我们数据集的表，我们必须运行`CREATE TABLE`命令，其中的列与 CSV 文件的顺序以及它们各自的类型相同。类似于运行一个`SELECT`查询，我们将把命令写成一个字符串，并把它传递给`execute()`方法。下面是该表的外观:
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()
@@ -125,7 +125,7 @@ cur.execute("""
 
 使用 Postgres，我们要处理的是可能同时更改数据库的多个用户。让我们想象一个简单的场景，我们跟踪一家银行不同客户的账户。我们可以编写一个简单的查询来为此创建一个表:
 
-```
+```py
  CREATE TABLE accounts(
     id integer PRIMARY KEY,
     name text,
@@ -135,7 +135,7 @@ cur.execute("""
 
 我们的表在表中有以下两行:
 
-```
+```py
  id name balance
 1 Jim 100
 2 Sue 200
@@ -143,14 +143,14 @@ cur.execute("""
 
 假设`Sue`给`100`美元给`Jim`。我们可以用两个查询对此建模:
 
-```
+```py
  UPDATE accounts SET balance=200 WHERE name="Jim";
 UPDATE accounts SET balance=100 WHERE name="Sue";
 ```
 
 在上面的例子中，我们从`Sue`中删除了`100`美元，并将`100`美元添加到`Jim`中。如果第二个`UPDATE`语句有错误，数据库失败，或者另一个用户有冲突的查询，该怎么办？第一个查询可以正常运行，但是第二个查询会失败。这将导致以下结果:
 
-```
+```py
  id name balance
 1 Jim 100
 2 Sue 200
@@ -166,7 +166,7 @@ UPDATE accounts SET balance=100 WHERE name="Sue";
 
 为了提交我们的更改并从前面创建`users`表，我们需要做的就是在事务结束时运行`commit()`方法。现在应该是这样的:
 
-```
+```py
  conn = psycopg2.connect("dbname=dq user=dq")
 cur = conn.cursor()
 cur.execute("""CREATE TABLE users(
@@ -185,13 +185,13 @@ conn.commit()
 
 将数据加载到 Postgres 表中的一种常见方式是在表上发出一个`INSERT`命令。insert 命令需要插入的表名和插入的值序列。下面是一个对`users`表进行插入查询的示例:
 
-```
+```py
  INSERT INTO users VALUES (10, "[[email protected]](/cdn-cgi/l/email-protection)", "Some Name", "123 Fake St.")
 ```
 
 使用`INSERT`命令，我们可以*使用`pyscopg2`将*插入到`users`表中。首先，为`execute()`方法编写一个字符串`INSERT` SQL 命令。然后，用所有值格式化字符串:
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()
@@ -204,7 +204,7 @@ conn.commit()
 
 幸运的是，`psycopg2`提供了另一种无需`format()`就能执行字符串插值的方法。这是使用`psycopg2`呼叫`INSERT`的推荐方式:
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()
@@ -216,7 +216,7 @@ conn.commit()
 
 我们首先使用 [`csv`模块](https://docs.python.org/3.6/library/csv.html)加载 Python 中的 CSV 文件。然后，我们将为每一行运行`INSERT`查询，然后提交事务:
 
-```
+```py
  import csv
 import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
@@ -244,7 +244,7 @@ conn.commit()
 
 这就是我们如何使用`copy_from()`来加载我们的文件，而不是循环使用`INSERT`命令:
 
-```
+```py
  import psycopg2
 conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
 cur = conn.cursor()

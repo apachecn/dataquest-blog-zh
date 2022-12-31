@@ -30,7 +30,7 @@ February 17, 2021![what's the best way to learn SQL?](img/7635b8f480aee9a21e90e6
 
 这通常不是人们学习编程语言(或者在这种情况下，查询语言)最喜欢的部分。但这是无法避免的。如果不能看到这样的东西并知道发生了什么，你就不可能达到 SQL *的功能级别:*
 
-```
+```py
 SELECT c.name capital_city, f.name country
 FROM facts f
 INNER JOIN (

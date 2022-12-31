@@ -61,7 +61,7 @@ SQL 插入是数据工作者需要理解的基本操作。在大多数数据科�
 
 #### **第一步:**导入 pymysql 模块。
 
-```
+```py
 # Import pymysql module
 import pymysql
 ```
@@ -72,7 +72,7 @@ import pymysql
 
 (以下参数仅用于演示目的；您需要填写您正在访问的 MySQL 数据库所需的特定访问细节。)
 
-```
+```py
 # Connect to the database
 connection = pymysql.connect(host='localhost',
                              user='root',
@@ -84,7 +84,7 @@ connection = pymysql.connect(host='localhost',
 
 这将允许我们在编写完 SQL 查询后执行它。
 
-```
+```py
 cursor = connection.cursor()
 ```
 
@@ -94,7 +94,7 @@ cursor = connection.cursor()
 
 然后，我们将使用`commit()`提交这些更改。
 
-```
+```py
 # Create a new record
 sql = "INSERT INTO `employee` (`EmployeeID`, `Ename`, `DeptID`, `Salary`, `Dname`, `Dlocation`) VALUES (%s, %s, %s, %s, %s, %s)"
 
@@ -109,7 +109,7 @@ connection.commit()
 
 我们可以通过在数据库中查询`employee`的全部内容，然后获取并打印这些结果。
 
-```
+```py
 # Create a new query that selects the entire contents of `employee`
 sql = "SELECT * FROM `employee`"
 cursor.execute(sql)
@@ -120,7 +120,7 @@ for i in result:
     print(i)
 ```
 
-```
+```py
 (1001, 'John', 2, 4000, 'IT', 'New Delhi') 
 (1002, 'Anna', 1, 3500, 'HR', 'Mumbai') 
 (1003, 'James', 1, 2500, 'HR', 'Mumbai') 
@@ -137,7 +137,7 @@ for i in result:
 
 现在我们完成了，我们应该使用`close()`方法关闭数据库连接。
 
-```
+```py
 # Close the connection
 connection.close()
 ```
@@ -146,7 +146,7 @@ connection.close()
 
 这是所有这些看起来的样子:
 
-```
+```py
 import pymysql
 
 try:
@@ -181,7 +181,7 @@ finally:
     connection.close()
 ```
 
-```
+```py
 ((1001, 'John', 2, 4000, 'IT', 'New Delhi'), (1002, 'Anna', 1, 3500, 'HR', 'Mumbai'), (1003, 'James', 1, 2500, 'HR', 'Mumbai'), (1004, 'David', 2, 5000, 'IT', 'New Delhi'), (1005, 'Mark', 2, 3000, 'IT', 'New Delhi'), (1006, 'Steve', 3, 4500, 'Finance', 'Mumbai'), (1007, 'Alice', 3, 3500, 'Finance', 'Mumbai'), (1008, 'Kabir', 2, 5000, 'IT', 'New Delhi'), (1009, 'Morgan', 1, 4000, 'HR', 'Mumbai'), (1009, 'Morgan', 1, 4000, 'HR', 'Mumbai'))
 ```
 
@@ -195,7 +195,7 @@ finally:
 
 我们还可以从 CSV 导入数据，或者以任何其他方式创建数据帧，但是对于本例，我们只是创建一个小的数据帧来保存一些数据科学教科书的标题和价格。
 
-```
+```py
 # Import pandas
 import pandas as pd
 
@@ -227,7 +227,7 @@ data
 
 一旦我们创建了这个表，我们就可以再次使用`pymysql`从 Python 创建一个到数据库的连接。
 
-```
+```py
 import pymysql
 
 # Connect to the database
@@ -246,7 +246,7 @@ cursor=connection.cursor()
 
 (也可以一次插入整个数据帧，我们将在下一节中研究如何插入，但首先让我们看看如何逐行插入)。
 
-```
+```py
 # creating column list for insertion
 cols = "`,`".join([str(i) for i in data.columns.tolist()])
 
@@ -263,7 +263,7 @@ for i,row in data.iterrows():
 
 同样，让我们查询数据库，以确保我们插入的数据已被正确保存。
 
-```
+```py
 # Execute query
 sql = "SELECT * FROM `book_details`"
 cursor.execute(sql)
@@ -274,7 +274,7 @@ for i in result:
     print(i)
 ```
 
-```
+```py
 (12345, 'Python Programming', 29) 
 (12346, 'Learn MySQL', 23) 
 (12347, 'Data Science Cookbook', 27)
@@ -282,7 +282,7 @@ for i in result:
 
 一旦我们确信一切正常，我们就可以关闭连接。
 
-```
+```py
 connection.close()
 ```
 
@@ -292,7 +292,7 @@ connection.close()
 
 这种方法以更直接的方式实现了相同的最终结果，并允许我们一次将整个数据帧添加到 MySQL 数据库中。
 
-```
+```py
 # Import modules
 import pandas as pd
 
@@ -314,7 +314,7 @@ data
 
 导入模块`sqlalchemy`并使用参数 user、password 和 database name 创建一个引擎。这就是我们连接和登录 MySQL 数据库的方式。
 
-```
+```py
 # import the module
 from sqlalchemy import create_engine
 
@@ -329,7 +329,7 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@localhost/{db}"
 
 我们一会儿将仔细看看这些参数分别指的是什么，但是首先，看看使用这种方法将 pandas 数据帧插入 MySQL 数据库有多简单。我们只用一行代码就可以做到:
 
-```
+```py
 # Insert whole DataFrame into MySQL
 data.to_sql('book_details', con = engine, if_exists = 'append', chunksize = 1000)
 ```
@@ -359,7 +359,7 @@ data.to_sql('book_details', con = engine, if_exists = 'append', chunksize = 1000
 
 如果我们想在 Python 中这样做，我们可以使用本教程前面使用的相同脚本来查询这些记录。唯一的区别是，我们将告诉`pymysql`执行`SELECT`命令，而不是我们之前使用的`INSERT`命令。
 
-```
+```py
 # Import module
 import pymysql
 
@@ -385,7 +385,7 @@ for i in result:
 connection.close()
 ```
 
-```
+```py
 (1001, 'John', 2, 4000, 'IT', 'New Delhi') 
 (1002, 'Anna', 1, 3500, 'HR', 'Mumbai') 
 (1003, 'James', 1, 2500, 'HR', 'Mumbai') 
@@ -400,7 +400,7 @@ connection.close()
 
 上面，我们已经选择并打印了整个数据库，但是如果我们想使用`WHERE`进行更仔细、有限的选择，方法是相同的:
 
-```
+```py
 my_cursor.execute("SELECT * FROM employee WHERE DeptID=2")
 ```
 

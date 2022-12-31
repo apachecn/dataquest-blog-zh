@@ -61,13 +61,13 @@ Pandas 比 Excel 更擅长自动化数据处理任务，包括处理 Excel 文�
 
 我们需要首先将 Excel 文件中的数据导入 pandas。为此，我们从导入 pandas 模块开始。
 
-```
+```py
 import pandas as pd
 ```
 
 然后，我们使用 pandas 的 read_excel 方法从 excel 文件中读入数据。调用此方法最简单的方法是传递文件名。如果没有指定工作表名称，那么它将读取索引中的第一个工作表(如下所示)。
 
-```
+```py
 excel_file = 'movies.xls'
 movies = pd.read_excel(excel_file)
 ```
@@ -76,7 +76,7 @@ movies = pd.read_excel(excel_file)
 
 Pandas 有一个内置的`DataFrame.head()`方法，我们可以使用它轻松地显示数据帧的前几行。如果没有传递参数，它将显示前五行。如果传递了一个数字，它将从顶部开始显示相同数量的行。
 
-```
+```py
 movies.head()
 ```
 
@@ -96,7 +96,7 @@ Excel 文件通常有多个工作表，读取特定工作表或全部工作表�
 
 在下面的代码中，我们选择第一列“Title”作为索引(index=0)，方法是将 0 传递给参数`index_col`。
 
-```
+```py
 movies_sheet1 = pd.read_excel(excel_file, sheetname=0, index_col=0)
 movies_sheet1.head()
 ```
@@ -115,7 +115,7 @@ movies_sheet1.head()
 
 正如您在上面注意到的，我们的 Excel 数据文件有三张表。我们已经阅读了上面数据框中的第一页。现在，使用相同的语法，我们也将读入两张表的其余部分。
 
-```
+```py
 movies_sheet2 = pd.read_excel(excel_file, sheetname=1, index_col=0)
 movies_sheet2.head()
 ```
@@ -132,7 +132,7 @@ movies_sheet2.head()
 
 5 行× 24 列
 
-```
+```py
 movies_sheet3 = pd.read_excel(excel_file, sheetname=2, index_col=0)
 movies_sheet3.head()
 ```
@@ -151,17 +151,17 @@ movies_sheet3.head()
 
 由于所有三个工作表都有相似的数据，但记录移动不同，我们将从上面创建的所有三个数据帧中创建一个数据帧。为此，我们将使用 pandas `concat`方法，传入我们刚刚创建的三个数据帧的名称，并将结果分配给一个新的数据帧对象`movies`。通过保持数据帧名称与之前相同，我们覆盖了之前创建的数据帧。
 
-```
+```py
 movies = pd.concat([movies_sheet1, movies_sheet2, movies_sheet3])
 ```
 
 我们可以通过检查组合数据帧中的行数来检查这种连接，方法是对其调用方法`shape`，该方法将给出行数和列数。
 
-```
+```py
 movies.shape
 ```
 
-```
+```py
 (5042, 24)
 ```
 
@@ -169,7 +169,7 @@ movies.shape
 
 我们还可以使用 ExcelFile 类来处理同一个 Excel 文件中的多个工作表。我们首先使用`ExcelFile`包装 Excel 文件，然后将其传递给`read_excel`方法。
 
-```
+```py
 xlsx = pd.ExcelFile(excel_file)
 movies_sheets = []
 for sheet in xlsx.sheet_names:
@@ -187,11 +187,11 @@ movies = pd.concat(movies_sheets)
 
 我们可以使用`shape`方法找出数据帧的行数和列数。
 
-```
+```py
 movies.shape
 ```
 
-```
+```py
 (5042, 25)
 ```
 
@@ -199,7 +199,7 @@ movies.shape
 
 我们可以使用`tail`方法来查看底部的行。如果没有传递参数，则只返回底部的五行。
 
-```
+```py
 movies.tail()
 ```
 
@@ -215,17 +215,17 @@ movies.tail()
 
 在 Excel 中，您可以根据一列或多列中的值对工作表进行排序。在熊猫身上，你可以用`sort_values`方法做同样的事情。例如，让我们根据总收入列对电影数据帧进行排序。
 
-```
+```py
 sorted_by_gross = movies.sort_values(['Gross Earnings'], ascending=False)
 ```
 
 因为我们有按列中的值排序的数据，所以我们可以用它做一些有趣的事情。例如，我们可以按总收入显示前 10 部电影。
 
-```
+```py
 sorted_by_gross["Gross Earnings"].head(10)
 ```
 
-```
+```py
 1867 760505847.0
 1027 658672302.0
 1263 652177271.0
@@ -243,13 +243,13 @@ Name: Gross Earnings, dtype: float64
 
 首先，我们导入 matplotlib 模块，并设置 matplotlib 在 Jupyter 笔记本中显示绘图。
 
-```
+```py
 import matplotlib.pyplot as plt%matplotlib inline
 ```
 
 我们将绘制一个条形图，其中每个条形代表前 10 部电影中的一部。我们可以通过调用 plot 方法并将参数`kind`设置为`barh`来实现这一点。这告诉`matplotlib`画一个单杠图。
 
-```
+```py
 sorted_by_gross['Gross Earnings'].head(10).plot(kind="barh")
 plt.show()
 ```
@@ -258,7 +258,7 @@ plt.show()
 
 让我们创建一个 IMDB 分数直方图，以检查 IMDB 分数在所有电影中的分布。直方图是可视化数据集分布的好方法。我们对来自电影数据帧的 IMDB 分数序列使用`plot`方法，并向其传递参数。
 
-```
+```py
 movies['IMDB Score'].plot(kind="hist")
 plt.show()
 ```
@@ -271,7 +271,7 @@ plt.show()
 
 Pandas 有一些非常方便的方法来查看我们数据集的统计数据。例如，我们可以使用`describe`方法来获得数据集的统计摘要。
 
-```
+```py
 movies.describe()
 ```
 
@@ -298,11 +298,11 @@ movies.describe()
 
 我们也可以使用相应的方法一次访问一个信息。例如，要获得特定列的平均值，可以对该列使用`mean`方法。
 
-```
+```py
 movies["Gross Earnings"].mean()
 ```
 
-```
+```py
 48468407.526809327
 ```
 
@@ -316,7 +316,7 @@ movies["Gross Earnings"].mean()
 
 这个文件显然没有标题，前四行不是实际记录，因此不应该读入。我们可以通过将参数`header`设置为`None`来告诉 read_excel 没有标题，并且我们可以通过将参数`skiprows`设置为 4 来跳过前四行。
 
-```
+```py
 movies_skip_rows = pd.read_excel("movies-no-header-skip-rows.xls", header=None, skiprows=4)
 movies_skip_rows.head(5)
 ```
@@ -335,7 +335,7 @@ movies_skip_rows.head(5)
 
 前面数据帧中的列名是数字，由 pandas 默认分配。我们可以通过调用 DataFrame 上的方法`columns`并将列名作为列表传递来将列名重命名为描述性的名称。
 
-```
+```py
 movies_skip_rows.columns = ['Title', 'Year', 'Genres', 'Language', 'Country', 'Content Rating', 'Duration', 'Aspect Ratio', 'Budget', 'Gross Earnings', 'Director', 'Actor 1', 'Actor 2', 'Actor 3', 'Facebook Likes - Director', 'Facebook Likes - Actor 1', 'Facebook Likes - Actor 2', 'Facebook Likes - Actor 3', 'Facebook Likes - cast Total', 'Facebook likes - Movie', 'Facenumber in posters', 'User Votes', 'Reviews by Users', 'Reviews by Crtiics', 'IMDB Score']
 movies_skip_rows.head()
 ```
@@ -356,7 +356,7 @@ movies_skip_rows.head()
 
 尽管 read_excel 默认读取并导入所有列，但您可以选择仅导入某些列。通过传递 parse_cols=6，我们告诉`read_excel`方法只读取第一列，直到索引 6 或前 7 列(第一列的索引为零)。
 
-```
+```py
 movies_subset_columns = pd.read_excel(excel_file, parse_cols=6)
 movies_subset_columns.head()
 ```
@@ -375,7 +375,7 @@ movies_subset_columns.head()
 
 Excel 常用的功能之一是应用公式从现有列值创建新列。在我们的 Excel 文件中，我们有总收入和预算列。我们可以从总收入中减去预算得到净收益。然后，我们可以将 Excel 文件中的公式应用于所有行。我们可以在熊猫身上这样做，如下图所示。
 
-```
+```py
 movies["Net Earnings"] = movies["Gross Earnings"] - movies["Budget"]
 ```
 
@@ -383,7 +383,7 @@ movies["Net Earnings"] = movies["Gross Earnings"] - movies["Budget"]
 
 让我们使用`sort_values`方法根据我们创建的新列对数据进行排序，并根据净收入可视化排名前 10 位的电影。
 
-```
+```py
 sorted_movies = movies[['Net Earnings']].sort_values(['Net Earnings'], ascending=[False])sorted_movies.head(10)['Net Earnings'].plot.barh()
 plt.show()
 ```
@@ -396,7 +396,7 @@ plt.show()
 
 我们需要首先确定将用作索引的一列或多列，以及将应用汇总公式的列。让我们从小处着手，选择 Year 作为索引列，选择 Gross Earnings 作为汇总列，并根据这些数据创建一个单独的数据框架。
 
-```
+```py
 movies_subset = movies[['Year', 'Gross Earnings']]
 movies_subset.head()
 ```
@@ -411,7 +411,7 @@ movies_subset.head()
 
 我们现在对这个数据子集调用`pivot_table`。方法`pivot_table`接受一个参数`index`。如前所述，我们希望使用年份作为索引。
 
-```
+```py
 earnings_by_year = movies_subset.pivot_table(index=['Year'])
 earnings_by_year.head()
 ```
@@ -430,7 +430,7 @@ earnings_by_year.head()
 
 我们可以使用这个数据透视表来创建一些数据可视化。我们可以调用 DataFrame 上的`plot`方法创建一个线图，并调用`show`方法在笔记本中显示该图。
 
-```
+```py
 earnings_by_year.plot()
 plt.show()
 ```
@@ -439,7 +439,7 @@ plt.show()
 
 我们看到了如何将单个列作为索引进行透视。如果我们可以使用多个列，事情会变得更有趣。让我们创建另一个数据框架子集，但这次我们将选择国家、语言和总收入列。
 
-```
+```py
 movies_subset = movies[['Country', 'Language', 'Gross Earnings']]
 movies_subset.head()
 ```
@@ -454,7 +454,7 @@ movies_subset.head()
 
 我们将使用国家和语言列作为数据透视表的索引。我们将使用总收入作为汇总表，但是，我们不需要像前面看到的那样明确指定。
 
-```
+```py
 earnings_by_co_lang = movies_subset.pivot_table(index=['Country', 'Language'])
 earnings_by_co_lang.head()
 ```
@@ -471,7 +471,7 @@ earnings_by_co_lang.head()
 
 让我们用条形图来可视化这个数据透视表。由于这个数据透视表中还有几百条记录，我们将只画出其中的几条。
 
-```
+```py
 earnings_by_co_lang.head(20).plot(kind='bar', figsize=(20,8))
 plt.show()
 ```
@@ -482,13 +482,13 @@ plt.show()
 
 如果你要和使用 Excel 的同事一起工作，在 pandas 中保存 Excel 文件是很重要的。您可以使用 pandas `to_excel`方法将 pandas 数据帧导出或写入 Excel 文件。Pandas 在内部使用`xlwt` Python 模块写入 Excel 文件。在我们想要导出的数据帧上调用了`to_excel`方法。我们还需要传递一个文件名，这个数据帧将被写入其中。
 
-```
+```py
 movies.to_excel('output.xlsx')
 ```
 
 默认情况下，索引也会保存到输出文件中。然而，有时索引并不提供任何有用的信息。例如，`movies`数据帧有一个数字自动递增索引，它不是原始 Excel 数据的一部分。
 
-```
+```py
 movies.head()
 ```
 
@@ -504,7 +504,7 @@ movies.head()
 
 您可以通过传递 index-False 来选择跳过索引。
 
-```
+```py
 movies.to_excel('output.xlsx', index=False)
 ```
 
@@ -512,7 +512,7 @@ movies.to_excel('output.xlsx', index=False)
 
 我们可以通过创建一个`ExcelWriter`对象来使用这些高级输出选项，并使用该对象写入 EXcel 文件。
 
-```
+```py
 writer = pd.ExcelWriter('output.xlsx', engine='xlsxwriter')
 movies.to_excel(writer, index=False, sheet_name='report')
 workbook = writer.bookworksheet = writer.sheets['report']
@@ -520,14 +520,14 @@ workbook = writer.bookworksheet = writer.sheets['report']
 
 我们可以通过在我们正在写入的工作簿上调用`add_format`来应用定制。这里我们将标题格式设置为粗体。
 
-```
+```py
 header_fmt = workbook.add_format({'bold': True})
 worksheet.set_row(0, None, header_fmt)
 ```
 
 最后，我们通过调用 writer 对象上的方法`save`来保存输出文件。
 
-```
+```py
 writer.save()
 ```
 

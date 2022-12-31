@@ -12,7 +12,7 @@ February 25, 2022![](img/81f34908548a166631acb9496c01e8de.png)
 
 如果我们使用`read_csv()` pandas 方法读取一个 *csv* 文件，而没有指定任何索引，那么得到的数据帧将有一个默认的基于整数的索引，从第一行的 0 开始，随后每一行增加 1:
 
-```
+```py
 import pandas as pd
 import numpy as np
 
@@ -30,7 +30,7 @@ df
 
 在某些情况下，我们可能希望有更有意义的行标签，所以我们将选择数据帧中的一列作为数据帧索引。当使用`index_col`参数应用`read_csv()` pandas 方法时，我们可以直接这样做:
 
-```
+```py
 df = pd.read_csv('Austin_Animal_Center_Intakes.csv', index_col='Animal ID').head()
 df
 ```
@@ -47,7 +47,7 @@ df
 
 或者，我们可以使用`set_index()`方法将数据帧的任何列设置为数据帧索引:
 
-```
+```py
 df = pd.read_csv('Austin_Animal_Center_Intakes.csv').head()
 df.set_index('Animal ID', inplace=True)
 df
@@ -65,7 +65,7 @@ df
 
 如果在某个时候，我们需要**恢复默认的数字索引**，该怎么办？这就是熊猫方法的用武之地:
 
-```
+```py
 df.reset_index()
 ```
 
@@ -95,7 +95,7 @@ df.reset_index()
 
 此参数将整数、字符串、元组或列表作为可能的数据类型，并且仅适用于带有`MultiIndex`的数据帧，如下所示:
 
-```
+```py
 df_multiindex = pd.read_csv('Austin_Animal_Center_Intakes.csv', index_col=['Animal ID', 'Name']).head()
 df_multiindex
 ```
@@ -112,11 +112,11 @@ df_multiindex
 
 事实上，如果我们现在检查上面数据帧的索引，我们会看到它不是一个普通的数据帧索引，而是一个`MultiIndex`对象:
 
-```
+```py
 df_multiindex.index
 ```
 
-```
+```py
 MultiIndex([('A786884',  '*Brock'),
             ('A706918',   'Belle'),
             ('A724273', 'Runster'),
@@ -127,7 +127,7 @@ MultiIndex([('A786884',  '*Brock'),
 
 默认情况下，`reset_index()` pandas 方法(`level=None`)的参数`level`会删除一个`MultiIndex`的所有级别:
 
-```
+```py
 df_multiindex.reset_index()
 ```
 
@@ -143,7 +143,7 @@ df_multiindex.reset_index()
 
 相反，如果我们显式传递`level`的值，该参数将从数据帧索引中删除所选级别，并将它们作为公共数据帧列返回(除非我们选择使用`drop`参数从数据帧中完全删除该信息)。比较以下操作:
 
-```
+```py
 df_multiindex.reset_index(level='Animal ID')
 ```
 
@@ -159,7 +159,7 @@ df_multiindex.reset_index(level='Animal ID')
 
 最初，`Animal ID`是数据帧的索引之一。在设置了`level`参数之后，它被从索引中删除，并作为一个名为`Animal ID`的公共列插入。
 
-```
+```py
 df_multiindex.reset_index(level='Name')
 ```
 
@@ -179,7 +179,7 @@ df_multiindex.reset_index(level='Name')
 
 此参数确定在索引重置后是将旧索引保留为公共数据帧列，还是将其从数据帧中完全删除。默认情况下(`drop=False`)保留它，正如我们在前面所有例子中看到的。否则，如果我们不想将旧索引保留为一列，我们可以在索引重置后将其从 DataFrame 中完全删除(`drop=True`):
 
-```
+```py
 df
 ```
 
@@ -193,7 +193,7 @@ df
 | A665644 | 圆盘烤饼 | 2013 年 10 月 21 日上午 07 时 59 分 | 2013 年 10 月 21 日上午 07 时 59 分 | 奥斯汀(德克萨斯州) | 走失的家畜 | 生病的 | 猫 | 完整的女性 | 4 周 | 国内短毛混合品种 | 白棉布 |
 | A682524 | 里约 | 2014 年 6 月 29 日上午 10 时 38 分 | 2014 年 6 月 29 日上午 10 时 38 分 | 德克萨斯州奥斯汀市格罗夫大道 800 号 | 走失的家畜 | 常态 | 狗 | 绝育男性 | 4 年 | 杜宾犬/澳大利亚牧牛犬 | 褐色/灰色 |
 
-```
+```py
 df.reset_index(drop=True)
 ```
 
@@ -209,7 +209,7 @@ df.reset_index(drop=True)
 
 `drop`参数也适用于带有`MultiIndex`的数据帧，就像我们之前创建的那个:
 
-```
+```py
 df_multiindex
 ```
 
@@ -223,7 +223,7 @@ df_multiindex
 | A665644 | 圆盘烤饼 | 2013 年 10 月 21 日上午 07 时 59 分 | 2013 年 10 月 21 日上午 07 时 59 分 | 奥斯汀(德克萨斯州) | 走失的家畜 | 生病的 | 猫 | 完整的女性 | 4 周 | 国内短毛混合品种 | 白棉布 |
 | A682524 | 里约 | 2014 年 6 月 29 日上午 10 时 38 分 | 2014 年 6 月 29 日上午 10 时 38 分 | 德克萨斯州奥斯汀市格罗夫大道 800 号 | 走失的家畜 | 常态 | 狗 | 绝育男性 | 4 年 | 杜宾犬/澳大利亚牧牛犬 | 褐色/灰色 |
 
-```
+```py
 df_multiindex.reset_index(drop=True)
 ```
 
@@ -239,7 +239,7 @@ df_multiindex.reset_index(drop=True)
 
 当然，我们可以组合`drop`和`level`参数，指定要从数据帧中完全删除的旧索引:
 
-```
+```py
 df_multiindex.reset_index(level='Animal ID', drop=True)
 ```
 
@@ -259,7 +259,7 @@ df_multiindex.reset_index(level='Animal ID', drop=True)
 
 该参数确定是直接修改原始数据帧还是创建新的数据帧对象。默认情况下，它[用新的索引(`inplace=False`)创建一个新的数据帧](https://www.dataquest.io/blog/tutorial-how-to-create-and-use-a-pandas-dataframe/)，并保持原来的数据帧不变。实际上，让我们使用默认参数再次运行`reset_index()`方法，然后将结果与原始数据帧进行比较:
 
-```
+```py
 df.reset_index()
 ```
 
@@ -271,7 +271,7 @@ df.reset_index()
 | three | A665644 | 圆盘烤饼 | 2013 年 10 月 21 日上午 07 时 59 分 | 2013 年 10 月 21 日上午 07 时 59 分 | 奥斯汀(德克萨斯州) | 走失的家畜 | 生病的 | 猫 | 完整的女性 | 4 周 | 国内短毛混合品种 | 白棉布 |
 | four | A682524 | 里约 | 2014 年 6 月 29 日上午 10 时 38 分 | 2014 年 6 月 29 日上午 10 时 38 分 | 德克萨斯州奥斯汀市格罗夫大道 800 号 | 走失的家畜 | 常态 | 狗 | 绝育男性 | 4 年 | 杜宾犬/澳大利亚牧牛犬 | 褐色/灰色 |
 
-```
+```py
 df
 ```
 
@@ -287,7 +287,7 @@ df
 
 即使我们在运行第一段代码时将索引重置为默认的数字索引，原始数据帧`df`仍然保持不变。如果我们需要将原始数据帧重新分配给对其应用`reset_index()`方法的结果，我们可以直接重新分配(`df = df.reset_index()`)或将参数`inplace=True`传递给该方法:
 
-```
+```py
 df.reset_index(inplace=True)
 df
 ```
@@ -308,7 +308,7 @@ df
 
 首先，让我们恢复我们在本教程开始时创建的第一个数据帧，它具有默认的数字索引:
 
-```
+```py
 df = pd.read_csv('Austin_Animal_Center_Intakes.csv').head()
 df
 ```
@@ -323,7 +323,7 @@ df
 
 我们发现数据帧中缺少一个值。让我们使用`dropna()`方法删除缺少值的整行:
 
-```
+```py
 df.dropna(inplace=True)
 df
 ```
@@ -337,7 +337,7 @@ df
 
 该行已从数据框架中删除。但是，索引不再是连续的:0，1，2，4。让我们重置它:
 
-```
+```py
 df.reset_index()
 ```
 
@@ -350,7 +350,7 @@ df.reset_index()
 
 现在指数是连续的；然而，由于我们没有显式地传递参数`drop`，旧的索引被转换成一个列，默认名称为`index`。让我们从数据帧中完全删除旧索引:
 
-```
+```py
 df.reset_index(drop=True)
 ```
 
@@ -363,7 +363,7 @@ df.reset_index(drop=True)
 
 我们彻底摆脱了无意义的旧指数，现在的指数是连续的。最后一步是使用`inplace`参数将这些修改保存到我们的原始数据帧:
 
-```
+```py
 df.reset_index(drop=True, inplace=True)
 df
 ```

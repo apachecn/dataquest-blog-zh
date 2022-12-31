@@ -18,14 +18,14 @@ May 30, 2019![python-for-loop-tutorial](img/3437e4d94a4e0cb58da101ae5df7cb84.png
 
 让我们看一个简单的例子:如果我们有一个用 Python 存储的名字列表，我们可以使用一个 for 循环来遍历这个列表，打印每个名字，直到它到达末尾。下面，我们将创建我们的名字列表，然后编写一个 for 循环来遍历它，按顺序打印列表中的每个条目。
 
-```
+```py
 our_list = ['Lily', 'Brad', 'Fatima', 'Zining']
 
 for name in our_list:
     print(name) 
 ```
 
-```
+```py
 Lily
 Brad
 Fatima
@@ -42,12 +42,12 @@ Zining
 
 不管我们怎么称呼这个变量，情况都会如此。因此，举例来说，如果我们重写代码，用`x`替换`name`，我们将得到完全相同的结果:
 
-```
+```py
 for x in our_list:
     print(x) 
 ```
 
-```
+```py
 Lily
 Brad
 Fatima
@@ -56,12 +56,12 @@ Zining
 
 注意，这种技术适用于任何可迭代对象。例如，字符串是可迭代的，我们可以使用相同类型的 For 循环来迭代字符串中的每个字符:
 
-```
+```py
 for letter in 'Lily':
     print(letter) 
 ```
 
-```
+```py
 L
 i
 l
@@ -82,7 +82,7 @@ y
 
 我们可以将相同的数据集表示为列表的列表，如下所示:
 
-```
+```py
 ev_data = [['vehicle', 'range', 'price'], 
            ['Tesla Model 3 LR', '310', '49900'], 
            ['Hyundai Ioniq EV', '124', '30315'],
@@ -97,7 +97,7 @@ ev_data = [['vehicle', 'range', 'price'],
 
 最后，我们将使用 Python 内置的`'int()`函数将范围数转换成整数，并在我们的数据集中用这些整数替换原始字符串。
 
-```
+```py
 for row in ev_data[1:]:         # loop through each row in ev_data starting with row 2 (index 1)
     ev_range = row[1]           # each car's range is found in column 2 (index 1)
     ev_range = int(ev_range)    # convert each range number from a string to an integer
@@ -106,7 +106,7 @@ for row in ev_data[1:]:         # loop through each row in ev_data starting with
 print(ev_data) 
 ```
 
-```
+```py
 [['vehicle', 'range', 'price'], ['Tesla Model 3 LR', 310, '49900'], ['Hyundai Ioniq EV', 124, '30315'], ['Chevy Bolt', 238, '36620']] 
 ```
 
@@ -118,7 +118,7 @@ print(ev_data)
 
 (注意，在下面的代码中，我们将通过计算列表的长度减去标题行来计算汽车的数量。对于像我们这样短的列表，我们也可以简单地除以 3，因为汽车的数量很容易计算，但是如果列表中添加了额外的汽车数据，就会破坏我们的计算。出于这个原因，最好使用`len()`来计算代码中汽车列表的长度，这样如果将来有额外的条目添加到我们的数据集中，我们可以重新运行这个代码，它仍然会产生正确的答案。)
 
-```
+```py
 total_range = 0                     # create a variable to store the total range number
 
 for row in ev_data[1:]:             # loop through each row in ev_data starting with row 2 (index 1)
@@ -130,13 +130,13 @@ number_of_cars = len(ev_data[1:])   # calculate the length of our list, minus th
 print(total_range / number_of_cars) # print the average range 
 ```
 
-```
+```py
 224.0 
 ```
 
 Python for 循环功能强大，可以在其中嵌套更复杂的指令。为了演示这一点，让我们对我们的`'price'`列重复上面的两个步骤，这次是在一个 for 循环中。
 
-```
+```py
 total_price = 0                     # create a variable to store the total range number
 
 for row in ev_data[1:]:             # loop through each row in ev_data starting with row 2 (index 1)
@@ -150,7 +150,7 @@ number_of_cars = len(ev_data[1:])   # calculate the length of our list, minus th
 print(total_price / number_of_cars) # print the average price 
 ```
 
-```
+```py
 38945.0 
 ```
 
@@ -158,7 +158,7 @@ print(total_price / number_of_cars) # print the average price
 
 例如，假设我们希望在列表中找到每辆行驶里程超过 200 英里的汽车。我们可以从创建一个新的空列表来保存我们的长期汽车数据开始。然后，我们将使用 for 循环遍历前面创建的包含汽车数据的列表列表`ev_data`，仅当其范围值大于 200:
 
-```
+```py
 long_range_car_list = []       # creating a new list to store our long range car data
 
 for row in ev_data[1:]:        # iterate through ev_data, skipping the header row
@@ -169,7 +169,7 @@ for row in ev_data[1:]:        # iterate through ev_data, skipping the header ro
 print(long_range_car_list) 
 ```
 
-```
+```py
 [['Tesla Model 3 LR', 310, 49900], ['Chevy Bolt', 238, 36620]] 
 ```
 
@@ -183,12 +183,12 @@ print(long_range_car_list)
 
 For 循环可以与 Python 的`range()`函数一起使用，遍历指定范围内的每个数字。例如:
 
-```
+```py
 for x in range(5, 9):
     print(x) 
 ```
 
-```
+```py
 5
 6
 7
@@ -197,12 +197,12 @@ for x in range(5, 9):
 
 请注意，Python 在范围计数中不包括范围的最大值，这就是为什么数字 9 没有出现在上面。如果我们想让这段代码从 5 数到 9，包括 9，我们需要将`range(5, 9)`改为`range(5, 10)`:
 
-```
+```py
 for x in range(5, 10):
     print(x) 
 ```
 
-```
+```py
 5
 6
 7
@@ -212,12 +212,12 @@ for x in range(5, 10):
 
 如果在`range()`函数中只指定了一个数字，Python 会把它作为最大值，并指定一个缺省的最小值零:
 
-```
+```py
 for x in range(3):
     print(x) 
 ```
 
-```
+```py
 0
 1
 2 
@@ -225,12 +225,12 @@ for x in range(3):
 
 您甚至可以向`range()`函数添加第三个参数，以指定您希望以特定数字的增量进行计数。正如您在上面看到的，默认值是 1，但是如果您添加第三个参数 3，例如，您可以将`range()`与 for 循环一起使用，以三为单位向上计数:
 
-```
+```py
 for x in range(0, 9, 3):
     print(x) 
 ```
 
-```
+```py
 0
 3
 6 
@@ -244,7 +244,7 @@ for x in range(0, 9, 3):
 
 让我们先来看一个简单的例子，使用我们之前创建的名为`our_list`的列表:
 
-```
+```py
 for name in our_list:
     break
     print(name) 
@@ -254,14 +254,14 @@ for name in our_list:
 
 让我们在这个循环中添加一个 if 语句，这样当 Python 到达紫凝这个名字时，我们就可以跳出这个循环了:
 
-```
+```py
 for name in our_list:
     if name == 'Zining':
         break
     print(name) 
 ```
 
-```
+```py
 Lily
 Brad
 Fatima 
@@ -276,7 +276,7 @@ Fatima
 
 让我们回到我们编写的用于收集电动汽车远程数据的代码，并再看一个例子。我们将插入一个 break 语句，一旦遇到字符串`'Tesla'`就停止查找:
 
-```
+```py
 long_range_car_list = []    # creating our empty long-range car list again
 
 for row in ev_data[1:]:     # iterate through ev_data as before looking for cars with a range > 200
@@ -289,7 +289,7 @@ for row in ev_data[1:]:     # iterate through ev_data as before looking for cars
 print(long_range_car_list) 
 ```
 
-```
+```py
 [['Tesla Model 3 LR', 310, 49900]] 
 ```
 
@@ -305,14 +305,14 @@ print(long_range_car_list)
 
 让我们回到我们的名字列表(`our_names`)中，如果名字是“Brad”，那么在打印之前使用带有 if 语句的`continue`来结束循环迭代:
 
-```
+```py
 for name in our_list:
     if name == 'Brad':
         continue
     print(name) 
 ```
 
-```
+```py
 Lily
 Fatima
 Zining 
@@ -325,7 +325,7 @@ Zining
 
  *为了对`continue`进行更多的练习，让我们列出一个*短程*电动车的列表，使用`continue`采取稍微不同的方法。我们将编写一个 for 循环，将每辆电动汽车的*添加到我们的短程列表中，而不是识别行驶里程小于 200 英里的电动汽车，但是在*之前有一个`continue`语句*，如果行驶里程大于 200 英里，我们将添加到新列表中:*
 
-```
+```py
 short_range_car_list = []               # creating our empty short-range car list 
 
 for row in ev_data[1:]:                 # iterate through ev_data as before 
@@ -337,7 +337,7 @@ for row in ev_data[1:]:                 # iterate through ev_data as before
 print(short_range_car_list) 
 ```
 
-```
+```py
 [['Hyundai Ioniq EV', 124, 30315]] 
 ```
 

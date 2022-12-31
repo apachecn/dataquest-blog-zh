@@ -47,31 +47,31 @@ October 3, 2016
 
 为了使用 Python 中的 SQLite 数据库，我们首先必须连接到它。我们可以使用 [connect](https://docs.python.org/3/library/sqlite3.html?highlight=connect#sqlite3.connect) 函数来实现，该函数返回一个[连接](https://docs.python.org/3/library/sqlite3.html?highlight=connect#sqlite3.Connection)对象:
 
-```
+```py
 import sqlite3
 conn = sqlite3.connect("flights.db")
 ```
 
 一旦我们有了一个连接对象，我们就可以创建一个[光标](https://docs.python.org/3/library/sqlite3.html#cursor-objects)对象。游标允许我们对数据库执行 SQL 查询:
 
-```
+```py
 cur = conn.cursor()
 ```
 
 一旦我们有了一个游标对象，我们就可以用它来执行一个针对数据库的查询，这个查询有一个恰当的名字 [execute](https://docs.python.org/3/library/sqlite3.html?highlight=connect#sqlite3.Cursor.execute) 方法。以下代码将从`airlines`表中获取前`5`行:
 
-```
+```py
 cur.execute("select * from airlines limit 5;")
 ```
 
 您可能已经注意到，我们没有将上述查询的结果赋给一个变量。这是因为我们需要运行另一个命令来实际获取结果。我们可以使用 [fetchall](https://docs.python.org/3/library/sqlite3.html?highlight=connect#sqlite3.Cursor.fetchall) 方法获取一个查询的所有结果:
 
-```
+```py
 results = cur.fetchall()
 print(results)
 ```
 
-```
+```py
 [(0, '1', 'Private flight', '\\N', '-', None, None, None, 'Y'), (1, '2', '135 Airways', '\\N', None, 'GNL', 'GENERAL', 'United States', 'N'), (2, '3', '1Time Airline', '\\N', '1T', 'RNX', 'NEXTIME', 'South Africa', 'Y'), (3, '4', '2 Sqn No 1 Elementary Flying Training School', '\\N', None, 'WYT', None, 'United Kingdom', 'N'), (4, '5', '213 Flight Unit', '\\N', None, 'TFU', None, 'Russia', 'N')]
 ```
 
@@ -79,7 +79,7 @@ print(results)
 
 在我们继续之前，最好关闭打开的连接对象和光标对象。这可以防止 SQLite 数据库被锁定。当 SQLite 数据库被锁定时，您可能无法更新该数据库，并且可能会出现错误。我们可以像这样关闭光标和连接:
 
-```
+```py
 cur.close()
 conn.close()
 ```
@@ -88,7 +88,7 @@ conn.close()
 
 使用我们新发现的查询知识，我们可以创建一个图表，显示世界上所有机场的位置。首先，我们查询纬度和经度:
 
-```
+```py
 import sqlite3
 conn = sqlite3.connect("flights.db")
 cur = conn.cursor()
@@ -104,14 +104,14 @@ from airports;""").fetchall()
 
 我们首先需要导入库:
 
-```
+```py
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 ```
 
 然后，我们设置我们的地图，并绘制将形成地图背景的大陆和海岸线:
 
-```
+```py
 m = Basemap(
 projection='merc',
 llcrnrlat=-80,
@@ -126,7 +126,7 @@ m.drawmapboundary()
 
 最后，我们在地图上标出每个机场的坐标。我们从 SQLite 数据库中检索了一个元组列表。每个元组中的第一个元素是机场的经度，第二个元素是纬度。我们将把经度和纬度转换成它们自己的列表，然后把它们标在地图上:
 
-```
+```py
 x, y = m(
 [l[0] for l in coords],
 [l[1] for l in coords])
@@ -151,7 +151,7 @@ color='red')
 *   它会自动从表格中读入标题的名称。
 *   它创建了一个数据框架，因此我们可以快速浏览数据。
 
-```
+```py
 import pandas as pd
 import sqlite3
 conn = sqlite3.connect("flights.db")
@@ -169,11 +169,11 @@ df
 
 如您所见，我们得到了一个格式良好的数据帧。我们可以很容易地操纵柱子:
 
-```
+```py
 df["country"]
 ```
 
-```
+```py
 0 None
 1 United States
 2 South Africa
@@ -193,7 +193,7 @@ Name: country, dtype: object
 *   将所有坐标值转换为浮点数。
 *   将结果读入数据帧，并存储到变量`routes`。
 
-```
+```py
 routes = pd.read_sql_query("""
 select cast(sa.longitude as float) as source_lon,
 cast(sa.latitude as float) as source_lat,
@@ -208,7 +208,7 @@ conn)
 
 然后我们设置我们的地图:
 
-```
+```py
 m = Basemap(
 projection='merc',
 llcrnrlat=-80,
@@ -228,7 +228,7 @@ m.drawcoastlines()
 *   如果路线不太长:
     *   在起点和终点之间画一个圆。
 
-```
+```py
 for name, row in routes[:3000].iterrows():
 if abs(row["source_lon"] - row["dest_lon"]) < 90:
 # Draw a great circle between source and dest airports.
@@ -258,7 +258,7 @@ color='b'
 
 要插入一行，我们需要编写一个`INSERT`查询。下面的代码将向`airlines`表中添加一个新行。我们指定要插入的`9`值，在`airlines`中每列一个。这将向表中添加一个新行。
 
-```
+```py
 cur = conn.cursor()
 cur.execute("insert into airlines values (6048, 19846, 'Test flight', '', '', null, null, null, 'Y')")
 ```
@@ -277,13 +277,13 @@ SQLite 不会写入数据库，直到您提交一个[事务](https://www.sqlite.
 
 默认情况下，当您执行任何修改数据库的查询时，`sqlite3`会打开一个事务。你可以在这里了解更多关于[的信息。我们可以提交事务，并使用](https://docs.python.org/3/library/sqlite3.html#sqlite3-controlling-transactions)[提交](https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.commit)方法将我们的新行添加到`airlines`表中:
 
-```
+```py
 conn.commit()
 ```
 
 现在，当我们查询`flights.db`时，我们将看到包含我们测试飞行的额外行:
 
-```
+```py
 pd.read_sql_query("select * from airlines where id=19846;", conn)
 ```
 
@@ -297,7 +297,7 @@ pd.read_sql_query("select * from airlines where id=19846;", conn)
 
 处理动态数据时，使用 Python 字符串格式插入值可能很有诱惑力:
 
-```
+```py
 cur = conn.cursor()
 name = "Test Flight"
 cur.execute("insert into airlines values (6049, 19847, {0}, '', '', null, null, null, 'Y')".format(name))
@@ -306,7 +306,7 @@ conn.commit()
 
 你想避免这样做！使用 Python 字符串格式插入值会使您的程序容易受到 [SQL 注入](https://en.wikipedia.org/wiki/SQL_injection)攻击。幸运的是，`sqlite3`有一种直接的方法来注入动态值，而不依赖于字符串格式:
 
-```
+```py
 cur = conn.cursor()
 values = ('Test Flight', 'Y')
 cur.execute("insert into airlines values (6049, 19847, ?, '', '', null, null, null, ?)", values)
@@ -319,7 +319,7 @@ conn.commit()
 
 我们可以使用`execute`方法修改 SQLite 表中的行:
 
-```
+```py
 cur = conn.cursor()
 values = ('USA', 19847)
 cur.execute("update airlines set country=? where id=?", values)
@@ -328,7 +328,7 @@ conn.commit()
 
 然后，我们可以验证更新发生了:
 
-```
+```py
 pd.read_sql_query("select * from airlines where id=19847;", conn)
 ```
 
@@ -340,14 +340,14 @@ pd.read_sql_query("select * from airlines where id=19847;", conn)
 
 最后，我们可以使用`execute`方法删除数据库中的行:
 
-```
+```py
 cur = conn.cursor()values = (19847, )
 cur.execute("delete from airlines where id=?", values)conn.commit()
 ```
 
 然后，我们可以通过确保没有行与我们的查询相匹配来验证是否发生了删除:
 
-```
+```py
 pd.read_sql_query("select * from airlines where id=19847;", conn)
 ```
 
@@ -364,21 +364,21 @@ pd.read_sql_query("select * from airlines where id=19847;", conn)
 *   `number` —文本，航班号
 *   `route_id` —整数，航班飞行路线的 id
 
-```
+```py
 cur = conn.cursor()
 cur.execute("create table daily_flights (id integer, departure date, arrival date, number text, route_id integer)")conn.commit()
 ```
 
 一旦我们创建了一个表，我们就可以正常地向其中插入数据:
 
-```
+```py
 cur.execute("insert into daily_flights values (1, '2016-09-28 0:00', '2016-09-28 12:00', 'T1', 1)")
 conn.commit()
 ```
 
 当我们查询该表时，我们现在将看到该行:
 
-```
+```py
 pd.read_sql_query("select * from daily_flights;", conn)
 ```
 
@@ -390,7 +390,7 @@ pd.read_sql_query("select * from daily_flights;", conn)
 
 pandas 包为我们提供了一种更快的创建表格的方法。我们只需首先创建一个数据帧，然后将其导出到 SQL 表中。首先，我们将创建一个数据帧:
 
-```
+```py
 from datetime import datetime
 df = pd.DataFrame(
 [[1, datetime(2016, 9, 29, 0, 0) ,
@@ -400,13 +400,13 @@ columns=["id", "departure", "arrival", "number", "route_id"])
 
 然后，我们将能够调用 [to_sql](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_sql.html) 方法将`df`转换成数据库中的一个表。我们将`keep_exists`参数设置为`replace`，以删除和替换任何名为`daily_flights`的现有表:
 
-```
+```py
 df.to_sql("daily_flights", conn, if_exists="replace")
 ```
 
 然后，我们可以通过查询数据库来验证一切正常:
 
-```
+```py
 pd.read_sql_query("select * from daily_flights;", conn)
 ```
 
@@ -418,13 +418,13 @@ pd.read_sql_query("select * from daily_flights;", conn)
 
 使用真实世界的数据科学最困难的部分之一是每条记录中的数据经常变化。以我们的航空公司为例，我们可以决定在`airlines`表中添加一个`airplanes`字段，指示每家航空公司拥有多少架飞机。幸运的是，有一种方法可以在 SQLite 中修改表来添加列:
 
-```
+```py
 cur.execute("alter table airlines add column airplanes integer;")
 ```
 
 注意，我们不需要调用 commit — `alter table`查询会被立即执行，并且不会被放入事务中。我们现在可以查询并查看额外的列:
 
-```
+```py
 pd.read_sql_query("select * from airlines limit 1;", conn)
 ```
 
@@ -438,7 +438,7 @@ pd.read_sql_query("select * from airlines limit 1;", conn)
 
 还可以使用 Pandas 修改表格，方法是将表格导出到数据帧，对数据帧进行修改，然后将数据帧导出到表格:
 
-```
+```py
 df = pd.read_sql("select * from daily_flights", conn)
 df["delay_minutes"] = None
 df.to_sql("daily_flights", conn, if_exists="replace")

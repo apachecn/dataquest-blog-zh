@@ -111,7 +111,7 @@ Dataquest 社区正在发展。在过去的几个月里，我一直在关注活�
 
 用于处理数据库的简单类:
 
-```
+```py
 class MongoManage:
    client = client
 
@@ -166,14 +166,14 @@ Asyncio 实际上会产生处理您的请求的套接字。这意味着，如果
 
 示例:
 
-```
+```py
 for _ in range(500):
    asyncio.create_task(asyncio_requests()) # There is no await, you have just created 500 requests for the site
 ```
 
 你也可以这样做
 
-```
+```py
 for _ in range(500):
    await asyncio.create_task(asyncio_requests()) # There is await here you make 1 request. And you wait for it to finish
 ```
@@ -194,7 +194,7 @@ for _ in range(500):
 
 我创建了一个类，它不允许创建超过特定限制的并发查询，并且还将数据缓存到磁盘。
 
-```
+```py
 class Downloader:
    cache_path = CACHE_PATH
    attemps = 20
@@ -259,7 +259,7 @@ class Downloader:
 
 每个解析器函数要么将结果保存在数据库中，要么将数据传递给下一个函数。我不必担心额外的数据同步，并且我获得了很高的有竞争力的执行值，这产生了很低的内存和 CPU 负载。
 
-```
+```py
 async def category_loading(self, page):
   logger.info(f"Loading category page {page}")
   url = CATEGORY_URL.format(page=page)
@@ -275,7 +275,7 @@ async def category_loading(self, page):
 
 很有意思值得注意的一点是 stop 方法。
 
-```
+```py
 async def stop(self):
   while len(asyncio.all_tasks()) > 1: # The script will close when one task remains. The current function
       logger.warning(f"Current tasks pool {len(asyncio.all_tasks())}")
@@ -290,7 +290,7 @@ async def stop(self):
 
 结果，开始扫描的功能具有非常简单的外观:
 
-```
+```py
 async def start_scan():
   try:
       mongo = MongoManage()

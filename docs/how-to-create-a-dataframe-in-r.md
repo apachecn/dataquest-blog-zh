@@ -14,7 +14,7 @@ R 中的数据帧是表格(即二维矩形)数据结构，用于存储任何数�
 
 为了从一个或多个相同长度的向量创建 R 中的数据帧，我们使用了 [`data.frame()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/data.frame) 函数。其最基本的语法如下:
 
-```
+```py
 df <- data.frame(vector_1, vector_2)
 ```
 
@@ -22,7 +22,7 @@ df <- data.frame(vector_1, vector_2)
 
 从向量创建 R 数据帧的一种方法是首先创建每个向量，然后按照必要的顺序将它们传递给`data.frame()`函数:
 
-```
+```py
 rating <- 1:4
 animal <- c('koala', 'hedgehog', 'sloth', 'panda') 
 country <- c('Australia', 'Italy', 'Peru', 'China')
@@ -31,7 +31,7 @@ super_sleepers <- data.frame(rating, animal, country, avg_sleep_hours)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -43,7 +43,7 @@ print(super_sleepers)
 
 或者，我们可以在下面的函数中直接提供所有的向量:
 
-```
+```py
 super_sleepers <- data.frame(rating=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                              country=c('Australia', 'Italy', 'Peru', 'China'),
@@ -51,7 +51,7 @@ super_sleepers <- data.frame(rating=1:4,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -68,21 +68,21 @@ print(super_sleepers)
 
 让我们确认我们得到的数据结构确实是一个数据帧:
 
-```
+```py
 print(class(super_sleepers))
 ```
 
-```
+```py
 [1] "data.frame"
 ```
 
 现在，让我们探索它的结构:
 
-```
+```py
 print(str(super_sleepers))
 ```
 
-```
+```py
 'data.frame':   4 obs. of  4 variables:
  $ rating         : int  1 2 3 4
  $ animal         : Factor w/ 4 levels "hedgehog","koala",..: 2 1 4 3
@@ -93,7 +93,7 @@ NULL
 
 我们看到，尽管`animal`和`country`向量最初是字符向量，但是对应的列具有 factor 数据类型。这种转换是`data.frame()`函数的默认行为。为了抑制它，我们需要添加一个可选参数`stringsAsFactors`，并将其设置为`FALSE`:
 
-```
+```py
 super_sleepers <- data.frame(rating=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                              country=c('Australia', 'Italy', 'Peru', 'China'),
@@ -102,7 +102,7 @@ super_sleepers <- data.frame(rating=1:4,
 print(str(super_sleepers))
 ```
 
-```
+```py
 'data.frame':   4 obs. of  4 variables:
  $ rating         : int  1 2 3 4
  $ animal         : chr  "koala" "hedgehog" "sloth" "panda"
@@ -115,7 +115,7 @@ NULL
 
 还可以添加数据帧中各行的名称(默认情况下，这些行是从 1 开始的连续整数)。为此，我们使用可选参数`row.names`，如下所示:
 
-```
+```py
 super_sleepers <- data.frame(rating=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                              country=c('Australia', 'Italy', 'Peru', 'China'),
@@ -124,7 +124,7 @@ super_sleepers <- data.frame(rating=1:4,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 row_1      1    koala Australia              21
 row_2      2 hedgehog     Italy              18
@@ -134,7 +134,7 @@ row_4      4    panda     China              10
 
 注意，在 R 数据帧中，列名和行名(如果存在的话)必须是唯一的。如果我们错误地为两列提供了相同的名称，R 会自动为其中的第二列添加一个后缀:
 
-```
+```py
 # Adding by mistake 2 columns called 'animal'
 super_sleepers <- data.frame(animal=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
@@ -143,7 +143,7 @@ super_sleepers <- data.frame(animal=1:4,
 print(super_sleepers)
 ```
 
-```
+```py
  animal animal.1   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -153,7 +153,7 @@ print(super_sleepers)
 
 相反，如果我们在行名上犯了类似的错误，程序将抛出一个错误:
 
-```
+```py
 # Naming by mistake 2 rows 'row_1'
 super_sleepers <- data.frame(rating=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
@@ -163,7 +163,7 @@ super_sleepers <- data.frame(rating=1:4,
 print(super_sleepers)
 ```
 
-```
+```py
 Error in data.frame(rating = 1:4, animal = c("koala", "hedgehog", "sloth", : duplicate row.names: row_1
 Traceback:
 
@@ -178,12 +178,12 @@ Traceback:
 
 如有必要，我们可以在创建后使用`names()`函数重命名数据帧的列:
 
-```
+```py
 names(super_sleepers) <- c('col_1', 'col_2', 'col_3', 'col_4')
 print(super_sleepers)
 ```
 
-```
+```py
  col_1    col_2     col_3 col_4
 1     1    koala Australia    21
 2     2 hedgehog     Italy    18
@@ -197,12 +197,12 @@ print(super_sleepers)
 
 假设我们有以下矩阵:
 
-```
+```py
 my_matrix <- matrix(c(1, 2, 3, 4, 5, 6), nrow=2)
 print(my_matrix)
 ```
 
-```
+```py
  [,1] [,2] [,3]
 [1,]    1    3    5
 [2,]    2    4    6
@@ -210,12 +210,12 @@ print(my_matrix)
 
 我们可以使用相同的`data.frame()`函数从它创建一个数据帧:
 
-```
+```py
 df_from_matrix <- data.frame(my_matrix)
 print(df_from_matrix)
 ```
 
-```
+```py
  X1 X2 X3
 1  1  3  5
 2  2  4  6
@@ -223,12 +223,12 @@ print(df_from_matrix)
 
 不幸的是，在这种情况下，无法使用一些可选参数直接在函数内部更改列名(然而，具有讽刺意味的是，我们仍然可以使用`row.names`参数重命名行)。由于默认的列名不是描述性的(或者至少是有意义的)，我们必须在创建 DataFrame 之后通过应用`names()`函数来修复它:
 
-```
+```py
 names(df_from_matrix) <- c('col_1', 'col_2', 'col_3')
 print(df_from_matrix)
 ```
 
-```
+```py
  col_1 col_2 col_3
 1     1     3     5
 2     2     4     6
@@ -240,7 +240,7 @@ print(df_from_matrix)
 
 假设我们有下面的向量列表:
 
-```
+```py
 my_list <- list(rating=1:4,
                 animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                 country=c('Australia', 'Italy', 'Peru', 'China'),
@@ -248,7 +248,7 @@ my_list <- list(rating=1:4,
 print(my_list)
 ```
 
-```
+```py
 $rating
 [1] 1 2 3 4
 
@@ -264,12 +264,12 @@ $avg_sleep_hours
 
 现在，我们想从它创建一个数据帧:
 
-```
+```py
 super_sleepers <- data.frame(my_list)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -281,7 +281,7 @@ print(super_sleepers)
 
 这里需要注意的另一点是，列表的项应该是名为的*(直接在创建向量列表时，就像我们做的那样，或者稍后，在列表上应用`names()`函数)。如果我们不这样做，并将一个包含“无名”向量的列表传递给`data.frame()`函数，我们将得到一个包含毫无意义的列名的数据帧:*
 
-```
+```py
 my_list <- list(1:4,
                 c('koala', 'hedgehog', 'sloth', 'panda'), 
                 c('Australia', 'Italy', 'Peru', 'China'),
@@ -291,7 +291,7 @@ super_sleepers <- data.frame(my_list)
 print(super_sleepers)
 ```
 
-```
+```py
  X1.4 c..koala....hedgehog....sloth....panda..
 1    1                                    koala
 2    2                                 hedgehog
@@ -312,13 +312,13 @@ print(super_sleepers)
 
  *假设我们有一个只包含`super_sleepers`表的前两列的数据帧:
 
-```
+```py
 super_sleepers_1 <- data.frame(rating=1:4, 
                                animal=c('koala', 'hedgehog', 'sloth', 'panda'))
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating   animal
 1      1    koala
 2      2 hedgehog
@@ -328,13 +328,13 @@ print(super_sleepers_1)
 
 `super_sleepers`的后两列保存在另一个数据帧中:
 
-```
+```py
 super_sleepers_2 <- data.frame(country=c('Australia', 'Italy', 'Peru', 'China'),
                                avg_sleep_hours=c(21, 18, 17, 10))
 print(super_sleepers_2)
 ```
 
-```
+```py
  country avg_sleep_hours
 1 Australia              21
 2     Italy              18
@@ -344,12 +344,12 @@ print(super_sleepers_2)
 
 现在，我们将应用`cbind()`函数来连接两个数据帧，并获得初始的`super_sleepers`数据帧:
 
-```
+```py
 super_sleepers <- cbind(super_sleepers_1, super_sleepers_2)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -363,7 +363,7 @@ print(super_sleepers)
 
  *假设我们有一个只包含前两行`super_sleepers`的数据帧:
 
-```
+```py
 super_sleepers_1 <- data.frame(rating=1:2, 
                                animal=c('koala', 'hedgehog'), 
                                country=c('Australia', 'Italy'),
@@ -371,7 +371,7 @@ super_sleepers_1 <- data.frame(rating=1:2,
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -379,7 +379,7 @@ print(super_sleepers_1)
 
 另一个数据帧包含最后两行`super_sleepers`:
 
-```
+```py
 super_sleepers_2 <- data.frame(rating=3:4, 
                                animal=c('sloth', 'panda'), 
                                country=c('Peru', 'China'),
@@ -387,7 +387,7 @@ super_sleepers_2 <- data.frame(rating=3:4,
 print(super_sleepers_2)
 ```
 
-```
+```py
  rating animal country avg_sleep_hours
 1      3  sloth    Peru              17
 2      4  panda   China              10
@@ -395,12 +395,12 @@ print(super_sleepers_2)
 
 让我们使用`rbind()`函数将它们垂直组合起来，得到我们的初始数据帧:
 
-```
+```py
 super_sleepers <- rbind(super_sleepers_1, super_sleepers_2)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -414,7 +414,7 @@ print(super_sleepers)
 
 在某些情况下，我们可能需要创建一个空的 R 数据帧，只有列名和列数据类型，没有行——然后使用 for 循环填充。为此，我们再次应用`data.frame()`函数，如下所示:
 
-```
+```py
 super_sleepers_empty <- data.frame(rating=numeric(),
                                    animal=character(),
                                    country=character(),
@@ -422,18 +422,18 @@ super_sleepers_empty <- data.frame(rating=numeric(),
 print(super_sleepers_empty)
 ```
 
-```
+```py
 [1] rating          animal          country         avg_sleep_hours
 <0 rows> (or 0-length row.names)
 ```
 
 让我们检查新的空数据帧的列的数据类型:
 
-```
+```py
 print(str(super_sleepers_empty))
 ```
 
-```
+```py
 'data.frame':   0 obs. of  4 variables:
  $ rating         : num 
  $ animal         : Factor w/ 0 levels: 
@@ -444,7 +444,7 @@ NULL
 
 正如我们前面看到的，由于由`data.frame()`函数进行的默认转换，我们希望成为字符数据类型的列实际上是因子数据类型。如前所述，我们可以通过引入一个可选参数`stringsAsFactors=FALSE`来修复它:
 
-```
+```py
 super_sleepers_empty <- data.frame(rating=numeric(),
                                    animal=character(),
                                    country=character(),
@@ -453,7 +453,7 @@ super_sleepers_empty <- data.frame(rating=numeric(),
 print(str(super_sleepers_empty))
 ```
 
-```
+```py
 'data.frame':   0 obs. of  4 variables:
  $ rating         : num 
  $ animal         : chr 
@@ -468,7 +468,7 @@ NULL
 
 让我们重新创建原始的`super_sleepers`(这次，使用`stringsAsFactors=FALSE`参数):
 
-```
+```py
 super_sleepers <- data.frame(rating=1:4, 
                              animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                              country=c('Australia', 'Italy', 'Peru', 'China'),
@@ -477,7 +477,7 @@ super_sleepers <- data.frame(rating=1:4,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country avg_sleep_hours
 1      1    koala Australia              21
 2      2 hedgehog     Italy              18
@@ -487,23 +487,23 @@ print(super_sleepers)
 
 现在，使用以下语法创建一个空模板作为新的数据帧:
 
-```
+```py
 super_sleepers_empty <- super_sleepers[FALSE, ]
 print(super_sleepers_empty)
 ```
 
-```
+```py
 [1] rating          animal          country         avg_sleep_hours
 <0 rows> (or 0-length row.names)
 ```
 
 让我们仔细检查原始数据帧的列的数据类型是否保留在新的空数据帧中:
 
-```
+```py
 print(str(super_sleepers_empty))
 ```
 
-```
+```py
 'data.frame':   0 obs. of  4 variables:
  $ rating         : int 
  $ animal         : chr 
@@ -514,25 +514,25 @@ NULL
 
 最后，我们可以从一个没有行和必要列数的矩阵中创建一个空的数据帧，然后给它分配相应的列名:
 
-```
+```py
 columns= c('rating', 'animal', 'country', 'avg_sleep_hours') 
 super_sleepers_empty = data.frame(matrix(nrow=0, ncol=length(columns))) 
 names(super_sleepers_empty) = columns
 print(super_sleepers_empty)
 ```
 
-```
+```py
 [1] rating          animal          country         avg_sleep_hours
 <0 rows> (or 0-length row.names)
 ```
 
 最后一种方法的一个潜在缺点是没有从一开始就设置列的数据类型:
 
-```
+```py
 print(str(super_sleepers_empty))
 ```
 
-```
+```py
 'data.frame':   0 obs. of  4 variables:
  $ rating         : logi 
  $ animal         : logi 
@@ -547,12 +547,12 @@ NULL
 
 为了了解它是如何工作的，让我们在本地机器上下载一个 Kaggle 数据集[橙子对葡萄柚](https://www.kaggle.com/datasets/joshmcadams/oranges-vs-grapefruit)，将其保存在与笔记本相同的文件夹中，将其作为新的数据帧`citrus`读取，并可视化数据帧的前六行。由于原始数据集以 *csv* 文件的形式存在，我们将使用`read.csv()`函数来读取它:
 
-```
+```py
 citrus <- read.csv('citrus.csv')
 print(head(citrus))
 ```
 
-```
+```py
  name diameter weight red green blue
 1 orange     2.96  86.76 172    85    2
 2 orange     3.91  88.05 166    78    3

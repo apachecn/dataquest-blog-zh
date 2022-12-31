@@ -32,14 +32,14 @@ October 21, 2020
 
 ### 稀有
 
-```
+```py
 library(readr)
 ba <- read_csv("nba_2013.csv")
 ```
 
 ### 计算机编程语言
 
-```
+```py
 import pandas
 ba = pandas.read_csv("nba_2013.csv")
 ```
@@ -54,22 +54,22 @@ ba = pandas.read_csv("nba_2013.csv")
 
 ### 稀有
 
-```
+```py
 dim(nba)
 ```
 
-```
+```py
 [1] 481 31
 /code>
 ```
 
 ### 计算机编程语言
 
-```
+```py
 nba.shape
 ```
 
-```
+```py
 (481, 31)
 /code>
 ```
@@ -82,11 +82,11 @@ nba.shape
 
 ### 稀有
 
-```
+```py
 head(nba, 1)
 ```
 
-```
+```py
 player pos age bref_team_id
  Quincy Acy SF 23 TOT[output truncated]
 /code>
@@ -94,11 +94,11 @@ player pos age bref_team_id
 
 ### 计算机编程语言
 
-```
+```py
 nba.head(1)
 ```
 
-```
+```py
 player pos age bref_team_id
  Quincy Acy SF 23 TOT[output truncated]
 /code>
@@ -122,7 +122,7 @@ player pos age bref_team_id
 
 ### 稀有
 
-```
+```py
 library(purrr)
 ibrary(dplyr)
 ba %>%
@@ -130,7 +130,7 @@ ba %>%
  map_dbl(mean, na.rm = TRUE)
 ```
 
-```
+```py
 player NA
 os NA
 ge 26.5093555093555
@@ -140,11 +140,11 @@ output truncated]
 
 ### 计算机编程语言
 
-```
+```py
 nba.mean()
 ```
 
-```
+```py
 age 26.509356
  53.253638
 s 25.571726
@@ -169,7 +169,7 @@ output truncated]
 
 ### 稀有
 
-```
+```py
 library(GGally)
 ba %>%
 elect(ast, fg, trb) %>%
@@ -180,7 +180,7 @@ gpairs()
 
 ### 计算机编程语言
 
-```
+```py
 import seaborn as sns
 span class="token keyword">import matplotlib.pyplot as plt
 ns.pairplot(nba[["ast", "fg", "trb"]])
@@ -205,7 +205,7 @@ lt.show()
 
 ### 稀有
 
-```
+```py
 library(cluster)
 et.seed(1)
 sGoodCol <- function(col){
@@ -218,7 +218,7 @@ abels <- clusters$cluster
 
 ### 计算机编程语言
 
-```
+```py
 from sklearn.cluster import KMeans
 means_model = KMeans(n_clusters=5, random_state=1)
 ood_columns = nba._get_numeric_data().dropna(axis=1)
@@ -238,7 +238,7 @@ abels = kmeans_model.labels_
 
 ### 稀有
 
-```
+```py
 nba2d <- prcomp(nba[,goodCols], center=TRUE)
 woColumns <- nba2d$x[,1:2]
 lusplot(twoColumns, labels)
@@ -248,7 +248,7 @@ lusplot(twoColumns, labels)
 
 ### 计算机编程语言
 
-```
+```py
 from sklearn.decomposition import PCA
 ca_2 = PCA(2)
 lot_columns = pca_2.fit_transform(good_columns)
@@ -274,7 +274,7 @@ lt.show()
 
 ### 稀有
 
-```
+```py
 trainRowCount <- floor(0.8 * nrow(nba))
 et.seed(1)
 rainIndex <- sample(1:nrow(nba), trainRowCount)
@@ -284,7 +284,7 @@ est <- nba[-trainIndex,]
 
 ### 计算机编程语言
 
-```
+```py
 train = nba.sample(frac=0.8, random_state=1)
 est = nba.loc[~nba.index.isin(train.index)]
 ```
@@ -301,14 +301,14 @@ est = nba.loc[~nba.index.isin(train.index)]
 
 ### 稀有
 
-```
+```py
 fit <- lm(ast ~ fg, data=train)
 redictions <- predict(fit, test)
 ```
 
 ### 计算机编程语言
 
-```
+```py
 from sklearn.linear_model import LinearRegression
 r = LinearRegression()
 r.fit(train[["fg"]], train["ast"])
@@ -327,11 +327,11 @@ r 依赖于内置的`lm`和`predict`函数。`predict`将根据传递给它的�
 
 ### 稀有
 
-```
+```py
 summary(fit)
 ```
 
-```
+```py
 Call:
 m(formula = ast ~ fg, data = train)
 esiduals:Min 1Q Median 3Q Max
@@ -341,14 +341,14 @@ output truncated]
 
 ### 计算机编程语言
 
-```
+```py
 import statsmodels.formula.api as sm
 odel = sm.ols(formula='ast ~ fga', data=train)
 itted = model.fit()
 itted.summary()
 ```
 
-```
+```py
 Dep. Variable: ast
 -squared: 0.568
 odel: OLS
@@ -370,7 +370,7 @@ output truncated]
 
 ### 稀有
 
-```
+```py
 library(randomForest)
 redictorColumns <- c("age", "mp", "fg", "trb", "stl", "blk")
 f <- randomForest(train[predictorColumns], train$ast, ntree=100)
@@ -379,7 +379,7 @@ redictions <- predict(rf, test[predictorColumns])
 
 ### 计算机编程语言
 
-```
+```py
 from sklearn.ensemble import RandomForestRegressor
 redictor_columns = ["age", "mp", "fg", "trb", "stl", "blk"]
 f = RandomForestRegressor(n_estimators=100, min_samples_leaf=3)
@@ -401,22 +401,22 @@ Scikit-learn 有一个统一的接口，可以在 Python 中使用许多不同�
 
 ### 稀有
 
-```
+```py
 mean((test["ast"] - predictions)^2)
 ```
 
-```
+```py
 4573.86778567462
 ```
 
 ### 计算机编程语言
 
-```
+```py
 from sklearn.metrics import mean_squared_error
 an_squared_error(test["ast"], predictions)
 ```
 
-```
+```py
 4166.9202475632374
 ```
 
@@ -434,7 +434,7 @@ an_squared_error(test["ast"], predictions)
 
 ### 稀有
 
-```
+```py
 library(RCurl)
 rl <- "https://www.basketball-reference.com/boxscores/201506140GSW.html"
 ata <- readLines(url)
@@ -442,7 +442,7 @@ ata <- readLines(url)
 
 ### 计算机编程语言
 
-```
+```py
 import requests
 rl = "https://www.basketball-reference.com/boxscores/201506140GSW.html"
 ata = requests.get(url).content
@@ -462,7 +462,7 @@ ata = requests.get(url).content
 
 ### 稀有
 
-```
+```py
 library(rvest)
 age <- read_html(url)
 able <- html_nodes(page, ".stats_table")[3]
@@ -491,7 +491,7 @@ ata <- lapply(teams, scrapeData)
 
 ### 计算机编程语言
 
-```
+```py
 from bs4 import BeautifulSoup
 span class="token keyword">import re
 oup = BeautifulSoup(data, 'html.parser')

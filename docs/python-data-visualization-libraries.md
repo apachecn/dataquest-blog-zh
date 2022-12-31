@@ -10,7 +10,7 @@ November 12, 2015The Python [scientific stack](https://www.scipy.org/about.html)
 
 [开放航班](https://openflights.org/data.html)。我们将使用[航线](https://openflights.org/data.html#route)、[机场](https://openflights.org/data.html#airport)和[航空公司](https://openflights.org/data.html#airline)的数据。路线数据中的每一行对应于两个机场之间的航线。机场数据中的每一行都对应于世界上的一个机场，并且有关于它的信息。航空公司数据中的每一行代表一家航空公司。我们首先读入数据:
 
-```
+```py
  # Import the pandas library.
 import pandas
 # Read in the airports data.
@@ -26,7 +26,7 @@ routes.columns = ["airline", "airline_id", "source", "source_id", "dest", "dest_
 
 `columns`属性。我们希望将每一列都作为一个字符串读入——这将使以后基于 id 匹配行时跨数据帧的比较更容易。我们通过在读入数据时设置`dtype`参数来实现这一点。我们可以快速浏览一下每个数据帧:
 
-```
+```py
 airports.head()
 ```
 
@@ -38,7 +38,7 @@ airports.head()
 | three | four | Nadzab | Nadzab | 巴布亚新几内亚 | 莱城 | AYNZ | -6.569828 | 146.726242 | Two hundred and thirty-nine | Ten | U | 太平洋/莫尔兹比港 |
 | four | five | 莫尔斯比港杰克逊国际机场 | 莫尔兹比港 | 巴布亚新几内亚 | 砰的一声 | AYPY | -9.443383 | 147.220050 | One hundred and forty-six | Ten | U | 太平洋/莫尔兹比港 |
 
-```
+```py
 airlines.head()
 ```
 
@@ -50,7 +50,7 @@ airlines.head()
 | three | four | 2 Sqn 第一初级飞行训练学校 | \N | 圆盘烤饼 | WYT | 圆盘烤饼 | 联合王国 | 普通 |
 | four | five | 213 飞行单位 | \N | 圆盘烤饼 | TFU | 圆盘烤饼 | 俄罗斯 | 普通 |
 
-```
+```py
 routes.head()
 ```
 
@@ -64,7 +64,7 @@ routes.head()
 
 我们可以单独对每个数据集进行各种有趣的探索，但只有将它们结合起来，我们才能看到最大的收获。Pandas 将在我们进行分析时为我们提供帮助，因为它可以轻松地过滤矩阵或对矩阵应用函数。我们将深入研究一些有趣的指标，比如分析航空公司和航线。在这样做之前，我们需要做一些数据清理工作:
 
-```
+```py
 routes = routes[routes["airline_id"] != "\\N"]
 ```
 
@@ -78,7 +78,7 @@ routes = routes[routes["airline_id"] != "\\N"]
 
 [直方图](https://en.wikipedia.org/wiki/Histogram)将所有路线长度划分为范围(或“箱”)，并计算每个范围内有多少条路线。这能告诉我们航空公司是飞更短的航线，还是更长的航线。为了做到这一点，我们需要首先计算路线长度。第一步是距离公式。我们将使用哈弗线距离，它计算纬度，经度对之间的距离。
 
-```
+```py
  import math
 def haversine(lon1, lat1, lon2, lat2):
     # Convert coordinates to floats.
@@ -98,7 +98,7 @@ def haversine(lon1, lat1, lon2, lat2):
 
 `source`和`dest`机场为单条航线。为此，我们需要从 routes 数据帧中获取`source_id`和`dest_id`机场，然后将它们与`airports`数据帧中的`id`列进行匹配，以获取这些机场的纬度和经度。然后，就是做计算的问题了。函数如下:
 
-```
+```py
  def calc_dist(row):
     dist = 0 
     try:
@@ -116,13 +116,13 @@ def haversine(lon1, lat1, lon2, lat2):
 
 `source_id`或`dest_id`列，所以我们将添加一个`try/except`块来捕捉这些。最后，我们将使用 pandas 在`routes`数据帧中应用距离计算功能。这将给我们一个包含所有路线长度的熊猫系列。路线长度均以千米为单位。
 
-```
+```py
 route_lengths = routes.apply(calc_dist, axis=1)
 ```
 
 现在我们已经有了一系列的路径长度，我们可以创建一个直方图，它会将值绑定到范围内，并计算每个范围内有多少条路径:
 
-```
+```py
  import matplotlib.pyplot as plt
 
 plt.hist(route_lengths, bins=20)
@@ -136,7 +136,7 @@ plt.hist(route_lengths, bins=20)
 
 `distplot`绘制一个直方图的函数，其顶部有一个核密度估计值。核密度估计是一条曲线——本质上是直方图的平滑版本，更容易看到其中的模式。
 
-```
+```py
  import seaborn
 seaborn.distplot(route_lengths, bins=20)
 ```
@@ -147,7 +147,7 @@ seaborn.distplot(route_lengths, bins=20)
 
 直方图很棒，但也许我们想看看航空公司的平均航线长度。我们可以用柱状图来代替——每个航空公司都有一个单独的柱状图，告诉我们每个航空公司的平均长度。这将让我们看到哪些运营商是地区性的，哪些是国际性的。我们可以使用 python 数据分析库 pandas 来计算每家航空公司的平均航线长度。
 
-```
+```py
  import numpy
 # Put relevant columns into a dataframe.
 route_length_df = pandas.DataFrame({"length": route_lengths, "id": routes["airline_id"]})
@@ -161,13 +161,13 @@ airline_route_lengths = airline_route_lengths.sort("length", ascending=False)
 
 `route_length_df`根据`airline_id`分组，基本上每个航空公司制作一个数据帧。然后，我们使用熊猫`aggregate`函数获取每个航空公司数据帧中`length`列的平均值，并将每个结果重新组合成一个新的数据帧。然后，我们对数据帧进行排序，使航线最多的航空公司排在最前面。然后我们可以用 matplotlib 来绘制:
 
-```
+```py
 plt.bar(range(airline_route_lengths.shape[0]), airline_route_lengths["length"])
 ```
 
 ![](img/cd446d28214aa26841954714543d619d.png)matplotlib`plt.bar`方法根据每家航空公司飞行的平均航线长度(`airline_route_lengths["length"]`)来绘制每家航空公司。上面这个图的问题是，我们不能轻易看出哪个航空公司有什么航线长度。为了做到这一点，我们需要能够看到轴标签。这有点难，因为有这么多的航空公司。一种更简单的方法是让图具有交互性，这将允许我们放大和缩小来查看标签。我们可以使用散景库来实现这一点——它使得制作交互式、可缩放的绘图变得简单。要使用散景，我们首先需要预处理我们的数据:
 
-```
+```py
  def lookup_name(row):
     try:
         # Match the row id to the id in the airlines dataframe so we can get the name.
@@ -187,7 +187,7 @@ airline_route_lengths.index = range(airline_route_lengths.shape[0])
 
 `airline_route_lengths`，并在`name`栏中添加，该栏包含各航空公司的名称。我们还添加了`id`列，这样我们就可以进行查找(apply 函数没有传入索引)。最后，我们重置索引列，使其包含所有唯一的值。如果没有这个，散景就不能正常工作。现在，我们可以进入图表部分了:
 
-```
+```py
  import numpy as np
 from bokeh.io import output_notebook
 from bokeh.charts import Bar, showoutput_notebook()
@@ -205,7 +205,7 @@ Pygal 是一个 python 数据分析库，可以快速制作有吸引力的图表
 
 `route_lengths`。
 
-```
+```py
  long_routes = len([k for k in route_lengths if k > 10000]) / len(route_lengths)
 medium_routes = len([k for k in route_lengths if k < 10000 and k > 2000]) / len(route_lengths)
 short_routes = len([k for k in route_lengths if k < 2000]) / len(route_lengths) 
@@ -213,7 +213,7 @@ short_routes = len([k for k in route_lengths if k < 2000]) / len(route_lengths)
 
 然后，我们可以在 pygal 水平条形图中将每个点绘制成一个条形:
 
-```
+```py
  import pygal
 from IPython.display import SVG
 chart = pygal.HorizontalBar()
@@ -231,14 +231,14 @@ SVG(filename='/blog/conteimg/routes.svg')
 
 散点图使我们能够比较多列数据。我们可以做一个简单的散点图来比较航空公司 id 号和航空公司名称的长度:
 
-```
+```py
 name_lengths = airlines["name"].apply(lambda x: len(str(x)))
 plt.scatter(airlines["id"].astype(int), name_lengths)
 ```
 
 ![mplscatter](img/ea9ce24cc8aa46d0ccf84f0f0bb2ad2d.png)首先，我们使用熊猫`apply`方法计算每个名字的长度。这将找到每个航空公司名称的字符长度。然后，我们使用 matplotlib 绘制一个散点图，比较航空公司 id 和名称长度。当我们绘图时，我们将`airlines`的`id`列转换为整数类型。如果我们不这样做，这个图就不会工作，因为它需要 x 轴上的数值。我们可以看到相当多的长名字出现在早期的 id 中。这可能意味着成立较早的航空公司往往名字更长。我们可以用 seaborn 来验证这种预感。Seaborn 有一个散点图的扩展版本，一个联合图，显示了两个变量的相关程度，以及每个变量的单独分布。
 
-```
+```py
  data = pandas.DataFrame({"lengths": name_lengths, "ids": airlines["id"].astype(int)})
 seaborn.jointplot(x="ids", y="lengths", data=data) 
 ```
@@ -251,7 +251,7 @@ seaborn.jointplot(x="ids", y="lengths", data=data)
 
 matplotlib 的[底图](https://matplotlib.org/basemap/)扩展。这使得绘制世界地图和添加点，是非常可定制的。
 
-```
+```py
  # Import the basemap package
 from mpl_toolkits.basemap import Basemap
 # Create a map on which to draw.  We're using a mercator projection, and showing the whole world.
@@ -270,7 +270,7 @@ plt.show()
 
 [墨卡托投影](https://en.wikipedia.org/wiki/Mercator_projection)。墨卡托投影是一种将整个世界投影到二维表面上的方法。然后，我们用红点在地图上画出机场。![mplmap](img/aa9138730bfeb21d256312c376155b23.png)上面地图的问题是很难看到每个机场的位置——它们只是在机场密度高的区域合并成一个红色的斑点。就像 bokeh 一样，有一个交互式地图库，我们可以使用它来放大地图，并帮助我们找到各个机场。
 
-```
+```py
  import folium
 # Get a basic world map.
 airports_map = folium.Map(location=[30, 0], zoom_start=2)
@@ -309,7 +309,7 @@ for name, row in routes[:3000].iterrows():
         pass
     # Show the map.
 plt.show()
-```
+```py
 
 上面的代码将绘制一张地图，然后在上面绘制路线。我们添加了一些过滤器，以防止过长的路线遮蔽其他路线。
 
@@ -339,7 +339,7 @@ for name, row in routes.iterrows():
     # This ensures that we aren't adding edges with a weight of 1.
     else:
         added_keys.append(key)
-```
+```py
 
 一旦上述代码运行完毕，权重字典将包含两个机场之间权重大于 2 的每条边。因此，任何由两条或多条航线连接的机场都会出现。现在，我们需要绘制图表。
 
@@ -373,7 +373,7 @@ for k, weight in weights.items():
 nx.draw_networkx_edges(graph,pos,width=1.0,alpha=1)
 # Show the plot.
 plt.show() 
-```
+```py
 
 ![nxgraph](img/fa29a36440468a0369a75f93703be0e2.png)
 

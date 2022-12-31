@@ -22,14 +22,14 @@ July 20, 2017
 
 ## 读取文件
 
-```
+```py
 f = open("my_file.txt", "r")
 file_as_string = f.read()
 ```
 
 打开文件`my_file.txt`并将其内容分配给`string`
 
-```
+```py
 import csv
 f = open("my_dataset.csv", "r")
 csvreader = csv.reader(f)
@@ -42,7 +42,7 @@ csv_as_list = list(csvreader)
 
 `s = "hello"` |将字符串`"hello"`赋给变量`s`
 
-```
+```py
 s = """
 She said,"there's a good idea.
 """"
@@ -100,7 +100,7 @@ She said,"there's a good idea.
 `import random` |导入模块`random`
 `from random import random` |从模块`random`导入函数`random`
 
-```
+```py
 def calculate(addition_one,addition_two,exponent=1,factor=1):
     result = (value_one + value_two) ** exponent * factor
     return result
@@ -127,7 +127,7 @@ def calculate(addition_one,addition_two,exponent=1,factor=1):
 
 *if 语句和循环体通过缩进定义*
 
-```
+```py
 if x > 5:
     print("{} is greater than five".format(x))
 elif x < 0:
@@ -138,14 +138,14 @@ else:
 
 测试变量`x`的值，并根据该值运行代码体
 
-```
+```py
 for value in l:
     print(value)
 ```
 
 迭代`l`中的每个值，在每次迭代中运行循环体中的代码。
 
-```
+```py
 while x < 10:
     x += 1
 ```

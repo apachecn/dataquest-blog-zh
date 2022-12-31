@@ -28,7 +28,7 @@ July 15, 2021
 
 首先，我安装了所需的库并阅读了 CSV 文件。
 
-```
+```py
 import pandas as pd
 pan class="token keyword">import matplotlib.pyplot as plt
 t.rcParams['figure.dpi'] = 200
@@ -41,7 +41,7 @@ t.rcParams['figure.dpi'] = 200
 
 我还向数据集添加了新的特性，我将在项目的后面使用这些特性。
 
-```
+```py
 df["date_added"] = pd.to_datetime(df['date_added'])
 ['year_added'] = df['date_added'].dt.year.astype('Int64')
 ['month_added'] = df['date_added'].dt.month
@@ -57,7 +57,7 @@ df["date_added"] = pd.to_datetime(df['date_added'])
 
 我还要补充一点，对于 matplotlib 中的 XKCDify 可视化，您只需将所有绘图代码放入以下块中，就万事俱备了:
 
-```
+```py
 with plt.xkcd():
 pan class="token comment" spellcheck="true"># all your regular visualization code goes in here
 ```
@@ -68,7 +68,7 @@ pan class="token comment" spellcheck="true"># all your regular visualization cod
 
 首先，我认为有必要看一下描绘网飞这些年发展的时间表。
 
-```
+```py
 from datetime import datetime
 
 n class="token comment" spellcheck="true"># these go on the numbers below
@@ -155,7 +155,7 @@ plt.show()
 
 接下来，我决定看看电影和电视剧的比例。
 
-```
+```py
 col = "type"
 ped = df[col].value_counts().reset_index()
 ped = grouped.rename(columns = {col : "count", "index" : col})
@@ -182,7 +182,7 @@ plt.show()
 
 为了处理这个问题，我用“，”作为分隔符将国家列中的数据分开，然后将所有国家放入一个名为 categories 的列表中:
 
-```
+```py
 from collections import Counter
 = "country"
 
@@ -223,7 +223,7 @@ plt.show()
 
 从集合导入计数器
 
-```
+```py
 from collections import Counter
 n class="token keyword">from matplotlib.pyplot import figure
 n class="token keyword">import math
@@ -260,7 +260,7 @@ plt.show()
 
 ### b.热门演员:
 
-```
+```py
 col = "cast"
 
 n class="token keyword">with plt.xkcd():
@@ -297,7 +297,7 @@ plt.show()
 
 ### a.最老的电影:
 
-```
+```py
 small = df.sort_values("release_year", ascending = True)
 all = small[small['duration'] != ""].reset_index()
 all[['title', "release_year"]][:15]
@@ -307,7 +307,7 @@ all[['title', "release_year"]][:15]
 
 ### b.最旧的电视节目:
 
-```
+```py
 small = df.sort_values("release_year", ascending = True)
 all = small[small['season_count'] != ""].reset_index()
 all = small[['title', "release_year"]][:15]
@@ -324,13 +324,13 @@ all
 
 是的，网飞很酷，因为它有一个世纪以前的内容，但是它也有最新的电影和电视节目吗？为了找到答案，首先我计算了内容被添加到网飞的日期和内容发布年份之间的差异。
 
-```
+```py
 df["year_diff"] = df["year_added"]-df["release_year"]
 ```
 
 然后，我创建了一个散点图，x 轴为年份差异，y 轴为电影/电视节目的数量:
 
-```
+```py
 col = "year_diff"
 _movies = df[df["duration"]!=""]
 _shows = df[df["season_count"]!=""]
@@ -370,19 +370,19 @@ plt.show()
 
 为了做到这一点，我首先查看了数据框架中的独特评级:
 
-```
+```py
 print(df['rating'].unique())
 ```
 
 输出:
 
-```
+```py
 ['TV-MA' 'R' 'PG-13' 'TV-14' 'TV-PG' 'NR' 'TV-G' 'TV-Y' nan 'TV-Y7' 'PG' 'G' 'NC-17' 'TV-Y7-FV' 'UR']
 ```
 
 然后，我根据他们所属的组(即小孩、大孩子、青少年和成年人)对评级进行分类，并将评级栏中的值更改为他们的组名。
 
-```
+```py
 ratings_list = ['TV-MA', 'R', 'PG-13', 'TV-14', 'TV-PG', 'TV-G', 'TV-Y', 'TV-Y7', 'PG', 'G', 'NC-17', 'TV-Y7-FV']
 ngs_group_list = ['Little Kids', 'Older Kids', 'Teens', 'Mature']
 ngs_dict={
@@ -405,7 +405,7 @@ df.loc[df.rating == rating_val, "rating"] = rating_group
 
 最后，我用 x 轴上的年份和 y 轴上的内容计数做了线图。
 
-```
+```py
 df['rating_val']=1
 an class="token operator">=0
 ls=['kinda\nless', 'not so\nbad', 'holyshit\nthat\'s too\nmany']
@@ -434,7 +434,7 @@ plt.show()
 
 ### 8.热门流派(全国)
 
-```
+```py
 col = "listed_in"
 urs = ["violet", "cornflowerblue", "darkseagreen", "mediumvioletred", "blue", "mediumseagreen", "darkmagenta", "darkslateblue", "seagreen"]
 tries_list = ["United States", "India", "United Kingdom", "Japan", "France", "Canada", "Spain", "South Korea", "Germany"]
@@ -483,7 +483,7 @@ plt.show()
 
 ### a.文字云描述:
 
-```
+```py
 from wordcloud import WordCloud
 pan class="token keyword">import random
 pan class="token keyword">from PIL import Image
@@ -508,7 +508,7 @@ t.show()
 
 ### b.标题的文字云
 
-```
+```py
 cmap = matplotlib.colors.LinearSegmentedColormap.from_list("", ['#221f1f', '#b20710'])
 xt = str(list(df['title'])).replace(',', '').replace('[', '').replace("'", '').replace(']', '').replace('.', '')
 sk = np.array(Image.open('../input/finallogo/New Note.png'))

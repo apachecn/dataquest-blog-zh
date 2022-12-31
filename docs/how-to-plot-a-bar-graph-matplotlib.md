@@ -15,7 +15,7 @@ July 30, 2021
 为了练习我们的条形图，我们将使用 Kaggle 的一个与酒吧密切相关的数据集— [世界各地的酒精消费量](https://www.kaggle.com/codebreaker619/alcohol-comsumption-around-the-world)
 ![🤪](img/8ce47a7c84b3d18d916984128b9ebf02.png) ![🍾](img/163746fd4ca66ae5e966caef1ccdd154.png)。该表是 2010 年的，所以让我们回到过去。我们将使用 Matplotlib 和 Python 来进行数据探索和数据可视化。
 
-```
+```py
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -34,7 +34,7 @@ print('Number of all the drinking countries:', len(df))
 
 **输出:**
 
-```
+```py
 Number of all the countries: 193
 
    country  beer_servings  spirit_servings  wine_servings  \
@@ -85,7 +85,7 @@ Number of all the drinking countries: 180
 
 让我们比较下面的两个条形图，它们在数据方面是相同的，但在风格上是不同的。此外，我们还将找出 2010 年哪些国家消费了最多的酒:
 
-```
+```py
 top5_alcohol = df.sort_values('total_litres_of_pure_alcohol',
                   ascending=False)[:5]\\
      .reset_index(drop=True)
@@ -138,7 +138,7 @@ ss="token punctuation">.show()
 
 当应用不同的颜色不能传达任何关于数据的信息时，我们应该避免。默认情况下，seaborn 条形图中的每个条形都有不同的颜色，正如我们前面看到的那样。我们可以通过引入颜色参数并给所有的条分配相同的颜色来覆盖它。然而，我们仍然可以特别强调一些条形，并用灰色显示其他条形。例如，在我们上面的前 5 个国家中，让我们突出饮用特定烈酒的领导者。除了颜色强调，我们还将添加相应的注释:
 
-```
+```py
 spirit_top = top5_alcohol['spirit_servings']
 colors = ['grey' if (s < max(spirit_top)) else 'red' for s in spirit_top]
 
@@ -177,7 +177,7 @@ plt.show()
 
 让我们回到纯酒精消费排名前五的国家，并检查每个国家饮用啤酒和葡萄酒的比例。当然，有些类型的啤酒是深红色的(例如樱桃色的)，有些葡萄酒是金黄色的(白葡萄酒或梅子酒)。尽管如此，这些饮料最直观的颜色联想是葡萄酒的深红色和啤酒的金黄色:
 
-```
+```py
 fig, ax = plt.subplots(figsize=(10,5))
 x = np.arrange(len(top5_alcohol))
 width = 0.4
@@ -217,7 +217,7 @@ plt.show()
 
 由于 country 列代表一个名义变量，并且一些国家的名称相当长，所以让我们选择许多类别(人均啤酒消费量排名前 20 位的国家),并查看水平条形图:
 
-```
+```py
 top20_beer = df.sort_values('beer_servings', ascending=False)[:20]
 
 fig, ax = plt.subplots(figsize=(40,18))
@@ -257,7 +257,7 @@ plt.show()
 
 如果我们提取人们饮酒超过平均水平的所有国家，然后将这些数据可视化为条形图，得到的条形图将按字母顺序按基本类别(国家)排序。不过，最有可能的是，在这种情况下，我们更感兴趣的是看到按人均葡萄酒数量排序的数据。让我们比较一下这两种方法:
 
-```
+```py
 wine_more_than_mean = (df[df['wine_servings'] > df['wine_servings']\\
                          .mean()])
 sort_wine_more_than_mean = wine_more_than_mean\\
@@ -298,7 +298,7 @@ plt.show()
 
 如果我们从 0 以外的值开始截断 y 轴(或 x 轴，如果是水平条形图),我们还会截断每个条形的长度，因此我们的图表无法正确显示——无论是每个类别的单个值还是它们之间的比率:
 
-```
+```py
 usa = df[df['country']=='USA'].transpose()[1:4].reset_index()
 usa.columns = ['drinks', 'servings']
 
@@ -338,7 +338,7 @@ plt.show()
 
 回到纯酒精消费量排名前五的国家，现在让我们来看看每个国家饮用烈酒和葡萄酒的比例:
 
-```
+```py
 top5_alcohol_rev = top5_alcohol\\
                        .sort_values('total_litres_of_pure_alcohol')\\
                        .reset_index(drop=True)
@@ -383,7 +383,7 @@ plt.show()
 
 让我们将堆积和分组条形图应用于波罗的海国家，以确定他们的饮酒偏好:
 
-```
+```py
 baltics = df[(df['country']=='Latvia')|(df['country']=='Lithuania')\\
             |(df['country']=='Estonia')].iloc[:,:4]
 baltics.columns = ['country', 'beer', 'spirit', 'wine']

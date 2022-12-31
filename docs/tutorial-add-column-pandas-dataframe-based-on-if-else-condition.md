@@ -12,7 +12,7 @@ July 1, 2020![pandas-add-column-to-df](img/5a4cf13a8742d3c0a507909df6c4977d.png)
 
 我们将从导入 pandas 和 numpy 开始，并加载我们的数据集来看看它是什么样子的。(如果你还不熟悉使用 pandas 和 numpy 进行数据分析，请查看[我们的交互式 numpy 和 pandas 课程](https://www.dataquest.io/course/pandas-fundamentals/))。
 
-```
+```py
 import pandas as pd
 import numpy as np
 
@@ -41,13 +41,13 @@ df.head()
 
 为此，我们将使用 [numpy 的内置`where()`函数](https://numpy.org/doc/stable/reference/generated/numpy.where.html)。该函数按顺序接受三个参数:我们要测试的条件，如果条件为真，则分配给新列的值，如果条件为假，则分配的值。看起来是这样的:
 
-```
+```py
 np.where(condition, value if condition is true, value if condition is false)
 ```
 
 在我们的数据中，我们可以看到没有图片的推文*在`photos`列中总是有值`[]`。我们可以使用信息和`np.where()`来创建我们的新列`hasimage`，如下所示:*
 
-```
+```py
 df['hasimage'] = np.where(df['photos']!= '[]', True, False)
 df.head()
 ```
@@ -58,7 +58,7 @@ df.head()
 
 现在我们已经有了我们的`hasimage`列，让我们快速制作几个新的数据帧，一个用于所有图片推文，一个用于所有非图片推文。我们将使用布尔过滤器:
 
-```
+```py
 image_tweets = df[df['hasimage'] == True]
 no_image_tweets = df[df['hasimage'] == False]
 ```
@@ -67,7 +67,7 @@ no_image_tweets = df[df['hasimage'] == False]
 
 我们将使用`print()`语句使结果更容易阅读。我们还需要记住使用`str()`将我们的`.mean()`计算结果转换成一个字符串，这样我们就可以在我们的打印语句中使用它:
 
-```
+```py
 ## LIKES
 print('Average likes, all tweets: ' + str(df['likes_count'].mean()))
 print('Average likes, image tweets: ' + str(image_tweets['likes_count'].mean()))
@@ -80,7 +80,7 @@ print('Average RTs, image tweets: ' + str(image_tweets['retweets_count'].mean())
 print('Average RTs, no image tweets: ' + str(no_image_tweets['retweets_count'].mean()))
 ```
 
-```
+```py
 Average likes, all tweets: 6.209759328770148
 Average likes, image tweets: 14.21042471042471
 Average likes, no image tweets: 5.176514584891549
@@ -109,7 +109,7 @@ Average RTs, no image tweets: 1.2991772625280478
 
 让我们看看这在 Python 代码中是怎样的:
 
-```
+```py
 # create a list of our conditions
 conditions = [
     (df['likes_count'] <= 2),
@@ -134,23 +134,23 @@ df.head()
 
 现在，我们可以用它来回答更多关于我们数据集的问题。例如:1 级和 4 级推文中有图片的比例是多少？
 
-```
+```py
 #tier 4 tweets
 df[(df['tier'] == 'tier_4')]['hasimage'].value_counts(normalize=True)
 ```
 
-```
+```py
 False    0.948784
 True     0.051216
 Name: hasimage, dtype: float64
 ```
 
-```
+```py
 #tier 1 tweets
 df[(df['tier'] == 'tier_1')]['hasimage'].value_counts(normalize=True)
 ```
 
-```
+```py
 False    0.836842
 True     0.163158
 Name: hasimage, dtype: float64

@@ -45,7 +45,7 @@ January 12, 2021![sql-columns](img/c28d894c0ceceb2501a258d109b004ba.png "sql-col
 
 通常，他们会使用以下查询获得正确的输出:
 
-```
+```py
 SELECT country, customer_name,
        MAX(total_purchased)
   FROM customer_country_purchases
@@ -83,7 +83,7 @@ SELECT country, customer_name,
 
 考虑到这一点，我们可以为这个新表构造一个查询，这个查询本质上与我们在 Chinook 中看到的有问题的查询相同:
 
-```
+```py
 SELECT city, gender,
        MAX(age) AS max_age
   FROM elite_agent
@@ -96,7 +96,7 @@ SELECT city, gender,
 
 据推测，这个查询的目标是确定最老的代理的年龄。如果我们不想要名字，我们将运行下面的查询。
 
-```
+```py
 SELECT city,
        MAX(age) AS max_age
   FROM elite_agent
@@ -137,7 +137,7 @@ SELECT city,
 
 现在，在我们的课程中，我们使用的是 [SQLite](https://sqlite.org/index.html) ，这在现实工作中也很常见。尽管空列不会给查询增加意义，但 SQLite 确实允许它们存在:
 
-```
+```py
 SELECT city, gender,
        MAX(age) AS max_age
   FROM elite_agent
@@ -154,7 +154,7 @@ SELECT city, gender,
 
 但是，当我们不用最大年龄来计算平均值这样的统计数据时，这种辩护就站不住脚了:
 
-```
+```py
 SELECT city, gender,
        AVG(age) AS mean_age
   FROM elite_agent
@@ -185,7 +185,7 @@ SELECT city, gender,
 
 那么，为什么下面的查询运行良好呢？
 
-```
+```py
 SELECT city, gender,
        MAX(age) AS max_age
   FROM elite_agent
@@ -236,7 +236,7 @@ MySQL 是上述第一点的另一个很好的例子，因为这种查询的结�
 
 让我们回到最初的查询，回顾一下为什么它会有问题，尽管它确实产生了正确的输出(至少在使用 SQLite 时):
 
-```
+```py
 SELECT country, customer_name,
        MAX(total_purchased)
   FROM customer_country_purchases
@@ -254,7 +254,7 @@ SELECT country, customer_name,
 *   创建一个表格，查找每个国家的最大花费金额。
 *   将`customer_country_purchases`与上面在 amount 列上创建的表连接起来。
 
-```
+```py
 SELECT ccp.country,
        ccp.customer_name,
        ccp.total_purchases AS total_purchased

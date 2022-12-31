@@ -39,7 +39,7 @@ Kaggle 创建了许多为初学者设计的比赛。这些竞赛中最受欢迎�
 
 本次比赛中，两档分别命名为`test.csv`和`train.csv`。我们首先使用 [`pandas.read_csv()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html) 库来读取这两个文件，然后检查它们的大小。
 
-```
+```py
  import pandas as pd
 test = pd.read_csv("test.csv")
 train = pd.read_csv("train.csv")
@@ -47,7 +47,7 @@ print("Dimensions of train: {}".format(train.shape))
 print("Dimensions of test: {}".format(test.shape)) 
 ```
 
-```
+```py
  Dimensions of train: (891, 12)
 Dimensions of test: (418, 11) 
 ```
@@ -72,7 +72,7 @@ Kaggle 上的数据页面有一些关于一些列的附加说明。为了对数�
 
 让我们看看`train`数据帧的前几行。
 
-```
+```py
 train.head()
 ```
 
@@ -94,7 +94,7 @@ train.head()
 
 因为`Survived`列包含乘客是否幸存的`0`和乘客是否幸存的`1`，我们可以按性别对数据进行分段，并计算这一列的平均值。我们可以使用`DataFrame.pivot_table()`轻松做到这一点:
 
-```
+```py
  import matplotlib.pyplot as plt
 
 sex_pivot = train.pivot_table(index="Sex",values="Survived")
@@ -106,7 +106,7 @@ plt.show()
 
 我们可以立即看到女性的存活率比男性高得多。让我们对`Pclass`列做同样的操作。
 
-```
+```py
  class_pivot = train.pivot_table(index="Pclass",values="Survived")
 class_pivot.plot.bar()
 plt.show() 
@@ -120,11 +120,11 @@ plt.show()
 
 让我们用 [`Series.describe()`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.describe.html) 来看看`Age`栏。
 
-```
+```py
 train["Age"].describe()
 ```
 
-```
+```py
  count    714.000000
 mean      29.699118
 std       14.526497
@@ -140,7 +140,7 @@ Name: Age, dtype: float64
 
 所有这些都意味着需要稍微不同地对待`Age`列，因为这是一个连续的数字列。查看连续数值集中值的分布的一种方法是使用直方图。我们可以创建两个直方图来直观地比较不同年龄范围内的幸存者和死亡者:
 
-```
+```py
  survived = train[train["Survived"] == 1]
 died = train[train["Survived"] == 0]
 survived["Age"].plot.hist(alpha=0.5,color='red',bins=50)
@@ -179,7 +179,7 @@ plt.show()
 
 注意，`cut_points`列表比`label_names`列表多了一个元素，因为它需要定义最后一段的上边界。
 
-```
+```py
  def process_age(df,cut_points,label_names):
     df["Age"] = df["Age"].fillna(-0.5)
     df["Age_categories"] = pd.cut(df["Age"],cut_points,labels=label_names)
@@ -209,11 +209,11 @@ plt.show()
 
 此外，我们需要注意不要在没有数字关系的地方暗示任何数字关系。数据字典告诉我们，`Pclass`列中的值是`1`、`2`和`3`。我们可以用熊猫来证实这一点:
 
-```
+```py
 train["Pclass"].value_counts()
 ```
 
-```
+```py
  3    491
 1    216
 2    184
@@ -230,7 +230,7 @@ Name: Pclass, dtype: int64
 
 我们将创建一个函数来为`Pclass`列创建虚拟列，并将其添加回原始数据帧。然后，我们将对每个`Pclass`、`Sex`和`Age_categories`列的`train`和`test`数据帧应用该函数。
 
-```
+```py
  def create_dummies(df,column_name):
     dummies = pd.get_dummies(df[column_name],prefix=column_name)
     df = pd.concat([df,dummies],axis=1)
@@ -256,19 +256,19 @@ scikit-learn 中的每个模型都是作为一个单独的类实现的，第一�
 
 我们将从前两步开始。首先，我们需要导入这个类:
 
-```
+```py
 from sklearn.linear_model import LogisticRegression
 ```
 
 接下来，我们创建一个`LogisticRegression`对象:
 
-```
+```py
 lr = LogisticRegression()
 ```
 
 最后，我们使用 [`LogisticRegression.fit()`方法](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression.fit)来训练我们的模型。`.fit()`方法接受两个参数:`X`和`y`。`X`必须是我们希望训练模型的二维特征数组(如数据帧)，而`y`必须是我们目标的一维数组(如序列)，或我们希望预测的列。
 
-```
+```py
  columns = ['Pclass_2', 'Pclass_3', 'Sex_male']
 lr.fit(train[columns], train['Survived'])
 ```
@@ -277,7 +277,7 @@ lr.fit(train[columns], train['Survived'])
 
 让我们使用我们用`create_dummies()`函数创建的所有列来训练我们的模型。
 
-```
+```py
  from sklearn.linear_model import LogisticRegression
 
 columns = ['Pclass_1', 'Pclass_2', 'Pclass_3', 'Sex_female', 'Sex_male',
@@ -290,7 +290,7 @@ lr = LogisticRegression()
 lr.fit(train[columns], train["Survived"]) 
 ```
 
-```
+```py
 LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
           intercept_scaling=1, max_iter=100, multi_class='ovr', n_jobs=1,
           penalty='l2', random_state=None, solver='liblinear', tol=0.0001,
@@ -318,7 +318,7 @@ scikit-learn 库有一个方便的 [`model_selection.train_test_split()`函数](
 
 您会注意到我们使用了一些额外的参数:`test_size`，它让我们控制我们的数据被分割成什么比例，以及`random_state`。`train_test_split()`函数在划分观察值之前将它们随机化，设置一个[随机种子](https://en.wikipedia.org/wiki/Random_seed)意味着我们的结果将是可重复的，所以你可以跟着做，得到和我们一样的结果。
 
-```
+```py
  holdout = test # from now on we will refer to this
                # dataframe as the holdout data
 
@@ -339,7 +339,7 @@ train_X, test_X, train_y, test_y = train_test_split(
 
 `predict()`方法采用单个参数`X`，这是我们希望预测的观测值的二维特征数组。`X`必须具有与我们用来拟合模型的阵列完全相同的特征。该方法返回预测的一维数组。
 
-```
+```py
  lr = LogisticRegression()
 lr.fit(train_X, train_y)
 predictions = lr.predict(test_X)
@@ -363,14 +363,14 @@ predictions = lr.predict(test_X)
 
 同样，scikit-learn 有一个方便的函数，我们可以使用它来计算精度: [`metrics.accuracy_score()`](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.accuracy_score.html) 。该函数接受两个参数，`y_true`和`y_pred`，它们分别是实际值和我们的预测值，并返回我们的准确度分数。
 
-```
+```py
  from sklearn.metrics import accuracy_score
 accuracy = accuracy_score(test_y, predictions)
 ```
 
 让我们把所有这些步骤放在一起，得到我们的第一个准确度分数。
 
-```
+```py
  from sklearn.metrics import accuracy_score
 lr = LogisticRegression()
 lr.fit(train_X, train_y)
@@ -379,7 +379,7 @@ accuracy = accuracy_score(test_y, predictions)
 print(accuracy) 
 ```
 
-```
+```py
 0.810055865922
 ```
 
@@ -395,7 +395,7 @@ print(accuracy)
 
 我们将使用 scikit-learn 的 [`model_selection.cross_val_score()`函数](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score)来自动化这个过程。`cross_val_score()`的基本语法是:
 
-```
+```py
 cross_val_score(estimator, X, y, cv=None)
 ```
 
@@ -409,7 +409,7 @@ cross_val_score(estimator, X, y, cv=None)
 在计算产生的
 分数的平均值之前，我们将使用`model_selection.cross_val_score()`对我们的数据进行交叉验证:
 
-```
+```py
  from sklearn.model_selection import cross_val_score
 
 lr = LogisticRegression()
@@ -421,7 +421,7 @@ print(scores)
 print(accuracy) 
 ```
 
-```
+```py
  [ 0.76404494  0.76404494  0.7752809   0.78651685  0.8         0.80681818  0.80898876  0.81111111  0.83146067  0.87640449]
 0.802467086596
 ```
@@ -434,7 +434,7 @@ print(accuracy)
 
 我们现在准备使用我们建立的模型来训练我们的最终模型，然后根据我们看不见的坚持数据，或 Kaggle 所谓的“测试”数据集进行预测。
 
-```
+```py
  lr = LogisticRegression()
 lr.fit(all_X,all_y)
 holdout_predictions = lr.predict(holdout[columns]) 
@@ -463,7 +463,7 @@ holdout_predictions = lr.predict(holdout[columns])
 
 为此，我们可以将字典传递给 [`pandas.DataFrame()`函数](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html):
 
-```
+```py
  holdout_ids = holdout["PassengerId"]
 sublesson_df = {"PassengerId": holdout_ids,
                  "Survived": holdout_predictions}
@@ -472,7 +472,7 @@ sublesson = pd.DataFrame(sublesson_df)
 
 最后，我们将使用 [`DataFrame.to_csv()`方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_csv.html)将数据帧保存到一个 CSV 文件。我们需要确保将`index`参数设置为`False`，否则我们将在 CSV 中添加一个额外的列。
 
-```
+```py
 sublesson.to_csv("sublesson.csv",index=False)
 ```
 

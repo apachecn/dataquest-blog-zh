@@ -35,25 +35,25 @@ January 24, 2022![](img/da5f9b4770a449878c87e1e6181ac4e0.png)
 
 在我们开始打扫卫生之前，让我们先了解一个简单的事实:
 
-```
+```py
 'ebay' == 'Ebay'
 ```
 
 输出
 
-```
+```py
 False
 ```
 
 如上所述，Python 是一种区分大小写的语言——“e”与“e”不同。这就是为什么清理字符串数据的第一步是将所有单词转换为小写:
 
-```
+```py
 df['title'] = df['title'].str.lower()
 ```
 
 现在让我们继续删除标点符号；我们将创建一个简单的函数，并将其应用于每个“标题”单元格:
 
-```
+```py
 import string
 
 # create function for punctuation removal:
@@ -82,7 +82,7 @@ df['title'] = df['title'].apply(remove_punctuations)
 
 让我们检查其中一个标题的删除示例:
 
-```
+```py
 # import list of stopwords:
 from nltk.corpus import stopwords
 stop = stopwords.words('english')
@@ -94,7 +94,7 @@ example1 = 'guided project visualizing the gender gap in college degrees'
 
 输出
 
-```
+```py
 'guided project visualizing gender gap college degrees'
 ```
 
@@ -102,7 +102,7 @@ example1 = 'guided project visualizing the gender gap in college degrees'
 
 我们可以将上面的方法应用于所有的“标题”单元格，但在此之前，我们想在列表中添加一些我们选择的单词。我们知道许多标题包含“项目”、“反馈”等词。他们没有给我们任何关于帖子内容的信息，所以我们应该删除它们:
 
-```
+```py
 # add more words to stopwords list:
 guided_list = ['guided', 'project', 'feedback']
 stop_extended = stop + guided_list
@@ -113,13 +113,13 @@ df['title_nostop'] = df['title'].apply(lambda x: ' '.join([word for word in x.sp
 
 让我们在最初的几个步骤之后检查一下我们有多少独特的标题:
 
-```
+```py
 len(df['title_nostop'].unique())
 ```
 
 输出
 
-```
+```py
 927
 ```
 
@@ -127,31 +127,31 @@ len(df['title_nostop'].unique())
 
 ## 使用标签号
 
-```
+```py
 df['content'][1]
 ```
 
 输出
 
-```
+```py
 <tr class="topic-list-item category-share-guided-project tag-python tag-pandas tag-469 tag-data-analysis-business tag-469-11 has-excerpt ember-view" data-topic-id="558226" id="ember77">\n<td class="main-link clearfix" colspan="">\n<div class="topic-details">\n<div class="topic-title">\n<span class="link-top-line">\n<a class="title raw-link raw-topic-link" data-topic-id="558226" href="https://community.dataquest.io/t/re-upload-project-feedback-popular-data-science-questions/558226/2" level="2" role="heading"><span dir="ltr">[Re-upload]Project Feedback - Popular Data Science Questions</span></a>\n<span class="topic-post-badges"></span>\n</span>\n</div>\n<div class="discourse-tags"><a class="discourse-tag bullet" data-tag-name="python" href="https://community.dataquest.io/tag/python">python</a> <a class="discourse-tag bullet" data-tag-name="pandas" href="https://community.dataquest.io/tag/pandas">pandas</a> <a class="discourse-tag bullet" data-tag-name="469" href="https://community.dataquest.io/tag/469">469</a> <a class="discourse-tag bullet" data-tag-name="data-analysis-business" href="https://community.dataquest.io/tag/data-analysis-business">data-analysis-business</a> <a class="discourse-tag bullet" data-tag-name="469-11" href="https://community.dataquest.io/tag/469-11">469-11</a> </div>\n<div class="actions-and-meta-data">\n</div>\n</div></td>\n<td class="posters">\n<a class="" data-user-card="kevindarley2024" href="https://community.dataquest.io/u/kevindarley2024"><img alt="" aria-label="kevindarley2024 - Original Poster" class="avatar" height="25" src="./Latest Share_Guided Project topics - Dataquest Community_files/50(1).png" title="kevindarley2024 - Original Poster" width="25"/></a>\n<a class="latest" data-user-card="jesmaxavier" href="https://community.dataquest.io/u/jesmaxavier"><img alt="" aria-label="jesmaxavier - Most Recent Poster" class="avatar latest" height="25" src="./Latest Share_Guided Project topics - Dataquest Community_files/50(2).png" title="jesmaxavier - Most Recent Poster" width="25"/></a>\n</td>\n<td class="num posts-map posts" title="This topic has 3 replies">\n<button class="btn-link posts-map badge-posts">\n<span aria-label="This topic has 3 replies" class="number">3</span>\n</button>\n</td>\n<td class="num likes">\n</td>\n<td class="num views"><span class="number" title="this topic has been viewed 47 times">47</span></td>\n<td class="num age activity" title="First post: Nov 14, 2021 2:57 am\nPosted: Nov 18, 2021 6:38 pm">\n<a class="post-activity" href="https://community.dataquest.io/t/re-upload-project-feedback-popular-data-science-questions/558226/4"><span class="relative-date" data-format="tiny" data-time="1637221085326">3d</span></a>\n</td>\n</tr>
 ```
 
 指导项目的每一课都有唯一的编号。大多数发布的项目都标有这些数字。利用这些知识，我们可以尽可能地提取标签号:
 
-```
+```py
 df['tag'] = df['content'].str.extract('data-tag-name="(\d+)" href')
 ```
 
 现在，让我们检查一下有多少帖子标有课程编号:
 
-```
+```py
 df['tag'].value_counts().sum()
 ```
 
 输出
 
-```
+```py
 700
 ```
 
@@ -167,7 +167,7 @@ df['tag'].value_counts().sum()
 
 ## 第一步。检查每个标签最常用的单词
 
-```
+```py
 from collections import Counter
 for a_tag in df['tag'].value_counts()[:25].index:
 	top_word = Counter(" ".join(df[df['tag']==a_tag]['title_nostop']).split()).most_common(1)[0][0]
@@ -198,7 +198,7 @@ for a_tag in df['tag'].value_counts()[:25].index:
 
 上述大多数关键词都指向我们都必须忍受的教训。但是“最佳”或“数据”并不能真正给我们任何关于这个项目的信息。最重要的是，两个不同的标签有相同的单词(“预测”)作为最常见的单词。让我们去掉这些词:
 
-```
+```py
 more_stop = ['predicting','best','analyzing','data','exploring']
 df['title_nostop'] = df['title_nostop'].apply(lambda x: ' '.join([word for word in x.split() if word not in (more_stop)]))
 
@@ -209,7 +209,7 @@ for a_tag in df['tag'].value_counts()[:25].index:
 
 ## 步骤 3:遍历标签号
 
-```
+```py
 for a_tag in df['tag'].value_counts()[:25].index:
 	top_word = Counter(" ".join(df[df['tag']==a_tag]['title_nostop']).split()).most_common(1)[0][0]
 	df.loc[(df['title_nostop'].str.contains(top_word)) & df['tag'].isnull(), 'tag'] = a_tag
@@ -221,20 +221,20 @@ df[df['tag'].isnull()].shape
 
 你可能注意到了，tag 155 最常见的词是 car 不幸的是，这个词在易贝项目中非常常见。以下是将不正确的标签编号分配给不正确的项目的问题的快速解决方法:
 
-```
+```py
 df.loc[(df['title_nostop'].str.contains('german')) & (df['tag']=='155'),'tag'] = '294'
 df[df['tag'].isnull()].shape
 ```
 
 输出
 
-```
+```py
 (59, 8)
 ```
 
 我们可以删除 59 行以获得一致的数据集；当我们这样做时，让我们删除原来的“标题”列:
 
-```
+```py
 df = df[~(df['tag'].isnull())].copy()
 df = df.drop(columns='title')
 ```
@@ -243,7 +243,7 @@ df = df.drop(columns='title')
 
 有一个问题:我们只能用前 29 课的数字来做；其余的只出现一次，所以如果标题在数据集中只出现一次，我们就无法检查最常见的单词。
 
-```
+```py
 # create empty dictionary and a column filled with '0's
 pop_tags = {}
 df['short_title'] = None
@@ -256,14 +256,14 @@ for a_tag in df['tag'].value_counts()[:29].index:
 
 现在，我们已经有了一个字典，其中包含了每个课程编号最常用的两个单词，让我们将它们分配给每一行:
 
-```
+```py
 for a_tag in df['tag'].value_counts()[:29].index:
 	df.loc[df['tag']==a_tag, 'short_title'] = pop_tags[a_tag]
 ```
 
 让我们来看看 10 个最受欢迎的短篇:
 
-```
+```py
 df['short_title'].value_counts()[:10]
 ```
 
@@ -285,7 +285,7 @@ df['short_title'].value_counts()[:10]
 
 “星球大战”对于一部太空歌剧来说并不是一个朗朗上口的名字，但我们可以认出一个熟悉的话题。现在，我们可以将每个独特的标题归类到一个特定的项目，我们可以开始分析数据集。哪个项目的职位数量最多？
 
-```
+```py
 import matplotlib.pyplot as plt
 
 # group the dataset by project title:
@@ -322,19 +322,19 @@ plt.show()
 
 ### 清理文本数据
 
-```
+```py
 df['feedback'][0]
 ```
 
 输出
 
-```
+```py
 \nprocessing data inside a function saves memory (the variables you create stay inside the function and are not stored in memory, when you’re done with the function) it’s important when you’re working with larger datasets - if you’re interested with experimenting:\nhttps://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page\nTry cleaning 1 month of this dataset on kaggle notebook (and look at your RAM usage) outside the function and inside the function, compare the RAM usage in both examples\n
 ```
 
 让我们从删除不必要的 HTML 代码和小写字母开始。下一步，我们将展开所有的缩写(将“不”展开为“不”等。)—我们将为此使用一个方便的[收缩包](https://github.com/kootenpv/contractions)。之后，我们将删除标点并将结果存储在一个新列中。为什么？去掉标点符号会阻止我们识别句子，我们会想要分析单个的句子。这就是为什么我们要保留两个选项:带标点和不带标点的字符串。接下来，我们将删除停用词和 10 个最常出现的词。
 
-```
+```py
 import contractions
 
 # remove '\n' and punctuation, lowercase all letters
@@ -362,7 +362,7 @@ df['feedback_clean2'] = df['feedback_clean'].apply(lambda x: ' '.join([word for 
 
 请记住，我们还没有从“反馈”栏中删除停用词。我们不会检查它—该专栏中最流行的单词将是停用词。知道“the”、“to”或“you”在文本中出现了多少次，不会给我们任何关于内容的概念。相反，我们将检查“反馈 _ 清理”和“反馈 _ 清理 2”:
 
-```
+```py
 from collections import Counter
 
 # function for checking popular words:
@@ -390,7 +390,7 @@ popular_words(df['feedback_clean'])
 | eight | 良好的 | Four hundred and ninety-four |
 | nine | 工作 | Four hundred and thirty-five |
 
-```
+```py
 popular_words(df['feedback_clean2'])
 ```
 
@@ -414,7 +414,7 @@ popular_words(df['feedback_clean2'])
 
 许多 NLP 技术需要输入标记化的字符串。什么是标记化？本质上，它是将一个字符串分割成更小的单元(记号)。最常见的方法是单词标记化。这里有一个简单的例子:
 
-```
+```py
 from nltk.tokenize import word_tokenize
 
 word_tokenize('The most common method is word tokenizing.')
@@ -422,13 +422,13 @@ word_tokenize('The most common method is word tokenizing.')
 
 输出
 
-```
+```py
 ['The', 'most', 'common', 'method', 'is', 'word', 'tokenizing', '.']
 ```
 
 在对句子进行标记后，我们得到了句子中所有单词(和符号)的列表。另一种常见的方法是句子标记化，它将文本分成一系列句子:
 
-```
+```py
 from nltk.tokenize import sent_tokenize
 
 sent_tokenize("You can also come across sentence tokenizing. This is a simple example.")
@@ -436,7 +436,7 @@ sent_tokenize("You can also come across sentence tokenizing. This is a simple ex
 
 输出
 
-```
+```py
 ['You can also come across sentence tokenizing.', 'This is a simple example.']
 ```
 
@@ -458,7 +458,7 @@ sent_tokenize("You can also come across sentence tokenizing. This is a simple ex
 
 在积累了超过 1000 个反馈帖子后，我们希望看到一些 n-grams 更频繁地出现，这应该表明我们在共享项目中的常见错误。
 
-```
+```py
 from nltk.util import ngrams 
 import collections
 
@@ -471,7 +471,7 @@ trigrams_freq.most_common(10)
 
 输出
 
-```
+```py
 [(('otherwise', 'everything', 'look'), 47),
 (('cell', 'order', 'start'), 30),
 (('order', 'start', '1'), 30),
@@ -486,7 +486,7 @@ trigrams_freq.most_common(10)
 
 不幸的是，许多 n-grams 是祝贺和赞美的一些积极变化；这很好，但是它没有给我们任何与反馈内容相关的信息。如果我们能只过滤掉某些 n-gram，我们会得到一个更好的图片。我们假设以“考虑”、“制作”或“使用”这样的词开头的 n 元语法应该会让我们非常感兴趣。另一方面，如果一个 n-gram 包含像“快乐”、“祝贺”或“社区”这样的词，它对我们就没有任何意义。这应该不难，因为我们可以通过收集。计数器输出到熊猫数据帧:
 
-```
+```py
 f4grams = ngrams(word_tokenize(df['feedback_clean2'].sum()), 4)
 f4grams_freq = collections.Counter(f4grams)
 df_4grams = pd.DataFrame(f4grams_freq.most_common())
@@ -507,7 +507,7 @@ df_4grams.head()
 *   创建一个我们想要避免的单词列表——我们将排除包含这些单词的 n 元语法
 *   创建一个我们最感兴趣的单词列表——我们将过滤掉第一个单词中不包含这些单词的行
 
-```
+```py
 # lists of words to exclude and include:
 exclude = ['best','help', 'happy', 'congratulation', 'learning', 'community', 'feedback', 'project', 'guided','guide', 'job', 'great', 'example', 
 		   'sharing', 'suggestion', 'share', 'download', 'topic', 'everything', 'nice', 'well', 'done', 'look', 'file', 'might']
@@ -547,7 +547,7 @@ df_4grams[:10]
 
 如果你更喜欢实践而不是理论，这里有一个 POS 的例子:
 
-```
+```py
 from nltk import pos_tag
 
 pos_tag(word_tokenize('The most common method is word tokenizing.'))
@@ -555,7 +555,7 @@ pos_tag(word_tokenize('The most common method is word tokenizing.'))
 
 输出
 
-```
+```py
 [('The', 'DT'),
 ('most', 'RBS'),
 ('common', 'JJ'),
@@ -568,7 +568,7 @@ pos_tag(word_tokenize('The most common method is word tokenizing.'))
 
 我们得到了一些分析！我们可以快速解读大多数标签(名词，JJ，形容词等等)。).但是要获得完整的列表，只需使用这一行:
 
-```
+```py
 nltk.help.upenn_tagset()
 ```
 
@@ -578,13 +578,13 @@ nltk.help.upenn_tagset()
 
 我们可以标记每个单词，所以让我们试着寻找特定的模式(也就是组块！).我们在找什么？许多反馈帖子中反复出现的主题之一是建议添加或更改某些内容。我们如何从语法上构建这个句子？让我们检查一下！
 
-```
+```py
 pos_tag(word_tokenize('You should add more color.'))
 ```
 
 输出
 
-```
+```py
 [('You', 'PRP'),
 ('should', 'MD'),
 ('add', 'VB'),
@@ -604,39 +604,39 @@ pos_tag(word_tokenize('You should add more color.'))
 
 4.  解析段落，并打印结果。
 
-	```
+	```py
 	from nltk import RegexpParser 
 	```
 
 # 1.我们的段落:
 
-```
+```py
 paragraph = '我认为你可以改进内容。你应该补充更多的信息。我就是这样做的，我永远是对的'
 ```
 
 # 2.对段落进行标记，然后使用词性标注:
 
-```
+```py
 paragraph_tokenized = word_tokenize(paragraph)
 ```
 
 # 3.命名并组织我们正在寻找的语法:
 
-```
+```py
 grammar = "target_phrase:{<vb><jjr><nn>}" 
 CP = nltk.RegexpParser(grammar)
 ```
 
 # 4.解析带标签的段落:
 
-```
+```py
 result = CP.parse(paragraph_taged)
 print(result)
 ```
 
 输出
 
-```
+```py
 (S
 I/PRP
 think/VBP
@@ -663,7 +663,7 @@ right/RB)
 
 如果我们只对我们要找的那块感兴趣呢？我们不想显示整个文本！我们的反馈帖子中会有很多文字！
 
-```
+```py
 target_chunks = []
 for subtree in result.subtrees(filter=lambda t: t.label() == 'target_phrase'):
 	target_chunks.append(tuple(subtree))
@@ -671,14 +671,14 @@ for subtree in result.subtrees(filter=lambda t: t.label() == 'target_phrase'):
 print(target_chunks)
 ```
 
-```
+```py
 Output
 [(('add', 'VB'), ('more', 'JJR'), ('information', 'NN'))]
 ```
 
 好了，问题解决了。现在我们要做的最后一件事是计算我们的块在文本中出现的次数:
 
-```
+```py
 from collections import Counter
 
 # create a Counter:
@@ -693,7 +693,7 @@ print(chunk_counter)
 
 输出
 
-```
+```py
 Counter({(('add', 'VB'), ('more', 'JJR'), ('information', 'NN')): 1})
 ```
 
@@ -701,7 +701,7 @@ Counter({(('add', 'VB'), ('more', 'JJR'), ('information', 'NN')): 1})
 
 第一个功能将为 NLP 工作准备文本数据:它将标记句子和单词，然后标记词性。它将返回一个带有词性标签的单词列表。
 
-```
+```py
 def prep_text(text):
 	# tokenize sentences:
 	sent_tokenized = sent_tokenize(text)
@@ -718,14 +718,14 @@ def prep_text(text):
 
 我们将使用第一个函数来准备所有反馈帖子的文本数据:
 
-```
+```py
 all_feedback = df['feedback'].sum()
 all_feedback_tagged = prep_text(all_feedback)
 ```
 
 第二个函数将解析所有标记文本数据，并寻找我们将提供的特定块语法；如果单词的标签与提供的模式匹配，它会用一个标签标记这个块。
 
-```
+```py
 def parser(regex_pattern, pos_tagged):
 	np_chunk_grammar = regex_pattern
 	np_chunk_parser = RegexpParser(np_chunk_grammar)
@@ -735,13 +735,13 @@ def parser(regex_pattern, pos_tagged):
 	return np_chunked_text
 ```
 
-```
+```py
 chunked_text = parser("bingo: {<VB|NN|NNP><JJR><NN|NNS>}",all_feedback_tagged)
 ```
 
 最后一个函数将只过滤出我们要查找的块，并计算它们出现的次数，它还将显示前 10 个:
 
-```
+```py
 def chunk_counter(chunked_sentences):
 	chunks = []
 	# loop through each chunked sentence to extract phrase chunks of our desired sequence:
@@ -756,13 +756,13 @@ def chunk_counter(chunked_sentences):
 	return chunk_counter.most_common(10)
 ```
 
-```
+```py
 chunk_counter(chunked_text)
 ```
 
 输出
 
-```
+```py
 [((('add', 'VB'), ('more', 'JJR'), ('information', 'NN')), 3),
 ((('add', 'VB'), ('more', 'JJR'), ('weight', 'NN')), 3),
 ((('see', 'VB'), ('more', 'JJR'), ('projects', 'NNS')), 2),
@@ -777,12 +777,12 @@ chunk_counter(chunked_text)
 
 因为我们的文本已经被标记，如果我们想要寻找不同的模式，我们只需要交换最后两个函数的输入:
 
-```
+```py
 chunked_text = parser("bingo: {<VB|NN><RB|VBG>?<JJ><NN|NNS><NN|NNS>?}",all_feedback_tagged)
 np_chunk_counter(chunked_text)
 ```
 
-```
+```py
 [((('make', 'VB'), ('proper', 'JJ'), ('documentation', 'NN')), 9),
  ((('have', 'VB'), ('sequential', 'JJ'), ('ordering', 'NN')), 6),
  ((('combine', 'VB'), ('adjacent', 'JJ'), ('code', 'NN'), ('cells', 'NNS')),
@@ -802,14 +802,14 @@ np_chunk_counter(chunked_text)
  ((('show', 'NN'), ('original', 'JJ'), ('hi', 'NN')), 2)]
 ```
 
-```
+```py
 chunked_text = parser("bingo: {<VB><DT><NN|NNS>}",all_feedback_tagged)
 chunk_counter(chunked_text)
 ```
 
 输出
 
-```
+```py
 [((('have', 'VB'), ('a', 'DT'), ('look', 'NN')), 19),
 ((('take', 'VB'), ('a', 'DT'), ('look', 'NN')), 14),
 ((('improve', 'VB'), ('the', 'DT'), ('readability', 'NN')), 13),
@@ -822,14 +822,14 @@ chunk_counter(chunked_text)
 ((('add', 'VB'), ('some', 'DT'), ('information', 'NN')), 9)]
 ```
 
-```
+```py
 chunked_text = parser("bingo: {<JJR><NN|NNS>}",all_feedback_tagged)
 np_chunk_counter(chunked_text)
 ```
 
 输出
 
-```
+```py
 [((('better', 'JJR'), ('readability', 'NN')), 15),
 ((('more', 'JJR'), ('information', 'NN')), 12),
 ((('more', 'JJR'), ('comments', 'NNS')), 11),
@@ -848,7 +848,7 @@ np_chunk_counter(chunked_text)
 
 我们可以把词汇化描述为把单词剥离到它的词根形式。如果我们的文本充满了同一个单词的单数或复数形式，或者同一个动词的不同时态，这可能是有用的。下面举个简单的例子:看函数下面的文字；看完课文后，我们将分析这个函数。
 
-```
+```py
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 
@@ -871,7 +871,7 @@ lemmatize_it(string1)
 
 输出
 
-```
+```py
 Adam write this great article , spend many hour on his computer . He be truly amazing
 ```
 
@@ -879,7 +879,7 @@ Adam write this great article , spend many hour on his computer . He be truly am
 
 让我们看看，当我们在词条化的文本上使用我们的 POS 管道时，会发生什么:
 
-```
+```py
 lemmatized = lemmatize_it(df['feedback'].sum())
 feedback_lemmed_tagged = prep_text(lemmatized)
 chunked_text = parser("bingo: {<VB|NN><RB|VBG>?<JJ><NN|NNS><NN|NNS>?}",feedback_lemmed_tagged)
@@ -888,7 +888,7 @@ chunk_counter(chunked_text)
 
 输出
 
-```
+```py
 [((('render', 'VB'), ('good', 'JJ'), ('output', 'NN')), 11),
 ((('make', 'VB'), ('proper', 'JJ'), ('documentation', 'NN')), 9),
 ((('be', 'VB'), ('not', 'RB'), ('skip', 'JJ'), ('sql', 'NN')), 7),

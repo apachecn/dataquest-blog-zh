@@ -60,7 +60,7 @@ Python 是最强大的编程语言之一，主要用于数据科学、机器学�
 
 5.让我们编写一个简单的 Python 代码，并在空闲时运行它。键入以下语句，然后按回车键。
 
-```
+```py
 print(“Hello, World!”)
 ```
 
@@ -118,7 +118,7 @@ print(“Hello, World!”)
 
 太好了，我们拥有了在 VS 代码中编写和运行 Python 代码所需的一切。让我们用 VS 代码写下面的代码，然后运行它。
 
-```
+```py
 print("Hello, World!)
 name = input("What's your name? ")
 print("Hello {}!\nWelcome to Dataquest!".format(name))

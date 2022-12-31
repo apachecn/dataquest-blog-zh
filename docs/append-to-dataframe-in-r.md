@@ -12,7 +12,7 @@ July 28, 2022![Append to DataFrame in R](img/71a8f14dce382fbbdaa88c5d9695cd3c.pn
 
 开始之前，让我们创建一个简单的数据框架作为实验:
 
-```
+```py
 super_sleepers_initial <- data.frame(animal=c('koala', 'hedgehog'), 
                                      country=c('Australia', 'Italy'),
                                      avg_sleep_hours=c(21, 18), 
@@ -32,7 +32,7 @@ print(super_sleepers_initial)
 
 要在 R 中向数据帧追加一行，我们可以使用内置函数`rbind()`，它代表“行绑定”。基本语法如下:
 
-```
+```py
 dataframe <- rbind(dataframe, new_row)
 ```
 
@@ -40,7 +40,7 @@ dataframe <- rbind(dataframe, new_row)
 
 让我们从最初的数据帧`super_sleepers_initial`重新构建一个新的数据帧`super_sleepers`，并向其追加一行:
 
-```
+```py
 # Reconstructing the `super_sleepers` dataframe
 super_sleepers <- super_sleepers_initial
 
@@ -61,7 +61,7 @@ print(super_sleepers)
 
 向 R 数据帧追加一行的另一种方法是使用`nrow()`函数。语法如下:
 
-```
+```py
 dataframe[nrow(dataframe) + 1,] <- new_row
 ```
 
@@ -71,7 +71,7 @@ dataframe[nrow(dataframe) + 1,] <- new_row
 
 让我们再增加一个“超级睡眠者”:
 
-```
+```py
 super_sleepers[nrow(super_sleepers) + 1,] <- list('panda', 'China', 10)
 print(super_sleepers)
 ```
@@ -88,7 +88,7 @@ print(super_sleepers)
 
 相反，如果我们不想在数据帧的末尾添加新行，而是想在数据帧的某个特定索引处添加新行，该怎么办呢？例如，我们发现老虎每天睡 16 个小时(即，在我们的评级中比熊猫多，所以我们需要将此观察结果作为第二个插入到数据帧的最后一行)。在这种情况下，使用基础 R 是不够的，但是我们可以使用`tidyverse` R 包的 [`add_row()`](https://www.rdocumentation.org/packages/tibble/versions/3.1.6/topics/add_row) 函数(我们可能需要安装它，如果它还没有安装，通过运行`install.packages("tidyverse")`):
 
-```
+```py
 library(tidyverse)
 super_sleepers <- super_sleepers %>% add_row(animal='tiger', 
                                              country='India', 
@@ -116,13 +116,13 @@ print(super_sleepers)
 
 通常，我们需要在 R 数据帧中添加多行而不是一行。这里最简单的方法还是使用`rbind()`函数。更准确地说，在这种情况下，我们实际上需要组合两个数据帧:初始数据帧和包含要追加的行的数据帧。
 
-```
+```py
 dataframe_1 <- rbind(dataframe_1, dataframe_2)
 ```
 
 为了了解它是如何工作的，让我们从最初的数据帧`super_sleepers_initial`重新构建一个新的数据帧`super_sleepers`，将其打印出来以回忆它的样子，并在其末尾追加两行:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -155,13 +155,13 @@ print(super_sleepers)
 
 或者，我们可以使用`nrow()`函数向 r 中的一个数据帧追加多行。然而，这里不推荐使用这种方法**，因为语法变得非常笨拙，难以阅读。事实上，在这种情况下，我们需要计算开始和结束索引。为此，我们必须用`nrow()`函数做更多的操作。从技术上讲，语法如下:**
 
-```
+```py
 dataframe_1[(nrow(dataframe_1) + 1):(nrow(dataframe_1) + nrow(dataframe_2)),] <- dataframe_2
 ```
 
 让我们从`super_sleepers_initial`重新构建我们的`super_sleepers`，并将已经存在的数据帧`super_sleepers_2`的行追加到它们中:
 
-```
+```py
 # Reconstructing the `super_sleepers` dataframe
 super_sleepers <- super_sleepers_initial
 
@@ -183,7 +183,7 @@ print(super_sleepers)
 
 让我们在当前数据帧`super_sleepers`中的刺猬和松鼠之间插入树懒和老虎的观察结果:
 
-```
+```py
 library(tidyverse)
 super_sleepers <- super_sleepers %>% add_row(animal=c('sloth', 'tiger'), 
                                              country=c('Peru', 'India'),

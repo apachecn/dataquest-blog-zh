@@ -98,7 +98,7 @@ August 10, 2017
 
 这将启动 psql shell。如果这是您第一次使用 psql shell，您的用户可能没有必要的经验来启动该实用程序。首先，您需要使用一个具有管理员权限的帐户，然后使用`psql -U postgres`以`postgres`用户(在安装过程中自动创建)登录
 
-```
+```py
 ~$ psql
 sql (9.5.3)
 ype "help" for help.postgres=#
@@ -108,7 +108,7 @@ ype "help" for help.postgres=#
 
 在本教程中，我们将称我们的用户为`oracle`，但是您可以使用任何名称，使用与您的操作系统相同的用户名也很方便，因为您不必担心密码或指定用户。要创建新用户，我们使用以下语法:
 
-```
+```py
 CREATE ROLE name WITH options_go_here;
 ```
 
@@ -126,7 +126,7 @@ CREATE ROLE name WITH options_go_here;
 
 `oracle`，密码`welcome1`。
 
-```
+```py
 CREATE ROLE oracle password 'welcome1' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
 ```
 
@@ -134,7 +134,7 @@ CREATE ROLE oracle password 'welcome1' SUPERUSER CREATEDB CREATEROLE INHERIT LOG
 
 并按回车键。您的用户应该有以下经验。
 
-```
+```py
 postgres=# du
            List of roles
 ole name | Attributes | Member of
@@ -149,13 +149,13 @@ ostgres | Superuser  | {}
 
 这将允许您从现在开始使用 oracle 用户进行连接。现在，我们可以使用命令切换到 oracle 用户
 
-```
+```py
 SET ROLE oracle;
 ```
 
 如果我们退出了 psql shell(使用`q`),我们可以在启动 psql shell 时连接:
 
-```
+```py
 ~$ psql -U oracle postgres
 sql (9.5.3)
 ype "help" for help.
@@ -165,13 +165,13 @@ ostgres=#
 
 `-U`标志允许我们指定用户，`postgres`指定 postgres 帐户数据库(如果我们不在这里指定数据库，我们将得到一个错误)。现在我们以 oracle 用户的身份登录，我们将创建一个新的数据库。要创建新的数据库，我们使用以下语法:
 
-```
+```py
 CREATE DATABASE database_name;
 ```
 
 `CREATE DATABASE`语句有很多我们现在不需要的选项——如果你愿意，你可以在[文档](https://www.postgresql.org/docs/8.4/static/sql-createdatabase.html)中读到它们。现在，让我们创建新的数据库`consumer_complaints`。
 
-```
+```py
 CREATE database consumer_complaints;
 ```
 
@@ -179,7 +179,7 @@ CREATE database consumer_complaints;
 
 `l`(列表)命令。您应该会看到新的数据库，如下所示。
 
-```
+```py
 postgres=# l
                                       List of databases
 ame         |  Owner   | Encoding |  Collation  |    Ctype    |   Access privileges
@@ -191,7 +191,7 @@ onsumer_complaints | oracle   | UTF8     | en_US.UTF-8 | en_US.UTF-8 |
 
 `connect`命令:
 
-```
+```py
 oracle=# connect consumer_complaints
 ou are now connected to database "consumer_complaints" as user "oracle".
 onsumer_complaints=#
@@ -199,7 +199,7 @@ onsumer_complaints=#
 
 您也可以从命令行启动直接连接到您的数据库的 psql。
 
-```
+```py
 ~$ psql -U oracle consumer_complaints
 sql (9.5.3)
 ype "help" for help.
@@ -216,7 +216,7 @@ onsumer_complaints=#
 
 两个表中的字段及其各自的数据类型将是相同的。要创建新表，我们使用以下语法:
 
-```
+```py
 CREATE TABLE name_of_table (
    name_of_column data_type [PRIMARY KEY],
    name_of_column data_type,
@@ -227,7 +227,7 @@ CREATE TABLE name_of_table (
 
 像`CREATE DATABASE`语句一样，`CREATE TABLE`有更多的选项，你可以在[文档](https://www.postgresql.org/docs/8.4/static/sql-createtable.html)中找到。要创建我们的两个数据库，您需要在 psql shell 中运行以下两条语句。
 
-```
+```py
 CREATE TABLE bank_account_complaints (
 complaint_id text PRIMARY KEY,
 date_received date,
@@ -249,7 +249,7 @@ timely_response text,
 consumer_disputed text);;
 ```
 
-```
+```py
 CREATE TABLE credit_card_complaints (
 complaint_id text PRIMARY KEY,
 date_received date,
@@ -291,7 +291,7 @@ consumer_disputed text);;
 
 要使用 copy 语句将数据从文件复制到数据库表，我们使用以下语法:
 
-```
+```py
 COPY name_of_table (<name_of_column, name_of_column, name_of_column)
    FROM 'filename'
    WITH options_go_here
@@ -301,7 +301,7 @@ COPY name_of_table (<name_of_column, name_of_column, name_of_column)
 
 `WITH CSV HEADER`选项，但是和之前一样[文档](https://www.postgresql.org/docs/8.4/static/sql-copy.html)有完整的语法和解释。我们假设 CSV 文件与您启动 psql 会话的文件夹在同一个文件夹中。我们首先将数据从`Credit_Card_Complaints.csv`文件导入到`credit_card_complaints` postgres 表中。
 
-```
+```py
 consumer_complaints=# COPY credit_card_complaints (date_received, product, sub_product, issue, sub_issue, consumer_complaint_narrative, company_public_response, company, state, zip_code, tags, consumer_consent_provided, submitted_via, date_sent, company_response_to_consumer, timely_response, consumer_disputed, complaint_id)
    FROM './Credit_Card_Complaints.csv'
    WITH CSV HEADER
@@ -311,7 +311,7 @@ consumer_complaints=# COPY credit_card_complaints (date_received, product, sub_p
 
 `Bank_Account_or_Service_Complaints.csv`文件和`bank_account_complaints` postgres 表。
 
-```
+```py
 consumer_complaints=# COPY bank_account_complaints (date_received, product, sub_product, issue, sub_issue, consumer_complaint_narrative, company_public_response, company, state, zip_code, tags, consumer_consent_provided, submitted_via, date_sent, company_response_to_consumer, timely_response, consumer_disputed, complaint_id)
    FROM './Bank_Account_or_Service_Complaints.csv'
    WITH CSV HEADER
@@ -323,21 +323,21 @@ consumer_complaints=# COPY bank_account_complaints (date_received, product, sub_
 
 `pip`:
 
-```
+```py
 ~$
 ip install pandas sqlalchemy pscopg2
 ```
 
 或者 conda(虽然都带有标准的 anaconda 包):
 
-```
+```py
 ~$
 onda install pandas sqlalchemy pscopg2
 ```
 
 我们还需要创建两个助手函数——一个运行我们的查询，一个运行我们的命令(即创建/删除视图、表、序列等)。).如果您不理解这些函数是如何工作的，请不要担心，只要知道它们将帮助我们使用 Python 与数据库进行交互，并给我们更容易阅读的结果。
 
-```
+```py
 import pandas as pd
 
 span class="token comment" spellcheck="true"># psycopg2 lets us easily run commands against our db
@@ -364,7 +364,7 @@ span class="token keyword">def run_query(query):
 
 `count`功能。
 
-```
+```py
 query = 'SELECT count(*) FROM credit_card_complaints;'
 un_query(query)
 ```
@@ -373,7 +373,7 @@ un_query(query)
 | --- | --- |
 | Zero | Eighty-seven thousand seven hundred and eighteen |
 
-```
+```py
 query = 'SELECT count(*) FROM bank_account_complaints;'
 un_query(query)
 ```
@@ -395,7 +395,7 @@ un_query(query)
 
 `credit_card_complaints`表。
 
-```
+```py
 query = '''
 ELECT count(*) FROM credit_card_complaints
 HERE consumer_complaint_narrative IS NOT NULL;
@@ -411,7 +411,7 @@ un_query(query)
 
 `credit_card_complaints`表。由于表 total 中有 87，718 条记录，因此肯定有 70，285 (87，718–17，433)条记录没有消费者投诉叙述(或者是`null`)。让我们手动检查一下:
 
-```
+```py
 query =
 span class="token triple-quoted-string string">'''
 ELECT count(*) FROM credit_card_complaints
@@ -428,7 +428,7 @@ un_query(query)
 
 `bank_account_complaints`表的`consumer_complaint_narrative`列的`null`值。
 
-```
+```py
 query = '''
 ELECT count(*) FROM bank_account_complaints
 HERE consumer_complaint_narrative IS NOT NULL;
@@ -442,7 +442,7 @@ un_query(query)
 
 在 credit_card_complaints 表中有 13，860 条消费者投诉叙述的记录。由于表 total 中有 84，811 条记录，因此肯定有 70，951 (84，811–13，860)条记录没有消费者投诉叙述。让我们看看:
 
-```
+```py
 query = '''
 ELECT count(*) FROM bank_account_complaints
 HERE consumer_complaint_narrative IS NULL;
@@ -477,14 +477,14 @@ A
 
 创建视图的语法非常简单:
 
-```
+```py
 CREATE VIEW view_name AS
    [query_to_generate_view_goes_here];
 ```
 
 让我们创建我们的四个视图。
 
-```
+```py
 command =
 span class="token triple-quoted-string string">'''
 REATE VIEW credit_card_w_complaints AS
@@ -494,11 +494,11 @@ REATE VIEW credit_card_w_complaints AS
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
-```
+```py
 command = '''
 REATE VIEW credit_card_wo_complaints as
    SELECT * FROM credit_card_complaints
@@ -507,11 +507,11 @@ REATE VIEW credit_card_wo_complaints as
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
-```
+```py
 command = '''
 REATE VIEW bank_account_w_complaints AS
    SELECT * FROM bank_account_complaints
@@ -521,11 +521,11 @@ NULL;
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
-```
+```py
 command = '''
 REATE VIEW bank_account_wo_complaints AS
    SELECT * FROM bank_account_complaints
@@ -535,13 +535,13 @@ NULL;
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
 让我们快速地看一下我们新创建的视图，这样我们可以看到它就像一个表一样工作。
 
-```
+```py
 query =
 span class="token triple-quoted-string string">'''
 ELECT * FROM credit_card_w_complaints LIMIT 5;
@@ -568,7 +568,7 @@ un_query(query)
 
 如果您还记得上一节，我们有四个视图。如果我们想一起查看这两种产品的数据，并且只通过它们的记录是否包含消费者投诉叙述的空值来区分，会怎么样？因为所有四个视图都有相同的列数和数据类型，这使它们成为 union 的完美候选。我们将创建两个新视图，通过对每个产品的视图执行联合，将当前的四个视图合并为两个。
 
-```
+```py
 command = '''
 REATE VIEW with_complaints AS
    SELECT * from credit_card_w_complaints
@@ -578,11 +578,11 @@ REATE VIEW with_complaints AS
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
-```
+```py
 command = '''
 REATE VIEW without_complaints AS
    SELECT * FROM credit_card_wo_complaints
@@ -592,7 +592,7 @@ REATE VIEW without_complaints AS
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
@@ -602,7 +602,7 @@ un_command(command)
 
 `INTERSECT`操作符返回两个查询结果集中的所有记录，而`EXCEPT`操作符返回第一个查询结果集中的所有记录，但不返回第二个查询结果集中的所有记录。![](img/db49d838eb05838ceb81c864f7575c91.png)`INTERSECT`/`EXCEPT`的语法很简单，我们只是使用命令连接两个 select 语句:
 
-```
+```py
 (SELECT * FROM name_of_table_one
 span class="token keyword">INTERSECT [or EXCEPT]
 span class="token keyword">SELECT * FROM name_of_table_two);
@@ -612,7 +612,7 @@ span class="token keyword">SELECT * FROM name_of_table_two);
 
 `INTERSECT`和`EXCEPT`运算符。首先，让我们检索`credit_card_wo_complaints`视图的记录数。
 
-```
+```py
 query = 'SELECT count(*) FROM credit_card_wo_complaints;'
 un_query(query)
 ```
@@ -625,7 +625,7 @@ un_query(query)
 
 `without_complaints`用`credit_card_wo_complaints`视图查看并返回相同数量的记录。
 
-```
+```py
 query = '''
 ELECT count(*)FROM (SELECT * FROM without_complaints
      INTERSECT
@@ -643,7 +643,7 @@ un_query(query)
 
 `without_complaints view`以及先前返回的 70，285 条记录计数。差额应为 70，951 (141，236–70，285)。
 
-```
+```py
 query =
 span class="token triple-quoted-string string">'''
 ELECT count(*)FROM (SELECT * FROM without_complaints
@@ -662,7 +662,7 @@ un_query(query)
 
 `||`操作员。语法如下:
 
-```
+```py
 SELECT <string_1> || <string_2> FROM name_of_table;
 ```
 
@@ -670,7 +670,7 @@ SELECT <string_1> || <string_2> FROM name_of_table;
 
 `complaint_id`、`product`、`company`、`zip_code`，并连接所有这些字段，用连字符(`-`)从`credit_card_complaints`隔开。
 
-```
+```py
 query = '''
 ELECT complaint_id, product, company, zip_code,
       complaint_id || '-' || product || '-' || company || '-' ||
@@ -700,14 +700,14 @@ un_query(query)
 
 另一个 select 语句中的子句。它们在许多不同的场景中都非常有用。当我们在`INTERSECT`和`EXCEPT`的例子中使用`COUNT(*)`时，我们实际上已经看到了这样的例子。子查询有助于简化复杂的查询，并提供更大的灵活性，正如其专有名称(内嵌视图)所示，就像在单个查询中创建一个迷你视图一样。语法是:
 
-```
+```py
 SELECT [column_names_here]
    FROM ( [subquery_goes_here] );
 ```
 
 最初，子查询的概念可能有点困难，所以我们将向您展示一个实际的子查询，然后对它进行分解。
 
-```
+```py
 query = '''
 ELECT ccd.complaint_id, ccd.product, ccd.company, ccd.zip_code
 ROM (SELECT complaint_id, product, company, zip_code
@@ -733,7 +733,7 @@ un_query(query)
 
 ![](img/16a3991504af23cdd732793f6172a953.png)首先执行最内层的查询(紫色部分),它根据特定的邮政编码过滤结果集。然后，最外层的查询对从最内层查询得到的结果集执行 select 语句。您会注意到，我们给子查询起了一个名字——`ccd`——然后我们用它来引用外部`SELECT`语句中的列。这是 PostgreSQL 所要求的，但除此之外，它还使查询更容易阅读，并确保 SQL 引擎准确理解您的意图(这可以避免错误或意外的结果)。如果您认为上面的查询可以简化，并且在没有子查询的情况下也可以获得相同的结果，那么您是正确的。您实际上不需要使用内嵌视图。这仅仅是一个简单的例子，展示了内联视图是如何构造的。一种更有效、更简单的构造查询的方法如下。
 
-```
+```py
 query = '''
 elect complaint_id, product, company, zip_codefrom credit_card_complaints
 here zip_code = '91701'
@@ -760,7 +760,7 @@ un_query(query)
 
 如果我们是一家金融服务公司，我们可能希望从这些数据中获得的一个见解是，最多的投诉来自哪里。此外，从我们的竞争对手那里看到相同的指标也可能是有用的。为了实现这一点，我们需要返回所有公司的不同列表，然后根据每个州找到与最高投诉数量相关的邮政编码。因此，对于每家公司，都应该有一个不同的州列表，以及该州投诉数量最多的邮政编码。让我们首先查询与投诉数量相关联的公司名称、州和邮政编码。让我们继续过滤州名为空的记录。现在，让我们从一家公司开始，花旗银行。
 
-```
+```py
 query = '''
 ELECT company, state, zip_code, count(complaint_id) AS complaint_count
 ROM credit_card_complaints
@@ -789,7 +789,7 @@ un_query(query)
 
 我们的第一个查询变成了子查询，用紫色突出显示，首先执行。然后，对我们的子查询的结果运行外部查询。让我们来看看结果。
 
-```
+```py
 query = '''
 ELECT ppt.company, ppt.state, max(ppt.complaint_count) AS complaint_count
 ROM (SELECT company, state, zip_code, count(complaint_id) AS complaint_count
@@ -828,7 +828,7 @@ un_query(query)
     *   我们的下一个子查询在**蓝色**中，我们以前也见过，它是我们上一个例子中的外部查询，减去了`LIMIT`语句。
     *   我们最外层的红色子查询找到了所有州/邮政编码的最大投诉数量。
 
-```
+```py
 query = '''
 ELECT ens.company, ens.state, ens.zip_code, ens.complaint_count
 ROM (select company, state, zip_code, count(complaint_id) AS complaint_count
@@ -860,7 +860,7 @@ un_query(query)
 
 最后，我们可以从最里面的(橙色)子查询中删除公司过滤器，这样我们就可以看到每个公司收到最多投诉的州和邮政编码，以及他们收到了多少投诉。
 
-```
+```py
 query = '''
 ELECT ens.company, ens.state, ens.zip_code, ens.complaint_count
 ROM (select company, state, zip_code, count(complaint_id) AS complaint_count
@@ -907,7 +907,7 @@ un_query(query)
 
 `Age`是一个文本数据类型，但是你需要它是一个数字数据类型，这样你就可以对该数据执行计算，你可以简单地使用`CAST()`函数来临时适应你正在尝试执行的计算。要将字段转换为新的数据类型，我们使用以下语法:
 
-```
+```py
 CAST(source_column AS type);
 ```
 
@@ -915,7 +915,7 @@ CAST(source_column AS type);
 
 为了确保您的 PostgreSQL 当前版本的文档。当我们之前创建表时，我们将`complaint_id`字段声明为主键。然而，我们将数据类型声明为`text`。让我们假设我们想要通过查询这个表来创建一个视图，但是想要在`complaint_id`上添加一个索引来提高性能。数字数据类型的索引比字符串(文本)数据类型更快，因为它们占用的空间更少。因此，让我们首先在`bank_account_complaints`表上运行一个简单的查询，将`complaint_id`作为`float`数据类型返回。
 
-```
+```py
 query = '''
 ELECT CAST(complaint_id AS float) AS complaint_id
 ROM bank_account_complaints LIMIT 10;
@@ -938,7 +938,7 @@ un_query(query)
 
 接下来，让我们测试我们将用来定义新视图的查询。我们的查询应该提取加利福尼亚州(state = 'CA ')的 Wells Fargo(Company = ' Wells Fargo & Company ')的所有字段值，其中消费者没有对公司的响应(consumer _ contracted = ' No ')提出异议。
 
-```
+```py
 query = '''
 ELECT CAST(complaint_id AS int) AS complaint_id,
       date_received, product, sub_product, issue, company,
@@ -965,7 +965,7 @@ un_query(query)
 
 `wells_complaints_v`。
 
-```
+```py
 command = '''
 REATE VIEW wells_complaints_v AS (
    SELECT CAST(complaint_id AS int) AS complaint_id,
@@ -980,7 +980,7 @@ REATE VIEW wells_complaints_v AS (
 un_command(command)
 ```
 
-```
+```py
 'CREATE VIEW'
 ```
 
@@ -1034,7 +1034,7 @@ un_command(command)
 
 ### 解决方案 1
 
-```
+```py
 SELECT company, COUNT(company) AS company_amt
 span class="token keyword">FROM credit_card_complaints
 span class="token keyword">GROUP BY company
@@ -1043,7 +1043,7 @@ span class="token keyword">ORDER BY 2 DESC;
 
 ### 解决方案 2
 
-```
+```py
 SELECT company, COUNT(company) as company_amt,
    (SELECT COUNT(*) FROM credit_card_complaints) AS total
 span class="token keyword">FROM credit_card_complaints
@@ -1053,7 +1053,7 @@ span class="token keyword">ORDER BY 2 DESC;
 
 ### 解决方案 3
 
-```
+```py
 SELECT ppg.company, ppg.company_amt, ppg.total,
       ((CAST(ppg.company_amt AS double precision) / CAST(ppg.total as double precision)) * 100) AS percent
 span class="token keyword">FROM (SELECT company, COUNT(company) as company_amt, (SELECT COUNT(*) FROM credit_card_complaints) AS total

@@ -82,7 +82,7 @@ May 16, 2019![](img/e24ebe3a3a83c235747ab0f5cdf95ddf.png)
 
 首先，让我们复制上面的图表，以确保我们没有遗漏任何数据，然后按文章数量排序。我们将从覆盖所有的导入开始，读取数据集，并检查其三个部分的长度。
 
-```
+```py
 # set up and load data, checking we've gotten it all
 
 import pandas as pd
@@ -106,62 +106,62 @@ pt1.head()
 | three | Seventeen thousand two hundred and eighty-six | 在 2016 年的死亡人数中，流行音乐死亡人数最多… | 纽约时报 | 威廉·麦克唐纳 | 2017-04-10 | Two thousand and seventeen | Four | 圆盘烤饼 | 死亡可能是最好的均衡器，但它不是… |
 | four | Seventeen thousand two hundred and eighty-seven | 金正恩称朝鲜正准备进行核试验 | 纽约时报 | 让他转到匈牙利 | 2017-01-02 | Two thousand and seventeen | One | 圆盘烤饼 | 韩国首尔——朝鲜领导人…… |
 
-```
+```py
 len(pt1)
 ```
 
-```
+```py
 50000
 ```
 
-```
+```py
 pt2 = pd.read_csv('data/articles2.csv.zip',compression='zip',index_col=0)
 len(pt2)
 ```
 
-```
+```py
 49999
 ```
 
-```
+```py
 pt3 = pd.read_csv('data/articles3.csv.zip',compression='zip',index_col=0)
 len(pt3)
 ```
 
-```
+```py
 42571
 ```
 
 不过，处理三个独立的数据集并不方便。我们将把所有三个数据帧合并成一个，这样我们可以更容易地处理整个语料库:
 
-```
+```py
 articles = pd.concat([pt1,pt2,pt3])
 len(articles)
 ```
 
-```
+```py
 142570
 ```
 
 接下来，我们将确保我们拥有与原始数据集中相同的出版物名称，并检查文章的最早和最新年份。
 
-```
+```py
 articles.publication.unique()
 ```
 
-```
+```py
 array(['New York Times', 'Breitbart', 'CNN', 'Business Insider',
        'Atlantic', 'Fox News', 'Talking Points Memo', 'Buzzfeed News',
        'National Review', 'New York Post', 'Guardian', 'NPR', 'Reuters',
        'Vox', 'Washington Post'], dtype=object)
 ```
 
-```
+```py
 print(articles['year'].min())
 articles['year'].max()
 ```
 
-```
+```py
 2000.0
 2017.0
 ```
@@ -170,11 +170,11 @@ articles['year'].max()
 
 先来快速看一下我们的文章是从什么时候开始使用熊猫的`value_counts()`功能的。
 
-```
+```py
 articles['year'].value_counts()
 ```
 
-```
+```py
 2016.0    85405
 2017.0    50404
 2015.0     3705
@@ -197,7 +197,7 @@ Name: year, dtype: int64
 
 现在，让我们按名称对出版物进行排序，以再现来自 Kaggle 的原始情节。
 
-```
+```py
 ax = articles['publication'].value_counts().sort_index().plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Article Count\n', fontsize=20)
 ax.set_xlabel('Publication', fontsize=18)
@@ -208,7 +208,7 @@ ax.set_ylabel('Count', fontsize=18);
 
 如果你想快速找到一个特定的出口，这种图的顺序是很有帮助的，但是对我们来说，按文章数量排序可能更有帮助，这样我们可以更好地了解我们的数据来自哪里。
 
-```
+```py
 ax = articles['publication'].value_counts().plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Article Count - most to least\n', fontsize=20)
 ax.set_xlabel('Publication', fontsize=18)
@@ -223,7 +223,7 @@ ax.set_ylabel('Count', fontsize=18);
 
 我们将从定义一个函数开始，该函数删除标点并将所有文本转换为小写。(我们没有做任何复杂的句法分析，所以我们不需要保留句子结构或大写)。
 
-```
+```py
 def clean_text(article):
     clean1 = re.sub(r'['+string.punctuation + '’—”'+']', "", article.lower())
     return re.sub(r'\W+', ' ', clean1)
@@ -231,15 +231,15 @@ def clean_text(article):
 
 现在，我们将在 dataframe 中创建一个新列，其中包含已清理的文本。
 
-```
+```py
 articles['tokenized'] = articles['content'].map(lambda x: clean_text(x))
 ```
 
-```
+```py
 articles['tokenized'].head()
 ```
 
-```
+```py
 0    washington congressional republicans have a ne...
 1    after the bullet shells get counted the blood ...
 2    when walt disneys bambi opened in 1942 critics...
@@ -252,51 +252,51 @@ Name: tokenized, dtype: object
 
 让我们看看每篇文章的平均字数，以及数据集中最长和最短的文章。
 
-```
+```py
 articles['num_wds'] = articles['tokenized'].apply(lambda x: len(x.split()))
 articles['num_wds'].mean()
 ```
 
-```
+```py
 732.36012485095046
 ```
 
-```
+```py
 articles['num_wds'].max()
 articles['num_wds'].min()
 ```
 
-```
+```py
 49902
 0
 ```
 
 一篇没有单词的文章对我们没有任何用处，所以让我们看看有多少单词。我们希望从数据集中删除没有单词的文章。
 
-```
+```py
 len(articles[articles['num_wds']==0])
 ```
 
-```
+```py
 97
 ```
 
 让我们去掉那些空文章，然后看看这对我们数据集中每篇文章的平均字数有什么影响，以及我们新的最小字数是多少。
 
-```
+```py
 articles = articles[articles['num_wds']>0]
 articles['num_wds'].mean()
 articles['num_wds'].min()
 ```
 
-```
+```py
 732.85873814687693
 1
 ```
 
 在这一点上，它可能有助于我们可视化文章字数的分布，以了解异常值对我们的平均值的影响程度。让我们生成另一个图来看看:
 
-```
+```py
 ax=articles['num_wds'].plot(kind='hist', bins=50, fontsize=14, figsize=(12,10))
 ax.set_title('Article Length in Words\n', fontsize=20)
 ax.set_ylabel('Frequency', fontsize=18)
@@ -309,11 +309,11 @@ Python 文本分析的下一步:探索文章的多样性。我们将使用每篇
 
 在官方文档中有更多关于集合和它们如何工作的信息[，但是让我们先来看一个创建集合如何工作的基本例子。请注意，虽然我们从两个`b`条目开始，但是在我们创建的集合中只有一个条目:](https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset)
 
-```
+```py
 set('b ac b'.split())
 ```
 
-```
+```py
 {'ac', 'b'}
 ```
 
@@ -323,12 +323,12 @@ set('b ac b'.split())
 
 最后，我们将把结果添加为一个新列，其中包含每篇文章中唯一单词的数量。
 
-```
+```py
 articles['uniq_wds'] = articles['tokenized'].str.split().apply(lambda x: len(set(x)))
 articles['uniq_wds'].head()
 ```
 
-```
+```py
 0     389
     1    1403
     2     920
@@ -339,13 +339,13 @@ articles['uniq_wds'].head()
 
 我们还想看看每篇文章的平均独立字数，以及最小和最大独立字数。
 
-```
+```py
 articles['uniq_wds'].mean()
 articles['uniq_wds'].min()
 articles['uniq_wds'].max()
 ```
 
-```
+```py
 336.49826282874648
 1
 4692
@@ -353,7 +353,7 @@ articles['uniq_wds'].max()
 
 当我们将其绘制成图表时，我们可以看到，虽然唯一单词的分布仍然是倾斜的，但它看起来比我们之前生成的基于总字数的分布更像正态(高斯)分布。
 
-```
+```py
 ax=articles['uniq_wds'].plot(kind='hist', bins=50, fontsize=14, figsize=(12,10))
 ax.set_title('Unique Words Per Article\n', fontsize=20)
 ax.set_ylabel('Frequency', fontsize=18)
@@ -368,7 +368,7 @@ ax.set_xlabel('Number of Unique Words', fontsize=18);
 
 在这种情况下，该列是`publication`。第一个图通过在`len`上聚合，仅使用每个组中的对象数量。我们可以在下面的代码中使用除了`title`之外的任何其他列。
 
-```
+```py
 art_grps = articles.groupby('publication')
 
 ax=art_grps['title'].aggregate(len).plot(kind='bar', fontsize=14, figsize=(12,10))
@@ -381,7 +381,7 @@ ax.set_xlabel('Publication', fontsize=18);
 
 现在，我们将分别合计平均单词数和唯一单词数。
 
-```
+```py
 ax=art_grps['num_wds'].aggregate(np.mean).plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Mean Number of Words per Article\n', fontsize=20)
 ax.set_ylabel('Mean Number of Words', fontsize=18)
@@ -390,7 +390,7 @@ ax.set_xlabel('Publication', fontsize=18);
 
 ![Text_Hyp_Test-Updated_54_0](img/00c0113bcf6575847da171d934df3c7e.png "Text_Hyp_Test-Updated_54_0")
 
-```
+```py
 ax=art_grps['uniq_wds'].aggregate(np.mean).plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Mean Number of Unique Words per Article\n', fontsize=20)
 ax.set_ylabel('Mean Number of Unique Words', fontsize=18)
@@ -403,7 +403,7 @@ ax.set_xlabel('Publication', fontsize=18);
 
 我们将使用 Python `Counter`，它是一种特殊的字典，为每个键值假定整数类型。这里，我们使用文章的标记化版本遍历所有文章。
 
-```
+```py
 wd_counts = Counter()
 for i, row in articles.iterrows():
     wd_counts.update(row['tokenized'].split())
@@ -413,13 +413,13 @@ for i, row in articles.iterrows():
 
 还记得我们在这个项目开始的时候从`nltk.corpus`中导入了模块`stopwords`，所以现在让我们来看看这个预先做好的`stopwords`列表中包含了哪些单词:
 
-```
+```py
 wd_counts = Counter()
 for i, row in articles.iterrows():
     wd_counts.update(row['tokenized'].split())
 ```
 
-```
+```py
 ['i',
      'me',
      'my',
@@ -603,18 +603,18 @@ for i, row in articles.iterrows():
 
 正如我们所看到的，这是一个相当长的列表，但这些单词中没有一个能真正告诉我们一篇文章的意思。让我们使用这个列表来删除`Counter`中的停用词。
 
-```
+```py
 for sw in stopwords.words('english'):
     del wd_counts[sw]
 ```
 
 为了进一步筛选出有用的信息，`Counter`有一个方便的`most_common`方法，我们可以用它来查看找到的最常用的单词。使用这个函数，我们可以指定想要看到的结果的数量。在这里，我们将要求它列出前 20 个最常用的单词。
 
-```
+```py
 wd_counts.most_common(20)
 ```
 
-```
+```py
 [('said', 571476),
  ('trump', 359436),
  ('would', 263184),
@@ -661,7 +661,7 @@ wd_counts.most_common(20)
 
 总之，搜索这两个字符串应该有助于我们识别任何提到气候变化、气候变化等的文章。
 
-```
+```py
 def find_cc_wds(content, cc_wds=['climate change','global warming', 'extreme weather', 'greenhouse gas'
                                  'clean energy', 'clean tech', 'renewable energy']
 ):
@@ -680,27 +680,27 @@ def find_cc_wds(content, cc_wds=['climate change','global warming', 'extreme wea
 
 下面我们来仔细看看这个函数的各个部分是如何工作的:
 
-```
+```py
 disj = re.compile(r'(chang\w+\W+(?:\w+\W+){1,5}?climate)|(climate\W+(?:\w+\W+){1,5}?chang)')
 ```
 
-```
+```py
 disj.match('climate is changing')
 ```
 
-```
+```py
 <_sre.SRE_Match object; span=(0, 16), match='climate is chang'>
 ```
 
-```
+```py
 disj.match('change in extreme  climate')
 ```
 
-```
+```py
 <_sre.SRE_Match object; span=(0, 26), match='change in extreme  climate'>
 ```
 
-```
+```py
 disj.match('nothing changing here except the weather')
 ```
 
@@ -708,12 +708,12 @@ disj.match('nothing changing here except the weather')
 
 现在，让我们使用我们的函数创建一个新的布尔字段，指示我们是否找到了相关的单词，然后查看在我们的数据集的前五篇文章中是否有任何关于气候变化的内容:
 
-```
+```py
 articles['cc_wds'] = articles['tokenized'].apply(find_cc_wds)
 articles['cc_wds'].head()
 ```
 
-```
+```py
 0    False
 1    False
 2    False
@@ -730,11 +730,11 @@ Name: cc_wds, dtype: bool
 
 让我们先来看看所有来源的总比例，给我们自己一个比较每个渠道的基线:
 
-```
+```py
 articles['cc_wds'].sum() / len(articles)
 ```
 
-```
+```py
 0.030826893516666315
 ```
 
@@ -742,11 +742,11 @@ articles['cc_wds'].sum() / len(articles)
 
 接下来我们要计算每组的相对比例。让我们通过查看每个出版物来源的比例来说明这是如何工作的。我们将再次使用 groupby 对象和`sum`，但是这一次我们想要每组的文章数，这是从`count`函数中获得的:
 
-```
+```py
 art_grps['cc_wds'].sum()
 ```
 
-```
+```py
 publication
     Atlantic               366.0
     Breitbart              471.0
@@ -766,7 +766,7 @@ publication
     Name: cc_wds, dtype: float64
 ```
 
-```
+```py
 art_grps.count()
 ```
 
@@ -792,13 +792,13 @@ art_grps.count()
 
 现在，让我们把它分成几个部分，并对列表进行排序，这样我们就可以快速地一目了然哪些媒体对气候变化的报道最多:
 
-```
+```py
 proportions = art_grps['cc_wds'].sum() / art_grps['cc_wds'].count()
 proportions.sort_values(ascending=True)
 proportions
 ```
 
-```
+```py
 publication
     New York Post          0.007089
     Fox News               0.013330
@@ -820,7 +820,7 @@ publication
 
 比例从《纽约邮报》的 0.7%到 Vox 的 8%不等。让我们绘制这个图，先按出版物名称排序，然后再按值排序。
 
-```
+```py
 ax=proportions.plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Mean Proportion of Climate Change Related Articles per Publication\n', fontsize=20)
 ax.set_ylabel('Mean Proportion', fontsize=18)
@@ -829,7 +829,7 @@ ax.set_xlabel('Publication', fontsize=18);
 
 ![Text_Hyp_Test-Updated_81_0](img/dd1938dc91637a2abd05c353277f6971.png "Text_Hyp_Test-Updated_81_0")
 
-```
+```py
 ax=proportions.sort_values(ascending=False).plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Mean Proportion of Climate Change Related Articles per Publication (Sorted)\n', fontsize=20)
 ax.set_ylabel('Mean Proportion', fontsize=18)
@@ -852,7 +852,7 @@ ax.set_xlabel('Publication', fontsize=18);
 
 让我们从政治倾向开始。你可以重温这篇文章的顶部，提醒自己我们是如何收集关于媒体政治倾向的信息的。下面的代码使用一个字典，根据我们收集的信息为每个出版物名称分配`left`、`right`和`center`值。
 
-```
+```py
 #liberal, conservative, and center
 bias_assigns = {'Atlantic': 'left', 'Breitbart': 'right', 'Business Insider': 'left', 'Buzzfeed News': 'left', 'CNN': 'left', 'Fox News': 'right',
                 'Guardian': 'left', 'National Review': 'right', 'New York Post': 'right', 'New York Times': 'left',
@@ -871,18 +871,18 @@ articles.head()
 
 我们再次使用`groupby()`来找出每个政治团体中气候变化文章的比例。
 
-```
+```py
 bias_groups = articles.groupby('bias')
 bias_proportions = bias_groups['cc_wds'].sum() / bias_groups['cc_wds'].count()
 ```
 
 让我们看看每组有多少篇文章，并用图表表示出来:
 
-```
+```py
 bias_groups['cc_wds'].count()
 ```
 
-```
+```py
 bias
     center    10710
     left      79943
@@ -890,7 +890,7 @@ bias
     Name: cc_wds, dtype: int64
 ```
 
-```
+```py
 ax=bias_proportions.plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Proportion of climate change articles by Political Bias\n', fontsize=20)
 ax.set_xlabel('Bias', fontsize=18)
@@ -915,19 +915,19 @@ ax.set_ylabel('Proportion', fontsize=18);
 
 让我们用一些辅助函数将我们的数字代入这些公式。
 
-```
+```py
 def standard_err(p1, n1, p2, n2):
     return np.sqrt((p1* (1-p1) / n1) + (p2 * (1-p2) / n2))
 ```
 
-```
+```py
 def ci_range(diff, std_err, cv=1.96):
     return (diff - cv * std_err, diff + cv * std_err)
 ```
 
 最后，`calc_ci_range`函数将所有东西放在一起。
 
-```
+```py
 def calc_ci_range(p1, n1, p2, n2):
     std_err = standard_err(p1, n1, p2, n2)
     diff = p1-p2
@@ -936,33 +936,33 @@ def calc_ci_range(p1, n1, p2, n2):
 
 让我们计算我们倾向组的置信区间，首先看左边和右边。
 
-```
+```py
 center = bias_groups.get_group('center')
 left = bias_groups.get_group('left')
 right = bias_groups.get_group('right')
 ```
 
-```
+```py
 calc_ci_range(bias_proportions['left'], len(left), bias_proportions['right'], len(right))
 ```
 
-```
+```py
 (0.017490570656831184, 0.02092806371626154)
 ```
 
 观察左与右出版物的比例差异，我们的置信区间在 1.8%到 2.1%之间。这是一个相当窄的范围，相对于比例差异的总体范围而言，远远不是零。所以拒绝零假设是显而易见的。类似地，中心对左侧的范围是 1.3%到 2.1%:
 
-```
+```py
 calc_ci_range(bias_proportions['center'], len(center), bias_proportions['left'], len(left))
 ```
 
-```
+```py
 (0.012506913377622272, 0.021418820332295894)
 ```
 
 因为将出版物归入 bias slant 有些主观，这里有另一个变体，将 Business Insider、NY Post 和 NPR 归入`center`。
 
-```
+```py
 bias_assigns = {'Atlantic': 'left', 'Breitbart': 'right', 'Business Insider': 'center', 'Buzzfeed News': 'left', 'CNN': 'left', 'Fox News': 'right',
                 'Guardian': 'left', 'National Review': 'right', 'New York Post': 'center', 'New York Times': 'left',
                 'NPR': 'center', 'Reuters': 'center', 'Talking Points Memo': 'left', 'Washington Post': 'left', 'Vox': 'left'}
@@ -971,7 +971,7 @@ bias_groups = articles.groupby('bias')
 bias_proportions = bias_groups['cc_wds'].sum() / bias_groups['cc_wds'].count()
 ```
 
-```
+```py
 ax=bias_proportions.plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Proportion of climate change articles by Political Bias\n', fontsize=20)
 ax.set_xlabel('Bias', fontsize=18)
@@ -980,36 +980,36 @@ ax.set_ylabel('Proportion', fontsize=18);
 
 ![Text_Hyp_Test-Updated_102_0](img/b45f633caf26353bf793dfe3600ba191.png "Text_Hyp_Test-Updated_102_0")
 
-```
+```py
 center = bias_groups.get_group('center')
 left = bias_groups.get_group('left')
 right = bias_groups.get_group('right')
 calc_ci_range(bias_proportions['left'], len(left), bias_proportions['right'], len(right))
 ```
 
-```
+```py
 (0.014934299280171939, 0.019341820093654233)
 ```
 
-```
+```py
 calc_ci_range(bias_proportions['left'], len(left), bias_proportions['center'], len(center))
 ```
 
-```
+```py
 (0.012270972859506818, 0.016471711767773518)
 ```
 
-```
+```py
 calc_ci_range(bias_proportions['center'], len(center), bias_proportions['right'], len(right))
 ```
 
-```
+```py
 (0.0006482405387969359, 0.0048851942077489004)
 ```
 
 接下来，我们可以使用相同的方法来查看发布所有权。我们将我们的人口分为四组，有限责任公司，公司，非营利组织和私人。
 
-```
+```py
 own_assigns = {'Atlantic': 'non-profit', 'Breitbart': 'LLC', 'Business Insider': 'corp', 'Buzzfeed News': 'private',
                'CNN': 'corp', 'Fox News': 'corp',
                 'Guardian': 'LLC', 'National Review': 'non-profit', 'New York Post': 'corp', 'New York Times': 'corp',
@@ -1021,7 +1021,7 @@ owner_proportions = owner_groups['cc_wds'].sum() / owner_groups['cc_wds'].count(
 
 现在让我们绘制这些数据，看看不同类型的公司是否以不同的比例报道气候变化。
 
-```
+```py
 ax=owner_proportions.plot(kind='bar', fontsize=14, figsize=(12,10))
 ax.set_title('Proportion of climate change articles by Ownership Group\n', fontsize=20)
 ax.set_xlabel('Ownership', fontsize=18)
@@ -1032,7 +1032,7 @@ ax.set_ylabel('Proportion', fontsize=18);
 
 或许不出所料，看起来私营公司和非营利组织比公司和有限责任公司更关注气候变化。但是让我们更仔细地看看前两者，有限责任公司和股份有限公司之间的比例差异:
 
-```
+```py
 llc = owner_groups.get_group('LLC')
 corp = owner_groups.get_group('corp')
 non_profit = owner_groups.get_group('non-profit')
@@ -1041,27 +1041,27 @@ private = owner_groups.get_group('private')
 calc_ci_range(owner_proportions['LLC'], len(llc), owner_proportions['corp'], len(corp))
 ```
 
-```
+```py
 (0.0031574852345019415, 0.0072617257208337279)
 ```
 
 这里，置信区间是 0.3%到 0.7%，比我们之前的差异更接近于零，但仍然不包括零。我们预计非营利到有限责任区间也不包括零:
 
-```
+```py
 calc_ci_range(owner_proportions['non-profit'], len(non_profit), owner_proportions['LLC'], len(llc))
 ```
 
-```
+```py
 (0.0058992390642172241, 0.011661788182388525)
 ```
 
 非营利组织对有限责任公司的置信区间为 0.6%至 1.2%。最后，看看私人与非营利组织，我们发现一个-0.3%到 0.5%的置信区间:
 
-```
+```py
 calc_ci_range(owner_proportions['private'], len(private), owner_proportions['non-profit'], len(non_profit))
 ```
 
-```
+```py
 (-0.003248922257497777, 0.004627808917174475)
 ```
 

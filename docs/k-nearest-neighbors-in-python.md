@@ -22,14 +22,14 @@ July 27, 2015![nba-basketball-python-knn-tutorial-k-nearest-neighbors](img/19b19
 
 我们可以读入数据集，并确定存在哪些列:
 
-```
+```py
  import pandas
 with open("nba_2013.csv", 'r') as csvfile:
     nba = pandas.read_csv(csvfile)
 print(nba.columns.values) # The names of all the columns in the data. 
 ```
 
-```
+```py
 ['player' 'pos' 'age' 'bref_team_id' 'g' 'gs' 'mp' 'fg' 'fga' 'fg.' 'x3p' 'x3pa' 'x3p.' 'x2p' 'x2pa' 'x2p.' 'efg.' 'ft' 'fta' 'ft.' 'orb' 'drb' 'trb' 'ast' 'stl' 'blk' 'tov' 'pf' 'pts' 'season' 'season_end']
 ```
 
@@ -39,7 +39,7 @@ k-最近邻算法基于通过将未知值与最相似的已知值进行匹配来
 
 假设我们有三种不同类型的汽车。我们知道车的名字，马力，是否有赛车条纹，是否很快。：
 
-```
+```py
 car,horsepower,racing_stripes,is_fast
 Honda Accord,180,False,False
 Yugo,500,True,True
@@ -48,7 +48,7 @@ Delorean DMC-12,200,True,True
 
 假设我们现在有另一辆车，但我们不知道它有多快:
 
-```
+```py
 car,horsepower,racing_stripes,is_fast
 Chevrolet Camaro,400,True,Unknown
 ```
@@ -69,7 +69,7 @@ Chevrolet Camaro,400,True,Unknown
 
 假设我们有这两行(True/False 已转换为 1/0)，我们希望找到它们之间的距离:
 
-```
+```py
 car,horsepower,is_fast
 Honda Accord,180,0
 Chevrolet Camaro,400,1
@@ -79,7 +79,7 @@ Chevrolet Camaro,400,1
 
 我们可以利用欧几里德距离原理，找出与[勒布朗詹姆斯](https://en.wikipedia.org/wiki/LeBron_James)最相似的 NBA 球员。
 
-```
+```py
  # Select Lebron James from our dataset
 selected_player = nba[nba["player"] == "LeBron James"].iloc[0]
 
@@ -109,7 +109,7 @@ lebron_distance = nba.apply(euclidean_distance, axis=1)
 
 要将平均值设置为 0，我们必须找到一列的平均值，然后从该列的每个值中减去该平均值。为了将标准差设置为 1，我们将列中的每个值除以标准差。公式为\(x=\frac{x-\mu}{\sigma}\)。
 
-```
+```py
  # Select only the numeric columns from the NBA dataset
 nba_numeric = nba[distance_columns]
 # Normalize all of the numeric columns
@@ -120,7 +120,7 @@ nba_normalized = (nba_numeric - nba_numeric.mean()) / nba_numeric.std()
 
 我们现在已经知道了足够的信息，可以在 NBA 数据集中找到给定行的最近邻。我们可以使用`scipy.spatial`中的`distance.euclidean`函数，这是一种计算欧几里德距离更快的方法。
 
-```
+```py
  from scipy.spatial import distance
 
 # Fill in NA values in nba_normalized
@@ -148,7 +148,7 @@ most_similar_to_lebron = nba.loc[int(second_smallest)]["player"]
 
 如果我们不这样做，我们最终会在相同的数据集上进行预测和训练，这将会过度拟合。我们也可以做交叉验证，这样会稍微好一点，但是稍微复杂一点。
 
-```
+```py
  import random
 from numpy.random import permutation
 
@@ -171,7 +171,7 @@ train = nba.loc[random_indices[test_cutoff:]]
 
 Sklearn 自动执行标准化和距离查找，并让我们指定想要查看多少个邻居。
 
-```
+```py
  # The columns that we will be making predictions with.
 x_columns = ['age', 'g', 'gs', 'mp', 'fg', 'fga', 'fg.', 'x3p', 'x3pa', 'x3p.', 'x2p', 'x2pa', 'x2p.', 'efg.', 'ft', 'fta', 'ft.', 'orb', 'drb', 'trb', 'ast', 'stl', 'blk', 'tov', 'pf']
 # The column that we want to predict.
@@ -191,7 +191,7 @@ predictions = knn.predict(test[x_columns])
 
 现在我们知道了我们的点预测，我们可以计算我们预测的误差。我们可以计算出[均方误差](https://en.wikipedia.org/wiki/Mean_squared_error)。公式是\(\frac{1}{n}\sum_{i=1}^{n}(\hat{y_{i}}-y_{i})^{2}\).
 
-```
+```py
  # Get the actual values for the test set.
 actual = test[y_column]
 

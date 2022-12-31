@@ -58,7 +58,7 @@ Docker Swarm 由两个主要组件组成:
 
 您应该会看到以下输出:
 
-```
+```py
  Swarm initialized: current node (iwjtf6u951g7rpx6ugkty3ksa) is now a manager.
 
 To add a worker to this swarm, run the following command:
@@ -69,7 +69,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 上面输出中显示的令牌将用于在下一步中向集群添加工作节点。Docker 引擎根据您提供给`docker swarm join`命令的 join-token 加入集群。节点仅在加入时使用令牌。如果您随后轮换令牌，它不会影响现有的群节点。现在，使用以下命令检查 Manager 节点的状态:`docker node ls`如果一切正常，您应该会看到以下输出:
 
-```
+```py
  ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS
 iwjtf6u951g7rpx6ugkty3ksa *   Manager-Node        Ready               Active              Leader
 ```
@@ -78,7 +78,7 @@ iwjtf6u951g7rpx6ugkty3ksa *   Manager-Node        Ready               Active    
 
 您应该会看到以下输出:
 
-```
+```py
  Containers: 0
  Running: 0
  Paused: 0
@@ -154,7 +154,7 @@ Live Restore Enabled: false
 
 您应该会看到以下输出:
 
-```
+```py
 This node joined a swarm as a worker.
 ```
 
@@ -162,7 +162,7 @@ This node joined a swarm as a worker.
 
 您应该在以下输出中看到 Worker 节点:
 
-```
+```py
  ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS
 iwjtf6u951g7rpx6ugkty3ksa *   Manager-Node        Ready               Active              Leader
 snrfyhi8pcleagnbs08g6nnmp     Worker-Node         Ready               Active 
@@ -174,7 +174,7 @@ Docker Swarm 集群现在已经启动并运行，是时候在 Docker Swarm 模�
 
 上面的命令将创建一个 Apache web 服务器容器，并将其映射到端口 80，这样您就可以从远程系统访问 Apache web 服务器。现在，您可以使用下面的命令检查正在运行的服务:`docker service ls`您应该会看到下面的输出:
 
-```
+```py
  ID                  NAME                
 MODE                REPLICAS            IMAGE               PORTS
 nnt7i1lipo0h        webserver           replicated          0/1                 apache:latest       *:80->80/tcp
@@ -184,7 +184,7 @@ nnt7i1lipo0h        webserver           replicated          0/1                 
 
 然后，使用以下命令检查 web 服务器服务的状态:`docker service ps webserver`您应该会看到以下输出:
 
-```
+```py
  ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE                  ERROR               PORTS
 7roily9zpjvq        webserver.1         httpd:latest        Worker-Node         Running             Preparing about a minute ago                       
 r7nzo325cu73        webserver.2         httpd:latest        Manager-Node        Running             Preparing 58 seconds ago 
@@ -196,7 +196,7 @@ Apache web 服务器现在运行在管理器节点上。现在，您可以通过
 
 或者工作者节点 IP 如下所示:![Screenshot-of-docker-swarm-apache](img/0f9aa45e582d546edfec5fddd6eed6c1.png) Apache web 服务器服务现在分布在两个节点上。Docker Swarm 还为您的服务提供高可用性。如果 web 服务器在 Worker 节点上关闭，那么新的容器将在 Manager 节点上启动。要测试高可用性，只需停止 Worker 节点上的 Docker 服务:`sudo systemctl stop docker`在 Manager 节点上，使用以下命令运行 web 服务器服务 status:`docker service ps webserver`您应该看到 Manager 节点上启动了一个新的容器:
 
-```
+```py
  ID                  NAME                IMAGE               NODE                DESIRED STATE       CURRENT STATE            ERROR               PORTS
 ia2qc8a5f5n4        webserver.1         httpd:latest        Manager-Node        Ready               Ready 1 second ago                           
 7roily9zpjvq         \_ webserver.1     httpd:latest        Worker-Node         Shutdown            Running 15 seconds ago                       r7nzo325cu73        webserver.2         httpd:latest        Manager-Node        Running             Running 23 minutes ago 

@@ -46,7 +46,7 @@ December 20, 2021![](img/ee28debf715b4b3f70cdfd7d9162d9f4.png)
 
 在我们开始之前，你见过 HTML 代码吗？它不同于 Python。如果你从未体验过 HTML 代码，这里有一个非常基本的 HTML 表格示例:
 
-```
+```py
 <html>
 <body>
 <table border=1>
@@ -64,19 +64,19 @@ December 20, 2021![](img/ee28debf715b4b3f70cdfd7d9162d9f4.png)
 
 在 HTML 中，我们使用标签来定义元素。许多元素都有一个开始标签和一个结束标签，例如。。。
 
-```
+```py
 <table>
 ```
 
 。。。打开表的构建，在表编码的最后，我们写。。。
 
-```
+```py
 </table>
 ```
 
 。。。关闭它。此表格有一行，该行有 3 个单元格。在第三个单元格中，我们使用了一个链接
 
-```
+```py
 <a href=...>
 ```
 
@@ -93,7 +93,7 @@ The concept behind web scraping is to extract (scrape) specific elements of a we
 
 现在我们可以看看网站的代码。当您将鼠标悬停在右窗口中的某些代码元素上时，浏览器会在左窗口中突出显示该元素。在下面的示例中，我的光标悬停在以下内容上:
 
-```
+```py
 <tr data-topic-id=...>
 ```
 
@@ -105,14 +105,14 @@ The concept behind web scraping is to extract (scrape) specific elements of a we
 
 对于我们的第一次尝试，我们将尝试只获得每个帖子的链接。请注意，实际的链接在下面代码的第二行中有一个类——“title raw-link raw-topic-link”:
 
-```
+```py
 <a href="https://www.dataquest.io/t/predicting-bike-rentals-with-machine-learning-optimization-of-the-linear-model/558618/3" role="heading" level="2" class="title raw-link raw-topic-link" data-topic-id="558618"><span dir="ltr">Predicting Bike Rentals
 With Machine Learning, Optimization of the Linear Model</span></a>
 ```
 
 我们将使用以下代码将该类的所有链接收集到一个列表中，并查看我们成功提取了多少链接:
 
-```
+```py
 # imports:
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
@@ -141,7 +141,7 @@ len(list_all) [Output]: 30
 是的，这是一个真正的叉子，推动键盘上的向下箭头，用一个空咖啡杯压着(这篇文章的作者不鼓励在你的电子设备周围使用任何不寻常的餐具或餐具)。向下滚动到最底部后，我们可以使用**文件>将页面另存为……**来保存网站。现在我们可以将该文件加载到我们的笔记本中并开始抓取；这次我们将瞄准每一个新行:
 `<tr>`。因为最终，我们不感兴趣的只是抓取链接——我们想要提取尽可能多的数据。不仅是标题，带链接，还有回复数，浏览量等。
 
-```
+```py
 import codecs
 # this is the file of the website, after scrolling all the way down:
 file = codecs.open("../input/dq-projects/projects.html", "r", "utf-8")
@@ -170,7 +170,7 @@ df.head()
 我们已经创建了一个充满 HTML 代码的数据框架。让我们检查一个单元格的内容:
 `df.loc[2,'content']`
 
-```
+```py
 <tr class="topic-list-item category-share-guided-project tag-257 tag-sql-fundamentals tag-257-8 has-excerpt 
 unseen-topic ember-view" data-topic-id="558357" id="ember71">\n<td class="main-link clearfix" colspan="">\n
 <div class="topic-details">\n<div class="topic-title">\n<span class="link-top-line">\n<a class="title raw-link
@@ -198,25 +198,25 @@ likes">\n</td>\n<td class="num views"><span class="number" title="this topic has
 **从 HTML 中提取数据:**
 如何在这一片混乱中找到秩序？我们只需要上面代码中的两个元素(但是我们会尝试提取更多)。上面代码块的标题是“用 SQL 分析 CIA 事实手册——整个项目”我们可以在 span 元素中找到标题:
 
-```
+```py
 <span dir="ltr">Analyzing CIA Factbook with SQL - Full Project</span>
 ```
 
 前一个元素是我们想要的链接:
 
-```
+```py
 <a class="title raw-link raw-topic-link" data-topic-id="558357" href="https://community.dataquest.io/t/analyzing-cia-factbook-with-sql-full-project/558357" level="2" role="heading">
 ```
 
 视图的数量应该是有用的:
 
-```
+```py
 <span class="number" title="this topic has been viewed 9 times">9</span>
 ```
 
 我们想要的最后一点信息是每个帖子的回复数量:
 
-```
+```py
 <span aria-label="This topic has 0 replies" class="number">0</span>
 ```
 
@@ -226,7 +226,7 @@ likes">\n</td>\n<td class="num views"><span class="number" title="this topic has
 *   使用正则表达式技术提取标题、链接、回复数和浏览量。这里有一张正则表达式的备忘单。)
 *   删除回复为 0 的行。
 
-```
+```py
 # remove 1st row:
 df = df.iloc[1:,:]
 # extract title, link and number of replies:
@@ -256,7 +256,7 @@ df.head()
 
 为了处理如此大量的文本数据，我们将创建一个函数。所有繁重的数据处理都在函数中，我们不用担心一些变量在处理完之后会占用内存。
 
-```
+```py
 # create a function for scraping the actual posts website:
 def get_reply(one_link):
 response = requests.get(one_link)
@@ -274,7 +274,7 @@ return feedback
 
 You don’t want to scrape a few thousand websites just to learn that your last line of code didn’t work and you have to redo everything and wait again. That is why we’ll start with a very small dataset, check if everything is clicking, then move on.
 
-```
+```py
 # create a test dataframe to test scraping on 5 rows:
 df_test = df[:5].copy()
 
@@ -288,7 +288,7 @@ df_test
 
 看起来很有希望——让我们检查整个细胞:
 
-```
+```py
 df_test['feedback'][4]
 ```
 
@@ -300,7 +300,7 @@ df_test['feedback'][4]
 
 现在让我们继续(这需要一段时间):
 
-```
+```py
 # this lets scrape all the posts, not just 5 of them:
 def scrape_replies(df):
 feedback_list = []
@@ -322,19 +322,19 @@ BeautifulSoup is a great library to start with, but you’ve probably noticed th
 
 如果你不断地从一个网站上请求大量内容，大多数服务器会接收到它，并经常切断你的联系。记得从小处着手。在我们的具体示例中，我们请求了一大块数据，并毫无问题地收到了它。但是遇到一些问题是很常见的，比如这个问题:
 
-```
+```py
 ConnectionError: HTTPSConnectionPool(host='en.wikipedia.orghttps', port=443): Max retries exceeded with url:[...]
 ```
 
 重要的部分是**最大重试次数超过**。这意味着我们已经请求数据太多次了。偶尔停止抓取网页来模仿人类的自然行为是一个好习惯。我们如何做到这一点？我们需要偷偷输入这行代码:
 
-```
+```py
 time.sleep(np.random.randint(1,20))
 ```
 
 这将使我们的算法暂停一个随机数(1-20)秒，自然，这延长了提取数据所需的时间，但也使它成为可能。请记住，我们需要将这个一行程序放在代码中的适当位置:
 
-```
+```py
 # this lets scrape all the posts, not just 5 of them:
 def scrape_replies(df):
 feedback_list = []

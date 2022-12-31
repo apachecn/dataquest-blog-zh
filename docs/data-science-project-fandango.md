@@ -28,7 +28,7 @@ August 15, 2018
 
 让我们从读入两个样本(分别存储为 CSV 文件:`fandango_score_comparison.csv`和`movie_ratings_16_17.csv`)开始，熟悉它们的结构。
 
-```
+```py
  import pandas as pd
 pd.options.display.max_columns = 100  # Avoid having displayed truncated output
 previous = pd.read_csv('fandango_score_comparison.csv')
@@ -42,7 +42,7 @@ previous.head(3)
 | one | 灰姑娘(2015) | eighty-five | Eighty | Sixty-seven | Seven point five | Seven point one | Five | Four point five | Four point two five | Four | Three point three five | Three point seven five | Three point five five | Four point five | Four | Three point five | Four | Three point five | Two hundred and forty-nine | Sixty-five thousand seven hundred and nine | Twelve thousand six hundred and forty | Zero point five |
 | Two | Ant-Man (2015) | Eighty | Ninety | Sixty-four | Eight point one | Seven point eight | Five | Four point five | Four | Four point five | Three point two | Four point zero five | Three point nine | Four | Four point five | Three | Four | Four | Six hundred and twenty-seven | One hundred and three thousand six hundred and sixty | Twelve thousand and fifty-five | Zero point five |
 
-```
+```py
 after.head(3)
 ```
 
@@ -54,7 +54,7 @@ after.head(3)
 
 下面，我们只分离出提供关于 Fandango 信息的列，以使相关数据更容易供以后使用。我们将复制[以避免以后出现任何`SettingWithCopyWarning`](https://www.dataquest.io/blog/settingwithcopywarning/) 。
 
-```
+```py
 fandango_previous = previous[['FILM', 'Fandango_Stars', 'Fandango_Ratingvalue', 'Fandango_votes',                             'Fandango_Difference']].copy()
 fandango_after = after[['movie', 'year', 'fandango']].copy()
 fandango_previous.head(3)
@@ -66,7 +66,7 @@ fandango_previous.head(3)
 | one | 灰姑娘(2015) | Five | Four point five | Twelve thousand six hundred and forty | Zero point five |
 | Two | Ant-Man (2015) | Five | Four point five | Twelve thousand and fifty-five | Zero point five |
 
-```
+```py
 fandango_after.head(3)
 ```
 
@@ -117,7 +117,7 @@ fandango_after.head(3)
 
 检查这个样本的代表性的一个快速方法是从中随机抽取 10 部电影，然后在 Fandango 的网站上自己检查粉丝评级的数量。理想情况下，10 部电影中至少有 8 部有 30 以上的粉丝评分。
 
-```
+```py
 fandango_after.sample(10, random_state = 1)
 ```
 
@@ -155,11 +155,11 @@ fandango_after.sample(10, random_state = 1)
 
 让我们也仔细检查一下流行电影的其他数据集。文档清楚地说明了只有至少 30 个粉丝的电影，但是在这里应该只需要几秒钟的时间来复查。
 
-```
+```py
 sum(fandango_previous['Fandango_votes'] < 30)
 ```
 
-```
+```py
 0
 ```
 
@@ -167,7 +167,7 @@ sum(fandango_previous['Fandango_votes'] < 30)
 
 先从 Hickey 的数据集开始，只隔离出 2015 年上映的电影。没有发布年份的特殊列，但是我们应该能够从`FILM`列的字符串中提取出来。
 
-```
+```py
 fandango_previous.head(2)
 ```
 
@@ -176,7 +176,7 @@ fandango_previous.head(2)
 | Zero | 《复仇者联盟:奥创时代》(2015) | Five | Four point five | Fourteen thousand eight hundred and forty-six | Zero point five |
 | one | 灰姑娘(2015) | Five | Four point five | Twelve thousand six hundred and forty | Zero point five |
 
-```
+```py
 fandango_previous['Year'] = fandango_previous['FILM'].str[-5:-1]
 fandango_previous.head(2)
 ```
@@ -186,29 +186,29 @@ fandango_previous.head(2)
 | Zero | 《复仇者联盟:奥创时代》(2015) | Five | Four point five | Fourteen thousand eight hundred and forty-six | Zero point five | Two thousand and fifteen |
 | one | 灰姑娘(2015) | Five | Four point five | Twelve thousand six hundred and forty | Zero point five | Two thousand and fifteen |
 
-```
+```py
 fandango_previous['Year'].value_counts()
 ```
 
-```
+```py
  2015    129
 2014     17
 Name: Year, dtype: int64
 ```
 
-```
+```py
  fandango_2015 = fandango_previous[fandango_previous['Year'] == '2015'].copy()
 fandango_2015['Year'].value_counts()
 ```
 
-```
+```py
  2015    129
 Name: Year, dtype: int64
 ```
 
 很好，现在让我们把电影从另一个数据集中分离出来。
 
-```
+```py
 fandango_after.head(2)
 ```
 
@@ -217,22 +217,22 @@ fandango_after.head(2)
 | Zero | 克洛弗菲尔德巷 10 号 | Two thousand and sixteen | Three point five |
 | one | 13 个小时 | Two thousand and sixteen | Four point five |
 
-```
+```py
 fandango_after['year'].value_counts()
 ```
 
-```
+```py
  2016    191
 2017     23
 Name: year, dtype: int64 
 ```
 
-```
+```py
  fandango_2016 = fandango_after[fandango_after['year'] == 2016].copy()
 fandango_2016['year'].value_counts() 
 ```
 
-```
+```py
  2016    191
 Name: year, dtype: int64
 ```
@@ -243,7 +243,7 @@ Name: year, dtype: int64
 
 我们将从使用核密度图比较两种分布的形状开始。我们将使用[538 风格](https://www.dataquest.io/blog/making-538-plots/)的情节。
 
-```
+```py
  import matplotlib.pyplot as plt
 from numpy import arange
 
@@ -272,13 +272,13 @@ plt.show()
 
 目前看来，我们的思路不错，但我们需要分析更精细的信息。让我们检查两个分布的频率表来分析一些数字。因为数据集有不同数量的电影，所以我们对表格进行标准化，显示百分比。
 
-```
+```py
 print('2015' + '\n' + '-' * 16) 
 # To help us distinguish between the two tables immediately and avoid silly mistakes as we read to and from
 fandango_2015['Fandango_Stars'].value_counts(normalize = True).sort_index() * 100
 ```
 
-```
+```py
 2015
 ----------------
 3.0     8.527132
@@ -289,12 +289,12 @@ fandango_2015['Fandango_Stars'].value_counts(normalize = True).sort_index() * 10
 Name: Fandango_Stars, dtype: float64
 ```
 
-```
+```py
 print('2016' + '\n' + '-' * 16)
 fandango_2016['fandango'].value_counts(normalize = True).sort_index() * 100
 ```
 
-```
+```py
 2016
 ----------------
 2.5     3.141361
@@ -315,7 +315,7 @@ fandango_2016['fandango'].value_counts(normalize = True).sort_index() * 100
 
 让我们通过几个汇总指标来更准确地了解变化的方向。在接下来的内容中，我们将计算两个分布的平均值、中值和众数，然后使用条形图来绘制这些值。
 
-```
+```py
  mean_2015 = fandango_2015['Fandango_Stars'].mean()
 mean_2016 = fandango_2016['fandango'].mean()
 
@@ -338,7 +338,7 @@ summary
 | 中位数 | 4.000000 | 4.000000 |
 | 方式 | 4.500000 | 4.000000 |
 
-```
+```py
  plt.style.use('fivethirtyeight')
 summary['2015'].plot.bar(color = '#0066FF', align = 'center', label = '2015', width = .25)
 summary['2016'].plot.bar(color = '#CC0000', align = 'edge', label = '2016', width = .25,
@@ -354,11 +354,11 @@ plt.show()
 
 2016 年的平均评分较低，约为 0.2。这意味着相对于 2015 年的平均评级下降了近 5%。
 
-```
+```py
 (summary.loc['mean'][0] - summary.loc['mean'][1]) / summary.loc['mean'][0]
 ```
 
-```
+```py
 0.048426835689519929
 ```
 

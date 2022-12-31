@@ -58,7 +58,7 @@ November 22, 2015
 
 在 shell 提示符下输入`docker run`命令(如下)。确保输入完整的命令:`docker run ubuntu:16.04`如果您的 Docker 安装正确，您应该看到如下输出:
 
-```
+```py
 Unable to find image 'ubuntu:16.04' locally
 16.04: Pulling from library/ubuntu
 297061f60c36: Downloading [============> ] 10.55MB/43.03MB
@@ -83,7 +83,7 @@ dbc33716854d: Download complete
 
 我们将运行只安装了 Python 和 Jupyter 的`minimal-notebook`。输入下面的命令:`docker run jupyter/minimal-notebook`使用这个命令，我们将从`jupyter` Docker hub 帐户中提取`minimal-notebook`的最新图像。如果您看到以下输出，就知道它已经成功运行了:
 
-```
+```py
 [C 06:14:15.384 NotebookApp]
 Copy/paste this URL into your browser when you connect for the first time,
 to login with a token:
@@ -110,7 +110,7 @@ https://localhost:8888/?token=166aead826e247ff182296400d370bd08b1308a5da5f9f87
 
 `exec`命令与`run`命令有相似的参数，但是它不使用参数启动容器，它*在已经运行的容器上执行*。因此，在从图像创建容器的 insead 中，像 docker run 一样，`docker exec`需要一个正在运行的**容器 ID** 或**容器名称**，它们被称为**容器标识符**。要定位一个正在运行的容器的标识符，您需要调用 [`docker ps`命令](https://docs.docker.com/engine/reference/commandline/ps/)，该命令列出了所有正在运行的容器和一些附加信息。例如，下面是我们的`docker ps`在`minimal-notebook`容器运行时的输出。
 
-```
+```py
 $ docker ps
 CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
 874108dfc9d9 jupyter/minimal-notebook "tini -- start-noteb…" Less than a second ago Up 4 seconds 0.0.0.0:8900->8888/tcp thirsty_almeida

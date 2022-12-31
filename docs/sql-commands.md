@@ -26,7 +26,7 @@ SELECT 可能是最常用的 SQL 语句。每次用 SQL 查询数据时都会用
 
 例如，在下面的代码中，我们从名为`customers`的表中选择名为`name`的列。
 
-```
+```py
 SELECT name
 FROM customers;
 ```
@@ -35,7 +35,7 @@ FROM customers;
 
 带星号(*)的 SELECT 将返回我们正在查询的表中所有列的*。*
 
-```
+```py
 SELECT * FROM customers;
 ```
 
@@ -45,7 +45,7 @@ SELECT DISTINCT 仅返回不同的数据，换句话说，如果有重复的记�
 
 下面的代码将只返回来自`customers`表的具有唯一`name`的行。
 
-```
+```py
 SELECT DISTINCT name
 FROM customers;
 ```
@@ -54,7 +54,7 @@ FROM customers;
 
 SELECT INTO 将指定数据从一个表复制到另一个表中。
 
-```
+```py
 SELECT * INTO customers
 FROM customers_backup;
 ```
@@ -65,13 +65,13 @@ SELECT TOP only 返回表格中最上面的`x`数字或百分比。
 
 下面的代码将从`customers`表中返回前 50 个结果:
 
-```
+```py
 SELECT TOP 50 * FROM customers;
 ```
 
 下面的代码将返回 customers 表中前 50%的内容:
 
-```
+```py
 SELECT TOP 50 PERCENT * FROM customers;
 ```
 
@@ -79,7 +79,7 @@ SELECT TOP 50 PERCENT * FROM customers;
 
 AS 用我们可以选择的别名重命名列或表。例如，在下面的代码中，我们将`name`列重命名为`first_name`:
 
-```
+```py
 SELECT name AS first_name
 FROM customers;
 ```
@@ -88,7 +88,7 @@ FROM customers;
 
 FROM 指定从中提取数据的表:
 
-```
+```py
 SELECT name
 FROM customers;
 ```
@@ -97,7 +97,7 @@ FROM customers;
 
 WHERE 筛选您的查询，只返回符合设定条件的结果。我们可以将它与条件运算符一起使用，如`=`、`>`、`<`、`>=`、`<=`等。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name = ‘Bob’;
@@ -107,7 +107,7 @@ WHERE name = ‘Bob’;
 
 并在单个查询中组合两个或多个条件。要返回结果，必须满足所有条件。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name = ‘Bob’ AND age = 55;
@@ -117,7 +117,7 @@ WHERE name = ‘Bob’ AND age = 55;
 
 或者在单个查询中组合两个或多个条件。要返回结果，只需满足其中一个条件。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name = ‘Bob’ OR age = 55;
@@ -127,7 +127,7 @@ WHERE name = ‘Bob’ OR age = 55;
 
 BETWEEN 筛选您的查询以仅返回符合指定范围的结果。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE age BETWEEN 45 AND 55;
@@ -137,7 +137,7 @@ WHERE age BETWEEN 45 AND 55;
 
 LIKE 在列中搜索指定的模式。在下面的示例代码中，将返回名称中包含字符 Bob 的任何行。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name LIKE ‘%Bob%’;
@@ -156,7 +156,7 @@ LIKE 的其他运算符:
 
 IN 允许我们在使用 WHERE 命令时指定要选择的多个值。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name IN (‘Bob’, ‘Fred’, ‘Harry’);
@@ -166,7 +166,7 @@ WHERE name IN (‘Bob’, ‘Fred’, ‘Harry’);
 
 IS NULL 将只返回具有空值的行。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name IS NULL;
@@ -176,7 +176,7 @@ WHERE name IS NULL;
 
 IS NOT NULL 的作用正好相反——它将只返回没有空值的行*。*
 
-```
+```py
 SELECT name
 FROM customers
 WHERE name IS NOT NULL;
@@ -190,7 +190,7 @@ CREATE 可用于建立数据库、表、索引或视图。
 
 CREATE DATABASE 创建一个新的数据库，假设运行该命令的用户具有正确的管理权限。
 
-```
+```py
 CREATE DATABASE dataquestDB;
 ```
 
@@ -198,7 +198,7 @@ CREATE DATABASE dataquestDB;
 
 CREATE TABLE 在数据库中创建新表。本例中的术语 **int** 和 **varchar(255)** 指定了我们正在创建的列的数据类型。
 
-```
+```py
 CREATE TABLE customers (
     customer_id int,
     name varchar(255),
@@ -210,7 +210,7 @@ CREATE TABLE customers (
 
 CREATE INDEX 为表生成索引。索引用于更快地从数据库中检索数据。
 
-```
+```py
 CREATE INDEX idx_name
 ON customers (name);
 ```
@@ -219,7 +219,7 @@ ON customers (name);
 
 CREATE VIEW 基于 SQL 语句的结果集创建虚拟表。视图就像一个普通的表(可以像普通的表一样被查询)，但是它是*而不是*作为一个永久的表保存在数据库中。
 
-```
+```py
 CREATE VIEW [Bob Customers] AS
 SELECT name, age
 FROM customers
@@ -238,7 +238,7 @@ DROP DATABASE 删除整个数据库，包括它的所有表、索引等以及其
 
 同样，这是一个我们希望非常小心使用的命令！
 
-```
+```py
 DROP DATABASE dataquestDB;
 ```
 
@@ -246,7 +246,7 @@ DROP DATABASE dataquestDB;
 
 DROP TABLE 删除一个表以及其中的数据。
 
-```
+```py
 DROP TABLE customers;
 ```
 
@@ -254,7 +254,7 @@ DROP TABLE customers;
 
 DROP INDEX 删除数据库中的索引。
 
-```
+```py
 DROP INDEX idx_name;
 ```
 
@@ -262,7 +262,7 @@ DROP INDEX idx_name;
 
 UPDATE 语句用于更新表中的数据。例如，下面的代码会将`customers`表中任何名为`Bob`的客户的年龄更新为`56`。
 
-```
+```py
 UPDATE customers
 SET age = 56
 WHERE name = ‘Bob’;
@@ -272,7 +272,7 @@ WHERE name = ‘Bob’;
 
 DELETE 可以删除表中的所有行(使用*)，或者可以作为 WHERE 子句的一部分删除满足特定条件的行。*
 
-```
+```py
 DELETE FROM customers
 WHERE name = ‘Bob’;
 ```
@@ -281,12 +281,12 @@ WHERE name = ‘Bob’;
 
 ALTER TABLE 允许您在表中添加或删除列。在下面的代码片段中，我们将为`surname`添加然后移除一列。文本`varchar(255)`指定了列的数据类型。
 
-```
+```py
 ALTER TABLE customers
 ADD surname varchar(255);
 ```
 
-```
+```py
 ALTER TABLE customers
 DROP COLUMN surname;
 ```
@@ -309,7 +309,7 @@ DROP COLUMN surname;
 
 COUNT 返回符合指定条件的行数。在下面的代码中，我们使用了`*`，因此将返回`customers`的总行数。
 
-```
+```py
 SELECT COUNT(*)
 FROM customers;
 ```
@@ -320,7 +320,7 @@ FROM customers;
 
 SUM 返回数值列的总和。
 
-```
+```py
 SELECT SUM(age)
 FROM customers;
 ```
@@ -329,7 +329,7 @@ FROM customers;
 
 AVG 返回数值列的平均值。
 
-```
+```py
 SELECT AVG(age)
 FROM customers;
 ```
@@ -338,7 +338,7 @@ FROM customers;
 
 MIN 返回数值列的最小值。
 
-```
+```py
 SELECT MIN(age)
 FROM customers;
 ```
@@ -347,7 +347,7 @@ FROM customers;
 
 MAX 返回数值列的最大值。
 
-```
+```py
 SELECT MAX(age)
 FROM customers;
 ```
@@ -356,7 +356,7 @@ FROM customers;
 
 GROUP BY 语句将具有相同值的行分组到汇总行中。该语句通常与聚合函数一起使用。例如，下面的代码将显示出现在我们的`customers`表中的每个名字的平均年龄。
 
-```
+```py
 SELECT name, AVG(age)
 FROM customers
 GROUP BY name;
@@ -368,7 +368,7 @@ HAVING 执行与 WHERE 子句相同的操作。不同之处在于 HAVING 用于�
 
 下面的例子将返回每个名字的行数，但只返回超过 2 条记录的名字。
 
-```
+```py
 SELECT COUNT(customer_id), name
 FROM customers
 GROUP BY name
@@ -379,7 +379,7 @@ HAVING COUNT(customer_id) > 2;
 
 ORDER BY 设置返回结果的顺序。默认情况下，顺序是升序的。
 
-```
+```py
 SELECT name
 FROM customers
 ORDER BY age;
@@ -389,7 +389,7 @@ ORDER BY age;
 
 DESC 将按降序返回结果。
 
-```
+```py
 SELECT name
 FROM customers
 ORDER BY age DESC;
@@ -399,7 +399,7 @@ ORDER BY age DESC;
 
 OFFSET 语句使用 ORDER BY，并指定在开始从查询返回行之前要跳过的行数。
 
-```
+```py
 SELECT name
 FROM customers
 ORDER BY age
@@ -410,7 +410,7 @@ OFFSET 10 ROWS;
 
 FETCH 指定处理 OFFSET 子句后要返回的行数。OFFSET 子句是必需的，而 FETCH 子句是可选的。
 
-```
+```py
 SELECT name
 FROM customers
 ORDER BY age
@@ -426,7 +426,7 @@ JOIN 子句用于合并两个或多个表中的行。四种类型的联接是内
 
 内部联接选择在两个表中具有匹配值的记录。
 
-```
+```py
 SELECT name
 FROM customers
 INNER JOIN orders
@@ -437,7 +437,7 @@ ON customers.customer_id = orders.customer_id;
 
 左连接从左表中选择与右表中的记录相匹配的记录。在下面的例子中，左边的表格是`customers`。
 
-```
+```py
 SELECT name
 FROM customers
 LEFT JOIN orders
@@ -448,7 +448,7 @@ ON customers.customer_id = orders.customer_id;
 
 右联接从右表中选择与左表中的记录相匹配的记录。在下面的例子中，右边的表格是`orders`。
 
-```
+```py
 SELECT name
 FROM customers
 RIGHT JOIN orders
@@ -459,7 +459,7 @@ ON customers.customer_id = orders.customer_id;
 
 完全联接选择在左表或右表中有匹配项的记录。与“和”连接(内部连接)相比，可以将其视为“或”连接。
 
-```
+```py
 SELECT name
 FROM customers
 FULL OUTER JOIN orders
@@ -470,7 +470,7 @@ ON customers.customer_id = orders.customer_id;
 
 EXISTS 用于测试子查询中是否存在任何记录。
 
-```
+```py
 SELECT name
 FROM customers
 WHERE EXISTS
@@ -481,7 +481,7 @@ WHERE EXISTS
 
 授予特定用户对数据库对象(如表、视图或数据库本身)的访问权限。下面的示例将向名为“usr_bob”的用户授予对 customers 表的选择和更新权限。
 
-```
+```py
 GRANT SELECT, UPDATE ON customers TO usr_bob;
 ```
 
@@ -489,7 +489,7 @@ GRANT SELECT, UPDATE ON customers TO usr_bob;
 
 REVOKE 删除用户对特定数据库对象的权限。
 
-```
+```py
 REVOKE SELECT, UPDATE ON customers FROM usr_bob;
 ```
 
@@ -497,7 +497,7 @@ REVOKE SELECT, UPDATE ON customers FROM usr_bob;
 
 保存点允许您确定事务中的一个点，以后可以回滚到该点。类似于创建备份。
 
-```
+```py
 SAVEPOINT SAVEPOINT_NAME;
 ```
 
@@ -505,7 +505,7 @@ SAVEPOINT SAVEPOINT_NAME;
 
 提交用于将每个事务保存到数据库。COMMIT 语句将释放任何可能正在使用的现有保存点，一旦发出该语句，就不能回滚事务。
 
-```
+```py
 DELETE FROM customers
 WHERE name = ‘Bob’;
 COMMIT
@@ -515,7 +515,7 @@ COMMIT
 
 回滚用于撤消未保存到数据库的事务。这只能用于撤消自上次提交或回滚命令发出以来的事务。您还可以回滚到以前创建的保存点。
 
-```
+```py
 ROLLBACK TO SAVEPOINT_NAME;
 ```
 
@@ -523,7 +523,7 @@ ROLLBACK TO SAVEPOINT_NAME;
 
 TRUNCATE TABLE 从数据库的表中删除所有数据条目，但保留表和结构。类似于删除。
 
-```
+```py
 TRUNCATE TABLE customers;
 ```
 
@@ -537,7 +537,7 @@ UNION 使用两个或多个 SELECT 语句组合多个结果集，并消除重复
 
 UNION ALL 使用两个或多个 SELECT 语句组合多个结果集，并保留重复的行。
 
-```
+```py
 SELECT name FROM customers
 UNION
 SELECT name FROM orders;

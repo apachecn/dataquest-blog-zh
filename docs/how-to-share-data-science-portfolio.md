@@ -10,7 +10,7 @@ GitHub 是围绕一项名为
 
 [git](https://git-scm.com/) ，分布式版本控制系统。这听起来可能有点吓人，但它的意思是，它允许您在不同的时间点创建代码的检查点，然后在这些检查点之间随意切换。例如，假设我有以下 Python 脚本，摘自 [scikit-learn examples](https://scikit-learn.org/stable/auto_examples/model_selection/plot_cv_predict.html) :
 
-```
+```py
  lr = linear_model.LinearRegression()
 boston = datasets.load_boston()
 y = boston.target
@@ -24,7 +24,7 @@ predicted = cross_val_predict(lr, boston.data, y, cv=10)
 *   更改 CV 折叠的数量
 *   展示一个情节
 
-```
+```py
  lr = linear_model.LinearRegression()
 diabetes = datasets.load_diabetes()
 y = diabetes.target
@@ -66,7 +66,7 @@ plt.show()
 
 git 中的提交发生在存储库内部。存储库类似于您的项目所在的文件夹。对于教程的这一部分，我们将使用具有如下文件结构的文件夹:
 
-```
+```py
  loans
 │   README.md
 │   main.py
@@ -80,7 +80,7 @@ git 中的提交发生在存储库内部。存储库类似于您的项目所在�
 
 [这里的](https://s3.amazonaws.com/dq-blog-files/loans.zip)在接下来的步骤中使用。你可以用任何解压文件的程序来解压它。上图中的 git 存储库是项目文件夹，或`loans`。为了创建提交，我们首先需要将文件夹初始化为 git 存储库。我们可以通过导航到该文件夹，然后键入`git init`来做到这一点:
 
-```
+```py
  $ cd loans
 $ git init
 Initialized empty Git repository in /loans/.git/ 
@@ -90,7 +90,7 @@ Initialized empty Git repository in /loans/.git/
 
 `.git`在`loans`文件夹里面。您将得到输出，表明存储库已正确初始化。git 使用`.git`文件夹来存储关于提交的信息:
 
-```
+```py
  loans
 │   README.md
 │   main.py
@@ -105,7 +105,7 @@ Initialized empty Git repository in /loans/.git/
 
 在本教程中，没有必要探究文件夹，但是您可能希望浏览一下，看看是否能够弄清楚提交数据是如何存储的。初始化存储库之后，我们需要将文件添加到潜在的提交中。这会将文件添加到临时区域。当我们对暂存区中的文件满意时，我们可以生成一个提交。我们可以使用`git add`来做到这一点:
 
-```
+```py
  $ git add README.md
 ```
 
@@ -113,7 +113,7 @@ Initialized empty Git repository in /loans/.git/
 
 `README.md`文件到暂存区。这不会改变磁盘上的文件，但是会告诉 git 我们想要将文件的当前状态添加到下一次提交中。我们可以通过`git status`检查中转区的状态:
 
-```
+```py
  $ git status
 On branch master
 
@@ -136,7 +136,7 @@ Untracked files:
 
 文件到暂存区，但仍有一些未跟踪的文件没有添加。我们可以添加所有带`git add .`的文件。在我们将所有文件添加到暂存区域之后，我们可以使用`git commit`创建一个提交:
 
-```
+```py
  $ git commit -m "Initial version"
 [master (root-commit) 907e793] Initial version 
 4 files changed, 0 insertions(+), 0 deletions(-) 
@@ -156,7 +156,7 @@ create mode 100644 main.py
 
 `README.md`文件。我们首先运行`git status`来看看发生了什么变化:
 
-```
+```py
  $ git status
 On branch master
 Changes not staged for commit:
@@ -173,13 +173,13 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 `git diff`。如果更改是我们所期望的，我们可以将这些更改添加到新的提交中:
 
-```
+```py
 $ git add .
 ```
 
 然后我们可以再次承诺:
 
-```
+```py
  $ git commit -m "Update README.md"
 [master 5bec608] Update README.md
  1 file changed, 1 insertion(+)
@@ -215,7 +215,7 @@ $ git add .
 
 查看“…或从命令行推送现有的存储库”部分，并将这两行复制到那里。然后在命令行中运行它们:
 
-```
+```py
  $ cd loans
 $ git remote add origin [[email protected]](/cdn-cgi/l/email-protection):YOUR_GITHUB_USERNAME/YOUR_GIT_REPO_NAME.git
 $ git push -u origin master
@@ -252,7 +252,7 @@ Branch master set up to track remote branch master from origin.
 
 如果你使用虚拟环境。您将得到如下输出:
 
-```
+```py
  $ pip freeze
 Django==1.10.5
 MechanicalSoup==0.6.0
@@ -263,7 +263,7 @@ Pillow==4.0.0
 
 例如`Django`版本`1.10.5`安装。您需要将这些需求复制到项目中名为`requirements.txt`的文件夹中。该文件应该如下所示:
 
-```
+```py
  Django==1.10.5
 MechanicalSoup==0.6.0
 Pillow==4.0.0 
@@ -273,7 +273,7 @@ Pillow==4.0.0
 
 `pip install -r requirements.txt`。这将安装我们机器上的库的精确版本。如果您想安装每个库的最新版本，您可以忽略`requirements.txt`中的版本号:
 
-```
+```py
  Django
 MechanicalSoup
 Pillow 
@@ -283,7 +283,7 @@ Pillow
 
 `requirements.txt`文件，但没有为您的项目使用 virtualenv，您将需要手动浏览您在项目中导入的库，并将它们添加到`requirements.txt`中，但不添加版本号，例如:
 
-```
+```py
  pandas
 numpy
 Pillow 
@@ -295,7 +295,7 @@ Pillow
 
 `/Users/vik/Documents/data.csv`。其他想要运行您的项目的人在他们的计算机上不会有那些相同的路径，所以他们将不能运行您的项目。您可以很容易地用相对路径来替换它们，这允许与您的项目在同一个文件夹中拥有数据但没有相同绝对路径的人使用您的代码。假设我们有这样的代码:
 
-```
+```py
  with open("/Users/vik/Documents/data.csv") as f:
     data = f.read()
 ```
@@ -304,7 +304,7 @@ Pillow
 
 `/Users/vik/Documents/Project.ipynb`。我们可以用相对路径替换代码，比如:
 
-```
+```py
  with open("data.csv") as f:
     data = f.read()
 ```
@@ -317,7 +317,7 @@ Pillow
 
 `git add .`和`git commit -m "Message""`会将文件夹中的所有文件添加到 git 提交中。然而，有许多您不想添加的工件文件。下面是一个文件夹示例:
 
-```
+```py
  loans
 │   __pycache__
 │   main.py
@@ -333,7 +333,7 @@ Pillow
 
 `__pycache__`、`main.pyc`和`temp.json`。项目主要代码在`main.py`，数据在`data/test.csv`，和`data/train.csv`。对于运行项目的人来说，这些是他们唯一需要的文件。像`__pycache__`和`main.pyc`这样的文件夹是在我们运行代码或者安装包的时候由 Python 自动生成的。这些使得 Python 脚本和包的安装更加快速和可靠。但是，这些文件不是您项目的一部分，因此不应该分发给其他人。我们可以用一个`.gitignore`文件忽略这样的文件。我们可以添加一个`.gitignore`文件到我们的文件夹:
 
-```
+```py
  loans
 │   .gitignore
 │   __pycache__
@@ -350,7 +350,7 @@ Pillow
 
 `.gitignore` file 是要忽略的文件列表。我们可以创建一个`.gitignore`文件，然后添加`*.pyc`和`__pycache__`来忽略我们文件夹中生成的文件:
 
-```
+```py
  *.pyc
 __pycache__ 
 ```
@@ -359,7 +359,7 @@ __pycache__
 
 `temp.json`文件。我们可以添加另一行来忽略这个文件:
 
-```
+```py
  *.pyc
 __pycache__
 temp.json 
@@ -375,7 +375,7 @@ temp.json
 
 `AWS_ACCESS_KEY="3434ffdsfd"`。您绝对不希望与他人共享您的密钥——这会让他们访问您的资源，并可能让您损失金钱。下面是一些使用密钥的示例代码:
 
-```
+```py
  import forecastio
 
 forecast = forecastio.load_forecast("34343434fdfddf", 37.77493, -122.41942) 
@@ -385,7 +385,7 @@ forecast = forecastio.load_forecast("34343434fdfddf", 37.77493, -122.41942)
 
 是一个密钥，我们将它传递到一个图书馆以获取天气预报。如果我们提交代码，任何浏览 Github 的人都可以看到我们的秘密数据。幸运的是，有一个简单的方法可以解决这个问题，并允许任何使用该项目的人提供他们自己的密钥，这样他们仍然可以运行代码。首先，我们创建一个名为`settings.py`的文件，包含以下几行:
 
-```
+```py
  API_KEY = ""
 
 try:
@@ -398,7 +398,7 @@ pass
 
 `API_KEY`。它还会尝试从名为`private.py`的文件导入，如果该文件不存在，它就不会执行任何操作。我们接下来需要添加一个`private.py`，内容如下:
 
-```
+```py
 API_KEY = "34343434fdfddf"
 ```
 
@@ -406,13 +406,13 @@ API_KEY = "34343434fdfddf"
 
 `private.py`到`.gitignore`这样它就不会被提交:
 
-```
+```py
 private.py
 ```
 
 然后，我们修改我们的原始代码:
 
-```
+```py
  import settings
 forecast = forecastio.load_forecast(settings.API_KEY, 37.77493, -122.41942) 
 ```
@@ -449,7 +449,7 @@ forecast = forecastio.load_forecast(settings.API_KEY, 37.77493, -122.41942)
 
 [这里](https://github.com/VikParuchuri/apartment-finder/blob/master/README.md)和[这里](https://github.com/dataquestio/loan-prediction/blob/master/README.md)。在新文件夹或新电脑上亲自完成安装步骤很重要，以确保一切正常。README 也是第一个，也可能是唯一一个有人会看的东西，因为 GitHub 把它呈现在存储库文件视图下面。重要的是“推销”这个项目是什么，你为什么要做它，它有什么有趣的地方。这里有一个例子:
 
-```
+```py
  # Loan Price Prediction
 
 In this project, I analyzed data on loans issued through the [LendingClub](https://www.lendingclub.com/) platform.  On the LendingClub platform, potential lenders see some information about potential borrowers, along with an interest rate they'll be paid.  The potential lenders then decide if the interest on the loan is worth the risk of a default (the loan not being repaid), and decide whether to lend to the borrower.  LendingClub publishes anonymous data about its loans and their repayment rates.
@@ -471,7 +471,7 @@ Using the data, I analyzed factors that correlated with loans being repaid on ti
 
 如果您正在编写 Python 脚本文件，您会希望包含大量行内注释，以使您的逻辑更容易理解。你不会想分享这样的东西:
 
-```
+```py
  def count_performance_rows():
     counts = {}
     with open(os.path.join(settings.PROCESSED_DIR, "Performance.txt"), 'r') as f:
@@ -493,7 +493,7 @@ Using the data, I analyzed factors that correlated with loans being repaid on ti
 
 更好的选择是:
 
-```
+```py
  def count_performance_rows():
     """
     A function to count the number of rows that deal with performance for each loan.

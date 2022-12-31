@@ -42,7 +42,7 @@ Excel 是世界上最常用的数据分析软件。为什么？一旦你掌握�
 
 我们的数据被保存为一个名为`sales.csv`的 CSV 文件。为了在 pandas 中导入我们的数据，我们需要从导入 pandas 库本身开始。
 
-```
+```py
 import pandas as pd
 ```
 
@@ -50,7 +50,7 @@ import pandas as pd
 
 为了读取我们的文件，我们使用`pd.read_csv()`:
 
-```
+```py
 sales = pd.read_csv('sales.csv')
 sales
 ```
@@ -80,11 +80,11 @@ sales
 
 让我们使用`type()`函数来看看我们的`sales`变量的类型:
 
-```
+```py
 type(sales)
 ```
 
-```
+```py
 pandas.core.frame.DataFrame
 ```
 
@@ -104,7 +104,7 @@ pandas.core.frame.DataFrame
 
 我们向该方法提供列名，告诉它根据哪一列进行排序:
 
-```
+```py
 sales = sales.sort_values("Start Date")
 sales
 ```
@@ -137,7 +137,7 @@ sales
 
 在 pandas 中，当我们执行一个操作时，它会立刻自动应用到每一行。我们将通过使用列表中的名称来选择三列:
 
-```
+```py
 q1_columns = sales[["Sales January", "Sales February", "Sales March"]]
 q1_columns
 ```
@@ -156,7 +156,7 @@ q1_columns
 
 接下来，我们将使用`DataFrame.sum()`方法并指定`axis=1`，这告诉 pandas 我们想要对行求和而不是对列求和。我们将通过在括号内提供新的列名来指定它:
 
-```
+```py
 sales["Sales Q1"] = q1_columns.sum(axis=1)
 sales
 ```
@@ -194,7 +194,7 @@ sales
 
 要在 pandas 中处理这些数据，首先我们需要从第二个 CSV 导入它，`managers.csv`:
 
-```
+```py
 managers = pd.read_csv('managers.csv')
 managers
 ```
@@ -212,7 +212,7 @@ managers
 *   `how='left'`:我们想要用来连接数据的方法。`left`连接指定无论如何，我们都要保留左边(第一个)数据帧中的所有行。
 *   `on='Department'`:我们将要连接的两个数据帧中的列名。
 
-```
+```py
 sales = pd.merge(sales, managers, how='left', on='Department')
 sales
 ```
@@ -245,7 +245,7 @@ sales
 
 在 pandas 中，我们使用`pandas.isnull()`函数来检查`"End Date"`列中的空值，并将结果分配给一个新列:
 
-```
+```py
 sales["Current Employee"] = pd.isnull(sales['End Date'])
 sales
 ```
@@ -276,11 +276,11 @@ series 类型对本教程来说是新的，但它与我们已经了解过的 Dat
 
 让我们用熊猫法来计算每个部门的雇员人数:
 
-```
+```py
 sales['Department'].value_counts()
 ```
 
-```
+```py
 C    4
 A    3
 B    2
@@ -297,7 +297,7 @@ Name: Department, dtype: int64
 *   `values`:我们要使用其值的列。
 *   `aggfunc`:我们想要使用的聚合函数，在这里是`'mean'` average。
 
-```
+```py
 sales.pivot_table(index='Department', values='Sales Q1', aggfunc='mean')
 ```
 

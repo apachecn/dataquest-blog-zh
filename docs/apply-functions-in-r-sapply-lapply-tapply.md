@@ -22,7 +22,7 @@ May 31, 2022![Using the Apply Function in R](img/da99536be430953154646a5fd5f26ef
 
 `apply()`函数的语法非常简单，只有三个参数:
 
-```
+```py
 apply(X, MARGIN, FUN)
 ```
 
@@ -30,12 +30,12 @@ apply(X, MARGIN, FUN)
 
 让我们看一些例子。我们将使用矩阵作为输入数据结构，但同样的原理也适用于其他可能的数据结构:
 
-```
+```py
 my_matrix <- matrix((1:12), nrow=3)
 print(my_matrix)
 ```
 
-```
+```py
  [,1] [,2] [,3] [,4]
 [1,]    1    4    7   10
 [2,]    2    5    8   11
@@ -44,11 +44,11 @@ print(my_matrix)
 
 例如，我们可能希望找到矩阵中每一行的最大值。为此，我们将把`1`设置为`MARGIN`参数，并传入`max`函数:
 
-```
+```py
 print(apply(my_matrix, 1, max))
 ```
 
-```
+```py
 [1] 10 11 12
 ```
 
@@ -56,11 +56,11 @@ print(apply(my_matrix, 1, max))
 
 现在，让我们按列(`MARGIN=2`)计算矩阵值的总和:
 
-```
+```py
 print(apply(my_matrix, 2, sum))
 ```
 
-```
+```py
 [1]  6 15 24 33
 ```
 
@@ -68,11 +68,11 @@ print(apply(my_matrix, 2, sum))
 
 在某些情况下，我们可能需要按列计算累积和:
 
-```
+```py
 print(apply(my_matrix, 2, cumsum))
 ```
 
-```
+```py
  [,1] [,2] [,3] [,4]
 [1,]    1    4    7   10
 [2,]    3    9   15   21
@@ -83,11 +83,11 @@ print(apply(my_matrix, 2, cumsum))
 
  **注意，最后的结果(输出对象与输入对象的大小相同)对于非聚合函数来说并不总是这样。例如，我们可能想要一个按列排列的*范围*的值:
 
-```
+```py
 print(apply(my_matrix, 2, range))
 ```
 
-```
+```py
  [,1] [,2] [,3] [,4]
 [1,]    1    4    7   10
 [2,]    3    6    9   12
@@ -97,37 +97,37 @@ print(apply(my_matrix, 2, range))
 
 可以向`apply()`提供任何自定义功能。让我们定义一个函数来计算每个输入的均方值:
 
-```
+```py
 mean_squared_vals <- function(x) mean(x**2)
 ```
 
 正如我们之前所做的那样，我们可以通过行(`MARGIN=1`)来应用这个函数:
 
-```
+```py
 print(apply(my_matrix, 1, mean_squared_vals))
 ```
 
-```
+```py
 [1] 41.5 53.5 67.5
 ```
 
 我们也可以按列(`MARGIN=2`)应用函数:
 
-```
+```py
 print(apply(my_matrix, 2, mean_squared_vals))
 ```
 
-```
+```py
 [1]   4.666667  25.666667  64.666667 121.666667
 ```
 
 最后——这是我们还没有尝试过的——我们可以通过行和列来应用它(`MARGIN=c(1,2)`):
 
-```
+```py
 print(apply(my_matrix, c(1,2), mean_squared_vals))
 ```
 
-```
+```py
  [,1] [,2] [,3] [,4]
 [1,]    1   16   49  100
 [2,]    4   25   64  121
@@ -142,24 +142,24 @@ print(apply(my_matrix, c(1,2), mean_squared_vals))
 
 该函数的语法类似于`apply()`的语法，只是这里不需要`MARGIN`参数，因为该函数对列表和向量应用元素方式，对数据帧应用列方式:
 
-```
+```py
 lapply(X, FUN)
 ```
 
 让我们看看它是如何处理向量、列表和数据帧的。首先，我们将创建一个将输入值加 1 的简单函数:
 
-```
+```py
 add_one <- function(x) x+1
 ```
 
 让我们在一个向量上测试它:
 
-```
+```py
 my_vector = c(1, 2, 3)
 print(lapply(my_vector, add_one))
 ```
 
-```
+```py
 [[1]]
 [1] 2
 
@@ -174,12 +174,12 @@ print(lapply(my_vector, add_one))
 
 现在，我们将创建一个列表:
 
-```
+```py
 my_list = list(TRUE, c(1, 2, 3), 10)
 print(my_list)
 ```
 
-```
+```py
 [[1]]
 [1] TRUE
 
@@ -192,11 +192,11 @@ print(my_list)
 
 现在我们将对它应用我们的函数:
 
-```
+```py
 print(lapply(my_list, add_one))
 ```
 
-```
+```py
 [[1]]
 [1] 2
 
@@ -211,23 +211,23 @@ print(lapply(my_list, add_one))
 
 最后，让我们在数据帧上使用`lapply()`:
 
-```
+```py
 my_df <- data.frame(a=1:3, b=4:6, c=7:9, d=10:12)
 print(my_df)
 ```
 
-```
+```py
  a b c  d
 1 1 4 7 10
 2 2 5 8 11
 3 3 6 9 12
 ```
 
-```
+```py
 print(lapply(my_df, add_one))
 ```
 
-```
+```py
 $a
 [1] 2 3 4
 
@@ -249,19 +249,19 @@ $d
 
 让我们使用与前面相同的自定义函数`add_one`对变量`my_vector`、`my_list`和`my_df`进行尝试:
 
-```
+```py
 print(sapply(my_vector, add_one))
 ```
 
-```
+```py
 [1] 2 3 4
 ```
 
-```
+```py
 print(sapply(my_list, add_one))
 ```
 
-```
+```py
 [[1]]
 [1] 2
 
@@ -272,11 +272,11 @@ print(sapply(my_list, add_one))
 [1] 11
 ```
 
-```
+```py
 print(sapply(my_df, add_one))
 ```
 
-```
+```py
  a b  c  d
 [1,] 2 5  8 11
 [2,] 3 6  9 12
@@ -285,13 +285,13 @@ print(sapply(my_df, add_one))
 
 我们可以改变`sapply()`函数的默认行为，传入一个可选参数`simplify=FALSE`(默认为`TRUE`)。在这种情况下，`sapply()`函数变得与`lapply()`相同，并且总是输出任何有效输入数据结构的列表:
 
-```
+```py
 print(typeof(sapply(my_vector, add_one, simplify=FALSE)))
 print(typeof(sapply(my_list, add_one, simplify=FALSE)))
 print(typeof(sapply(my_df, add_one, simplify=FALSE)))
 ```
 
-```
+```py
 [1] "list"
 [1] "list"
 [1] "list"
@@ -301,7 +301,7 @@ print(typeof(sapply(my_df, add_one, simplify=FALSE)))
 
 我们使用`tapply()`函数来计算汇总统计数据(如平均值、中值、最小值、最大值、总和等)。)针对不同的因素(即类别)。它具有以下语法:
 
-```
+```py
 tapply(X, INDEX, FUN)
 ```
 
@@ -311,13 +311,13 @@ tapply(X, INDEX, FUN)
 
 (*旁注:*作为一个粗略的指南，我们在这里使用了来自[的信息，实际上是](https://www.indeed.com/career/salaries)来估算 2022 年 2 月美国各职位的平均工资。)
 
-```
+```py
 salaries <- c(80000, 62000, 113000, 68000, 75000, 79000, 112000, 118000, 65000, 117000)
 jobs <- c('DS', 'DA', 'DE', 'DA', 'DS', 'DS', 'DE', 'DE', 'DA', 'DE')
 print(tapply(salaries, jobs, mean))
 ```
 
-```
+```py
  DA     DE     DS 
  65000 115000  78000 
 ```

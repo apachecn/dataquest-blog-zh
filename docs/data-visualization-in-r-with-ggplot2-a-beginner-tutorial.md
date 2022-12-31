@@ -54,14 +54,14 @@ September 2, 2020
 
 为了开始可视化，我们需要将数据放入我们的工作空间。我们将引入`tidyverse`包，并使用`read_csv()`函数导入数据。我们将数据命名为`life_expec.csv`，所以您需要根据您对文件的命名来重命名它。
 
-```
+```py
 library(tidyverse)
 life_expec <- read_csv("life_expec.csv")
 ```
 
 让我们看看我们正在处理哪些数据:
 
-```
+```py
 colnames(life_expec)
 [1] "Year"    "Race"        “Sex"         "Avg_Life_Expec"    "Age_Adj_Death_Rate"
 ```
@@ -70,14 +70,14 @@ colnames(life_expec)
 
 让我们快速浏览一下数据，看看某一年的情况如何:
 
-```
+```py
 life_expec %>%
   filter(Year == 2000)
 ```
 
 2000 年有九个数据点:
 
-```
+```py
 ## # A tibble: 9 x 5
 ##    Year Race      Sex        Avg_Life_Expec Age_Adj_Death_Rate
 ##                                      
@@ -94,14 +94,14 @@ life_expec %>%
 
 一年有九个不同的行，每一行对应一个不同的人口统计分区。对于这个可视化，我们将关注美国整体，因此我们需要相应地过滤数据:
 
-```
+```py
 life_expec <- life_expec %>%
   filter(Race == "All Races", Sex == "Both Sexes")
 ```
 
 数据放在一个合适的位置，所以我们可以将它放入一个 ggplot()函数，开始创建一个图表。我们使用 ggplot()函数来表示我们想要创建一个图。
 
-```
+```py
 life_expec %>%
   ggplot()
 ```
@@ -116,7 +116,7 @@ life_expec %>%
 
 为了指定轴，我们需要使用`aes()`功能。`aes`是“美学”的缩写，它是我们告诉`ggplot`我们想要为情节的不同部分使用什么*列*的地方。我们正试图通过时间来观察预期寿命，所以这意味着`Year`将走向 x 轴，而`Avg_Life_Expec`将走向 y 轴。
 
-```
+```py
 life_expec %>%
   ggplot(aes(x = Year, y = Avg_Life_Expec))
 ```
@@ -135,7 +135,7 @@ life_expec %>%
 
 为了用 `ggplot()`创建一个线图，我们使用了`geom_line()`函数。`geom`是我们希望用来可视化数据的特定形状的名称。所有用于绘制这些形状的函数前面都有`geom`。`geom_line()`创建折线图，`geom_point()`创建散点图，等等。
 
-```
+```py
 life_expec %>%
   ggplot(aes(x = Year, y = Avg_Life_Expec)) +
   geom_line()
@@ -153,7 +153,7 @@ life_expec %>%
 
 目前，图形将列名作为两个轴的标签。这对于`Year`来说已经足够了，但是我们需要改变 y 轴。为了改变绘图的轴标签，我们可以使用`labs()`函数，并将其作为一个层添加到绘图上。`labs()`可以改变轴标签和标题，所以我们将在这里合并。
 
-```
+```py
 life_expec %>% # data layer
   ggplot(aes(x = Year, y = Avg_Life_Expec)) + # axes layer
   geom_line() + # geom layer

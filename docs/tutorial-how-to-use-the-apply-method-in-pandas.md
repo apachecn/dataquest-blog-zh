@@ -14,7 +14,7 @@ February 18, 2022![](img/8c81ee55db042b188cee7c7fedcf9b6c.png)
 
 创建一个系列对象有不同的方法(例如，我们可以用列表或字典初始化一个系列)。让我们定义一个包含两个列表的 Series 对象，这两个列表包含学生姓名作为索引，以厘米为单位的身高作为数据:
 
-```
+```py
 import pandas as pd
 import numpy as np
 from IPython.display import display
@@ -25,7 +25,7 @@ display(students)
 print(type(students))
 ```
 
-```
+```py
 Vik       180
 Mehdi     175
 Bella     168
@@ -39,14 +39,14 @@ dtype: int64
 
 `students`对象的数据类型是*系列*，因此我们可以使用`apply()`方法对其数据应用任何函数。让我们看看如何将学生的身高从厘米转换为英尺:
 
-```
+```py
 def cm_to_feet(h):
     return np.round(h/30.48, 2)
 
 print(students.apply(cm_to_feet))
 ```
 
-```
+```py
 Vik       5.91
 Mehdi     5.74
 Bella     5.51
@@ -62,7 +62,7 @@ dtype: float64
 
 首先，让我们使用下面的代码片段[创建一个包含公司员工个人详细信息的虚拟数据帧](https://www.dataquest.io/blog/tutorial-how-to-create-and-use-a-pandas-dataframe/):
 
-```
+```py
 data = pd.DataFrame({'EmployeeName': ['Callen Dunkley', 'Sarah Rayner', 'Jeanette Sloan', 'Kaycee Acosta', 'Henri Conroy', 'Emma Peralta', 'Martin Butt', 'Alex Jensen', 'Kim Howarth', 'Jane Burnett'],
                     'Department': ['Accounting', 'Engineering', 'Engineering', 'HR', 'HR', 'HR', 'Data Science', 'Data Science', 'Accounting', 'Data Science'],
                     'HireDate': [2010, 2018, 2012, 2014, 2014, 2018, 2020, 2018, 2020, 2012],
@@ -100,7 +100,7 @@ display(data)
 
 让我们假设人力资源团队想要发送一封邀请电子邮件，以对所有员工的友好问候开始(例如，*嘿，莎拉！*)。他们要求您创建两列来分别存储雇员的名和姓，以便于引用雇员的名。为此，我们可以使用一个 lambda 函数，该函数在用指定的分隔符将一个字符串拆分成一个列表之后，将它拆分成一个列表；`split()`方法的默认分隔符是任何空格。让我们看看代码:
 
-```
+```py
 data['FirstName'] = data['EmployeeName'].apply(lambda x : x.split()[0])
 data['LastName'] = data['EmployeeName'].apply(lambda x : x.split()[1])
 display(data)
@@ -127,7 +127,7 @@ display(data)
 
 要完成这项工作，第一步是定义一个函数，获取雇员的出生日期并返回他们的年龄:
 
-```
+```py
 from datetime import datetime, date
 
 def calculate_age(birthdate):
@@ -140,7 +140,7 @@ def calculate_age(birthdate):
 
 下一步是使用`apply()`方法对数据帧的`Birthdate`列应用函数，如下所示:
 
-```
+```py
 data['Age'] = data['Birthdate'].apply(calculate_age)
 display(data)
 ```
@@ -162,11 +162,11 @@ display(data)
 
 最后一步是计算雇员的平均年龄，如下所示:
 
-```
+```py
 print(data['Age'].mean())
 ```
 
-```
+```py
 32.8
 ```
 
@@ -176,20 +176,20 @@ print(data['Age'].mean())
 
 为了完成这项任务，首先，我们需要定义一个计算身体质量指数(身体质量指数)的函数。身体质量指数的公式是以千克为单位的重量除以以米为单位的高度的平方。因为员工的身高是以厘米为单位的，所以我们需要将身高除以 100 来获得以米为单位的身高。让我们实现这个函数:
 
-```
+```py
 def calc_bmi(weight, height):
     return np.round(weight/(height/100)**2, 2)
 ```
 
 下一步是在数据帧上应用函数:
 
-```
+```py
 data['BMI'] = data.apply(lambda x: calc_bmi(x['Weight'], x['Height']), axis=1)
 ```
 
 lambda 函数获取每一行的体重和身高值，然后对它们应用`calc_bmi()`函数来计算它们的 BMI。`axis=1`参数意味着迭代数据帧中的行。
 
-```
+```py
 display(data)
 ```
 
@@ -208,7 +208,7 @@ display(data)
 
 最后一步是根据身体质量指数度量对员工进行分类。低于 18.5 的身体质量指数是第一组，在 18.5 和 24.9 之间是第二组，在 25 和 29.9 之间是第三组，超过 30 是第四组。为了实现该解决方案，我们将定义一个返回各种身体质量指数指标的函数，然后将其应用于数据帧的`BMI`列，以查看每个员工属于哪个类别:
 
-```
+```py
 def indicator(bmi):
     if (bmi < 18.5):
         return 'Group One'
@@ -242,12 +242,12 @@ display(data)
 
 为了准备请求的信息，您需要对`HireDate`列应用下面的 lambda 函数，如果当前年份和雇佣年份之间的差值大于或等于十年，则返回`True`，否则返回`False`。
 
-```
+```py
 mask = data['HireDate'].apply(lambda x: date.today().year - x >= 10)
 print(mask)
 ```
 
-```
+```py
 0     True
 1    False
 2     True
@@ -265,7 +265,7 @@ Name: HireDate, dtype: bool
 
 为了显示合格的雇员，我们使用布尔掩码来过滤数据帧行。让我们运行下面的语句，看看结果:
 
-```
+```py
 display(data[mask])
 ```
 
@@ -279,7 +279,7 @@ display(data[mask])
 
 假设明天是母亲节，公司为所有有孩子的女员工策划了一份母亲节礼物。人力资源团队要求您准备一份有资格获得礼品的员工名单。为了完成这项任务，我们需要编写一个简单的 lambda 函数，它考虑到了`Sex`和`Kids`列，以提供所需的结果，如下所示:
 
-```
+```py
 data[data.apply(lambda x: True if x ['Gender'] == 'F' and x['Kids'] > 0 else False, axis=1)]
 ```
 

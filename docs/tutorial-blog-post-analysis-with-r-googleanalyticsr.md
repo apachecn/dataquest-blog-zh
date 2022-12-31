@@ -67,7 +67,7 @@ July 21, 2020![blog-data-analysis-with-r-googleanalytics-r](img/6b32da0a838f7ce8
 
 接下来，我们将加载该库，并使用`ga_auth()`函数通过 Google Analytics 帐户对其进行授权。
 
-```
+```py
 library(googleAnalyticsR)
 ga_auth()
 ```
@@ -76,7 +76,7 @@ ga_auth()
 
 一旦你完成了 Google Analytics 授权，我们就可以设置剩下的库并加载我们的博客文章了。我们还将使用`dplyr::mutate()`将 post_date 更改为一个日期类！
 
-```
+```py
 library(dplyr)
 library(lubridate)
 library(stringr)
@@ -94,7 +94,7 @@ blog_posts <- read.csv("articles.csv") %>%
 
 最后，要从您的 Google Analytics 帐户获取数据，您需要您想要访问的 Google Analytics 视图的 ID。`ga_account_list()`将返回您的可用帐户列表。
 
-```
+```py
 accounts <- ga_account_list()
 
 # select the view ID by view and property name, and store it for ease of use
@@ -110,7 +110,7 @@ view_id <- accounts$viewId[which(accounts$viewName == "All Web Site Data" & acco
 
 所以，让我们看看如何使用`googleAnalyticsR`向 Google Analytics API 发送请求。
 
-```
+```py
 google_analytics(view_id,
                   date_range = c(as.Date("2020-06-01"), as.Date("2020-06-30")),
                   metrics = c("pageviews"),
@@ -128,7 +128,7 @@ google_analytics(view_id,
 
 但是，在我们的例子中，我们只想检索特定页面的浏览量，因此我们需要使用维度过滤器在 pagePath 维度上进行过滤，如下所示:
 
-```
+```py
 page_filter <- dim_filter(dimension = "pagePath",
                           operator = "REGEXP",
                           expressions = "^dataquestmarketingsite.kinsta.cloud/blog/r-markdown-guide-cheatsheet/$")
@@ -136,13 +136,13 @@ page_filter <- dim_filter(dimension = "pagePath",
 
 为了在我们的请求中使用这个过滤器，googleAnalyticsR 希望我们创建一个 filter 子句——如果您想使用多维过滤器，这就是如何组合过滤器。但是在我们的例子中，我们只需要一个:
 
-```
+```py
 page_filter_clause <- filter_clause_ga4(list(page_filter))
 ```
 
 现在，让我们试着用这个过滤器发送一个响应:
 
-```
+```py
 google_analytics(view_id,
               date_range = c(as.Date("2020-07-01"), Sys.Date()),
               metrics = c("pageviews"),
@@ -169,7 +169,7 @@ google_analytics(view_id,
 
 这是所有东西放在一起的样子！
 
-```
+```py
 get_pageviews <- function(posts) {
 
   # set up dataframe to be returned, using the same variable names as our original dataframe
@@ -221,7 +221,7 @@ get_pageviews <- function(posts) {
 
 现在，我们将在我们的`blog_posts`数据帧上运行循环，并将结果合并到我们的`blog_posts`数据中。
 
-```
+```py
 recent_posts_first_week <- get_pageviews(blog_posts)
 recent_posts_first_week <- merge(blog_posts, recent_posts_first_week)
 
@@ -236,7 +236,7 @@ recent_posts_first_week
 
 为了进行演示，这里有一个 ggplot 条形图，显示了我们最近的 10 篇博文在发布后的第一周内的浏览量:
 
-```
+```py
 library(ggplot2)
 library(scales)
 

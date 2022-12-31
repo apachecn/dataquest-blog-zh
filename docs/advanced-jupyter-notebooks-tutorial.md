@@ -25,13 +25,13 @@ Jupyter 项目生命周期是现代数据科学和分析的核心。无论您是
 
 每个用户至少都会不时地受益于从他们的笔记本中直接与操作系统交互的能力。代码单元中以感叹号开头的任何一行都将作为 shell 命令执行。这在处理数据集或其他文件以及管理 Python 包时非常有用。举个简单的例子:
 
-```
+```py
 !echo Hello World!!
 pip freeze | grep pandas
 
 ```
 
-```
+```py
 
 Hello World!
 pandas==0.23.4
@@ -40,14 +40,14 @@ pandas==0.23.4
 
 还可以在 shell 命令中使用 Python 变量，方法是在前面加上一个与 bash 风格变量名一致的符号`$`。
 
-```
+```py
 
 message = 'This is nifty'
 !echo $message
 
 ```
 
-```
+```py
 
 This is nifty
 
@@ -61,11 +61,11 @@ Magics 是内置于 IPython 内核中的便捷命令，它使执行特定任务�
 
 有两种魔法:线魔法和细胞魔法。它们分别作用于单个细胞株，也可以分布于多个细胞株或整个细胞。要查看可用的魔术，您可以执行以下操作:
 
-```
+```py
 %lsmagic
 ```
 
-```
+```py
 Available line magics:
 
 Available cell magics:%%! %%HTML %%SVG %%bash %%capture %%cmd %%debug %%file %%html %%javascript %%js %%latex %%markdown %%perl %%prun %%pypy %%python %%python2 %%python3 %%ruby %%script %%sh %%svg %%sx %%system %%time %%timeit %%writefile
@@ -82,11 +82,11 @@ Automagic is ON, % prefix IS NOT needed for line magics.
 
 首先，`%autosave`魔术让你改变你的笔记本多久自动保存到它的检查点文件。
 
-```
+```py
 %autosave 60
 ```
 
-```
+```py
 Autosaving every 60 seconds
 ```
 
@@ -96,7 +96,7 @@ Autosaving every 60 seconds
 
 对于数据科学家来说，最常见的线条魔法之一当然是`%matplotlib`，它当然是和最流行的 Python 绘图库 [Matplotlib](https://matplotlib.org/) 一起使用。
 
-```
+```py
 %matplotlib inline
 ```
 
@@ -108,14 +108,14 @@ Autosaving every 60 seconds
 
 更有经验的读者可能会担心没有调试器的 Jupyter 笔记本的最终功效。但是不要害怕！IPython 内核有自己的 Python 调试器接口[、pdb](https://docs.python.org/3/library/pdb.html) ，以及几个在笔记本上使用它进行调试的选项。执行`%pdb` line magic 将打开/关闭笔记本中所有单元格的 pdb on error 自动触发。
 
-```
+```py
 
 
 raise NotImplementedError()
 
 ```
 
-```
+```py
 
 Automatic pdb calling has been turned ON
 --------------------------------------------------------------------
@@ -140,14 +140,14 @@ NotImplementedError:
 
 有时在研究中，为竞争方法提供运行时比较是很重要的。IPython 提供了两个时序魔法`%time`和`%timeit`，每个都有行和单元模式。前者只是对单个语句或单元格的执行进行计时，这取决于它是用于行模式还是单元模式。
 
-```
+```py
 
 n = 1000000
 
 
 ```
 
-```
+```py
 
 Wall time: 32.9 ms
 499999500000
@@ -156,7 +156,7 @@ Wall time: 32.9 ms
 
 在单元模式下:
 
-```
+```py
 
 
 total = 0
@@ -165,7 +165,7 @@ total += i
 
 ```
 
-```
+```py
 
 Wall time: 95.8 ms
 
@@ -173,11 +173,11 @@ Wall time: 95.8 ms
 
 `%timeit`与`%time`的显著区别在于它多次运行指定的代码并计算平均值。您可以使用`-n`选项指定运行次数，但是如果没有通过，将根据计算时间选择一个合适的值。
 
-```
+```py
 %timeit sum(range(n))
 ```
 
-```
+```py
 34.9 ms ± 276 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
 ```
 
@@ -187,7 +187,7 @@ Wall time: 95.8 ms
 
 例如，要在笔记本中呈现 HTML:
 
-```
+```py
 %%HTML
 This is <em>really</em> neat!
 ```
@@ -196,7 +196,7 @@ This is <em>really</em> neat!
 
 同样， [LaTeX](https://www.latex-project.org/) 是一种显示数学表达式的标记语言，可以直接使用:
 
-```
+```py
 %%latex
 Some important equations:$E = mc^2$
 $e^{i pi} = -1$
@@ -233,7 +233,7 @@ $e^{i pi} = -1$
 
 将[记录到一个外部文件](https://stackoverflow.com/a/28195348/604687)也很容易，如果你从命令行执行你的笔记本，这可能会派上用场，后面会讨论。只是用一个`FileHandler`代替一个`StreamHandler`:
 
-```
+```py
 handler = logging.FileHandler(filename='important_log.log', mode='a')
 ```
 
@@ -245,7 +245,7 @@ handler = logging.FileHandler(filename='important_log.log', mode='a')
 
 您可以从命令行安装和设置它，如下所示:
 
-```
+```py
 
 pip install jupyter_contrib_nbextensions
 jupyter contrib nbextension install --user
@@ -264,7 +264,7 @@ Jupyter 笔记本用户进行的最常见的练习之一是制作情节。但是
 
 让我们来看一个例子。首先，我们将导入我们的库并加载一些数据。
 
-```
+```py
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -274,7 +274,7 @@ data = sns.load_dataset("tips")
 
 Seaborn 提供了一些内置的[样本数据集](https://github.com/mwaskom/seaborn-data)，用于文档、测试和学习目的，我们将在这里使用它们。这个“tips”数据集是一个 pandas `DataFrame`,列出了酒吧或餐馆的一些账单信息。我们可以看到账单总额、小费、付款人的性别以及其他一些属性。
 
-```
+```py
 data.head()
 ```
 
@@ -288,7 +288,7 @@ data.head()
 
 我们可以很容易地在 Matplotlib 中绘制出`total_bill` vs `tip`。
 
-```
+```py
 plt.scatter(data.total_bill, data.tip);
 ```
 
@@ -296,7 +296,7 @@ plt.scatter(data.total_bill, data.tip);
 
 在 Seaborn 绘图也一样简单！只需设置一个样式，你的 Matplotlib 图就会自动转换。
 
-```
+```py
 sns.set(style="darkgrid")plt.scatter(data.total_bill, data.tip);
 ```
 
@@ -306,7 +306,7 @@ sns.set(style="darkgrid")plt.scatter(data.total_bill, data.tip);
 
 但是，我们并没有止步于样式化:由于 Seaborn 与 pandas 数据结构紧密集成，它自己的散点图功能释放了额外的特性。
 
-```
+```py
 sns.scatterplot(x="total_bill", y="tip", data=data);
 ```
 
@@ -314,7 +314,7 @@ sns.scatterplot(x="total_bill", y="tip", data=data);
 
 现在，我们为每个数据点获得了默认的轴标签和改进的默认标记。Seaborn 还可以根据数据中的类别自动分组，为您的绘图添加另一个维度。让我们根据买单的群体是否吸烟来改变标记的颜色。
 
-```
+```py
 sns.scatterplot(x="total_bill", y="tip", hue="smoker", data=data);
 ```
 
@@ -322,7 +322,7 @@ sns.scatterplot(x="total_bill", y="tip", hue="smoker", data=data);
 
 这真是太棒了！事实上，我们可以做得更深入，但是这里的细节太多了。作为品尝者，让我们根据买单的人数来区分吸烟者和非吸烟者。
 
-```
+```py
 sns.scatterplot(x="total_bill", y="tip", hue="size", style="smoker", data=data);
 ```
 
@@ -342,28 +342,28 @@ Jupyter 允许您将代码片段保存为可执行宏，以便在所有笔记本
 
 宏只是代码，所以它们可以包含在执行前必须定义的变量。让我们定义一个来使用。
 
-```
+```py
 name = 'Tim'
 ```
 
 现在，要定义一个宏，我们首先需要一些代码来使用。
 
-```
+```py
 print('Hello, %s!' % name)
 ```
 
-```
+```py
 Hello, Tim!
 ```
 
 我们使用`%macro`和`%store`魔法来设置一个可以在所有笔记本上重复使用的宏。宏名通常以双下划线开头，以区别于其他变量，如下所示:
 
-```
+```py
 %macro -q __hello_world 23
 \%store __hello_world
 ```
 
-```
+```py
 Stored '__hello_world' (Macro)
 ```
 
@@ -371,33 +371,33 @@ Stored '__hello_world' (Macro)
 
 要从存储中加载宏，我们只需运行:
 
-```
+```py
 %store -r __hello_world
 ```
 
 为了执行它，我们只需要运行一个只包含宏名的单元格。
 
-```
+```py
 __hello_world
 ```
 
-```
+```py
 Hello, Tim!
 ```
 
 让我们修改我们在宏中使用的变量。
 
-```
+```py
 name = 'Ben'
 ```
 
 当我们现在运行宏时，我们修改后的值被选中。
 
-```
+```py
 __hello_world
 ```
 
-```
+```py
 Hello, Ben!
 ```
 
@@ -415,7 +415,7 @@ Hello, Ben!
 
 但是已经说得够多了，让我们来看一个例子！如果我们创建一个包含以下代码的文件`imports.py`:
 
-```
+```py
 
 
 import pandas as pd
@@ -425,13 +425,13 @@ import matplotlib.pyplot as plt
 
 我们可以简单地通过编写一个单行代码单元格来加载它，就像这样:
 
-```
+```py
 %load imports.py
 ```
 
 执行此操作将用加载的文件替换单元格内容。
 
-```
+```py
 
 # %load imports.py
 
@@ -445,7 +445,7 @@ import matplotlib.pyplot as plt
 
 `%run`魔术是相似的，除了它将执行代码和显示任何输出，包括 Matplotlib 图。您甚至可以这样执行整个笔记本，但是请记住，并不是所有代码都真正属于笔记本。让我们来看看这个魔术的例子；考虑一个包含以下简短脚本的文件。
 
-```
+```py
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -458,13 +458,13 @@ plt.show()
 
 当通过`%run`执行时，我们得到以下结果。
 
-```
+```py
 %run triangle_hist.py
 ```
 
 ![Histogram](img/cafd3282cea48950a0b518204d1329d7.png)
 
-```
+```py
 <matplotlib.figure.Figure at 0x2ace50fe860>
 ```
 
@@ -482,13 +482,13 @@ Jupyter 提供了一个命令行工具，它可以以最简单的形式用于文
 
 稍后将会清楚`nbconvert`如何让开发者创建他们自己的自动化报告管道，但是首先让我们看一些简单的例子。基本语法是:
 
-```
+```py
 jupyter nbconvert --to <format> notebook.ipynb
 ```
 
 例如，要创建 PDF，只需编写:
 
-```
+```py
 jupyter nbconvert --to pdf notebook.ipynb
 ```
 
@@ -496,13 +496,13 @@ jupyter nbconvert --to pdf notebook.ipynb
 
 默认情况下，`nbconvert`不执行你的笔记本代码单元格。但是如果你也愿意，你可以指定 [`--execute`](https://nbconvert.readthedocs.io/en/latest/execute_api.html#executing-notebooks-from-the-command-line) 标志。
 
-```
+```py
 jupyter nbconvert --to pdf --execute notebook.ipynb
 ```
 
 一个常见的障碍是，运行笔记本时遇到的任何错误都会暂停执行。幸运的是，您可以加入`--allow-errors`标志来指示`nbconvert`将错误消息输出到单元格输出中。
 
-```
+```py
 jupyter nbconvert --to pdf --execute --allow-errors notebook.ipynb
 ```
 
@@ -514,19 +514,19 @@ jupyter nbconvert --to pdf --execute --allow-errors notebook.ipynb
 
 假设我们想要为不同的日期生成几个报告；在我们笔记本的第一个单元格中，我们可以从一个环境变量中提取这些信息，我们将其命名为`REPORT_DATE`。`%env` line magic 使得将环境变量的值赋给 Python 变量变得很容易。
 
-```
+```py
 report_date = %env REPORT_DATE
 ```
 
 然后，要运行笔记本(在 UNIX 系统上),我们可以这样做:
 
-```
+```py
 REPORT_DATE=2018-01-01 jupyter nbconvert --to html --execute report.ipynb
 ```
 
 因为所有的环境变量都是字符串，所以我们必须解析它们以获得我们想要的数据类型。例如:
 
-```
+```py
 
 A_STRING="Hello, Tim!"
 AN_INT=42
@@ -536,7 +536,7 @@ A_DATE=2017-12-31 jupyter nbconvert --to html --execute example.ipynb
 
 我们简单地解析如下:
 
-```
+```py
 
 import datetime as dt
 the_str = %env A_STRING
@@ -555,7 +555,7 @@ my_date = dt.datetime.strptime(date_str, '%Y-%m-%d')
 
 如果你想设置你的环境变量并在 Windows 上用一行代码运行你的笔记本，那就没那么简单了:
 
-```
+```py
 cmd /C "set A_STRING=Hello, Tim!&& set AN_INT=42 && set A_FLOAT=3.14 && set A_DATE=2017-12-31&& jupyter nbconvert --to html --execute example.ipynb"
 ```
 
@@ -569,7 +569,7 @@ Papermill 将一个新的单元注入到您的笔记本中，该单元实例化�
 
 我们之前生成 HTML 文档的例子现在变成了:
 
-```
+```py
 papermill example.ipynb example-parameterised.ipynb -p my_string "Hello, Tim!" -p my_int 3 -p my_float 3.1416 -p a_date 2017-12-31
 jupyter nbconvert example-parameterised.ipynb --to html --output example.html
 ```
@@ -578,7 +578,7 @@ jupyter nbconvert example-parameterised.ipynb --to html --output example.html
 
 现在，我们的笔记本电脑设置简单多了:
 
-```
+```py
 
 # my_string, my_int, and my_float are already defined!
 import datetime as dt
@@ -594,7 +594,7 @@ my_date = dt.datetime.strptime(a_date, '%Y-%m-%d')
 
 如果您正在寻找笔记本的特定外观，您可以创建一个外部 CSS 文件并用 Python 加载它。
 
-```
+```py
 
 from IPython.display import HTML
 HTML('<style>{}</style>'.format(open('custom.css').read()))
@@ -602,7 +602,7 @@ HTML('<style>{}</style>'.format(open('custom.css').read()))
 
 这是因为 IPython 的 [HTML](https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html#IPython.display.HTML) 对象作为原始 HTML 直接插入到单元格输出 div 中。实际上，这相当于编写一个 HTML 单元格:
 
-```
+```py
 
 
 <style>.css-example { color: darkcyan; }</style>
@@ -610,7 +610,7 @@ HTML('<style>{}</style>'.format(open('custom.css').read()))
 
 为了证明这一点，让我们使用另一个 HTML 单元格。
 
-```
+```py
 %%html
 <span class='css-example'>This text has a nice colour</span>
 ```
@@ -631,7 +631,7 @@ GitHub 上还发布了[各种](https://github.com/nsonnad/base16-ipython-noteboo
 
 虽然隐藏笔记本中有助于其他人理解的部分是不好的做法，但你的一些单元格对读者来说可能并不重要。例如，您可能希望隐藏一个向笔记本添加 CSS 样式的单元格，或者，如果您希望隐藏默认的和注入的 Papermill 参数，您可以修改您的`nbconvert`调用，如下所示:
 
-```
+```py
 jupyter nbconvert example-parameterised.ipynb --to html --output example.html --TagRemovePreprocessor.remove_cell_tags="{'parameters', 'injected-parameters'}"
 ```
 
@@ -641,29 +641,29 @@ jupyter nbconvert example-parameterised.ipynb --to html --output example.html --
 
 数据库是数据科学家的面包和黄油，所以平滑你的数据库和笔记本之间的接口将是一个真正的福音。Catherine Devlin 的 [IPython SQL magic](https://github.com/catherinedevlin/ipython-sql) 扩展让你可以用最少的样板文件将 SQL 查询直接写入代码单元，也可以将结果直接读入 pandas 数据帧。首先，继续:
 
-```
+```py
 pip install ipython-sql
 ```
 
 安装好软件包后，我们通过在代码单元中执行以下魔术来开始:
 
-```
+```py
 %load_ext sql
 ```
 
 这将加载我们刚刚安装到笔记本中的`ipython-sql`扩展。让我们连接到一个数据库！
 
-```
+```py
 %sql sqlite://
 ```
 
-```
+```py
 'Connected: @None'
 ```
 
 这里，为了方便起见，我们只是连接到一个临时的内存数据库，但是您可能希望指定适合您的数据库的细节。连接字符串遵循 [SQLAlchemy 标准](https://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls):
 
-```
+```py
 dialect+driver://username:[email protected]:port/database
 ```
 
@@ -673,12 +673,12 @@ dialect+driver://username:[email protected]:port/database
 
 接下来，让我们从之前使用的 Seaborn 的 tips 数据集快速填充我们的数据库。
 
-```
+```py
  tips = sns.load_dataset("tips")
 \%sql PERSIST tips 
 ```
 
-```
+```py
 
 * sqlite://
 'Persisted tips'
@@ -686,14 +686,14 @@ dialect+driver://username:[email protected]:port/database
 
 我们现在可以在数据库上执行查询。注意，我们可以对多行 SQL 使用多行单元格魔术`%%`。
 
-```
+```py
 
 
 SELECT * FROM tips
 LIMIT 3
 ```
 
-```
+```py
 
 * sqlite://
 Done.
@@ -707,14 +707,14 @@ Done.
 
 您可以通过在查询前加上冒号，使用局部范围的变量来参数化查询。
 
-```
+```py
 
 meal_time = 'Dinner'
 
 
 ```
 
-```
+```py
 
 * sqlite://
 Done.
@@ -728,7 +728,7 @@ Done.
 
 我们的查询的复杂性不受扩展的限制，因此我们可以轻松地编写更具表达力的查询，比如查找账单总额大于平均值的所有结果。
 
-```
+```py
 
 result = %sql SELECT * FROM tips WHERE total_bill > (SELECT AVG(total_bill) FROM tips)
 larger_bills = result.DataFrame()
@@ -736,7 +736,7 @@ larger_bills.head(3)
 
 ```
 
-```
+```py
 
 * sqlite://
 Done.
@@ -751,7 +751,7 @@ Done.
 
 如您所见，转换成熊猫`DataFrame`也很容易，这使得从我们的查询中绘制结果变得轻而易举。让我们来看看 95%的置信区间。
 
-```
+```py
 
 sns.lmplot(x="total_bill", y="tip", hue="smoker", data=larger_bills);
 

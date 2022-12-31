@@ -99,7 +99,7 @@ March 26, 2018
 
 这里有一个链接指向最终的电子表格。将其下载为 CSV 文件并加载到 pandas 数据帧中，以处理包含道岔编号缺失值的行的第一个问题。
 
-```
+```py
 import pandas as pd
 all_marches = pd.read_csv("FinalSocialMedia.csv")
 all_marches
@@ -120,11 +120,11 @@ all_marches
 
 让我们计算每列缺少值的行数:
 
-```
+```py
 all_marches.isnull().sum()
 ```
 
-```
+```py
  City_State     0
 State          2
 Country        1
@@ -136,7 +136,7 @@ dtype: int64
 
 然后，调查`State`列的两行缺失值:
 
-```
+```py
  all_marches[all_marches['State'].isnull()] 
 ```
 
@@ -146,12 +146,12 @@ dtype: int64
 
 看起来我们还发现了`Country`列缺少值的行。让我们删除这两行，因为一行是遗漏的投票数，另一行是在线发生的(这限制了我们在地图上可视化)。
 
-```
+```py
  all_marches = all_marches.drop([149, 665], axis=0)
 all_marches.isnull().sum()
 ```
 
-```
+```py
  City_State     0
 State          0
 Country        0
@@ -163,12 +163,12 @@ dtype: int64
 
 现在我们只需要处理包含`Low`和`High`列缺失值的行。包含一列缺失值的行很可能也包含另一列的缺失值。尝试删除`Low`列中所有缺少值的行，看看是否能处理那些缺少`High`值的行:
 
-```
+```py
  low_null = all_marches[~all_marches['Low'].isnull()]
 low_null.isnull().sum()
 ```
 
-```
+```py
  City_State    0
 State         0
 Country       0
@@ -180,7 +180,7 @@ dtype: int64
 
 看来我们的假设是正确的！我们可以删除主数据帧的那些行，并将结果分配给新的数据帧。
 
-```
+```py
 sm_marches = all_marches[~all_marches['Low'].isnull()]
 ```
 

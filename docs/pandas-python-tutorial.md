@@ -18,7 +18,7 @@ Python 的 pandas 库是使 Python 成为数据分析的伟大编程语言的原
 
 我们要做的第一步是读入数据。数据存储为一个[逗号分隔值](https://en.wikipedia.org/wiki/Comma-separated_values)，或 csv 文件，其中每行由一个新行分隔，每列由一个逗号(`,`)分隔。以下是`ign.csv`文件的前几行:
 
-```
+```py
  ,score_phrase,title,url,platform,score,genre,editors_choice,release_year,release_month,release_day
 0,Amazing,LittleBigPlanet PS Vita,/games/littlebigplanet-vita/vita-98907,PlayStation Vita,9.0,Platformer,Y,2012,9,12
 1,Amazing,LittleBigPlanet PS Vita -- Marvel Super Hero Edition,/games/littlebigplanet-ps-vita-marvel-super-hero-edition/vita-20027059,PlayStation Vita,9.0,Platformer,Y,2012,9,12
@@ -48,7 +48,7 @@ Python 的 pandas 库是使 Python 成为数据分析的伟大编程语言的原
 *   导入`pandas`库。我们将其重命名为`pd`，这样打字速度会更快。这是数据分析和数据科学中的标准约定，你会经常在别人的代码中看到熊猫被导入为`pd`。
 *   将`ign.csv`读入一个数据帧，并将结果赋给一个名为`reviews`的新变量，这样我们就可以使用`reviews`来引用我们的数据。
 
-```
+```py
  import pandas as pd
 reviews = pd.read_csv("ign.csv") 
 ```
@@ -60,7 +60,7 @@ reviews = pd.read_csv("ign.csv")
 
 我们将使用`head`方法来查看`reviews`中的内容:
 
-```
+```py
 reviews.head()
 ```
 
@@ -74,11 +74,11 @@ reviews.head()
 
 我们还可以参观熊猫。DataFrame.shape 属性查看多行多列在`reviews`:
 
-```
+```py
 reviews.shape
 ```
 
-```
+```py
 (18625, 11)
 ```
 
@@ -94,7 +94,7 @@ reviews.shape
 
 之前，我们使用了`head`方法来打印`reviews`的前`5`行。我们可以用[熊猫完成同样的事情。DataFrame.iloc](https://pandas.pydata.org/pandas-docs/version/0.17.0/generated/pandas.DataFrame.iloc.html) 方法。`iloc`方法允许我们按位置检索行和列。为了做到这一点，我们需要指定我们想要的行的位置，以及我们想要的列的位置。下面的代码将通过选择数据集中的第 0 到第 5 行以及所有列来复制我们的`reviews.head()`的结果:
 
-```
+```py
 reviews.iloc[0:5,:]
 ```
 
@@ -118,7 +118,7 @@ reviews.iloc[0:5,:]
 
 按位置步进非常类似于 [NumPy](https://www.numpy.org/) 步进。如果你想了解更多，可以阅读[我们的 NumPy 教程](https://www.dataquest.io/blog/numpy-tutorial-python/)。现在我们知道了如何按位置索引，让我们删除第一列，它没有任何有用的信息:
 
-```
+```py
  reviews = reviews.iloc[:,1:]
 reviews.head()
 ```
@@ -137,7 +137,7 @@ reviews.head()
 
 我们可以用[熊猫做标签。DataFrame.loc](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.loc.html) 方法，它允许我们使用标签而不是位置进行索引。我们可以像这样使用`loc`方法显示`reviews`的前五行:
 
-```
+```py
 reviews.loc[0:5,:]
 ```
 
@@ -152,11 +152,11 @@ reviews.loc[0:5,:]
 
 以上其实看起来和`reviews.iloc[0:5,:]`没有太大区别。这是因为虽然行标签可以采用任何值，但是我们的行标签与位置完全匹配。您可以在上表的最左侧看到行标签(它们以粗体显示)。您也可以通过访问数据帧的[索引](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html)属性来查看它们。我们将显示`reviews`的行索引:
 
-```
+```py
 reviews.index
 ```
 
-```
+```py
 Int64Index([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, ...], dtype='int64')
 ```
 
@@ -165,7 +165,7 @@ Int64Index([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 *   获取`reviews`的第`10`行到第`20`行，并将结果赋给`some_reviews`。
 *   显示`some_reviews`的前`5`行。
 
-```
+```py
 some_reviews = reviews.iloc[10:20,]
 some_reviews.head()
 ```
@@ -180,11 +180,11 @@ some_reviews.head()
 
 如上所述，在`some_reviews`中，行索引从`10`开始，到`20`结束。因此，尝试将`loc`与低于`10`或高于`20`的数字一起使用会导致错误:
 
-```
+```py
 some_reviews.loc[9:21,:]
 ```
 
-```
+```py
  ---------------------------------------------------------------------------
 KeyError Traceback (most recent call last)
 <ipython -input-76-5378b774c9a7> in <module>()
@@ -219,12 +219,12 @@ KeyError: 'start bound [9] is not the [index]'
 
 正如我们前面提到的，当您处理数据时，列标签可以使生活变得更加容易。我们可以在`loc`方法中指定列标签，通过标签而不是位置来检索列。
 
-```
+```py
 reviews.loc
 [:5,"score"]
 ```
 
-```
+```py
 0 9.0
 1 9.0
 2 8.5
@@ -236,7 +236,7 @@ Name: score, dtype: float64
 
 我们还可以通过传入一个列表来一次指定多个列:
 
-```
+```py
 reviews.loc[:5,["score", "release_year"]]
 ```
 
@@ -258,11 +258,11 @@ reviews.loc[:5,["score", "release_year"]]
 
 还有第三种更简单的方法来检索整个列。我们可以在方括号中指定列名，就像字典一样:
 
-```
+```py
 reviews["score"]
 ```
 
-```
+```py
 0 9.0
 1 9.0
 2 8.5
@@ -299,7 +299,7 @@ Name: score, Length: 18625, dtype: float64
 
 我们也可以通过这种方法使用列列表:
 
-```
+```py
 reviews[["score", "release_year"]]
 ```
 
@@ -373,22 +373,22 @@ reviews[["score", "release_year"]]
 
 我们可以验证单个列是一个系列:
 
-```
+```py
 type(reviews["score"])
 ```
 
-```
+```py
 pandas.core.series.Series
 ```
 
 我们可以手动创建一个系列来更好地理解它是如何工作的。为了创建一个系列，我们在实例化 Series 对象时将一个 list 或 NumPy 数组传递给它:
 
-```
+```py
 s1 = pd.Series([1,2])
 s1
 ```
 
-```
+```py
  0 1
 1 2
 dtype: int64
@@ -396,12 +396,12 @@ dtype: int64
 
 系列可以包含任何类型的数据，包括混合类型的数据。在这里，我们创建一个包含字符串对象的系列:
 
-```
+```py
 s2 = pd.Series(["Boris Yeltsin", "Mikhail Gorbachev"])
 s2
 ```
 
-```
+```py
  0 Boris Yeltsin
 1 Mikhail Gorbachev
 dtype: object
@@ -415,7 +415,7 @@ dtype: object
 
 `s1`为第一行，`s2`为第二行:
 
-```
+```py
 pd.DataFrame([s1,s2])
 ```
 
@@ -426,7 +426,7 @@ pd.DataFrame([s1,s2])
 
 我们也可以用列表来完成同样的事情。每个内部列表都被视为结果数据帧中的一行:
 
-```
+```py
 pd.DataFrame(
     [
     [1,2],
@@ -442,7 +442,7 @@ pd.DataFrame(
 
 我们可以在创建数据帧时指定列标签:
 
-```
+```py
  pd.DataFrame(
     [
     [1,2],
@@ -459,7 +459,7 @@ pd.DataFrame(
 
 以及行标签(索引):
 
-```
+```py
 frame = pd.DataFrame(
     [
     [1,2],
@@ -478,7 +478,7 @@ frame
 
 还要注意，缩进和分隔线不是必需的。我们以这种方式编写代码是为了让它更容易解析，但是您经常会遇到把它写成一行的情况。例如，下面的代码将产生与我们在本段上表中看到的完全相同的结果:
 
-```
+```py
  frame = pd.DataFrame([[1,2],["Boris Yeltsin", "Mikhail Gorbachev"]],index=["row1", "row2"],columns=["column1", "column2"])
 
 frame
@@ -486,11 +486,11 @@ frame
 
 无论如何，一旦我们添加了标签，我们就可以使用它们来索引数据帧:
 
-```
+```py
 frame.loc["row1":"row2", "column1"]
 ```
 
-```
+```py
  row1 1
 row2 Boris Yeltsin
 Name: column1, dtype: object
@@ -498,7 +498,7 @@ Name: column1, dtype: object
 
 如果我们将字典传递给`DataFrame`构造函数，我们可以跳过指定`columns`关键字参数。这将自动设置列名:
 
-```
+```py
  frame = pd.DataFrame(
     {
     "column1": [1, "Boris Yeltsin"],
@@ -517,21 +517,21 @@ frame
 
 正如我们前面提到的，熊猫数据帧中的每一列都是一个系列对象:
 
-```
+```py
 type(reviews["title"])
 ```
 
-```
+```py
 pandas.core.series.Series
 ```
 
 我们可以在一个系列对象上调用我们可以在一个数据帧上调用的大多数相同的方法，包括`head`:
 
-```
+```py
 reviews["title"].head()
 ```
 
-```
+```py
  0 LittleBigPlanet PS Vita
 1 LittleBigPlanet PS Vita -- Marvel Super Hero E...
 2 Splice: Tree of Life
@@ -542,21 +542,21 @@ Name: title, dtype: object
 
 Pandas 系列和 DataFrames 也有其他方法使计算更简单。例如，我们可以用熊猫。Series.mean 求数列平均值的方法:
 
-```
+```py
 reviews["score"].mean()
 ```
 
-```
+```py
 6.950459060402685
 ```
 
 我们也可以称类似的动物为熊猫。DataFrame.mean 方法，默认情况下，该方法将查找 DataFrame 中每个数值列的平均值:
 
-```
+```py
 reviews.mean()
 ```
 
-```
+```py
  score 6.950459
 release_year 2006.515329
 release_month 7.138470
@@ -566,11 +566,11 @@ dtype: float64
 
 我们可以将关键字参数`axis`修改为`mean`，以便计算每行或每列的平均值。默认情况下，`axis`等于`0`，将计算每列的平均值。我们也可以将它设置为`1`来计算每行的平均值。请注意，这将只计算每行中数值的平均值:
 
-```
+```py
 reviews.mean(axis=1)
 ```
 
-```
+```py
 0 510.500
 1 510.500
 2 510.375
@@ -616,7 +616,7 @@ Length: 18625, dtype: float64
 
 例如，我们可以使用`corr`方法来查看是否有任何列与`score`相关。这将告诉我们最近发布的游戏是否获得了更高的评论(`release_year`)，或者接近年底发布的游戏是否得分更高(`release_month`):
 
-```
+```py
 reviews.corr()
 ```
 
@@ -633,11 +633,11 @@ reviews.corr()
 
 我们还可以用 pandas 对 Python 中的 Series 或 DataFrame 对象进行数学运算。例如，我们可以将`score`列中的每个值除以`2`来将刻度从`0`–`10`切换到`0`–`5`:
 
-```
+```py
 reviews["score"] / 2
 ```
 
-```
+```py
 0 4.50
 1 4.50
 2 4.25
@@ -681,12 +681,12 @@ Name: score, Length: 18625, dtype: float64
 
 我们可以从做一个比较开始。该比较将序列中的每个值与指定值进行比较，然后生成一个充满布尔值的序列，指示比较的状态。例如，我们可以看到哪些行的`score`值高于`7`:
 
-```
+```py
  score_filter = reviews["score"] > 7
 score_filter
 ```
 
-```
+```py
  0 True
 1 True
 2 True
@@ -722,7 +722,7 @@ Name: score, Length: 18625, dtype: bool
 
 一旦我们有了一个布尔序列，我们就可以用它来选择数据帧中包含值`True`的行。因此，我们只能在`reviews`中选择`score`大于`7`的行:
 
-```
+```py
  filtered_reviews = reviews[score_filter]
 filtered_reviews.head()
 ```
@@ -743,7 +743,7 @@ filtered_reviews.head()
 *   对`reviews`应用过滤器，只获取我们想要的行。
 *   使用`head`方法打印`filtered_reviews`的前`5`行。
 
-```
+```py
  xbox_one_filter = (reviews["score"] > 7) & (reviews["platform"] == "Xbox One")
 filtered_reviews = reviews[xbox_one_filter]
 filtered_reviews.head() 
@@ -771,11 +771,11 @@ filtered_reviews.head()
 *   过滤`reviews`以仅包含关于`Xbox One`的数据。
 *   绘制`score`列。
 
-```
+```py
  reviews[reviews["platform"] == "Xbox One"]["score"].plot(kind="hist")
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10c9c5438>
 ```
 
@@ -783,11 +783,11 @@ filtered_reviews.head()
 
 我们也可以对`PS4`做同样的事情:
 
-```
+```py
 reviews[reviews["platform"] == "PlayStation 4"]["score"].plot(kind="hist")
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10c9e0e80>
 ```
 

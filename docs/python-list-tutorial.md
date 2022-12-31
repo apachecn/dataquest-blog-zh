@@ -62,7 +62,7 @@ November 15, 2019
 
 现在让我们创建五个列表，数据集中的每一行都有一个列表:
 
-```
+```py
 row_1 = ['Facebook', 0.0, 'USD', 2974676, 3.5]
 row_2 = ['Instagram', 0.0, 'USD', 2161558, 4.5]
 row_3 = ['Clash of Clans', 0.0, 'USD', 2130805, 4.5]
@@ -120,7 +120,7 @@ row_5 = ['Pandora - Music & Radio', 0.0, 'USD', 1126879, 4.0]
 
 让我们使用列表索引从前三行中提取评级数量，然后对它们进行平均:
 
-```
+```py
 ratings_1 = row_1[3]
 ratings_2 = row_2[3]
 ratings_3 = row_3[3]
@@ -131,7 +131,7 @@ average = total / 3
 print(average)
 ```
 
-```
+```py
 2422346.3333333335
 
 ```
@@ -161,7 +161,7 @@ print(average)
 
 让我们使用负索引从前三行的每一行中提取用户评级(最后一个值),然后对它们进行平均。
 
-```
+```py
 rating_1 = row_1[-1]
 rating_2 = row_2[-1]
 rating_3 = row_3[-1]
@@ -172,7 +172,7 @@ average_rating = total_rating / 3
 print(average)
 ```
 
-```
+```py
 2422346.3333333335
 
 ```
@@ -218,36 +218,36 @@ print(average)
 
 让我们看看如何从第一行中提取前四个元素(带有关于脸书的数据):
 
-```
+```py
 first_4_fb = row_1[:4]
 print(first_4_fb)
 ```
 
-```
+```py
 ['Facebook', 0.0, 'USD', 2974676]
 
 ```
 
 同一行的最后三个元素:
 
-```
+```py
 last_3_fb = row_1[-3:]
 print(last_3_fb)
 ```
 
-```
+```py
 ['USD', 2974676, 3.5]
 
 ```
 
 第五行的第三和第四个元素(关于潘多拉的数据):
 
-```
+```py
 pandora_3_4 = row_5[2:4]
 print(pandora_3_4)
 ```
 
-```
+```py
 ['USD', 1126879]
 
 ```
@@ -297,12 +297,12 @@ print(pandora_3_4)
 
 让我们将五个单独的列表转换成一个列表列表:
 
-```
+```py
 app_data_set = [row_1, row_2, row_3, row_4, row_5]
 print(app_data_set)
 ```
 
-```
+```py
 [['Facebook', 0.0, 'USD', 2974676, 3.5],
  ['Instagram', 0.0, 'USD', 2161558, 4.5],
  ['Clash of Clans', 0.0, 'USD', 2130805, 4.5],
@@ -366,14 +366,14 @@ print(app_data_set)
 
 让我们使用这种技术来打印每个应用程序的名称和评级:
 
-```
+```py
 for each_list in app_data_set:
     name = each_list[0]
     rating = each_list[-1]
     print(name, rating)
 ```
 
-```
+```py
 Facebook 3.5
 Instagram 4.5
 Clash of Clans 4.5
@@ -418,7 +418,7 @@ Pandora - Music & Radio 4.0
 
 上图中，我们创建了一种对列表中的数字求和的方法。我们可以使用这种技术来总结数据集中的评分。一旦我们有了总和，我们只需要除以收视率的数量就可以得到平均值。
 
-```
+```py
 rating_sum = 0
 for row in app_data_set:
     rating = row[-1]
@@ -428,7 +428,7 @@ avg_rating = rating_sum / len(app_data_set)
 print(avg_rating)
 ```
 
-```
+```py
 4.2
 
 ```
@@ -462,14 +462,14 @@ print(avg_rating)
 
 我们还可以使用`append()`通过将数据作为列表追加来将另一行添加到我们的列表中。让我们看看它是如何工作的:
 
-```
+```py
 row_6 = ['Pinterest', 0.0, 'USD', 1061624, 4]
 app_data_set.append(row_6)
 
 print(app_data_set)
 ```
 
-```
+```py
 [['Facebook', 0.0, 'USD', 2974676, 3.5],
  ['Instagram', 0.0, 'USD', 2161558, 4.5],
  ['Clash of Clans', 0.0, 'USD', 2130805, 4.5],
@@ -481,7 +481,7 @@ print(app_data_set)
 
 现在，让我们使用上面学到的技术来计算所有六款应用的平均评分:
 
-```
+```py
 all_ratings = []
 
 for row in app_data_set:
@@ -492,7 +492,7 @@ avg_rating = sum(all_ratings) / len(all_ratings)
 print(avg_rating)
 ```
 
-```
+```py
 4.166666666666667
 
 ```

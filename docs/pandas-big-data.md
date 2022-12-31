@@ -22,7 +22,7 @@ August 4, 2017
 
 让我们从在 Python 中导入熊猫和我们的数据开始，看看前五行。
 
-```
+```py
  import pandas as pd
 gl = pd.read_csv('game_logs.csv')
 gl.head() 
@@ -54,11 +54,11 @@ gl.head()
 
 默认情况下，pandas 大约使用数据帧的内存来节省时间。因为我们对准确性感兴趣，所以我们将把`memory_usage`参数设置为`'deep'`来获得一个准确的数字。
 
-```
+```py
 gl.info(memory_usage='deep')
 ```
 
-```
+```py
 <class 'pandas.core.frame.DataFrame'>RangeIndex: 171907 entries, 0 to 171906
 Columns: 161 entries, date to acquisition_infodtypes: float64(77), int64(6), object(78)
 memory usage: 861.6 MB
@@ -80,7 +80,7 @@ memory usage: 861.6 MB
 
 因为每种数据类型都是单独存储的，所以我们将按数据类型检查内存使用情况。让我们从查看数据类型的平均内存使用量开始。
 
-```
+```py
  for dtype in ['float','int','object']:
     selected_dtype = gl.select_dtypes(include=[dtype])
     mean_usage_b = selected_dtype.memory_usage(deep=True).mean()
@@ -88,7 +88,7 @@ memory usage: 861.6 MB
     print("Average memory usage for {} columns: {:03.2f} MB".format(dtype,mean_usage_mb))
 ```
 
-```
+```py
 Average memory usage for float columns: 1.29 MB
 Average memory usage for int columns: 1.12 MB
 Average memory usage for object columns: 9.53 MB
@@ -114,14 +114,14 @@ pandas 中的许多类型有多个子类型，可以使用较少的字节来表�
 
 我们可以使用 [`numpy.iinfo`](https://docs.scipy.org/doc/numpy-1.10.0/reference/generated/numpy.iinfo.html) 类来验证每个整数子类型的最小值和最大值。让我们看一个例子:
 
-```
+```py
  import numpy as np
 int_types = ["uint8", "int8", "int16"]
 for it in int_types:
     print(np.iinfo(it))
 ```
 
-```
+```py
  Machine parameters for uint8----------------------------------------
 min = 0
 max = 255
@@ -139,7 +139,7 @@ max = 32767
 
 我们可以使用函数`pd.to_numeric()`来**向下转换**我们的数值类型。我们将使用`DataFrame.select_dtypes`只选择整数列，然后我们将优化类型并比较内存使用情况。
 
-```
+```py
  # We're going to be calculating memory usage a lot,
 # so we'll create a function to save us some time!
 def mem_usage(pandas_obj):
@@ -158,7 +158,7 @@ compare_ints.columns = ['before','after']
 compare_ints.apply(pd.Series.value_counts)
 ```
 
-```
+```py
 7.87 MB
 1.48 MB
 ```
@@ -173,7 +173,7 @@ compare_ints.apply(pd.Series.value_counts)
 
 让我们对浮动列做同样的事情。
 
-```
+```py
  gl_float = gl.select_dtypes(include=['float'])
 converted_float = gl_float.apply(pd.to_numeric,downcast='float')
 print(mem_usage(gl_float))
@@ -183,7 +183,7 @@ compare_floats.columns = ['before','after']
 compare_floats.apply(pd.Series.value_counts) 
 ```
 
-```
+```py
 100.99 MB
 50.49 MB
 ```
@@ -197,7 +197,7 @@ compare_floats.apply(pd.Series.value_counts)
 
 让我们创建原始数据帧的副本，将这些优化的数字列分配到原始数据帧的位置，并查看我们现在的整体内存使用情况。
 
-```
+```py
  optimized_gl = gl.copy()
 optimized_gl[converted_int.columns] = converted_int
 optimized_gl[converted_float.columns] = converted_float
@@ -205,11 +205,11 @@ print(mem_usage(gl))
 print(mem_usage(optimized_gl)) 
 ```
 
-```
+```py
 861.57 MB
 ```
 
-```
+```py
 804.69 MB
 ```
 
@@ -231,7 +231,7 @@ print(mem_usage(optimized_gl))
 
 您可能已经注意到，我们之前的图表将`object`类型描述为使用可变数量的内存。虽然每个指针占用 1 个字节的内存，但是每个实际的字符串值使用的内存量与单独存储在 Python 中的字符串使用的内存量相同。让我们使用`sys.getsizeof()`来证明这一点，首先查看单个字符串，然后查看熊猫系列中的项目。
 
-```
+```py
  from sys import getsizeof
 s1 = 'working out'
 s2 = 'memory usage for'
@@ -241,14 +241,14 @@ for s in [s1, s2, s3, s4]:
     print(getsizeof(s))
 ```
 
-```
+```py
  60
 65
 74
 74
 ```
 
-```
+```py
 obj_series = pd.Series(['working out',
     'memory usage for',
     'strings in python is fun!',
@@ -256,7 +256,7 @@ obj_series = pd.Series(['working out',
 obj_series.apply(getsizeof) 
 ```
 
-```
+```py
  0 60
 1 65
 2 74
@@ -274,7 +274,7 @@ dtype: int64
 
 为了了解我们可以在哪里使用这种类型来减少内存，让我们来看看每个对象类型的唯一值的数量。
 
-```
+```py
  gl_obj = gl.select_dtypes(include=['object']).copy()
 gl_obj.describe()
 ```
@@ -292,14 +292,14 @@ gl_obj.describe()
 
 看着上面的桌子。我们可以看到它只包含七个唯一值。我们将使用`.astype()`方法将其转换为分类。
 
-```
+```py
  dow = gl_obj.day_of_week
 print(dow.head())
 dow_cat = dow.astype('category')
 print(dow_cat.head())
 ```
 
-```
+```py
  0 Thu
 1 Fri
 2 Sat
@@ -319,11 +319,11 @@ Categories (7, object): [Fri, Mon, Sat, Sun, Thu, Tue, Wed]
 
 在下面的代码中，我们使用`Series.cat.codes`属性返回整数值，`category`类型使用这些整数值来表示每个值。
 
-```
+```py
 dow_cat.head().cat.codes
 ```
 
-```
+```py
  0 4
 1 0
 2 2
@@ -336,12 +336,12 @@ dtype: int8
 
 最后，让我们看看这个列在转换为`category`类型之前和之后的内存使用情况。
 
-```
+```py
  print(mem_usage(dow))
 print(mem_usage(dow_cat))
 ```
 
-```
+```py
 9.84 MB
 0.16 MB
 ```
@@ -354,7 +354,7 @@ print(mem_usage(dow_cat))
 
 我们将编写一个循环来迭代每个`object`列，检查唯一值的数量是否小于 50%，如果是，则将其转换为 category 类型。
 
-```
+```py
  converted_obj = pd.DataFrame()
 for col in gl_obj.columns:
     num_unique_values = len(gl_obj[col].unique())
@@ -367,7 +367,7 @@ for col in gl_obj.columns:
 
 和以前一样，
 
-```
+```py
  print(mem_usage(gl_obj))
 print(mem_usage(converted_obj))
 compare_obj = pd.concat([gl_obj.dtypes,converted_obj.dtypes],axis=1)
@@ -375,7 +375,7 @@ compare_obj.columns = ['before','after']
 compare_obj.apply(pd.Series.value_counts)
 ```
 
-```
+```py
 752.72 MB
 51.67 MB
 ```
@@ -389,28 +389,28 @@ compare_obj.apply(pd.Series.value_counts)
 
 此外，我们的`object`列的内存使用从 752MB 减少到 52MB，减少了 93%。让我们将这一点与数据帧的其余部分结合起来，看看我们相对于开始时的 861MB 内存使用量处于什么位置。
 
-```
+```py
  optimized_gl[converted_obj.columns] = converted_obj
 mem_usage(optimized_gl)
 ```
 
-```
+```py
 '103.64 MB'
 ```
 
 哇，我们真的取得了一些进展！我们还可以做一个优化——如果你还记得我们的类型表，有一个`datetime`类型可以用于我们数据集的第一列。
 
-```
+```py
  date = optimized_gl.date
 print(mem_usage(date))
 date.head()
 ```
 
-```
+```py
 0.66 MB
 ```
 
-```
+```py
 0 18710504
 1 18710505
 2 18710506
@@ -423,17 +423,17 @@ Name: date, dtype: uint32
 
 我们将使用`pandas.to_datetime()`函数进行转换，使用`format`参数告诉它我们的日期数据存储在`YYYY-MM-DD`中。
 
-```
+```py
  optimized_gl['date'] = pd.to_datetime(date,format='%Y%m%d')
 print(mem_usage(optimized_gl))
 optimized_gl.date.head()
 ```
 
-```
+```py
 104.29 MB
 ```
 
-```
+```py
  0 1871-05-04
 1 1871-05-05
 2 1871-05-06
@@ -450,7 +450,7 @@ Name: date, dtype: datetime64[ns]
 
 首先，我们将把每一列的最终类型存储在一个包含列名键的字典中，首先删除日期列，因为它需要单独处理。
 
-```
+```py
  dtypes = optimized_gl.drop('date',axis=1).dtypes
 dtypes_col = dtypes.index
 dtypes_type = [i.name for i in dtypes.values]
@@ -464,7 +464,7 @@ pp = pp = pprint.PrettyPrinter(indent=4)
 pp.pprint(preview)
 ```
 
-```
+```py
  {
 'acquisition_info': 'category',
 'h_caught_stealing': 'float32',
@@ -481,13 +481,13 @@ pp.pprint(preview)
 
 现在，我们可以使用字典和几个日期参数，用几行代码读入正确类型的数据:
 
-```
+```py
  read_and_optimized = pd.read_csv('game_logs.csv',dtype=column_types,parse_dates=['date'],infer_datetime_format=True)
 print(mem_usage(read_and_optimized))
 read_and_optimized.head()
 ```
 
-```
+```py
 104.28 MB
 ```
 
@@ -505,7 +505,7 @@ read_and_optimized.head()
 
 现在我们已经优化了我们的数据，我们可以执行一些分析。我们先来看一下游戏天数的分布。
 
-```
+```py
  optimized_gl['year'] = optimized_gl.date.dt.year
 games_per_day = optimized_gl.pivot_table(index='year',columns='day_of_week',values='date',aggfunc=len)
 games_per_day = games_per_day.divide(games_per_day.sum(axis=1),axis=0)
@@ -523,7 +523,7 @@ plt.show()
 
 让我们也来看看游戏长度在这些年里是如何变化的。
 
-```
+```py
  game_lengths = optimized_gl.pivot_table(index='year', values='length_minutes')
 game_lengths.reset_index().plot.scatter('year','length_minutes')
 plt.show() 

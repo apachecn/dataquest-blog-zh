@@ -89,14 +89,14 @@ Airbnb 不在其市场上发布任何房源数据，但 Airbnb 内部一个名�
 
 我们首先将清理后的数据集读入 pandas，打印其大小并查看前几行。(如果你不确定如何自己从原始数据集中删除多余的列，[看看我们的一些熊猫和数据清理课程](https://www.dataquest.io/data-science-courses-directory/))。
 
-```
+```py
  import pandas as pd
 dc_listings = pd.read_csv('dc_airbnb.csv')
 print(dc_listings.shape)
 dc_listings.head() 
 ```
 
-```
+```py
 (3723, 19)
 ```
 
@@ -147,7 +147,7 @@ K-最近邻(KNN)算法的工作方式类似于我们之前概述的三步过程�
 
 我们将首先使用`accommodates`特征计算数据集中第一个居住空间和我们自己居住空间之间的距离。我们可以使用 NumPy 函数`np.abs()`来获得绝对值。
 
-```
+```py
  import numpy as np
 our_acc_value = 3
 first_living_space_value = dc_listings.loc[0,'accommodates']
@@ -155,18 +155,18 @@ first_distance = np.abs(first_living_space_value - our_acc_value)
 print(first_distance) 
 ```
 
-```
+```py
 1
 ```
 
 最小的欧几里德距离是零，这意味着我们要比较的观察结果和我们的是一样的，所以我们在这里得到的结果是有意义的。然而，孤立地看，这个值没有多大意义，除非我们知道它与其他值相比如何。让我们计算数据集中每个观察值的欧几里德距离，并使用`pd.value_counts()`查看我们拥有的值的范围。
 
-```
+```py
  dc_listings['distance'] = np.abs(dc_listings.accommodates - our_acc_value)
 dc_listings.distance.value_counts().sort_index()
 ```
 
-```
+```py
  0     461
 1     2294
 2     503
@@ -190,13 +190,13 @@ Name: distance, dtype: int64
 
 我们还将使用`random_state`参数，它只是给我们一个可重复的随机顺序，因此任何人都可以跟随并得到完全相同的结果。
 
-```
+```py
  dc_listings = dc_listings.sample(frac=1,random_state=0)
 dc_listings = dc_listings.sort_values('distance')
 dc_listings.price.head()
 ```
 
-```
+```py
  $75.002825    
 $120.002145     
 $90.002541     
@@ -209,13 +209,13 @@ Name: price, dtype: object
 
 在计算前五个值的平均值之前，让我们通过删除这些字符并将其转换为`float`类型来清理该列。我们将使用熊猫的`Series.str.replace()`来删除杂散字符，并通过正则表达式`\$|,`来匹配`<center或`,`。
 
-```
+```py
  dc_listings['price'] = dc_listings.price.str.replace("\$|,",'').astype(float)
 mean_price = dc_listings.price.iloc[:5].mean()
 mean_price
 ```
 
-```
+```py
 88.0
 ```
 
@@ -241,7 +241,7 @@ mean_price
 
 我们还将删除之前创建第一个模型时添加的列。
 
-```
+```py
  dc_listings.drop('distance',axis=1)
 train_df = dc_listings.copy().iloc[:2792]
 test_df = dc_listings.copy().iloc[2792:] 
@@ -249,7 +249,7 @@ test_df = dc_listings.copy().iloc[2792:]
 
 为了在查看指标时让事情变得更简单，我们将把之前制作的模型合并到一个函数中。我们不需要担心随机化这些行，因为它们仍然是之前随机化的。
 
-```
+```py
  def predict_price(new_listing_value,feature_column):
     temp_df = train_df
     temp_df['distance'] = np.abs(dc_listings[feature_column] - new_listing_value)
@@ -261,7 +261,7 @@ test_df = dc_listings.copy().iloc[2792:]
 
 我们现在可以使用这个函数来预测使用`accommodates`列的测试数据集的值。
 
-```
+```py
  test_df['predicted_price'] = test_df.accommodates.apply(predict_price,feature_column='accommodates') 
 ```
 
@@ -278,14 +278,14 @@ test_df = dc_listings.copy().iloc[2792:]
 
 因此，从下往上读:均方根误差。让我们计算我们在测试集上所做预测的 RMSE 值。
 
-```
+```py
  test_df['squared_error'] = (test_df['predicted_price'] - test_df['price'])**(2)
 mse = test_df['squared_error'].mean()
 rmse = mse ** (1/2)
 rmse
 ```
 
-```
+```py
 212.98927967051529
 ```
 
@@ -297,7 +297,7 @@ rmse
 
 有了可以用来查看模型准确性的误差指标，让我们使用不同的列创建一些预测，并看看误差是如何变化的。
 
-```
+```py
  for feature in ['accommodates','bedrooms','bathrooms','number_of_reviews']:
     test_df['predicted_price'] = test_df.accommodates.apply(predict_price,feature_column=feature)
     test_df['squared_error'] = (test_df['predicted_price'] - test_df['price'])**(2)
@@ -306,7 +306,7 @@ rmse
     print("RMSE for the {} column: {}".format(feature,rmse))
 ```
 
-```
+```py
  RMSE for the accommodates column: 212.9892796705153
 RMSE for the bedrooms column: 216.49048609414766
 RMSE for the bathrooms column: 216.89419042215704
@@ -330,13 +330,13 @@ RMSE for the number_of_reviews column: 240.2152831433485
 
 让我们读入这个被清理的版本，它被称为`dc_airbnb.normalized.csv`，并预览前几行:
 
-```
+```py
  normalized_listings = pd.read_csv('dc_airbnb_normalized.csv')
 print(normalized_listings.shape)
 normalized_listings.head()
 ```
 
-```
+```py
 (3671, 8)
 ```
 
@@ -350,7 +350,7 @@ normalized_listings.head()
 
 然后，我们将随机化这些行，并将其分成训练和测试数据集。
 
-```
+```py
 normalized_listings = normalized_listings.sample(frac=1,random_state=0)
 norm_train_df = normalized_listings.copy().iloc[0:2792]
 norm_test_df = normalized_listings.copy().iloc[2792:]
@@ -375,7 +375,7 @@ norm_test_df = normalized_listings.copy().iloc[2792:]
 
 让我们使用`euclidean()`函数来计算我们要练习的数据集中第一行和第五行之间的欧几里德距离。
 
-```
+```py
  from scipy.spatial import distance
 first_listing = normalized_listings.iloc[0][['accommodates', 'bathrooms']]
 fifth_listing = normalized_listings.iloc[20][['accommodates', 'bathrooms']]
@@ -383,7 +383,7 @@ first_fifth_distance = distance.euclidean(first_listing, fifth_listing)
 first_fifth_distance
 ```
 
-```
+```py
 0.9979095531766813
 ```
 
@@ -393,7 +393,7 @@ first_fifth_distance
 
 (`cdist()`方法可用于使用多种方法计算距离，但它默认为欧几里得。)
 
-```
+```py
  def predict_price_multivariate(new_listing_value,feature_columns):
     temp_df = norm_train_df
     temp_df['distance'] = distance.cdist(temp_df[feature_columns],[new_listing_value[feature_columns]])
@@ -409,7 +409,7 @@ rmse = mse ** (1/2)
 print(rmse)
 ```
 
-```
+```py
 122.702007943
 ```
 
@@ -436,7 +436,7 @@ scikit-learn 中的每个模型都是作为一个单独的类实现的，第一�
 
 Scikit-learn 使用类似于 Matplotlib 的面向对象风格。我们需要通过调用构造函数在做任何事情之前实例化一个空模型。
 
-```
+```py
  from sklearn.neighbors import KNeighborsRegressor
 knn = KNeighborsRegressor() 
 ```
@@ -449,7 +449,7 @@ knn = KNeighborsRegressor()
 
 让我们将`algorithm`参数设置为`brute`，并将`n_neighbors`值保留为`5`，这与我们构建的手动实现相匹配。
 
-```
+```py
  from sklearn.neighbors import KNeighborsRegressor
 knn = KNeighborsRegressor(algorithm='brute') 
 ```
@@ -471,7 +471,7 @@ knn = KNeighborsRegressor(algorithm='brute')
 
 让我们从数据帧中选择目标列，并将其用作`fit`方法的第二个参数:
 
-```
+```py
 knn.fit(train_features, train_target)
 ```
 
@@ -483,7 +483,7 @@ knn.fit(train_features, train_target)
 
 我们在训练和测试期间使用的特性列数需要匹配，否则 scikit-learn 将返回错误。
 
-```
+```py
 predictions = knn.predict(test_features)
 ```
 
@@ -491,7 +491,7 @@ predictions = knn.predict(test_features)
 
 我们现在拥有了练习整个 scikit-learn 工作流程所需的一切:
 
-```
+```py
  knn.fit(norm_train_df[cols], norm_train_df['price'])
 two_features_predictions = knn.predict(norm_test_df[cols]) 
 ```
@@ -507,14 +507,14 @@ two_features_predictions = knn.predict(norm_test_df[cols])
 *   一个类似列表的对象，代表测试集中的真实值。
 *   第二个类似列表的对象，表示由模型生成的预测值。
 
-```
+```py
  from sklearn.metrics import mean_squared_error
 two_features_mse = mean_squared_error(norm_test_df['price'], two_features_predictions)
 two_features_rmse = two_features_mse ** (1/2)
 print(two_features_rmse) 
 ```
 
-```
+```py
 124.834722314
 ```
 
@@ -528,7 +528,7 @@ print(two_features_rmse)
 
 scikit-learn 最棒的一点是它允许我们更快地迭代。让我们通过创建一个使用四个特征而不是两个特征的模型来尝试一下，看看这是否会改善我们的结果。
 
-```
+```py
 knn = KNeighborsRegressor(algorithm='brute')
 cols = ['accommodates','bedrooms','bathrooms','beds']
 knn.fit(norm_train_df[cols], norm_train_df['price'])
@@ -538,7 +538,7 @@ four_features_rmse = four_features_mse ** (1/2)
 four_features_rmse
 ```
 
-```
+```py
 120.92729413345498
 ```
 

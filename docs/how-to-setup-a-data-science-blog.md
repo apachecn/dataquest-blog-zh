@@ -10,7 +10,7 @@ June 14, 2016Data science blogs can be a fantastic way to demonstrate your skill
 
 `index.html`文件。如果你的网址是`thebestblog.com`，访问者访问了`https://www.thebestblog.com`，他们就会看到`index.html`的内容。下面是一个 HTML 文件夹如何寻找`thebestblog.com`:
 
-```
+```py
  thebestblog.com
 │   index.html
 │   first-post.html
@@ -23,7 +23,7 @@ June 14, 2016Data science blogs can be a fantastic way to demonstrate your skill
 
 `https://www.thebestblog.com/first-post.html`会显示`first-post.html`中的内容，以此类推。`first-post.html`可能是这样的:
 
-```
+```py
  <html>
 <head>
   <title>The best blog!</title>
@@ -56,7 +56,7 @@ June 14, 2016Data science blogs can be a fantastic way to demonstrate your skill
 
 `first-post.html`变成`first-post.md`:
 
-```
+```py
  # First post!
 
 This is the first post in what will soon become (if it already isn't) the best blog.
@@ -80,7 +80,7 @@ Future posts will teach you about data science.
 *   创建并激活一个虚拟环境。
 *   在`jupyter-blog`中创建一个名为`requirements.txt`的文件，内容如下:
 
-```
+```py
  Markdown==2.6.6
 pelican==3.6.3
 jupyter>=1.0
@@ -99,7 +99,7 @@ matplotlib==1.5.1
 
 在`jupyter-blog`中的`pelican-quickstart`，为您的博客启动一个交互式设置序列。你会得到一系列的问题来帮助你正确地建立你的博客。对于大多数问题，只要点击`Enter`并接受默认值就可以了。您应该填写的只是网站的标题、网站的作者、URL 前缀的`n`和时区。这里有一个例子:
 
-```
+```py
  (jupyter-blog)➜  jupyter-blog ✗ pelican-quickstart
 Welcome to pelican-quickstart v3.6.3.
 
@@ -130,7 +130,7 @@ needed by Pelican.
 
 `pelican-quickstart`，你应该有两个新文件夹在`jupyter-blog`、`content`、`output`，还有几个文件，比如`pelicanconf.py`、`publishconf.py`。以下是文件夹中应包含内容的示例:
 
-```
+```py
  jupyter-blog
 │   output
 │   content
@@ -157,7 +157,7 @@ needed by Pelican.
 
 `.gitmodules`文件和一个`plugins`文件夹:
 
-```
+```py
  jupyter-blog
 │   output
 │   content
@@ -176,7 +176,7 @@ needed by Pelican.
 
 在底部加上这几行:
 
-```
+```py
  MARKUP = ('md', 'ipynb')
 
 PLUGIN_PATH = './plugins'
@@ -194,7 +194,7 @@ PLUGINS = ['ipynb.markup']
 *   创建一个与您的笔记本同名的文件，但扩展名为`.ipynb-meta`。[这里有一个](https://github.com/dataquestio/jupyter-blog/blob/master/content/first-post.ipynb-meta)的例子。
 *   将以下内容添加到`ipynb-meta`文件中，但更改字段以匹配您自己的帖子:
 
-```
+```py
  Title: First Post
 Slug: first-post
 Date: 2016-06-08 20:00
@@ -214,7 +214,7 @@ Summary: My first post, read it to find out.
 
 每当你想在博客上发表新文章时，就提交文件。一旦创建了笔记本和元文件，就可以生成博客 HTML 文件了。下面是一个示例，展示了`jupyter-blog`文件夹现在应该是什么样子:
 
-```
+```py
  jupyter-blog
 │   output
 │   content

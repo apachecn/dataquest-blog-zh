@@ -14,7 +14,7 @@ Pandas 库是一个快速、强大且易于使用的数据处理工具。它通�
 
 首先，让我们使用下面的代码片段[创建一个包含公司员工个人详细信息的虚拟数据帧](https://www.dataquest.io/blog/tutorial-how-to-create-and-use-a-pandas-dataframe/):
 
-```
+```py
 import pandas as pd
 import numpy as np
 from IPython.display import display
@@ -46,11 +46,11 @@ display(data)
 运行上面的代码。它用上述数据创建一个数据帧。
 让我们通过运行以下语句来看看列的数据类型:
 
-```
+```py
 print(data.dtypes)
 ```
 
-```
+```py
 EmployeeName    object
 Department      object
 HireDate         int64
@@ -64,11 +64,11 @@ dtype: object
 Pandas 字符串值的数据类型是**对象**，这就是为什么像 *EmployeeName* 或 *Department* 这样包含字符串的列的数据类型是**对象**。数据帧的每一列都有特定的数据类型；换句话说，数据帧的列不共享相同的数据类型。
 另一个有用的 DataFrame 属性是`.values`，它返回一个列表数组，每个列表代表 DataFrame 的一行。
 
-```
+```py
 print(data.values)
 ```
 
-```
+```py
 [['Callen Dunkley' 'Accounting' 2010 'M' '04/09/1982' 78 176]
  ['Sarah Rayner' 'Engineering' 2018 'F' '14/04/1981' 80 160]
  ['Jeanette Sloan' 'Engineering' 2012 'F' '06/05/1997' 66 169]
@@ -83,11 +83,11 @@ print(data.values)
 
 如果您想知道数据帧的行数和列数，您可以如下使用`.shape`属性:
 
-```
+```py
 print(data.shape)
 ```
 
-```
+```py
 (10, 7)
 ```
 
@@ -98,7 +98,7 @@ print(data.shape)
 到目前为止，我们已经创建并检查了一个数据帧。如前所述，过滤数据帧有不同的方法。在这一节中，我们将讨论最流行和最有效的方法。但是，最好先看看我们如何选择特定的列。
 要获取特定列的全部内容，我们可以使用以下语法:
 
-```
+```py
 DataFrame.ColumnName  # if the column name does not contain any spaces
 OR 
 DataFrame["ColumnName"]
@@ -106,11 +106,11 @@ DataFrame["ColumnName"]
 
 例如，让我们抓住数据帧的部门列。
 
-```
+```py
 display(data.Department)
 ```
 
-```
+```py
 0      Accounting
 1     Engineering
 2     Engineering
@@ -128,7 +128,7 @@ Name: Department, dtype: object
 
 此外，我们可以通过传递列名列表来选择多个列，如下所示:
 
-```
+```py
 display(data[['EmployeeName','Department','Gender']])
 ```
 
@@ -151,7 +151,7 @@ display(data[['EmployeeName','Department','Gender']])
 
 我们可以使用切片技术从数据帧中提取特定的行。分割数据帧并选择特定列的最佳方式是使用`.loc`和`.iloc`方法。这两种方法分别使用基于标签或基于整数的索引创建数据帧的子集。
 
-```
+```py
 DataFrame.loc[row_indexer,column_indexer]
 DataFrame.iloc[row_indexer,column_indexer]
 ```
@@ -159,7 +159,7 @@ DataFrame.iloc[row_indexer,column_indexer]
 两种方法中的第一个位置指定行索引器，第二个位置指定列索引器，用逗号分隔。
 在我们想练习使用`.loc`和`.iloc`方法之前，让我们将 *EmployeeName* 列设置为 DataFrame 的索引。这样做不是必需的，但有助于我们讨论这些方法的所有功能。为此，使用`set_index()`方法使 *EmployeeName* 列成为 DataFrame 的索引:
 
-```
+```py
 data = data.set_index('EmployeeName')
 display(data)
 ```
@@ -191,7 +191,7 @@ display(data)
 
 以下语句实际上返回相同的结果:
 
-```
+```py
 display(data.loc[['Henri Conroy', 'Kim Howarth']])
 display(data.iloc[[4,8]])
 ```
@@ -214,7 +214,7 @@ display(data.iloc[[4,8]])
 `.iloc`方法做同样的事情，但是它不是获取带标签的索引，而是获取行的整数索引。
 现在，让我们使用`.loc`和`.iloc`方法提取一个包含前三名雇员的姓名、部门和性别值的子数据帧:
 
-```
+```py
 display(data.iloc[:3,[0,2]])
 display(data.loc['Callen Dunkley':'Jeanette Sloan',['Department','Gender']])
 ```
@@ -237,7 +237,7 @@ display(data.loc['Callen Dunkley':'Jeanette Sloan',['Department','Gender']])
 
 运行上述语句会返回相同的结果，如下所示:
 
-```
+```py
 EmployeeName     Department Gender                      
 Callen Dunkley   Accounting      M
 Sarah Rayner    Engineering      F
@@ -247,7 +247,7 @@ Jeanette Sloan  Engineering      F
 `.loc`和`.iloc`方法非常相似；唯一的区别是如何引用数据帧中的列和行。
 以下语句返回数据帧的所有行:
 
-```
+```py
 display(data.iloc[:,[0,2]])
 display(data.loc[:,['Department','Gender']])
 ```
@@ -284,7 +284,7 @@ display(data.loc[:,['Department','Gender']])
 
 我们也可以对列进行切片。下面的语句返回数据帧中每隔一行的`Weight`和`Height`列:
 
-```
+```py
 display(data.loc[::2,'Weight':'Height'])
 display(data.iloc[::2,4:6])
 ```
@@ -311,7 +311,7 @@ display(data.iloc[::2,4:6])
 
 我们在上面的代码中对数据帧的行和列执行切片。语法类似于 Python 中的列表切片。我们需要指定开始索引、停止索引和步长。
 
-```
+```py
 EmployeeName    Weight  Height                  
 Callen Dunkley      78     176
 Jeanette Sloan      66     169
@@ -326,11 +326,11 @@ Kim Howarth         95     174
 
 到目前为止，我们已经学会了如何分割数据帧，但是我们如何获取符合特定标准的数据呢？在 Pandas 中，使用布尔掩码是过滤数据帧的常用方法。首先让我们看看什么是布尔掩码:
 
-```
+```py
 print(data.HireDate > 2015)
 ```
 
-```
+```py
 EmployeeName
 Callen Dunkley    False
 Sarah Rayner       True
@@ -349,7 +349,7 @@ Name: HireDate, dtype: bool
 现在，我们可以使用布尔掩码来获取包含 2015 年后雇佣的
 员工的数据帧子集:
 
-```
+```py
 display(data[data.HireDate > 2015])
 ```
 
@@ -365,7 +365,7 @@ display(data[data.HireDate > 2015])
 
 我们还可以使用`.loc`方法过滤行并返回某些列，如下所示:
 
-```
+```py
 display(data.loc[data.HireDate > 2015, ['Department', 'HireDate']])
 ```
 
@@ -381,7 +381,7 @@ display(data.loc[data.HireDate > 2015, ['Department', 'HireDate']])
 
 我们能够使用逻辑运算符将两个或多个标准结合起来。让我们列出那些在数据科学团队工作的男性员工:
 
-```
+```py
 display(data.loc[(data.Gender == "M") & (data.Department=='Data Science'), 
                 ['Department', 'Gender', 'HireDate']]
         )
@@ -396,7 +396,7 @@ display(data.loc[(data.Gender == "M") & (data.Department=='Data Science'),
 
 如果我们想让所有员工身高在 170 cm 到 190 cm 之间怎么办？
 
-```
+```py
 display(data.loc[data.Height.between(170,190), 
                 ['Department', 'Gender', 'Height']]
         )
@@ -414,7 +414,7 @@ display(data.loc[data.Height.between(170,190),
 在`between()`方法中，范围的两端都包括在内。
 另一个有用的方法是`isin()`，它为包含在指定值列表中的值创建一个布尔掩码。让我们尝试一下检索在人力资源或会计部门工作的雇员的方法:
 
-```
+```py
 display(data.loc[data.Department.isin(['HR', 'Accounting']),['Department', 'Gender', 'HireDate']])
 ```
 
@@ -430,7 +430,7 @@ display(data.loc[data.Department.isin(['HR', 'Accounting']),['Department', 'Gend
 
 为了过滤数据帧，我们可以使用正则表达式来搜索模式，而不是精确的内容。以下示例显示了如何使用正则表达式来获取那些姓氏以“tt”或“th”结尾的雇员:
 
-```
+```py
 display(data.loc[data.index.str.contains(r'tt$|th$'),
                 ['Department', 'Gender']])
 ```

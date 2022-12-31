@@ -58,7 +58,7 @@ February 11, 2020
 
 像其他编程语言一样，SQL 中的代码必须遵循定义的结构和词汇。要指定我们想要从`recent_grads`返回前 5 行，我们需要运行以下 SQL 查询:
 
-```
+```py
 SELECT * FROM recent_grads LIMIT 5
 ```
 
@@ -114,25 +114,25 @@ SELECT * FROM recent_grads LIMIT 5
 
 为了只返回`Major`列，我们需要将特定的列名添加到查询的`SELECT`语句部分(而不是使用`*`操作符返回所有列):
 
-```
+```py
 SELECT Major FROM recent_grads
 ```
 
 这将返回`Major`列中所有值的*。我们也可以用这种方式指定多个列，结果表将保持列的顺序:*
 
-```
+```py
 SELECT Major, Major_category FROM recent_grads
 ```
 
 为了只返回`ShareWomen`大于或等于`0.5`的值，我们需要添加一个`WHERE` *子句*:
 
-```
+```py
 SELECT Major FROM recent_gradsWHERE ShareWomen >= 0.5
 ```
 
 最后，我们可以使用`LIMIT`来限制返回的行数:
 
-```
+```py
 SELECT Major FROM recent_gradsWHERE ShareWomen >= 0.5 LIMIT 5
 ```
 
@@ -154,7 +154,7 @@ SELECT Major FROM recent_gradsWHERE ShareWomen >= 0.5 LIMIT 5
 
 让我们编写一个 SQL 查询，返回女性占少数的专业。我们将只返回`Major`和`ShareWomen`列(按此顺序),我们不会限制返回的行数:
 
-```
+```py
 SELECT Major, ShareWomen FROM recent_grads WHERE ShareWomen < 0.5
 ```
 
@@ -258,7 +258,7 @@ SELECT Major, ShareWomen FROM recent_grads WHERE ShareWomen < 0.5
 
 **最后，大多数数据库系统要求`SELECT`和`FROM`语句排在前面，在`WHERE`或任何其他语句之前。**我们可以使用`AND`操作符来组合多个过滤标准。例如，要确定哪个工程专业女生占多数，我们需要指定 2 个过滤标准。
 
-```
+```py
 SELECT Major FROM recent_gradsWHERE Major_category = 'Engineering' AND ShareWomen > 0.5
 ```
 
@@ -269,7 +269,7 @@ SELECT Major FROM recent_gradsWHERE Major_category = 'Engineering' AND ShareWome
 
 看起来只有两个专业符合这个标准。如果我们想“缩小”回去查看这两个专业的所有列的“T2 ”( T3 ),看看它们是否有一些共同的属性，我们可以修改语句“T0 ”,使用符号“T1”来表示所有列
 
-```
+```py
 SELECT * FROM recent_gradsWHERE Major_category = 'Engineering' AND ShareWomen > 0.5
 ```
 
@@ -282,7 +282,7 @@ SELECT * FROM recent_gradsWHERE Major_category = 'Engineering' AND ShareWomen > 
 
 现在，让我们编写一个 SQL 查询，返回所有女生占多数的专业**和**的平均工资高于`50000`。让我们也限制结果中显示的列，如下所示:
 
-```
+```py
 SELECT Major, Major_category, Median, ShareWomen FROM recent_grads WHERE ShareWomen > 0.5 AND Median > 50000
 ```
 
@@ -299,7 +299,7 @@ SELECT Major, Major_category, Median, ShareWomen FROM recent_grads WHERE ShareWo
 
 如果我们想指定一个过滤器满足**或者**的条件，我们可以使用`OR`操作符。
 
-```
+```py
 SELECT [column1, column2,...] FROM [table1]WHERE [condition1] OR [condition2]
 ```
 
@@ -309,7 +309,7 @@ SELECT [column1, column2,...] FROM [table1]WHERE [condition1] OR [condition2]
 *   `Median`
 *   `Unemployed`
 
-```
+```py
 SELECT Major, Median, Unemployed FROM recent_grads WHERE Median >= 10000 OR Unemployed <= 1000 LIMIT 20
 ```
 
@@ -344,26 +344,26 @@ SELECT Major, Median, Unemployed FROM recent_grads WHERE Median >= 10000 OR Unem
 
 我们需要的三个原始条件是:
 
-```
+```py
 Major_category = 'Engineering'ShareWomen >= 0.5Unemployment_rate < 0.051
 ```
 
 使用 parantheses 的 SQL 查询看起来像什么:
 
-```
+```py
 SELECT Major, Major_category, ShareWomen, Unemployment_rate FROM recent_grads
 WHERE (Major_category = 'Engineering') AND (ShareWomen > 0.5 OR Unemployment_rate < 0.051);
 ```
 
 请注意，我们将希望一起评估的逻辑括在括号中。这非常类似于我们如何使用括号将数学计算组合在一起，以定义首先评估哪些计算。括号清楚地向数据库表明，我们希望所有语句中表达式的*和*都等于`True`的行:
 
-```
+```py
 (Major_category = 'Engineering' AND ShareWomen > 0.5) -> True or False(ShareWomen > 0.5 OR Unemployment_rate < 0.051) -> True or False
 ```
 
 如果我们编写了不带任何括号的`where`语句，数据库会猜测我们的意图，并实际执行以下查询:
 
-```
+```py
 WHERE (Major_category = 'Engineering' AND ShareWomen > 0.5) OR (Unemployment_rate < 0.051)
 ```
 
@@ -380,7 +380,7 @@ WHERE (Major_category = 'Engineering' AND ShareWomen > 0.5) OR (Unemployment_rat
 
 我们的疑问是:
 
-```
+```py
 SELECT Major, Major_category, ShareWomen, Unemployment_rateFROM recent_gradsWHERE (Major_category = 'Engineering') AND (ShareWomen > 0.5 OR Unemployment_rate < 0.051)
 ```
 
@@ -403,7 +403,7 @@ SELECT Major, Major_category, ShareWomen, Unemployment_rateFROM recent_gradsWHER
 
 到目前为止，我们编写的每个查询的结果都是按照`Rank`列排序的。回想一下本文前面返回所有列的查询，您会看到 Rank 列:
 
-```
+```py
 SELECT * FROM recent_grads LIMIT 5
 ```
 
@@ -419,7 +419,7 @@ SELECT * FROM recent_grads LIMIT 5
 
 例如，我们可能想了解哪些符合`WHERE`陈述中标准的专业失业率最低。下面的查询将按照`Unemployment_rate`列的升序返回结果。
 
-```
+```py
 SELECT Rank, Major, Major_category, ShareWomen, Unemployment_rate
 FROM recent_grads
 WHERE (Major_category = 'Engineering') AND (ShareWomen > 0.5 OR Unemployment_rate < 0.051)
@@ -441,7 +441,7 @@ ORDER BY Unemployment_rate
 
 如果我们想让结果按同一列排序，但按*降序*排序，我们可以添加`DESC`关键字:
 
-```
+```py
 SELECT Rank, Major, Major_category, ShareWomen, Unemployment_rate
 FROM recent_gradsWHERE (Major_category = 'Engineering') AND (ShareWomen > 0.5 OR Unemployment_rate < 0.051)
 ORDER BY Unemployment_rate DESC
@@ -468,7 +468,7 @@ ORDER BY Unemployment_rate DESC
 
 我们将按照`ShareWomen`列对结果进行降序排序。这将使我们能够很容易地比较女性比例较高或较低的专业的失业率。
 
-```
+```py
 SELECT Major, ShareWomen, Unemployment_rate FROM recent_grads
 WHERE ShareWomen > 0.3 AND Unemployment_rate < .1O
 RDER BY ShareWomen DESC

@@ -69,7 +69,7 @@ tidyverse 是为处理数据而设计的 R 包的[集合。tidyverse 包拥有�
 
 现在让我们将布鲁克林数据集从一个 Excel 文件加载到 R 中。我们将使用`readxl`包。我们指定函数参数`skip = 4`,因为我们想要用作标题的行(即列名)实际上是第 5 行。我们可以完全忽略前四行，从第 5 行开始将数据加载到 R 中。代码如下:
 
-```
+```py
 library(readxl) # Load Excel files
 brooklyn <- read_excel("rollingsales_brooklyn.xls", skip = 4)
 ```
@@ -80,23 +80,23 @@ brooklyn <- read_excel("rollingsales_brooklyn.xls", skip = 4)
 
 tidyverse 提供了一种用户友好的方式，通过作为`tibble`包一部分的`glimpse()`函数来查看这些数据。要使用这个包，我们需要加载它以便在当前会话中使用。但是我们可以一次加载许多 tidyverse 包，而不是单独加载这个包。如果没有包的 tidyverse 集合，请在 R 或 R Studio 会话中使用以下命令将其安装到您的计算机上:
 
-```
+```py
 install.packages("tidyverse")
 ```
 
 软件包安装完成后，将其加载到内存中:
 
-```
+```py
 library(tidyverse)
 ```
 
 既然 `tidyverse` 已经加载到内存中，那么就来“一瞥”一下 Brooklyn 数据集:
 
-```
+```py
 glimpse(brooklyn)
 ```
 
-```
+```py
 ## Observations: 20,185
 ## Variables: 21
 ## $ BOROUGH <chr> "3", "3", "3", "3", "3", "3", "…
@@ -135,11 +135,11 @@ glimpse(brooklyn)
 
 那么，为什么这很重要呢？因为`GROSS SQUARE FEET`和`SALE PRICE`是数值，我们可以马上对数据进行算术运算。例如，我们可以计算所有房产的平均销售价格:
 
-```
+```py
 mean(brooklyn$`SALE PRICE`)
 ```
 
-```
+```py
 ## [1] 1098644
 ```
 
@@ -147,7 +147,7 @@ mean(brooklyn$`SALE PRICE`)
 
 `SALE DATE`以表示日历日期和时间的格式存储是很有用的，因为这使我们能够使用一行代码按日期制作房地产销售直方图:
 
-```
+```py
 qplot(`SALE DATE`, data = brooklyn)
 ```
 
@@ -165,12 +165,12 @@ qplot(`SALE DATE`, data = brooklyn)
 
 下面是我们用`read.csv()`加载 CSV 格式的相同数据时看到的情况:
 
-```
+```py
 brooklyn_csv <- read.csv("rollingsales_brooklyn.csv", skip = 4)
 glimpse(brooklyn_csv)
 ```
 
-```
+```py
 ## Observations: 20,185
 ## Variables: 21
 ## $ BOROUGH <int> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
@@ -205,12 +205,12 @@ glimpse(brooklyn_csv)
 
 但是如果我们用来自`readr`包的 [`read_csv()`函数](https://readr.tidyverse.org/reference/read_delim.html)加载同一个数据集，它是 tidyverse 的一部分，我们会看到类似于我们用`readxl()`的原始方法的结果:
 
-```
+```py
 brooklyn_csv <- read_csv("rollingsales_brooklyn.csv", skip = 4)
 glimpse(brooklyn_csv)
 ```
 
-```
+```py
 ## Observations: 20,185
 ## Variables: 21
 ## $ BOROUGH <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3…
@@ -244,7 +244,7 @@ glimpse(brooklyn_csv)
 
 如果我们想对纽约市的所有五个区进行数据分析，那么合并数据集将会很有帮助。此外，如果数据需要任何额外的清理，最好是只在一个地方清理数据，而不是在五个地方！我们已经验证了五个 Excel 文件中的列名是相同的。所以我们可以将数据帧与来自`dplyr`包(另一个 tidyverse 包)的 [`bind_rows()`函数](https://dplyr.tidyverse.org/reference/bind.html)组合起来。):
 
-```
+```py
 brooklyn <- read_excel("rollingsales_brooklyn.xls", skip = 4)
 bronx <- read_excel("rollingsales_bronx.xls", skip = 4)
 manhattan <- read_excel("rollingsales_manhattan.xls", skip = 4)
@@ -257,7 +257,7 @@ NYC_property_sales <- bind_rows(brooklyn, bronx, manhattan, staten_island, queen
 glimpse(NYC_property_sales)
 ```
 
-```
+```py
 ## Observations: 70,870
 ## Variables: 21
 ## $ BOROUGH <chr> "3", "3", "3", "3", "3", "3", "…
@@ -293,7 +293,7 @@ glimpse(NYC_property_sales)
 
 列名包含空格，这在 tidyverse 中可能更难处理。此外，列名包含大写字母。在我们的分析过程中，我们不想担心空格或记住大写变量名！让我们使用 [`magrittr`包](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html)中的一种简便方法快速清理列名。首先将包加载到内存中。如果需要，安装软件包。tidyverse 中使用了“magrittr”包，但是我们需要显式地加载它来访问它的一个内置函数。
 
-```
+```py
 library(magrittr)
 ```
 
@@ -301,7 +301,7 @@ library(magrittr)
 
 让我们将赋值管道操作符与 tidyverse `stringr`包中的`str_replace_all()`函数结合起来，用下划线替换所有空格。`NYC_property_sales`数据帧的代码如下所示:
 
-```
+```py
 colnames(NYC_property_sales) %<>% str_replace_all("\\s", "_") %<>% tolower()
 ```
 
@@ -311,11 +311,11 @@ colnames(NYC_property_sales) %<>% str_replace_all("\\s", "_") %<>% tolower()
 
 好长的一句话！但是这展示了管道操作符将多个命令链接在一起的价值。让我们看看更新后的列名:
 
-```
+```py
 colnames(NYC_property_sales)
 ```
 
-```
+```py
 ## [1] "borough" "neighborhood" 
 ## [3] "building_class_category" "tax_class_at_present" 
 ## [5] "block" "lot" 
@@ -335,7 +335,7 @@ colnames(NYC_property_sales)
 
 通常，当使用 tidyverse 工具时，我们将使用来自`magrittr`的单管道(`%>%`)。管道是将多个命令链接在一起的一种方式。回想一下上面我们是如何把`%<>%`想成“然后更新”的？好吧，单管可以简单的认为是“然后”。下面是一个使用我们到目前为止所学命令的示例:
 
-```
+```py
 NYC_property_sales %>% glimpse()
 ```
 

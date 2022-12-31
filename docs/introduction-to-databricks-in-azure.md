@@ -82,7 +82,7 @@ Databricks 还提供了一个交互式的工作空间，使得在数据项目上
 
 在建立机器学习模型之前，我们需要加载数据。我们将使用由`seaborn`库提供的一个内置数据集。Seaborn 的库中有许多重要的数据集。安装后，这些软件会自动下载并随时可用！以下命令导入库并提供从 **`seaborn`** 库中可用的数据集列表。
 
-```
+```py
 import pandas as pd
 import seaborn as sns
 sns.get_dataset_names()
@@ -90,7 +90,7 @@ sns.get_dataset_names()
 
 这将返回 seaborn 中可用数据集的列表，如下所示:
 
-```
+```py
 Out[1]: ['anagrams', 'anscombe', 'attention', 'brain_networks', 'car_crashes', 'diamonds', 'dots', 'dowjones', 'exercise', 'flights', 'fmri', 'geyser', 'glue', 'healthexp', 'iris', 'mpg', 'penguins', 'planets', 'seaice', 'taxis', 'tips',...]
 ```
 
@@ -100,7 +100,7 @@ Out[1]: ['anagrams', 'anscombe', 'attention', 'brain_networks', 'car_crashes', '
 
 在新代码块中，加载数据集并使用以下命令查看前五行:
 
-```
+```py
 df = sns.load_dataset('iris')
 df.head()
 ```
@@ -121,7 +121,7 @@ df.head()
 
 重现上述结果的代码如下:
 
-```
+```py
 # Import other required libraries
 import sklearn
 import numpy as np
@@ -140,7 +140,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.4, rando
 X_train.shape, X_test.shape
 ```
 
-```
+```py
 Out[3]: ((90, 4), (60, 4))
 ```
 
@@ -154,7 +154,7 @@ Out[3]: ((90, 4), (60, 4))
 
 为了计算我们模型的准确性，我们需要将我们的预测与测试集中的实际标签进行比较。我们可以使用“混淆矩阵”函数来计算我们预测的准确性。
 
-```
+```py
 logreg = LogisticRegression()
 logreg.fit(X_train, y_train)
 y_pred = logreg.predict(X_test)
@@ -164,7 +164,7 @@ print(classification_report(y_test, y_pred))
 
 上述命令将产生以下输出:
 
-```
+```py
 precision recall f1-score support 
 setosa 1.00 1.00 1.00 18 
 versicolor 1.00 0.96 0.98 24 

@@ -83,13 +83,13 @@ Anaconda 使您能够通过环境管理您的 Python 安装。每个环境运行
 
 Python 附带了一个内置的包管理器`pip`，能够自动安装 Python 包。然而，许多科学包具有 Python 包之外的依赖性。Anaconda 自带通用的包管理器:`conda`，可以处理包含依赖项和与 Python 无关的命令的复杂安装例程。与`pip`不同，它还具有处理环境的能力，取代了传统的 virtualenv。在一个`conda`环境中，你将能够精确地定义你想要安装的包和版本。在遗留包的情况下，您甚至可以更改在环境中使用的 Python 版本。通过使用环境，您可以大大减少软件包之间发生冲突的机会，并且可以测试各种配置，而不会影响您的全局安装。您可以通过在 Anaconda 提示符下键入以下命令来了解`conda`的命令行选项:
 
-```
+```py
 conda --help
 ```
 
 这相当于:
 
-```
+```py
 conda -h
 ```
 
@@ -101,32 +101,32 @@ conda -h
 
 让我们首先创建一个没有任何特定包的名为 demo 的环境:
 
-```
+```py
 conda create --name demo 
 ```
 
 当要求确认时，键入`y`。
 ![condacreate](img/1a659cec57021359896aee214a5fb19f.png)如果你想在环境中使用一个特定的 Python 版本你可以在命令中添加它:
 
-```
+```py
 conda create --name demo python=2.7
 ```
 
 这将使用 Python 2.7 创建一个环境。类似地，如果您已经想将一些包添加到环境中，您可以简单地将它们添加到行尾:
 
-```
+```py
 conda create --name demo2 python=2.7 scikit-learn statsmodels
 ```
 
 已安装的包可以在以后更改，我们将在本文的下一部分讨论。一旦创建了环境，它将出现在环境列表中。您可以使用以下任一方式访问该列表:
 
-```
+```py
 conda info --envs
 ```
 
 或者
 
-```
+```py
 conda env list
 ```
 
@@ -134,7 +134,7 @@ conda env list
 
 ![condalist](img/97f4496fbcef93c25f697ae54573d9de.png)如图所示，我们仍处于根环境中。使用 activate 命令可以切换到新的演示环境:
 
-```
+```py
 activate demo
 ```
 
@@ -142,31 +142,31 @@ activate demo
 
 完成后，您可以通过输入 deactivate 离开环境。现在想象你已经完全建立了你的完美环境，但是你决定做出改变。最安全的方法是对您当前的环境进行精确克隆。让我们创建一个名为 demo2 的环境，它将是演示环境的精确克隆:
 
-```
+```py
 conda create --name demo2 --clone demo
 ```
 
 如果我们决定不再需要它，我们可以删除它:
 
-```
+```py
 conda remove --name demo2 --all
 ```
 
 您还可以备份您的环境，供自己使用或与他人共享。为此，我们需要回到环境中去。
 
-```
+```py
 activate demo
 ```
 
 然后，我们可以创建当前环境的环境文件:
 
-```
+```py
 conda env export > demo.yml
 ```
 
 可用于从文件创建一个相同的环境，如下所示:
 
-```
+```py
 conda env create --file demo.yml
 ```
 
@@ -176,19 +176,19 @@ conda env create --file demo.yml
 
 现在我们已经学习了如何设置环境，让我们来看看如何在环境中管理包。我们已经看到，您可以在创建环境时提供要安装的软件包列表:
 
-```
+```py
 conda create --name demo scikit-learn statsmodels
 ```
 
 这不仅会安装软件包本身，还会安装所有的依赖项。创建环境后，您可以使用以下任一方式查看已安装的软件包:
 
-```
+```py
 conda list
 ```
 
 在环境中，或者在演示环境中:
 
-```
+```py
 conda list --name demo
 ```
 
@@ -196,7 +196,7 @@ conda list --name demo
 
 如果你想安装一个新的软件包，你可以先搜索它。例如，如果我们想寻找巴别塔包:
 
-```
+```py
 conda search babel
 ```
 
@@ -204,43 +204,43 @@ conda search babel
 
 然后，您可以使用 install 命令在演示环境中安装该软件包:
 
-```
+```py
 conda install --name demo babel
 ```
 
 省略-n demo 会将它安装在当前活动的环境中。稍后，您可以使用 update 命令更新软件包:
 
-```
+```py
 conda update --name demo babel
 ```
 
 你甚至可以更新`conda`本身:
 
-```
+```py
 conda update conda
 ```
 
 如果您决定不再需要某个软件包，同样可以将其从您的环境中删除:
 
-```
+```py
 conda remove --name demo babel
 ```
 
 最后，如果您找不到您正在寻找的包(或包版本)，您会怎么做？第一个选项是检查由[Anaconda.org](https://www.anaconda.com/distribution/)提供的附加包频道。前往 Anaconda.org，使用搜索框查找您的包裹。举个例子，让我们安装 cartopy。 [Cartopy](https://scitools.org.uk/cartopy/) 是一个地理绘图包，用来替换 Anaconda 附带的不推荐使用的底图包。如果你在 Anaconda.org 上搜索，你会在康达-福吉频道找到它。![cloud](img/c1f1405a95d170ec611fe881b81a3b02.png)可以通过运行以下命令进行安装，其中`-c`标志表示通道名称:
 
-```
+```py
 conda install --name demo --channel conda-forge cartopy
 ```
 
 然后，可以像管理任何其他包一样管理它。如果你找不到你的包裹怎么办？嗯，你可以试试其他的包管理器比如`pip`。后者实际上可以在`conda`环境中安装和使用:
 
-```
+```py
 conda install --name demo pip
 ```
 
 然后，您可以在您的环境中正常使用 pip。例如，安装谷歌深度学习库 [Tensorflow](https://www.tensorflow.org) 的 CPU 版本将需要在您的环境中运行以下`pip`命令:
 
-```
+```py
 pip install --ignore-installed --upgrade tensorflow
 ```
 

@@ -32,13 +32,13 @@ January 31, 2022![How to Create and Use a Pandas DataFrame](img/4a6412ab46baca7e
 
 一种途径可能来自 web(即来自 API 或 GitHub 库)
 
-```
+```py
 import pandas as pd
 import numpy as np 
 import datetime as dt
 ```
 
-```
+```py
 # While not necessarily the case, you’ll often need to load the numpy library when working with the pandas library 
 url = 'https://raw.githubusercontent.com/Vibe1990/Netflix-Project/main/netflix_title.csv'
 netflix = pd.read_csv(url)
@@ -56,7 +56,7 @@ netflix
 
 或者，如果一个文件存储在您的计算机上的工作目录中，那么路径会相应地调整。在这个过程中，我们可以使用[相对路径或完整路径](https://docs.oracle.com/javase/tutorial/essential/io/path.html#:~:text=A%2520path%2520is%2520either%2520relative,required%2520to%2520locate%2520the%2520file.&text=A%2520relative%2520path%2520needs%2520to,foo%2520is%2520a%2520relative%2520path.)来指定获取给定文件的路径，因为该函数可以毫无问题地解释两者之间的差异。
 
-```
+```py
 # Assuming you've set up your notebook to have the desired working directory set
 
 netflix = pd.read_csv(“netflix_title.csv”)
@@ -79,7 +79,7 @@ netflix
 
 7787 行× 12 列
 
-```
+```py
 netflix.head(5)
 ```
 
@@ -106,13 +106,13 @@ netflix.head(5)
 
 *   无-这将生成一个空的数据帧，您可以在稍后用数据填充它
 
-    ```
+    ```py
     # Creating an empty DataFrame
     data = pd.DataFrame()
     print(data)
     ```
 
-    ```
+    ```py
     Empty DataFrame
     Columns: []
     Index: []
@@ -120,7 +120,7 @@ netflix.head(5)
 
 *   A dictionary of [ndarrays](https://www.geeksforgeeks.org/numpy-ndarray/) / [Lists](https://www.tutorialspoint.com/python/python_lists.htm)
 
-    ```
+    ```py
     # DataFrame for Pawnee City Hall
 
     Pawnee_city_hall = {
@@ -149,7 +149,7 @@ netflix.head(5)
 
 *   A dictionary of [series](https://pandas.pydata.org/docs/reference/api/pandas.Series.html) (a one-dimensional array of data with an axis label)
 
-    ```
+    ```py
     # Another way to create a DataFrame for Pawnee City Hall
     personnel = pd.Series(["Leslie Knope", "Ron Swanson", "Ann Perkins", "Tom Haverford", "Mark Brendanawicz", "April Ludgate", "Andy Dwyer", "Ben Wyatt", "Chris Traeger","Jerry Gergich", "Donna Meagle", "Craig Middlebrooks"])
     position = pd.Series(["Deputy Director", "Director", "Health Representative", "Administrator", "City Planner", "Assistant - Director", "Assistant - Deputy Director", "Deputy City Manager", "City Manger", "Administrator", "Office Manger", "Assistant Office Manager"])
@@ -175,7 +175,7 @@ netflix.head(5)
 
 *   A list of lists
 
-    ```
+    ```py
     # Another way to create a DataFrame for Pawnee City Hall
 
     data = [
@@ -205,7 +205,7 @@ netflix.head(5)
 
 *   A list of dictionaries
 
-    ```
+    ```py
     # DATAFRAME FOR RAPTORS
 
     raptors = [{"Player": "Pascal Siakim", "PPG": 23.7, "College":"University of New Mexico", "is_starting_five": True},
@@ -229,7 +229,7 @@ netflix.head(5)
 
 虽然在上面的例子中使用了相同的数据类型(字符串)，但数据帧可以由各种不同的数据类型组成，如整数、浮点、列表、日期时间、布尔、列表等。
 
-```
+```py
 # DATAFRAME FOR LAKERS
 
 lakers = {
@@ -271,19 +271,19 @@ lakers
 *   [DataFrame.shape](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.shape.html#pandas.DataFrame.shape) —返回指示数据帧的行数和列数的元组
 *   [DataFrame.size](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.size.html#pandas.DataFrame.size) —返回数据集中数据点数的整数值
 
-    ```
+    ```py
     print(netflix.shape)
     print(netflix.size)
     ```
 
-    ```
+    ```py
     (7787, 12)
     93444
     ```
 
 如果您要探索数据帧的轴，您可以通过让数组经由 [DataFrame.columns](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.columns.html#pandas.DataFrame.columns) 和 [DataFrame.index](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.index.html#pandas.DataFrame.index) 返回列出的列和索引来实现。另一方面，查看组成数据集的不同类型的数据可能是有用的。在这些情况下，使用 [DataFrame.dtypes](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dtypes.html#pandas.DataFrame.dtypes) 。
 
-```
+```py
 print(netflix.columns)
 print("")
 print(netflix.index)
@@ -291,7 +291,7 @@ print("")
 print(netflix.dtypes)
 ```
 
-```
+```py
 Index(['show_id', 'type', 'title', 'director', 'cast', 'country', 'date_added',
        'release_year', 'rating', 'duration', 'listed_in', 'description'],
       dtype='object')
@@ -319,7 +319,7 @@ RangeIndex(start=0, stop=7787, step=1)
 
 为了分割数据帧，我们使用 [DataFrame.loc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html#pandas.DataFrame.loc) 属性或 [DataFrame.iloc](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.iloc.html#pandas.DataFrame.iloc) 属性，其中输入指示提取哪些行或列([rows: columns])。如果一个列需要被隔离，那么这个过程将会是使用方括号和给定列的名称。
 
-```
+```py
 print(netflix['title'])
 print("")
 print(netflix.loc[0])
@@ -356,7 +356,7 @@ print(netflix.loc[0])
 
 在我们需要提取多行或多列的情况下，我们使用[切片方法](https://realpython.com/lessons/indexing-and-slicing/)，这涉及到使用“:”来指示一个连续的范围，该范围的结束范围是排他的(即不包括在内)，或者通过在方括号内输入标准，其方式类似于使用带有 NumPy 的布尔的[索引。](https://numpy.org/doc/stable/user/quickstart.html#indexing-with-boolean-arrays)
 
-```
+```py
 # Select the first two row of the raptors DataFrame 
 raptors.iloc[0:2]
 ```
@@ -366,7 +366,7 @@ raptors.iloc[0:2]
 | 大前锋 | 帕斯卡尔·西亚金 | Twenty-three point seven | 新墨西哥大学 | 真实的 |
 | 控球后卫 | 弗瑞德疯了 | Twenty point one | 威奇托州 | 真实的 |
 
-```
+```py
 # Select the last three columns of the raptors DataFrame
 raptors.iloc[:, 1:4]
 ```
@@ -378,7 +378,7 @@ raptors.iloc[:, 1:4]
 | 小前锋 | Fifteen point one | 佛罗里达州 | 真实的 |
 | 中心 | Eight point seven | 俄勒冈州 | 错误的 |
 
-```
+```py
 # Select players that averaged more than 15 PPG on the Laker DataFrame
 lakers[lakers["PPG"] > 15]
 ```
@@ -391,7 +391,7 @@ lakers[lakers["PPG"] > 15]
 
 虽然上面的例子很简单，但是通过使用 AND (&)、OR (|)、NOT EQUAL TO(！idspnonenote)等运算符，可以使它变得更加强大和复杂。=)或等于(==)。为此，让我们创建一个包含当前 UFC 冠军信息的新数据框架:
 
-```
+```py
 # DATAFRAME FOR UFC CHAMPS
 
 ufc_champs = {
@@ -429,7 +429,7 @@ ufc_champs
 | nine | 瓦伦蒂娜·舍甫琴科 | 子弹 | Twenty-two | three | 轻量级 | 吉尔吉斯斯坦 |
 | Ten | 罗斯·纳马朱纳斯 | 暴徒 | Eleven | four | 秸秆重量 | 美利坚合众国 |
 
-```
+```py
 # Select champion that came from Brazil + is the Light Heavyweight Champ
 ufc_champs[(ufc_champs['country'] == "Brazil") & (ufc_champs['weightclass'] == "Light Heavyweight")]
 ```
@@ -438,7 +438,7 @@ ufc_champs[(ufc_champs['country'] == "Brazil") & (ufc_champs['weightclass'] == "
 | --- | --- | --- | --- | --- | --- | --- |
 | one | 格洛弗·特谢拉 | 没有人 | Thirty-three | seven | 轻量级 | 巴西 |
 
-```
+```py
 # Select champion(s) if home country is Brazil OR has at Less than 2 losses 
 ufc_champs[(ufc_champs['country'] == "Brazil") | (ufc_champs['losses'] < 2)]
 ```
@@ -451,7 +451,7 @@ ufc_champs[(ufc_champs['country'] == "Brazil") | (ufc_champs['losses'] < 2)]
 | four | 查尔斯·奥利维拉 | 达布朗克斯 | Thirty-one | eight | 轻量级选手 | 巴西 |
 | five | 亚历克斯·弗莱根斯基 | 伟大的 | Twenty-three | one | 轻量级 | 澳大利亚 |
 
-```
+```py
 # Select chamption with less than 20 wins AND home country is not USA
 print(ufc_champs[(ufc_champs['wins'] < 20) & (ufc_champs["country"] != "USA")])
 ```
@@ -463,7 +463,7 @@ print(ufc_champs[(ufc_champs['wins'] < 20) & (ufc_champs["country"] != "USA")])
 
 除了过滤掉数据帧或将其分段，还可以使用`DataFrame.iloc()`和`DataFrame.loc()`属性来更改特定的值。让我们看一个例子，看看我们如何用真实数据做到这一点。假设湖人改变了首发五人阵容，用迪安卓·乔丹替换安东尼·戴维斯。我们可以用`DataFrame.iloc()`这样做:
 
-```
+```py
 # The Lakers made a change in the starting 5 lineup where we replace Anthony Davis with DeAndre Jordan
 
 lakers.iloc[2,2] = False
@@ -492,7 +492,7 @@ lakers
 
 回想一下，我们创建了一个由 UFC 冠军组成的数据框架，这些冠军在 2021 年底获得冠军，并拥有他们的绰号和输赢记录:
 
-```
+```py
 # Say we create a DataFrame consisting of UFC champions that held the title at the end of 2021 with their monikers and win-loss record 
 
 ufc_champs = {
@@ -534,7 +534,7 @@ ufc_champs.append(pd.Series(data = ["Amanda Nunes", "Lioness", 21, 5, "Featherwe
 | Ten | 罗斯·纳马朱纳斯 | 暴徒 | Eleven | four | 秸秆重量 |
 | Seventeen | 阿曼达纽内斯 | 母狮子 | Twenty-one | five | 轻量级 |
 
-```
+```py
 ufc_champs.drop([0], axis = 0) # drops first row
 ```
 
@@ -553,7 +553,7 @@ ufc_champs.drop([0], axis = 0) # drops first row
 
 在添加列的情况下，这个过程类似于将一个条目添加到字典中。
 
-```
+```py
 weight_limit = [265,205,185,170,155,145,135,125,135,125,115]
 ufc_champs['weight_limit'] = weight_limit
 ufc_champs
@@ -575,7 +575,7 @@ ufc_champs
 
 有时对于数据集，用于标识列的标签可能无法准确描述其属性。要更改这些标签，我们可以使用`[DataFrame.rename()](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rename.html#pandas.DataFrame.rename)`方法，该方法接受 index 参数(以类似字典的格式指定索引的标签)、columns 参数(以类似字典的格式指定列的标签)以及确定是否返回新数据帧的就地参数。
 
-```
+```py
 # Let’s say we need to rename the columns of the UFC champ DataFrame by capitalizing the labels
 
 ufc_champs.rename(columns = {'names': 'Names', 
@@ -606,7 +606,7 @@ ufc_champs.rename(columns = {'names': 'Names',
 
 这种转换实质上是将一个较长格式的数据帧变得更宽。这通常是因为每个后续条目的唯一标识符在多行中重复。导出新格式化的数据帧的一种方法是使用 [DataFrame.pivot](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html) 。这种方法需要定义哪些数据列将用作新的索引和索引以及数据帧的值。
 
-```
+```py
 # Say we are creating a DataFrame that maps out the voting for the season MVP of the 2021-2022 NBA season from 5 different sports journalist/reporter/pundits in sports media
 
 mvp_vote_2022 = pd.DataFrame({
@@ -642,7 +642,7 @@ mvp_vote_2022.pivot(index = 'Voter', columns = 'Placing')
 
 对于给定的列，`DataFrame.pivot`方法不允许有重复值的行。如果不能保证这种唯一性，另一种方法是使用 [`DataFrame.pivot_table()`](https://pandas.pydata.org/docs/reference/api/pandas.pivot_table.html) 函数。这种方法需要用于指定索引、列和值的参数。独特的是，这个函数还有一个额外的参数“agg func”(*默认为 numpy.mean* )，它传递一个函数来聚合 DataFrame 的值。
 
-```
+```py
 # Create a new DataFrame that shows the median placing for NBA MVP 
 mvp_vote_2022.pivot_table(index = 'Player', values = 'Placing', aggfunc = np.median).sort_values(by= 'Placing') 
 
@@ -665,7 +665,7 @@ mvp_vote_2022.pivot_table(index = 'Player', values = 'Placing', aggfunc = np.med
 
 有时一个数据帧可能有多个索引，如下所示:
 
-```
+```py
 array = [["Month 1",  "Month 2", "Month  3", "Month 4"], 
         ['Squat', "Squat", "Squat", "Squat"]]
 
@@ -690,7 +690,7 @@ effect_of_ped
 
 通常很难理解数据的含义或对其进行分析。因此，诸如 [`stack()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.stack.html#pandas.DataFrame.stack) 或 [`unstack()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.unstack.html#pandas.DataFrame.unstack) 之类的功能可以分别使其更长或更宽。
 
-```
+```py
 effect_of_ped.stack()
 ```
 
@@ -701,7 +701,7 @@ effect_of_ped.stack()
 | 拉里 | **在**之前 | **下蹲** | Four hundred and thirty-five | Three hundred and fifteen | Three hundred and sixty-five | Four hundred and fifty-five |
 | 之后 | **下蹲** | Five hundred and forty-five | Four hundred and ninety-five | Four hundred and five | Five hundred and eighty-five |
 
-```
+```py
 effect_of_ped.unstack()
 ```
 
@@ -716,7 +716,7 @@ effect_of_ped.unstack()
 
 这被称为 *unpivoting* a DataFrame，其工作原理是将宽格式数据帧转换为长格式数据帧。这通常发生在多个列作为给定分析的标识符时。为了将数据帧转换成更长的格式，我们需要使用 [`DataFrame.melt()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.melt.html#pandas.DataFrame.melt) 函数，该函数需要确定哪些列将被用作标识符变量，哪些列将被“取消透视”以对应于所述标识符的值。
 
-```
+```py
 data = pd.DataFrame({"Name": ["Pankaj", "Lisa", "David"], "ID": [1, 2, 3], "Role": ["CEO", "Editor", "Author"]})
 data
 

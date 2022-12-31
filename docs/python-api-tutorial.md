@@ -40,19 +40,19 @@ API 请求的工作方式完全相同——您向 API 服务器发出数据请�
 
 如果使用 pip 管理 Python 包，可以使用以下命令安装请求:
 
-```
+```py
 pip install requests
 ```
 
 如果您使用 conda，您需要的命令是:
 
-```
+```py
 conda install requests
 ```
 
 一旦你安装了库，你需要导入它。让我们从重要的一步开始:
 
-```
+```py
 import requests
 ```
 
@@ -66,17 +66,17 @@ import requests
 
 ![](img/abf452fbdf0b92d0726c3d2d301010b1.png)要发出一个“GET”请求，我们将使用 [`requests.get()`函数](https://2.python-requests.org/en/master/user/quickstart/#make-a-request)，它需要一个参数——我们要向其发出请求的 URL。我们首先向一个不存在的 API 端点发出请求，这样我们就可以看到响应代码是什么样子。
 
-```
+```py
 response = requests.get("https://api.open-notify.org/this-api-doesnt-exist")
 ```
 
 `get()`函数返回一个 [`response`对象](https://2.python-requests.org/en/master/user/advanced/#request-and-response-objects)。我们可以使用`[response.status_code](https://2.python-requests.org/en/master/user/quickstart/#response-status-codes)`属性来接收请求的状态代码:
 
-```
+```py
 print(response.status_code)
 ```
 
-```
+```py
 404
 ```
 
@@ -108,22 +108,22 @@ print(response.status_code)
 
 如果您点击上面的链接来查看这个端点的文档，您会看到它说*这个 API 不接受任何输入。*这使它成为我们开始使用的一个简单的 API。我们将从使用请求库向端点发出 GET 请求开始:
 
-```
+```py
 response = requests.get("https://api.open-notify.org/astros.json")
 print(response.status_code)
 ```
 
-```
+```py
 200
 ```
 
 我们收到一个“200”代码，告诉我们我们的请求是成功的。文档告诉我们，我们将得到的 API 响应是 JSON 格式的。在下一节中，我们将了解 JSON，但是首先让我们使用 [response.json()方法](https://2.python-requests.org/en/master/user/quickstart/#json-response-content)来查看我们从 API 接收到的数据:
 
-```
+```py
 print(response.json())
 ```
 
-```
+```py
 {'message': 'success', 'people': [{'name': 'Alexey Ovchinin', 'craft': 'ISS'}, {'name': 'Nick Hague', 'craft': 'ISS'}, {'name': 'Christina Koch', 'craft': 'ISS'}, {'name': 'Alexander Skvortsov', 'craft': 'ISS'}, {'name': 'Luca Parmitano', 'craft': 'ISS'}, {'name': 'Andrew Morgan', 'craft': 'ISS'}], 'number': 6}
 ```
 
@@ -144,7 +144,7 @@ json 库有两个主要功能:
 
 `dumps()`函数特别有用，因为我们可以用它来打印一个格式化的字符串，这样更容易理解 JSON 输出，就像我们上面看到的图表一样:
 
-```
+```py
 import json
 
 def jprint(obj):
@@ -155,7 +155,7 @@ def jprint(obj):
 jprint(response.json())
 ```
 
-```
+```py
 {
     "message": "success",
     "number": 6,
@@ -202,7 +202,7 @@ jprint(response.json())
 
 我们可以通过在请求中添加一个可选的关键字参数`params`来做到这一点。我们可以用这些参数做一个字典，然后把它们传入`requests.get`函数。使用纽约市的坐标，我们的字典看起来是这样的:
 
-```
+```py
 parameters = {
     "lat": 40.71,
     "lon": -74
@@ -216,13 +216,13 @@ parameters = {
 
 让我们用这些坐标发出一个请求，看看会得到什么样的响应。
 
-```
+```py
 response = requests.get("https://api.open-notify.org/iss-pass.json", params=parameters)
 
 jprint(response.json())
 ```
 
-```
+```py
 {
     "message": "success",
     "request": {
@@ -267,12 +267,12 @@ JSON 响应与文档中指定的内容相匹配:
 
 让我们从 JSON 对象中提取通过时间:
 
-```
+```py
 pass_times = response.json()['response']
 jprint(pass_times)
 ```
 
-```
+```py
 [
     {
         "duration": 395,
@@ -299,7 +299,7 @@ jprint(pass_times)
 
 接下来，我们将使用一个循环来提取五个`risetime`值:
 
-```
+```py
 risetimes = []
 
 for d in pass_times:
@@ -309,13 +309,13 @@ for d in pass_times:
 print(risetimes)
 ```
 
-```
+```py
 [1568082479, 1568088118, 1568093944, 1568099831, 1568105674]
 ```
 
 这些时间很难理解——它们的格式被称为时间戳或[纪元](https://en.wikipedia.org/wiki/Unix_time)。从 1970 年 1 月 1 日开始，时间基本上是以秒数来计算的。我们可以使用 Python [`datetime.fromtimestamp()`方法](https://docs.python.org/3/library/datetime.html#datetime.date.fromtimestamp)将这些转换成更容易理解的时间:
 
-```
+```py
 from datetime import datetime
 
 times = []
@@ -326,7 +326,7 @@ for rt in risetimes:
     print(time)
 ```
 
-```
+```py
 2019-09-09 21:27:59
 2019-09-09 23:01:58
 2019-09-10 00:39:04

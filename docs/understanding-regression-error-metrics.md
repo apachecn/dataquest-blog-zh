@@ -57,7 +57,7 @@ MAE 也是最直观的指标，因为我们只是查看数据和模型预测之�
 
 在 Python 中计算 MAE 相对简单。在下面的代码中，`sales`包含所有销售数字的列表，`X`包含大小为 2 的元组列表。每个元组包含与同一索引中的销售相对应的评论家分数和用户分数。`lm`包含一个来自 scikit-learn 的`LinearRegression`对象，我用它来创建模型本身。这个对象也包含系数。`predict`方法接受输入，并基于这些输入给出实际预测。
 
-```
+```py
 # Perform the intial fitting to get the LinearRegression object
 from sklearn import linear_model
 lm = linear_model.LinearRegression()
@@ -97,7 +97,7 @@ print(mae)
 
 像 MAE 一样，我们将计算模型的 MSE。谢天谢地，计算就像 MAE 一样简单。
 
-```
+```py
 mse_sum = 0
 for sale, x in zip(sales, X):
     prediction = lm.predict(x)
@@ -120,7 +120,7 @@ print(mse)
 
 ## 根据我们的模型计算 MAPE
 
-```
+```py
 mape_sum = 0
 for sale, x in zip(sales, X):
     prediction = lm.predict(x)
@@ -145,7 +145,7 @@ print(mape)
 
 ## 根据我们的模型计算 MPE
 
-```
+```py
 mpe_sum = 0
 for sale, x in zip(sales, X):
     prediction = lm.predict(x)

@@ -18,7 +18,7 @@ November 4, 2019
 
 以下是这篇博客的 Nginx 日志中的几行文字:
 
-```
+```py
  X.X.X.X - - [09/Mar/2017:01:15:59 +0000] "GET /blog/assets/css/jupyter.css HTTP/1.1" 200 30294 "https://www.dataquest.io/blog/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36 PingdomPageSpeed/1.0 (pingbot/2.0; +https://www.pingdom.com/)"
 X.X.X.X - - [09/Mar/2017:01:15:59 +0000] "GET /blog/assets/js/jquery-1.11.1.min.js HTTP/1.1" 200 95786 "https://www.dataquest.io/blog/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36 PingdomPageSpeed/1.0 (pingbot/2.0; +https://www.pingdom.com/)
 "X.X.X.X - - [09/Mar/2017:01:15:59 +0000] "GET /blog/assets/js/markdeep.min.js HTTP/1.1" 200 58713 "https://www.dataquest.io/blog/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36 PingdomPageSpeed/1.0 (pingbot/2.0; +https://www.pingdom.com/)"
@@ -29,7 +29,7 @@ X.X.X.X - - [09/Mar/2017:01:16:01 +0000] "GET /blog/feed.xml HTTP/1.1" 200 48285
 
 每个请求都是一行，当请求发送到服务器时，这些行按时间顺序附加。每一行的格式都是 Nginx `combined`格式，内部看起来是这样的:
 
-```
+```py
 $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
 ```
 
@@ -101,7 +101,7 @@ $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$
         *   睡觉前把阅读点设回原来的位置(调用`readline`前)，这样就不会漏掉什么(用`seek`的方法)。
     *   如果其中一个文件写了一行，就抓取那一行。回想一下，一次只能写入一个文件，所以我们无法从两个文件中获取行。
 
-```
+```py
  f_a = open(LOG_FILE_A, 'r')
 f_b = open(LOG_FILE_B, 'r')
 while True:
@@ -135,7 +135,7 @@ while True:
 `*   从分割表示中提取所有字段。
     *   请注意，有些字段在这里看起来并不“完美”——例如，时间仍然用括号括起来。*   初始化一个存储数据库记录创建时间的`created`变量。这将使未来的管道步骤能够查询数据。`
 
-```
+```py
  split_line = line.split(" ")
 remote_addr = split_line[0]
 time_local = split_line[3] + " " + split_line[4]
@@ -150,7 +150,7 @@ created = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
 我们还需要决定 SQLite 数据库表的模式，并运行所需的代码来创建它。因为我们希望这个组件简单，所以简单的模式是最好的。我们将使用以下查询来创建表:
 
-```
+```py
  CREATE TABLE IF NOT EXISTS logs (
     raw_log TEXT NOT NULL UNIQUE,
     remote_addr TEXT,
@@ -180,7 +180,7 @@ created = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 *   提交事务，以便它写入数据库。
 *   关闭与数据库的连接。
 
-```
+```py
  conn = sqlite3.connect(DB_NAME)
 cur = conn.cursor()
 args = [line] + parsed
@@ -209,7 +209,7 @@ conn.close()
 *   查询在某个时间戳之后添加的任何行。
 *   获取所有行。
 
-```
+```py
  def get_lines(time_obj):
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
@@ -223,7 +223,7 @@ conn.close()
 *   初始化两个空列表。
 *   从查询响应中提取时间和 ip，并将它们添加到列表中。
 
-```
+```py
  def get_time_and_ip(lines):
     ips = []
     times = []
@@ -235,7 +235,7 @@ conn.close()
 
 您可能会注意到，在上面的代码中，我们将字符串中的时间解析为一个 [datetime](https://docs.python.org/3/library/datetime.html) 对象。用于解析的代码如下:
 
-```
+```py
  def parse_time(time_str):
     time_obj = datetime.strptime(time_str, '[%d/%b/%Y:%H:%M:%S %z]')
     return time_obj
@@ -249,7 +249,7 @@ conn.close()
 *   创建一个关键字`day`，用于计算唯一 IP。
 *   将每个 ip 添加到一个[集合](https://docs.python.org/3/library/stdtypes.html?highlight=set#set)中，该集合将只包含每天的唯一 IP。
 
-```
+```py
  lines = get_lines(start_time)
 ips, times = get_time_and_ip(lines)
 if len(times) > 0:
@@ -270,7 +270,7 @@ for ip, time_obj in zip(ips, times):
 *   将列表排序，使日期按顺序排列。
 *   打印出每天的访客数量。
 
-```
+```py
  for k, v in unique_ips.items():
     counts[k] = len(v)
 count_list = counts.items()
@@ -281,7 +281,7 @@ for item in count_list:
 
 然后我们可以从上面获取代码片段，这样它们每`5`秒运行一次:
 
-```
+```py
  unique_ips = {}
 counts = {}
 start_time = datetime(year=2017, month=3, day=9)
@@ -330,7 +330,7 @@ while True:
 
 为了统计浏览者的数量，我们的代码与统计访问者数量的代码基本相同。主要区别在于我们解析用户代理来检索浏览器的名称。在下面的代码中，您会注意到我们查询的是`http_user_agent`列而不是`remote_addr`，我们解析用户代理来找出访问者使用的浏览器:
 
-```
+```py
  def get_lines(time_obj):
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
@@ -354,7 +354,7 @@ def parse_user_agent(user_agent):
 
 然后我们修改我们的循环来统计访问该站点的浏览器:
 
-```
+```py
  browsers, times = get_time_and_ip(lines)
 if len(times) > 0:
     start_time = times[-1]

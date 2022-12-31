@@ -54,7 +54,7 @@ Python 附带了两个用于实现多线程程序的内置模块，包括`thread
 
 该程序包括如下两个独立的任务(功能):
 
-```
+```py
 import time
 def calc_square(numbers):
     for n in numbers:
@@ -69,7 +69,7 @@ def calc_cube(numbers):
 
 上面的代码实现了两个功能，`calc_square()`和`calc_cube()`。`calc_square()`函数计算列表中每个数字的平方，`calc_cube()`计算列表中每个数字的立方。函数体中的`time.sleep(0.1)`语句在每次迭代结束时暂停代码执行 0.1 秒。我们将这个语句添加到函数中，使 CPU 空闲一会儿，并模拟一个 I/O 绑定的任务。在真实的场景中，I/O 绑定的任务可能会等待外围设备或 web 服务响应。
 
-```
+```py
 numbers = [2, 3, 5, 8]
 start = time.time()
 calc_square(numbers)
@@ -81,7 +81,7 @@ print('Execution Time: {}'.format(end-start))
 
 如您所见，程序的顺序执行几乎需要一秒钟。现在让我们利用 CPU 的空闲时间，利用多线程技术，减少总的执行时间。多线程技术通过在其他任务等待 I/O 响应的同时将 CPU 时间分配给一个任务来减少运行时间。让我们看看它是如何工作的:
 
-```
+```py
 import threading
 
 start = time.time()
@@ -100,7 +100,7 @@ end = time.time()
 print('Execution Time: {}'.format(end-start))
 ```
 
-```
+```py
  2 ^ 2 = 4
 
     2 ^ 3 = 8
@@ -126,14 +126,14 @@ print('Execution Time: {}'.format(end-start))
 
 要开始线程执行，我们需要分别调用每个线程实例的“start”方法。因此，这两行同时执行 square 和 cube 线程:
 
-```
+```py
 square_thread.start()
 cube_thread.start()
 ```
 
 我们需要做的最后一件事是调用“join”方法，它告诉一个线程等待，直到另一个线程的执行完成:
 
-```
+```py
 square_thread.join()
 cube_thread.join()
 ```

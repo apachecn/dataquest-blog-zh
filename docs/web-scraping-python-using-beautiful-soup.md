@@ -117,7 +117,7 @@ HTML 有许多功能类似于你可能在像 Microsoft Word 这样的文字处�
 
 HTML 由称为**标签**的元素组成。最基本的标签是`<html>`标签。这个标签告诉 web 浏览器里面的所有东西都是 HTML。我们可以用这个标签制作一个简单的 HTML 文档:
 
-```
+```py
 <html>
 </html>
 ```
@@ -128,7 +128,7 @@ HTML 由称为**标签**的元素组成。最基本的标签是`<html>`标签。
 
 网页的主要内容放在`body`标签中。`head`标签包含关于页面标题的数据，以及其他在 web 抓取中通常没有用的信息:
 
-```
+```py
 <html>
 <head>
 </head>
@@ -143,7 +143,7 @@ HTML 由称为**标签**的元素组成。最基本的标签是`<html>`标签。
 
 我们现在将第一个内容添加到页面中的一个`p`标签中。`p`标签定义了一个段落，标签内的任何文本都显示为一个单独的段落:
 
-```
+```py
 <html>
 <head>
 </head>
@@ -172,7 +172,7 @@ Here's a second paragraph of text!
 
 我们也可以给 HTML 标签添加属性来改变它们的行为。下面，我们将使用`a`标签添加一些额外的文本和超链接。
 
-```
+```py
 <html>
 <head>
 </head>
@@ -211,7 +211,7 @@ Here's a second paragraph of text!
 
 我们可以在示例中添加类和 id:
 
-```
+```py
 <html>
 <head>
 </head>
@@ -246,23 +246,23 @@ Here's a second paragraph of text!
 
 我们需要首先导入`requests`库，然后使用 [requests.get](https://2.python-requests.org/en/master/user/quickstart/#make-a-request) 方法下载页面:
 
-```
+```py
 import requests
 page = requests.get("https://dataquestio.github.io/web-scraping-pages/simple.html")
 page
 ```
 
-```
+```py
 <Response [200]>
 ```
 
 运行我们的请求后，我们得到一个[响应](https://2.python-requests.org/en/master/user/quickstart/#response-content)对象。这个对象有一个`status_code`属性，指示页面是否下载成功:
 
-```
+```py
 page.status_code
 ```
 
-```
+```py
 200
 ```
 
@@ -270,11 +270,11 @@ page.status_code
 
 我们可以使用`content`属性打印出页面的 HTML 内容:
 
-```
+```py
 page.content
 ```
 
-```
+```py
 <!DOCTYPE html>
 <html>
 <head>
@@ -294,18 +294,18 @@ page.content
 
 我们首先必须导入这个库，并创建一个`BeautifulSoup`类的实例来解析我们的文档:
 
-```
+```py
 from bs4 import BeautifulSoup
 soup = BeautifulSoup(page.content, 'html.parser')
 ```
 
 我们现在可以打印出页面的 HTML 内容，格式很好，在`BeautifulSoup`对象上使用`prettify`方法。
 
-```
+```py
 print(soup.prettify())
 ```
 
-```
+```py
 <!DOCTYPE html>
 <html>
     <head>
@@ -322,21 +322,21 @@ print(soup.prettify())
 
 注意，`children`返回一个列表生成器，所以我们需要对它调用`list`函数:
 
-```
+```py
 list(soup.children)
 ```
 
-```
+```py
 ['html', 'n', <html> <head> <title>A simple example page</title> </head> <body> <p>Here is some simple content for this page.</p> </body> </html>]
 ```
 
 上面告诉我们在页面的顶层有两个标签——初始的`<!DOCTYPE html>`标签和`<html>`标签。列表中还有一个换行符(`n`)。让我们看看列表中每个元素的类型:
 
-```
+```py
 [type(item) for item in list(soup.children)]
 ```
 
-```
+```py
 [bs4.element.Doctype, bs4.element.NavigableString, bs4.element.Tag]
 ```
 
@@ -352,7 +352,7 @@ list(soup.children)
 
 我们现在可以通过选择列表中的第三项来选择`html`标签及其子标签:
 
-```
+```py
 html = list(soup.children)[2]
 ```
 
@@ -360,43 +360,43 @@ html = list(soup.children)[2]
 
 现在，我们可以在`html`标签中找到孩子:
 
-```
+```py
 list(html.children)
 ```
 
-```
+```py
 ['n', <head> <title>A simple example page</title> </head>, 'n', <body> <p>Here is some simple content for this page.</p> </body>, 'n']
 ```
 
 正如我们在上面看到的，这里有两个标签，`head`和`body`。我们想要提取`p`标签中的文本，所以我们将深入主体:
 
-```
+```py
 body = list(html.children)[3]
 ```
 
 现在，我们可以通过找到 body 标签的子标签来获得`p`标签:
 
-```
+```py
 list(body.children)
 ```
 
-```
+```py
 ['n', <p>Here is some simple content for this page.</p>, 'n']
 ```
 
 我们现在可以分离出 p 标签:
 
-```
+```py
 p = list(body.children)[1]
 ```
 
 一旦我们隔离了标签，我们可以使用`get_text`方法提取标签中的所有文本:
 
-```
+```py
 p.get_text()
 ```
 
-```
+```py
 'Here is some simple content for this page.'
 ```
 
@@ -406,32 +406,32 @@ p.get_text()
 
 如果我们想提取一个标签，我们可以使用`find_all`方法，它会在页面上找到一个标签的所有实例。
 
-```
+```py
 soup = BeautifulSoup(page.content, 'html.parser')
 soup.find_all('p')
 ```
 
-```
+```py
 [<p>Here is some simple content for this page.</p>]
 ```
 
 注意，`find_all`返回一个列表，所以我们必须循环遍历，或者使用列表索引，来提取文本:
 
-```
+```py
 soup.find_all('p')[0].get_text()
 ```
 
-```
+```py
 'Here is some simple content for this page.'
 ```
 
 如果您只想找到标签的第一个实例，您可以使用`find`方法，该方法将返回一个单独的`BeautifulSoup`对象:
 
-```
+```py
 soup.find('p')
 ```
 
-```
+```py
 <p>Here is some simple content for this page.</p>
 ```
 
@@ -443,7 +443,7 @@ CSS 使用类和 id 来决定对哪些 HTML 元素应用特定的样式。但是
 
 为了说明这一原则，我们将使用以下页面:
 
-```
+```py
 <html>
     <head>
         <title>A simple example page</title>
@@ -475,13 +475,13 @@ CSS 使用类和 id 来决定对哪些 HTML 元素应用特定的样式。但是
 
 让我们首先下载页面并创建一个`BeautifulSoup`对象:
 
-```
+```py
 page = requests.get("https://dataquestio.github.io/web-scraping-pages/ids_and_classes.html")
 soup = BeautifulSoup(page.content, 'html.parser')
 soup
 ```
 
-```
+```py
 <html>
 <head>
 <title>A simple example page
@@ -506,21 +506,21 @@ Second outer paragraph.
 
 现在，我们可以使用`find_all`方法按类或 id 搜索条目。在下面的例子中，我们将搜索任何具有类别`outer-text`的`p`标签:
 
-```
+```py
 soup.find_all('p', class_='outer-text')
 ```
 
-```
+```py
 [<p class="outer-text first-item" id="second"> <b> First outer paragraph. </b> </p>, <p class="outer-text"> <b> Second outer paragraph. </b> </p>]
 ```
 
 在下面的例子中，我们将寻找任何具有类`outer-text`的标签:
 
-```
+```py
 soup.find_all(class_="outer-text")
 ```
 
-```
+```py
 <p class="outer-text first-item" id="second">
 <b>
 First outer paragraph.
@@ -534,11 +534,11 @@ Second outer paragraph.
 
 我们还可以通过 id 搜索元素:
 
-```
+```py
 soup.find_all(id="first")
 ```
 
-```
+```py
 [<p class="inner-text first-item" id="first">
 First paragraph.
 </p>]
@@ -559,11 +559,11 @@ First paragraph.
 
 `BeautifulSoup`对象支持使用`select`方法通过 CSS 选择器搜索页面。我们可以使用 CSS 选择器来查找页面中位于像这样的`div`内的所有`p`标签:
 
-```
+```py
 soup.select("div p")
 ```
 
-```
+```py
 [<p class="inner-text first-item" id="first">
 First paragraph.
 </p>, <p class="inner-text">
@@ -621,7 +621,7 @@ Second paragraph.
 *   在`seven_day`中，找到每个单独的预测项目。
 *   提取并打印第一个预测项目。
 
-```
+```py
 page = requests.get("https://forecast.weather.gov/MapClick.php?lat=37.7772&lon=-122.4168")
 soup = BeautifulSoup(page.content, 'html.parser')
 seven_day = soup.find(id="seven-day-forecast")
@@ -630,7 +630,7 @@ tonight = forecast_items[0]
 print(tonight.prettify())
 ```
 
-```
+```py
 <div class="tombstone-container">
 	<p class="period-name">
 		Tonight
@@ -661,7 +661,7 @@ print(tonight.prettify())
 
 我们将首先提取预测项目的名称、简短描述和温度，因为它们都是相似的:
 
-```
+```py
 period = tonight.find(class_="period-name").get_text()
 short_desc = tonight.find(class_="short-desc").get_text()
 temp = tonight.find(class_="temp").get_text()
@@ -670,7 +670,7 @@ print(short_desc)
 print(temp)
 ```
 
-```
+```py
 Tonight
 Mostly Clear
 Low: 49 °F
@@ -678,13 +678,13 @@ Low: 49 °F
 
 现在，我们可以从`img`标签中提取出`title`属性。为此，我们只需将`BeautifulSoup`对象视为一个字典，并将我们想要的属性作为一个键传入:
 
-```
+```py
 img = tonight.find("img")
 desc = img['title']
 print(desc)
 ```
 
-```
+```py
 Tonight: Mostly clear, with a low around 49\. West northwest wind 12 to 17 mph decreasing to 6 to 11 mph after midnight. Winds could gust as high as 23 mph.
 ```
 
@@ -697,13 +697,13 @@ Tonight: Mostly clear, with a low around 49\. West northwest wind 12 to 17 mph d
 *   在`seven_day`中选择类别为`tombstone-container`的项目内类别为`period-name`的所有项目。
 *   使用 list comprehension 在每个`BeautifulSoup`对象上调用`get_text`方法。
 
-```
+```py
 period_tags = seven_day.select(".tombstone-container .period-name")
 periods = [pt.get_text() for pt in period_tags]
 periods
 ```
 
-```
+```py
 ['Tonight',
 'Thursday',
 'ThursdayNight',
@@ -719,13 +719,13 @@ periods
 
 我们可以应用相同的技术来获得其他三个字段:
 
-```
+```py
 short_descs = [sd.get_text() for sd in seven_day.select(".tombstone-container .short-desc")]
 temps = [t.get_text() for t in seven_day.select(".tombstone-container .temp")]
 descs = [d["title"] for d in seven_day.select(".tombstone-container img")]print(short_descs)print(temps)print(descs)
 ```
 
-```
+```py
 ['Mostly Clear', 'Sunny', 'Mostly Clear', 'Sunny', 'Slight ChanceRain', 'Rain Likely', 'Rain Likely', 'Rain Likely', 'Chance Rain']
 ['Low: 49 °F', 'High: 63 °F', 'Low: 50 °F', 'High: 67 °F', 'Low: 57 °F', 'High: 64 °F', 'Low: 57 °F', 'High: 64 °F', 'Low: 55 °F']
 ['Tonight: Mostly clear, with a low around 49\. West northwest wind 12 to 17 mph decreasing to 6 to 11 mph after midnight. Winds could gust as high as 23 mph. ', 'Thursday: Sunny, with a high near 63\. North wind 3 to 5 mph. ', 'Thursday Night: Mostly clear, with a low around 50\. Light and variable wind becoming east southeast 5 to 8 mph after midnight. ', 'Friday: Sunny, with a high near 67\. Southeast wind around 9 mph. ', 'Friday Night: A 20 percent chance of rain after 11pm. Partly cloudy, with a low around 57\. South southeast wind 13 to 15 mph, with gusts as high as 20 mph. New precipitation amounts of less than a tenth of an inch possible. ', 'Saturday: Rain likely. Cloudy, with a high near 64\. Chance of precipitation is 70%. New precipitation amounts between a quarter and half of an inch possible. ', 'Saturday Night: Rain likely. Cloudy, with a low around 57\. Chance of precipitation is 60%.', 'Sunday: Rain likely. Cloudy, with a high near 64.', 'Sunday Night: A chance of rain. Mostly cloudy, with a low around 55.']
@@ -739,7 +739,7 @@ descs = [d["title"] for d in seven_day.select(".tombstone-container img")]print(
 
 每个字典键将成为数据帧中的一列，每个列表将成为该列中的值:
 
-```
+```py
 import pandas as pd
 weather = pd.DataFrame({
     "period": periods,
@@ -764,13 +764,13 @@ weather
 
 我们现在可以对数据进行一些分析。例如，我们可以使用一个[正则表达式](https://app.dataquest.io/m/354/)和 [Series.str.extract](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.str.extract.html) 方法来提取数字温度值:
 
-```
+```py
 temp_nums = weather["temp"].str.extract("(?Pd+)", expand=False)
 weather["temp_num"] = temp_nums.astype('int')
 temp_nums
 ```
 
-```
+```py
 0 49
 1 63
 2 50
@@ -785,23 +785,23 @@ Name: temp_num, dtype: object
 
 然后我们可以找到所有高温和低温的平均值:
 
-```
+```py
 weather["temp_num"].mean()
 ```
 
-```
+```py
 58.444444444444443
 ```
 
 我们也可以只选择夜间发生的行:
 
-```
+```py
 is_night = weather["temp"].str.contains("Low")
 weather["is_night"] = is_night
 is_night
 ```
 
-```
+```py
 0 True
 1 False
 2 True
@@ -814,11 +814,11 @@ is_night
 Name: temp, dtype: bool
 ```
 
-```
+```py
 weather[is_night]
 ```
 
-```
+```py
 0 True
 1 False
 2 True

@@ -55,7 +55,7 @@ December 8, 2022![Common data visualization techniques](img/35ad296711dedd0f045e
 
 在我们读取数据后，该表仅用一行 Python 代码创建:
 
-```
+```py
 df = pd.read_csv('power_and_weather21.csv')
 round(df.groupby('quarter')['temperature_max','kwh'].mean(), 2)
 ```
@@ -142,7 +142,7 @@ round(df.groupby('quarter')['temperature_max','kwh'].mean(), 2)
 
 请注意，我们将值写在了条形上，以使各组之间的差异显而易见。在定制图表时，Python 允许很多可能性。这是这个的源代码:
 
-```
+```py
 import pandas as pd
 import matplotlib.pyplot as plt
 df_churn = pd.read_csv('churn_predict.csv')

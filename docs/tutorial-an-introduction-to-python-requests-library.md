@@ -23,7 +23,7 @@ HTTP 客户端(如 web 浏览器或移动应用程序)向 HTTP 服务器发送�
 
 开始使用请求库的第一步是安装它。您可以使用`pip`或`conda`命令来安装库。为此，让我们首先创建一个新的 Python 虚拟环境，然后在其中安装库。
 
-```
+```py
 ~ % mkdir req-prj
 ~ % python3 -m venv req-prj/venv
 ~ % source re   q-prj/venv/bin/activate
@@ -42,7 +42,7 @@ HTTP 客户端(如 web 浏览器或移动应用程序)向 HTTP 服务器发送�
 
 现在您可以导入这个库并编写您的第一个代码片段来试用它。
 
-```
+```py
 import requests
 r = requests.get('https://www.dataquest.io/')
 print(r)
@@ -52,7 +52,7 @@ print(r)
 
 让我们检查上面代码中`r`变量的数据类型:
 
-```
+```py
 print(type(r))
 ```
 
@@ -70,7 +70,7 @@ print(type(r))
 
 我们使用`get`方法从特定的 web 服务器请求数据。让我们试一试:
 
-```
+```py
 url = 'http://httpbin.org/json'
 r = requests.get(url)
 print('Response Code:', r.status_code)
@@ -82,7 +82,7 @@ print('Response Content:\n',r.text)
 
 `headers`属性返回一个专门针对 HTTP 头的特殊字典，因此您可以简单地使用它的键来访问每个项目:
 
-```
+```py
 print(r.headers['Content-Type'])
 ```
 
@@ -93,7 +93,7 @@ print(r.headers['Content-Type'])
 
 我们使用 GET 参数通过 URL 将键值对格式的信息传递给 web 服务器。`get`方法允许我们使用`params`参数传递一个键值对字典。让我们试一试。
 
-```
+```py
 url = 'http://httpbin.org/get'
 payload = {
     'website':'dataquest.io', 
@@ -105,7 +105,7 @@ print('Response Content:\n',r.text)
 
 运行上面的代码。您将看到以下输出:
 
-```
+```py
 Response Content:
  {
   "args": {
@@ -133,7 +133,7 @@ Response Content:
 
 我们使用 POST 请求将从 web 表单收集的数据提交到 web 服务器。要在请求库中做到这一点，您需要首先创建一个数据字典，并将其分配给`post`方法的`data`参数。让我们看一个使用`post`方法的例子:
 
-```
+```py
 url = 'http://httpbin.org/post'
 payload = {
     'website':'dataquest.io', 
@@ -145,7 +145,7 @@ print('Response Content:\n',r.text)
 
 运行上面的代码会返回以下响应:
 
-```
+```py
 Response Content:
  {
   "args": {}, 
@@ -179,7 +179,7 @@ Response Content:
 
 与远程服务器通信时可能会出现一些异常。例如，服务器可能无法访问，请求的 URL 在服务器上不存在，或者服务器没有在适当的时间范围内响应。在这一节中，我们将学习如何使用请求库的 *HTTPError* 类来检测和解决 HTTP 错误。
 
-```
+```py
 import requests
 from requests import HTTPError
 
@@ -194,7 +194,7 @@ except HTTPError as ex:
 
 在上面的代码中，我们导入了 *HTTPError* 类，用于从请求库中捕获和解析 HTTP 异常。然后，我们尝试请求 httpbin.org 上的一个端点，这会生成一个`404`状态代码。每当 HTTP 响应包含错误状态代码(4XX 客户端错误或 5XX 服务器错误响应)时，`raise_for_status()`方法就会抛出异常。一旦出现错误，请求库不会自动引发异常。所以我们需要使用`raise_for_status()`方法来识别是否出现了错误状态代码。最后，异常处理程序块捕获错误并按如下方式打印出来:
 
-```
+```py
 404 Client Error: NOT FOUND for url: http://httpbin.org/status/404
 ```---
 **NOTE**
@@ -202,7 +202,7 @@ except HTTPError as ex:
 If you try to access the <code>http://httpbin.org/status/200 endpoint, the code above outputs <code>Response Code: 200 because the status code is not in the range of error status codes. The <code>raise_for_status() method will return <code>None, which won't trigger the exception handler.
 - - - -
 In addition to the exception that we just discussed, let’s see how we can resolve server timeouts. It's crucial because we need to ensure our application doesn’t hang indefinitely. In the Requests library, if a request times out, a *Timeout*  exception will occur. To specify the timeout of a request to a number of seconds, we can use the <code>timeout argument:
-```py
+```pypy
 import requests
 from requests import Timeout
 url = "http://httpbin.org/delay/10"
@@ -216,7 +216,7 @@ except Timeout as ex:
 
 先说代码。我们导入了 *Timeout* 类来解决超时异常，并提供了一个 URL 来引用一个有 10 秒延迟的端点来测试我们的代码。然后，我们将超时参数设置为 3 秒，这意味着如果服务器在 3 秒内没有响应，get 请求将抛出一个异常。最后，异常处理程序捕获超时错误(如果有的话)，并将其打印出来。所以运行上面的代码会输出下面的错误消息，因为服务器不会在给定的时间内响应。
 
-```
+```py
 HTTPConnectionPool(host='httpbin.org', port=80): Read timed out. (read timeout=3)
 ```## Authentication
 The Requests library supports various web authentications, such as basic, digest, the two versions of OAuth, etc. We can use these authentication methods when we want to work with any data sources that require us to be logged in.
@@ -226,7 +226,7 @@ We will implement the basic authentication using HTTPBin service in the followin
 http://httpbin.org/basic-auth/data/quest
 
 . . . you can authenticate using the username *'data'* and the password *'quest'* by assigning them as a tuple to the <code>auth argument. Once you authenticate successfully, it responds with JSON data <code>{ "authenticated": true, "user": "data"}.
-```py
+```pypy
 import requests
 r = requests.get('http://httpbin.org/basic-auth/data/quest', auth=('data', 'quest'))
 print('Response Code:', r.status_code)
@@ -235,7 +235,7 @@ print('Response Content:\n', r.text)
 
 运行上面的代码。它的输出如下:
 
-```
+```py
 Response Code: 200
 Response Content:
  {
@@ -246,7 +246,7 @@ Response Content:
 
 如果我们使用户名或密码不正确，它的输出如下:
 
-```
+```py
 Response Code: 401
 Response Content:
 ```

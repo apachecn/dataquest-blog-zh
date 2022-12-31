@@ -59,12 +59,12 @@ Project Jupyter 诞生于 IPython 项目，该项目发展成为一个可以支�
 
 不太为人所知的是，您可以修改一个 modify`ast_note_interactivity`内核选项，让 Jupyter 在它自己的行上为任何变量或语句做这件事，因此您可以一次看到多个语句的值。
 
-```
+```py
 from IPython.core.interactiveshell import InteractiveShell
 InteractiveShell.ast_node_interactivity = "all"
 ```
 
-```
+```py
 from pydataset import data
 quakes = data('quakes')
 quakes.head()
@@ -157,7 +157,7 @@ quakes.tail()
 
 如果您想为 Jupyter(笔记本和控制台)的所有实例设置这种行为，只需用下面几行创建一个文件`~/.ipython/profile_default/ipython_config.py`。
 
-```
+```py
 c = get_config()
 
 # Run all nodes interactively
@@ -170,11 +170,11 @@ c.InteractiveShell.ast_node_interactivity = "all"
 
 也不要忘记，通过在库、方法或变量前面加上`?`，你可以访问 Docstring 来快速参考语法。
 
-```
+```py
 ?str.replace()
 ```
 
-```
+```py
 Docstring:
 S.replace(old, new[, count]) -> str
 
@@ -212,12 +212,12 @@ Jupyter 接口。
 
  *你在上面看到的`%matplotlib inline`是一个 *IPython Magic* 命令的例子。基于 IPython 内核，Jupyter 可以访问来自 IPython 内核的所有魔法，它们可以让您的生活变得更加轻松！
 
-```
+```py
 # This will list all magic commands
 %lsmagic
 ```
 
-```
+```py
 Available line magics:
 %alias %alias_magic %autocall %automagic %autosave %bookmark %cat %cd %clear %colors %config %connect_info %cp %debug %dhist %dirs %doctest_mode %ed %edit %env %gui %hist %history %killbgscripts %ldir %less %lf %lk %ll %load %load_ext %loadpy %logoff %logon %logstart %logstate %logstop %ls %lsmagic %lx %macro %magic %man %matplotlib %mkdir %more %mv %notebook %page %pastebin %pdb %pdef %pdoc %pfile %pinfo %pinfo2 %popd %pprint %precision %profile %prun %psearch %psource %pushd %pwd %pycat %pylab %qtconsole %quickref %recall %rehashx %reload_ext %rep %rerun %reset %reset_selective %rm %rmdir %run %save %sc %set_env %store %sx %system %tb %time %timeit %unalias %unload_ext %who %who_ls %whos %xdel %xmode 
 Available cell magics:%%! %%HTML %%SVG %%bash %%capture %%debug %%file %%html %%javascript %%js %%latex %%perl %%prun %%pypy %%python %%python2 %%python3 %%ruby %%script %%sh %%svg %%sx %%system %%time %%timeit %%writefile 
@@ -230,14 +230,14 @@ Automagic is ON, % prefix IS NOT needed for line magics.
 
 您可以管理笔记本的环境变量，而无需重新启动 jupyter 服务器进程。一些库(比如 theano)使用环境变量来控制行为，%env 是最方便的方法。
 
-```
+```py
 # Running %env without any arguments
 # lists all environment variables# The line below sets the environment
 # variable
 %env OMP_NUM_THREADS%env OMP_NUM_THREADS=4
 ```
 
-```
+```py
 env: OMP_NUM_THREADS=4
 ```
 
@@ -247,7 +247,7 @@ env: OMP_NUM_THREADS=4
 
 注意，使用`%run`并不等同于导入 python 模块。
 
-```
+```py
 # this will execute and show the output from
 # all code cells of the specified notebook
 %run ./two-histograms.ipynb
@@ -259,19 +259,19 @@ env: OMP_NUM_THREADS=4
 
 这将用外部脚本替换单元格的内容。您可以使用计算机上的文件作为源，也可以使用 URL 作为源。
 
-```
+```py
 # Before Running
 %load ./hello_world.py
 ```
 
-```
+```py
 # After Running
 # %load ./hello_world.py
 if __name__ == "__main__":
  print("Hello World!")
 ```
 
-```
+```py
 Hello World!
 ```
 
@@ -279,24 +279,24 @@ Hello World!
 
 `%store`命令允许你在两个不同的笔记本之间传递变量。
 
-```
+```py
 data = 'this is the string I want to pass to different notebook'
 %store data
 del data # This has deleted the variable
 ```
 
-```
+```py
 Stored 'data' (str)
 ```
 
 现在，在一个新的笔记本中…
 
-```
+```py
 %store -r data
 print(data)
 ```
 
-```
+```py
 this is the string I want to pass to different notebook
 ```
 
@@ -304,14 +304,14 @@ this is the string I want to pass to different notebook
 
 不带任何参数的`%who`命令将列出全局范围内存在的所有变量。传递类似于`str`的参数将只列出该类型的变量。
 
-```
+```py
 one = "for the money"
 two = "for the show"
 three = "to get ready now go cat go"
 %who str
 ```
 
-```
+```py
 one three two
 ```
 
@@ -321,25 +321,25 @@ one three two
 
 `%%time`将为您提供单元格中代码的单次运行信息。
 
-```
+```py
 %%time
 import time
 for _ in range(1000):
  time.sleep(0.01) # sleep for 0.01 seconds
 ```
 
-```
+```py
 CPU times: user 21.5 ms, sys: 14.8 ms, total: 36.3 ms Wall time: 11.6 s
 ```
 
 `%%timeit`使用 Python [timeit 模块](https://docs.python.org/3.5/library/timeit.html)，该模块运行一条语句 100，000 次(默认情况下)，然后提供最快三次的平均值。
 
-```
+```py
 import numpy
 %timeit numpy.random.normal(size=100)
 ```
 
-```
+```py
 The slowest run took 7.29 times longer than the fastest. This could mean that an intermediate result is being cached.
 100000 loops, best of 3: 5.5 µs per loop
 ```
@@ -348,7 +348,7 @@ The slowest run took 7.29 times longer than the fastest. This could mean that an
 
 使用`%%writefile`魔法将该单元格的内容保存到外部文件中。`%pycat`做相反的事情，向您显示(在弹出窗口中)外部文件的语法高亮内容。
 
-```
+```py
 %%writefile pythoncode.py 
 import numpy
 def append_if_not_exists(arr, x):
@@ -360,15 +360,15 @@ def append_if_not_exists(arr, x):
     append_if_not_exists(arr, x)
 ```
 
-```
+```py
 Writing pythoncode.py
 ```
 
-```
+```py
 %pycat pythoncode.py
 ```
 
-```
+```py
 import numpy
 def append_if_not_exists(arr, x):
  if x not in arr:
@@ -383,11 +383,11 @@ def append_if_not_exists(arr, x):
 
 使用“%prun statement_name”将为您提供一个有序的表格，显示每个内部函数在语句中被调用的次数、每次调用所用的时间以及该函数所有运行的累计时间。
 
-```
+```py
 %prun some_useless_slow_function()
 ```
 
-```
+```py
 26324 function calls in 0.556 seconds 
 Ordered by: internal time 
 ncalls tottime percall cumtime percall filename:lineno(function)
@@ -406,7 +406,7 @@ Jupyter 有自己的接口用于[Python 调试器(`pdb` )](https://docs.python.o
 
 你可以在这里查看`pdb`接受的命令列表[。](https://docs.python.org/3.5/library/pdb.html#debugger-commands)
 
-```
+```py
 %pdb 
 def pick_and_take():
  picked = numpy.random.randint(0, 1000)
@@ -414,11 +414,11 @@ def pick_and_take():
 pick_and_take()
 ```
 
-```
+```py
 Automatic pdb calling has been turned ON
 ```
 
-```
+```py
 --------------------------------------------------------------------
 NotImplementedError Traceback (most recent call last)
 in ()
@@ -434,7 +434,7 @@ in pick_and_take()
 NotImplementedError:
 ```
 
-```
+```py
 > (5)pick_and_take()
 3 def pick_and_take():
 4 picked = numpy.random.randint(0, 1000)
@@ -443,7 +443,7 @@ NotImplementedError:
 7 pick_and_take()
 ```
 
-```
+```py
 ipdb>
 ```
 
@@ -451,14 +451,14 @@ ipdb>
 
 IPython magic 的一条线将为 Retina 屏幕提供双倍分辨率的绘图输出，例如最近的 Macbooks。*注意:下面的例子不会在非视网膜屏幕上渲染*
 
-```
+```py
 x = range(1000)
 y = [i ** 2 for i in x]
 plt.plot(x,y)
 plt.show();
 ```
 
-```
+```py
 %config InlineBackend.figure_format ='retina'
 plt.plot(x,y)
 plt.show();
@@ -472,23 +472,23 @@ plt.show();
 
 有时在最后一行隐藏函数的输出是很方便的，例如在绘图时。为此，您只需在末尾添加一个分号。
 
-```
+```py
 %matplotlib inline
 from matplotlib import pyplot as plt
 import numpyx = numpy.linspace(0, 1, 1000)**1.5
 ```
 
-```
+```py
 # Here you get the output of the function
 plt.hist(x)
 ```
 
-```
+```py
 (array([ 216., 126., 106., 95., 87., 81., 77., 73., 71., 68.]), array([ 0\. , 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1\. ]),
 <a list of 10 Patch objects>)
 ```
 
-```
+```py
 # By adding a semicolon at the end, the output is suppressed.plt.hist(x);
 ```
 
@@ -500,21 +500,21 @@ plt.hist(x)
 
 从笔记本内部执行 shell 命令很容易。您可以使用它来检查工作文件夹中有哪些数据集可用:
 
-```
+```py
 !ls *.csv
 ```
 
-```
+```py
 nba_2016.csv titanic.csv pixar_movies.csv whitehouse_employees.csv
 ```
 
 或者检查和管理包。
 
-```
+```py
 !pip install numpy !pip list | grep pandas
 ```
 
-```
+```py
 Requirement already satisfied (use --upgrade to upgrade): numpy in /Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages pandas (0.18.1)
 ```
 
@@ -524,7 +524,7 @@ Requirement already satisfied (use --upgrade to upgrade): numpy in /Library/Fram
 
 这个:
 
-```
+```py
 $P(A \mid B) = \frac{P(B \mid A)P(A)}{P(B)}$
 ```
 
@@ -547,14 +547,14 @@ Markdown 是笔记本的重要组成部分，别忘了利用它的表现力！
 *   `%%ruby`
 *   `%%perl`
 
-```
+```py
 %%bash
 for i in {1..5}
 do echo "i is $i"
 done
 ```
 
-```
+```py
 i is 1
 i is 2
 i is 3
@@ -570,7 +570,7 @@ Jupyter 的一个很好的特性是能够运行不同语言的内核。作为一
 
 如果您使用 Anaconda 来设置您的环境，让 R 工作是非常容易的。只需在您的终端中运行以下命令:
 
-```
+```py
 conda install -c r r-essentials
 ```
 
@@ -580,7 +580,7 @@ conda install -c r r-essentials
 
 完成后，启动一个 R 控制台并运行以下命令:
 
-```
+```py
 install.packages(c('repr', 'IRdisplay', 'crayon', 'pbdZMQ', 'devtools'))
 devtools::install_github('IRkernel/IRkernel')
 IRkernel::installspec() # to register the kernel in the current R installation
@@ -590,25 +590,25 @@ IRkernel::installspec() # to register the kernel in the current R installation
 
 最好的解决方案是安装 [rpy2](https://rpy2.bitbucket.org/) (也需要一个 R 的工作版本)，这可以用`pip`轻松完成:
 
-```
+```py
 pip install rpy2
 ```
 
 然后，您可以一起使用这两种语言，甚至在它们之间传递变量:
 
-```
+```py
 %load_ext rpy2.ipython
 ```
 
-```
+```py
 %R require(ggplot2)
 ```
 
-```
+```py
 array([1], dtype=int32)
 ```
 
-```
+```py
 import pandas as pd df = pd.DataFrame({
 'Letter': ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c'],
 'X': [4, 3, 5, 2, 1, 7, 7, 5, 9],
@@ -617,7 +617,7 @@ import pandas as pd df = pd.DataFrame({
 })
 ```
 
-```
+```py
 %%R -i df ggplot(data = df) + geom_point(aes(x = X, y= Y, color = Letter, size = Z))
 ```
 
@@ -635,31 +635,31 @@ import pandas as pd df = pd.DataFrame({
 
 首先，您需要安装:
 
-```
+```py
 !pip install cython fortran-magic
 ```
 
-```
+```py
 %load_ext Cython
 ```
 
-```
+```py
 %%cython
 def myltiply_by_2(float x):
 return 2.0 * x
 ```
 
-```
+```py
 myltiply_by_2(23.)
 ```
 
 就我个人而言，我更喜欢使用 fortran，我发现它对于编写数字运算函数非常方便。更多使用细节可以在这里找到[。](https://arogozhnikov.github.io/2015/11/29/using-fortran-from-python.html)
 
-```
+```py
 %load_ext fortranmagic
 ```
 
-```
+```py
 %%fortran subroutine compute_fortran(x, y, z)
 real, intent(in) :: x(:), y(:)
 real, intent(out) :: z(size(x, 1))
@@ -667,7 +667,7 @@ z = sin(x + y)
 end subroutine compute_fortran
 ```
 
-```
+```py
 compute_fortran([1, 2, 3], [4, 5, 6])
 ```
 
@@ -687,7 +687,7 @@ Jupyter 支持多光标，类似于 Sublime 文本。按住`Alt`，点击并拖�
 
 以下命令将安装扩展，以及基于菜单的配置器，该配置器将帮助您从 Jupyter 笔记本主屏幕浏览和启用扩展。
 
-```
+```py
 !pip install https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tarball/master !pip install jupyter_nbextensions_configurator !jupyter contrib nbextension install --user !jupyter nbextensions_configurator enable --user
 ```
 
@@ -701,19 +701,19 @@ Damian Avila 的 [RISE](https://github.com/damianavila/RISE) 允许你从现有�
 
 您可以使用 conda 安装 RISE:
 
-```
+```py
 conda install -c damianavila82 rise
 ```
 
 或者 pip:
 
-```
+```py
 pip install RISE
 ```
 
 然后运行以下代码来安装并启用该扩展:
 
-```
+```py
 jupyter-nbextension install rise --py --sys-prefix jupyter-nbextension enable rise --py --sys-prefix
 ```
 
@@ -723,7 +723,7 @@ jupyter-nbextension install rise --py --sys-prefix jupyter-nbextension enable ri
 
 在本例中，我扫描了存储库中包含图像的文件夹，并显示了前 5:
 
-```
+```py
 import os
 from IPython.display import display, Image names = [f for f in os.listdir('img/ml_demonstrations/') if f.endswith('.png')]
 for name in names[:5]:
@@ -742,11 +742,11 @@ for name in names[:5]:
 
 我们可以用 bash 命令创建相同的列表，因为 magics 和 bash 调用返回 python 变量:
 
-```
+```py
 names = !ls img/ml_demonstrations/*.png names[:5]
 ```
 
-```
+```py
 ['img/ml_demonstrations/colah_embeddings.png',
 'img/ml_demonstrations/convnetjs.png',
 'img/ml_demonstrations/decision_tree.png',

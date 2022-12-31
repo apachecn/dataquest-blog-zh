@@ -28,13 +28,13 @@ April 18, 2022![Read Files in Python](img/3bb28cce9869f6a1a6b7158a5ac6ddfd.png)
 
 首先，让我们通过打开一个文本文件来尝试这个功能。下载包含 Python 之禅的文本文件，并将其存储在与您的代码相同的路径中。
 
-```
+```py
 f = open('zen_of_python.txt', 'r')
 print(f.read())
 f.close()
 ```
 
-```
+```py
  The Zen of Python, by Tim Peters
 
     Beautiful is better than ugly.
@@ -62,12 +62,12 @@ f.close()
 
 在 Python 中，我们可以使用`with`上下文管理器来确保程序在文件关闭后释放所使用的资源，即使发生了异常。让我们来试试:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     print(f.read())
 ```
 
-```
+```py
  The Zen of Python, by Tim Peters
 
     Beautiful is better than ugly.
@@ -97,7 +97,7 @@ with open('zen_of_python.txt') as f:
 
 注意，即使在退出`with`上下文管理器块之后，我们仍然可以访问`f`变量；但是，该文件已关闭。让我们尝试一些文件对象属性，看看该变量是否仍然有效并且可以访问:
 
-```
+```py
 print("Filename is '{}'.".format(f.name))
 if f.closed:
     print("File is closed.")
@@ -105,18 +105,18 @@ else:
     print("File isn't closed.")
 ```
 
-```
+```py
  Filename is 'zen_of_python.txt'.
     File is closed.
 ```
 
 然而，不可能从文件中读取或向文件中写入。当文件关闭时，任何访问其内容的尝试都会导致以下错误:
 
-```
+```py
 f.read()
 ```
 
-```
+```py
  ---------------------------------------------------------------------------
 
     ValueError                                Traceback (most recent call last)
@@ -141,7 +141,7 @@ f.read()
 
 我们还可以指定以文本模式打开文件，默认模式是`'t'`，或者二进制模式是`'b'`。让我们看看如何使用简单的语句复制一个图像文件， [dataquest_logo.png](https://raw.githubusercontent.com/m-mehdi/tutorials/8210bc95fdde6e46c393bd56298cee1a49ea08b1/dataquest_logo.png) :
 
-```
+```py
 with open('dataquest_logo.png', 'rb') as rf:
     with open('data_quest_logo_copy.png', 'wb') as wf:
         for b in rf:
@@ -156,12 +156,12 @@ with open('dataquest_logo.png', 'rb') as rf:
 
 到目前为止，我们已经了解了使用`read()`方法可以读取文件的全部内容。如果我们只想从文本文件中读取几个字节呢？为此，在`read()`方法中指定字节数。让我们来试试:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     print(f.read(17))
 ```
 
-```
+```py
 The Zen of Python
 ```
 
@@ -169,18 +169,18 @@ The Zen of Python
 
 有时，一次读取一行文本文件的内容更有意义。在这种情况下，我们可以使用`readline()`方法。让我们开始吧:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     print(f.readline())
 ```
 
-```
+```py
 The Zen of Python, by Tim Peters
 ```
 
 上面的代码返回文件的第一行。如果我们再次调用该方法，它将返回文件中的第二行，等等。，如下所示:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     print(f.readline())
     print(f.readline())
@@ -188,7 +188,7 @@ with open('zen_of_python.txt') as f:
     print(f.readline())
 ```
 
-```
+```py
 The Zen of Python, by Tim Peters  
 
 Beautiful is better than ugly.
@@ -198,7 +198,7 @@ Explicit is better than implicit.
 
 这种有用的方法帮助我们以增量方式读取整个文件。下面的代码通过逐行迭代输出整个文件，直到跟踪文件读写位置的文件指针到达文件末尾。当`readline()`方法到达文件末尾时，它返回一个空字符串`''`。用 open('zen_of_python.txt ')作为 f:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     line = f.readline()
     while line:
@@ -206,7 +206,7 @@ with open('zen_of_python.txt') as f:
         line = f.readline() 
 ```
 
-```
+```py
  The Zen of Python, by Tim Peters
 
     Beautiful is better than ugly.
@@ -234,32 +234,32 @@ with open('zen_of_python.txt') as f:
 
 读取文本文件的另一个有用的方法是`readlines()`方法。对 file 对象应用此方法将返回包含文件每行的字符串列表。让我们看看它是如何工作的:
 
-```
+```py
 with open('zen_of_python.txt') as f:
     lines = f.readlines()
 ```
 
 让我们检查一下`lines`变量的数据类型，然后打印出来:
 
-```
+```py
 print(type(lines))
 print(lines)
 ```
 
-```
+```py
 <class 'list'>
 ['The Zen of Python, by Tim Peters\n', '\n', 'Beautiful is better than ugly.\n', 'Explicit is better than implicit.\n', 'Simple is better than complex.\n', 'Complex is better than complicated.\n', 'Flat is better than nested.\n', 'Sparse is better than dense.\n', 'Readability counts.\n', "Special cases aren't special enough to break the rules.\n", 'Although practicality beats purity.\n', 'Errors should never pass silently.\n', 'Unless explicitly silenced.\n', 'In the face of ambiguity, refuse the temptation to guess.\n', 'There should be one-- and preferably only one --obvious way to do it.\n', "Although that way may not be obvious at first unless you're Dutch.\n", 'Now is better than never.\n', 'Although never is often better than *right* now.\n', "If the implementation is hard to explain, it's a bad idea.\n", 'If the implementation is easy to explain, it may be a good idea.\n', "Namespaces are one honking great idea -- let's do more of those!"]
 ```
 
 这是一个字符串列表，列表中的每一项都是文本文件中的一行。`\n`转义字符代表文件中的新行。此外，我们可以通过索引或切片操作来访问列表中的每一项:
 
-```
+```py
 print(lines)
 print(lines[3:5])
 print(lines[-1])
 ```
 
-```
+```py
 ['The Zen of Python, by Tim Peters\n', '\n', 'Beautiful is better than ugly.\n', 'Explicit is better than implicit.\n', 'Simple is better than complex.\n', 'Complex is better than complicated.\n', 'Flat is better than nested.\n', 'Sparse is better than dense.\n', 'Readability counts.\n', "Special cases aren't special enough to break the rules.\n", 'Although practicality beats purity.\n', 'Errors should never pass silently.\n', 'Unless explicitly silenced.\n', 'In the face of ambiguity, refuse the temptation to guess.\n', 'There should be one-- and preferably only one --obvious way to do it.\n', "Although that way may not be obvious at first unless you're Dutch.\n", 'Now is better than never.\n', 'Although never is often better than *right* now.\n', "If the implementation is hard to explain, it's a bad idea.\n", 'If the implementation is easy to explain, it may be a good idea.\n', "Namespaces are one honking great idea -- let's do more of those!"]
 ['Explicit is better than implicit.\n', 'Simple is better than complex.\n']
 Namespaces are one honking great idea -- let's do more of those!
@@ -271,7 +271,7 @@ Namespaces are one honking great idea -- let's do more of those!
 
 我们将在本节中使用 CSV 模块。CSV 模块提供了读取 CSV 文件中存储的逗号分隔值的有用方法。我们现在就尝试一下，但是首先，你需要下载 [`chocolate.csv`](https://raw.githubusercontent.com/m-mehdi/tutorials/main/chocolate.csv) 文件，并将其存储在当前工作目录中:
 
-```
+```py
 import csv
 with open('chocolate.csv') as f:
     reader = csv.reader(f, delimiter=',')
@@ -279,7 +279,7 @@ with open('chocolate.csv') as f:
         print(row)
 ```
 
-```
+```py
  ['Company', 'Bean Origin or Bar Name', 'REF', 'Review Date', 'Cocoa Percent', 'Company Location', 'Rating', 'Bean Type', 'Country of Origin']
     ['A. Morin', 'Agua Grande', '1876', '2016', '63%', 'France', '3.75', 'Â\xa0', 'Sao Tome']
     ['A. Morin', 'Kpime', '1676', '2015', '70%', 'France', '2.75', 'Â\xa0', 'Togo']
@@ -395,7 +395,7 @@ with open('chocolate.csv') as f:
 
 CSV 文件的每一行都形成一个列表，其中的每一项都可以方便地访问，如下所示:
 
-```
+```py
 import csv
 with open('chocolate.csv') as f:
     reader = csv.reader(f, delimiter=',')
@@ -403,7 +403,7 @@ with open('chocolate.csv') as f:
         print("The {} company is located in {}.".format(row[0], row[5]))
 ```
 
-```
+```py
  The Company company is located in Company Location.
     The A. Morin company is located in France.
     The A. Morin company is located in France.
@@ -519,7 +519,7 @@ with open('chocolate.csv') as f:
 
 可以使用列名而不是使用它们的索引，这对开发人员来说通常更方便。在这种情况下，我们不使用`reader()`方法，而是使用返回字典对象集合的`DictReader()`方法。让我们来试试:
 
-```
+```py
 import csv
 with open('chocolate.csv') as f:
     dict_reader = csv.DictReader(f, delimiter=',')
@@ -527,7 +527,7 @@ with open('chocolate.csv') as f:
         print("The {} company is located in {}.".format(row['Company'], row['Company Location']))
 ```
 
-```
+```py
  The A. Morin company is located in France.
     The A. Morin company is located in France.
     The A. Morin company is located in France.
@@ -646,34 +646,34 @@ with open('chocolate.csv') as f:
 
 在这一节中，我们将加载一个 JSON 文件，并将其作为一个 JSON 对象使用，而不是作为一个文本文件。为此，我们需要导入 JSON 模块。然后，在`with`上下文管理器中，我们使用属于`json`对象的`load()`方法。它加载文件的内容，并将其作为字典存储在`context`变量中。让我们试一试，但是在运行代码之前，下载 [`movie.json`](https://raw.githubusercontent.com/m-mehdi/tutorials/main/movie.json) 文件，放在当前工作目录下。
 
-```
+```py
 import json
 with open('movie.json') as f:
     content = json.load(f)
     print(content)
 ```
 
-```
+```py
  {'Title': 'Bicentennial Man', 'Release Date': 'Dec 17 1999', 'MPAA Rating': 'PG', 'Running Time min': 132, 'Distributor': 'Walt Disney Pictures', 'Source': 'Based on Book/Short Story', 'Major Genre': 'Drama', 'Creative Type': 'Science Fiction', 'Director': 'Chris Columbus', 'Rotten Tomatoes Rating': 38, 'IMDB Rating': 6.4, 'IMDB Votes': 28827}
 ```
 
 让我们检查一下`content`变量的数据类型:
 
-```
+```py
 print(type(content))
 ```
 
-```
+```py
  <class 'dict'>
 ```
 
 它的数据类型是字典。所以我们可以用它的键访问存储在 JSON 文件中的每一条信息。让我们看看如何从中检索数据:
 
-```
+```py
 print('{} directed by {}'.format(content['Title'], content['Director']))
 ```
 
-```
+```py
  Bicentennial Man directed by Chris Columbus
 ```
 

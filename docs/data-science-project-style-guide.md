@@ -165,7 +165,7 @@ July 9, 2018
 
 **否:**
 
-```
+```py
  opened_file = open('Super_Bowl.csv')
 read_file = opened_file.read()
 super_bowl_split = read_file.split('\\n')
@@ -176,7 +176,7 @@ for row in super_bowl_split:
 
 **是**:
 
-```
+```py
  # Read in the data
 opened_file = open('Super_Bowl.csv')
 read_file = opened_file.read()
@@ -191,7 +191,7 @@ for row in super_bowl_split:
 
 **否:**
 
-```
+```py
  # Read in the data
 opened_file = open('Super_Bowl.csv')
 read_file = opened_file.read()
@@ -204,7 +204,7 @@ for row in super_bowl_split:
 
 **是:**
 
-```
+```py
  # Read in the data
 opened_file = open('Super_Bowl.csv')
 read_file = opened_file.read()
@@ -219,7 +219,7 @@ for row in super_bowl_split:
 
 **否:**
 
-```
+```py
  for row in super_bowl[1:]:    # Iterate through super_bowl[1:]
     row[2] = int(row[2])      # Convert to integer
     row[2] -= 5000            # Subtract 5000 from each row element in position 2
@@ -227,7 +227,7 @@ for row in super_bowl_split:
 
 **是:**
 
-```
+```py
  for row in super_bowl[1:]:   # Omit the first row - it contains the headers
     row[2] = int(row[2])
     row[2] -= 5000            # Values in the "Attendance" column are wrong - correct by subtracting 5000
@@ -237,14 +237,14 @@ for row in super_bowl_split:
 
 **否:**
 
-```
+```py
  o_f = open('Super_Bowl.csv')
 r_f = opened_file.read()
 ```
 
 **是:**
 
-```
+```py
  opened_file = open('Super_Bowl.csv')
 read_file = opened_file.read()
 ```

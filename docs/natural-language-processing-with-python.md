@@ -23,7 +23,7 @@ Python 有一些强大的工具，可以让你做[自然语言处理](https://en
 
 第一步是创建一个叫做单词包矩阵的东西。一包单词矩阵给了我们哪个单词在哪个标题中的数字表示。为了构建一个单词包矩阵，我们首先在整个标题集中找到唯一的单词。然后，我们建立一个矩阵，其中每行是一个标题，每列是一个独特的单词。然后，我们在每个单元格中填入该词在标题中出现的次数。这将产生一个矩阵，其中许多单元格的值为零，除非词汇表主要在标题之间共享。
 
-```
+```py
  from collections import Counter
 
 headlines = [
@@ -51,7 +51,7 @@ def make_matrix(headlines, vocab):
 print(make_matrix(headlines, unique_words))
 ```
 
-```
+```py
  why  HN:  for  people  immediately  like  I  Go  80  meets  ...   my  who  
 0    0    0    0       0            0     0  0   0   0      0  ...    0    0   
 1    0    0    0       0            0     0  0   0   0      0  ...    0    0   
@@ -73,7 +73,7 @@ print(make_matrix(headlines, unique_words))
 
 我们刚刚制作的矩阵非常稀疏，这意味着许多值为零。这在某种程度上是不可避免的，因为标题没有太多的共享词汇。不过，我们可以采取一些措施来改善这个问题。现在`Why`和`why`，以及`use`和`use.`被视为不同的实体，但是我们知道它们指的是同一个词。我们可以通过降低每个单词的大小写并删除所有标点符号来帮助解析器识别出这些事实上是相同的。
 
-```
+```py
  import re
 
 # Lowercase, then replace any non-letter, space, or digit character in the headlines.
@@ -86,7 +86,7 @@ unique_words = list(set(" ".join(new_headlines).split(" ")))
 print(make_matrix(new_headlines, unique_words)) 
 ```
 
-```
+```py
  2  why  top  hn  for  people  immediately  like  python  80  ...   should  
 0  1    0    0   0    0       0            0     0       0   0  ...        0   
 1  0    0    0   0    0       0            0     0       0   0  ...        0   
@@ -108,7 +108,7 @@ print(make_matrix(new_headlines, unique_words))
 
 某些词不能帮助你区分好的和坏的标题。像`the`、`a`和`also`这样的词在所有的上下文中出现得足够频繁，以至于它们并不能真正告诉我们什么东西是好是坏。它们通常同样可能出现在好的和坏的标题中。通过删除这些，我们可以减少矩阵的大小，并使训练算法更快。
 
-```
+```py
  # Read in and split the stopwords file.
 with open("stop_words.txt", 'r') as f:
     stopwords = f.read().split("n")
@@ -124,7 +124,7 @@ unique_words = list(set(" ".join(new_headlines).split(" ")))
 print(make_matrix(new_headlines, unique_words)) 
 ```
 
-```
+```py
  2  top  hn  people  immediately  like  python  80  meets  pretzels  ...   \
 0  1    0   0       0            0     0       0   0      0         0  ...    
 1  0    0   0       0            0     0       0   0      0         0  ...    
@@ -146,7 +146,7 @@ print(make_matrix(new_headlines, unique_words))
 
 现在我们知道了基础知识，我们可以为整套标题制作一个单词包矩阵。我们不希望每次都必须手工编写代码，所以我们将使用来自 [scikit-learn](https://scikit-learn.org/stable/) 的一个类来自动完成。使用 scikit-learn 的*矢量器*来构建你的单词矩阵包将会使这个过程变得更加容易和快速。
 
-```
+```py
  from sklearn.feature_extraction.text import CountVectorizer
 
 # Construct a bag of words matrix.
@@ -165,7 +165,7 @@ full_matrix = vectorizer.fit_transform(sublessons["headline"])
 print(full_matrix.shape)
 ```
 
-```
+```py
  [[0 0 1 0 0 0 0 0 0 0 1 0 0 1 1 1 1 0 1 0 0 0 0 0 0 0 0]
  [1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0]
  [0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 1]
@@ -180,7 +180,7 @@ print(full_matrix.shape)
 
 找出信息量最大的列的一个好方法是使用一种叫做[卡方](https://en.wikipedia.org/wiki/Chi-squared_test)测试的东西。卡方检验发现，在高投票率的帖子和没有高投票率的帖子之间，区别最大的词。这可以是在高投票的帖子中出现很多的词，而在没有投票的帖子中根本不会出现，或者是在没有投票的帖子中出现很多的词，但在投票的帖子中不会出现。卡方检验只对二进制值起作用，因此我们将通过将任何比平均值多的投票数设置为`1`并将任何比平均值少的投票数设置为`0`来使我们的 upvotes 列为二进制。这样做的一个缺点是，我们使用来自数据集的知识来选择特征，因此引入了一些过度拟合。我们可以通过使用数据的子集进行特征选择，并使用不同的子集来训练算法，来避免“现实世界”中的过度拟合。我们现在让事情简单一点，跳过这一步。
 
-```
+```py
  from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 
@@ -203,7 +203,7 @@ chi_matrix = full_matrix[:,top_words[0]]
 
 如果我们忽略了标题的“元”特征，我们就会错过很多好的信息。这些特征包括长度、标点符号数量、平均单词长度和其他句子特定的特征。添加这些可以大大提高预测的准确性。为了添加它们，我们将遍历标题，并对每个标题应用一个函数。一些函数将计算标题的字符长度，其他函数将做更高级的事情，比如计算数字的个数。
 
-```
+```py
  # Our list of functions to apply.
 transform_functions = [
     lambda x: len(x),
@@ -229,7 +229,7 @@ meta = numpy.asarray(columns).T
 
 我们可以使用的功能不仅仅是文本功能。我们有一个名为`sublesson_time`的专栏，告诉我们一个故事是何时提交的，并且可以添加更多信息。通常，在进行 NLP 工作时，您可以添加外部特征，使您的预测更好。一些机器学习算法可以计算出这些特征如何与你的文本特征进行交互(即“在午夜发布标题中带有‘tacos’一词的帖子会导致高分帖子”)。
 
-```
+```py
  columns = []
 
 # Convert the sublesson dates column to datetime.
@@ -260,7 +260,7 @@ features = numpy.hstack([non_nlp, meta, chi_matrix.todense()])
 
 既然我们可以将单词翻译成数字，我们就可以使用算法进行预测。我们将随机选取`7500`个标题作为训练集，然后在`2500`个标题的测试集上评估算法的性能。在我们训练的同一个集合上预测结果将导致[过度拟合](https://en.wikipedia.org/wiki/Overfitting)，此时你的算法对训练集过度优化——我们会认为错误率很好，但实际上在新数据上它可能会高得多。对于算法，我们将使用[岭回归](https://en.wikipedia.org/wiki/Tikhonov_regularization)。与普通的线性回归相比，岭回归引入了对系数的惩罚，防止它们变得太大。这可以帮助它处理大量相互关联的预测值(列)，就像我们所做的那样。
 
-```
+```py
  from sklearn.linear_model 
 import Ridge
 import numpy
@@ -293,7 +293,7 @@ predictions = reg.predict(test)
 
 一个非常简单的基线是获取训练集中每个子成员的平均投票数，并将其用作每个子成员的预测。我们将使用[平均绝对误差](https://en.wikipedia.org/wiki/Mean_absolute_error)作为误差度量。非常简单——只需从预测值中减去实际值，取差值的绝对值，然后求所有差值的平均值。
 
-```
+```py
  # We're going to use mean absolute error as an error metric.
 # Our error is about 13.6 upvotes, which means that, on average, 
 # our prediction is 13.6 upvotes away from the actual number of upvotes.
@@ -307,7 +307,7 @@ average_upvotes = sum(test_upvotes)/len(test_upvotes)
 print(sum(abs(average_upvotes - test_upvotes)) / len(predictions))
 ```
 
-```
+```py
  13.6606593988
 17.2759421912
 ```

@@ -16,19 +16,19 @@ December 13, 2017
 
 我们将使用来自[经合组织就业和劳动力市场统计数据库](https://dx.doi.org/10.1787/data-00303-en)的数据，该数据库提供了自 1950 年以来大多数发达国家的年均劳动时间数据。在整个教程中，我将交替使用数据帧和表格。我们将在 Python 3 中使用一个 Jupyter 笔记本(欢迎您使用任何 IDE(集成开发环境),但是本教程在 Jupyter 中是最容易理解的)。一旦启动，让我们导入`pandas`和`matplotlib`库，然后使用`%matplotlb inline`以便 Jupyter 知道在笔记本单元格内显示图形。如果我提到的任何工具听起来不熟悉，我建议看看 [Dataquest 的入门指南](https://www.dataquest.io/blog/python-data-science/)。
 
-```
+```py
  import pandas as pd
 import matplotlib.pyplot as plt 
 ```
 
 接下来，我们将使用`pd.read_csv()`函数打开前两个数据文件。我们将通过传递参数`index_col=0`来指定第一列应该用作行索引。最后，我们将展示我们的初始表的样子。
 
-```
+```py
  north_america = pd.read_csv('./north_america_2000_2010.csv', index_col=0)
 south_america = pd.read_csv('./south_america_2000_2010.csv', index_col=0) 
 ```
 
-```
+```py
  north_america 
 ```
 
@@ -48,11 +48,11 @@ south_america = pd.read_csv('./south_america_2000_2010.csv', index_col=0)
 
 经过一些观察，我们发现行是国家，列是年份，单元格值是每个雇员的平均年工作时间。尽管数据框架如此辉煌，但它们仍然很难一眼看懂，所以我们将使用 matplotlib 的 [`DataFrame.plot()`方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.plot.html)来绘制我们每年的劳动力趋势线图。
 
-```
+```py
 north_america.plot()
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x2fc51a80f0>
 ```
 
@@ -60,14 +60,14 @@ north_america.plot()
 
 哇，这不是我们想要的！默认情况下，`DataFrame.plot()`方法将行视为 x 轴标签，将单元格值视为 y 轴标签，将列视为线条。这里的快速解决方案是使用`DataFrame.transpose()`方法在我们的数据框架上旋转轴。为了使我们的可视化完整，我们将使用 plot 方法中的`title='string'`参数添加一个标题。我们可以将这些方法链接在一起，然后使用`plt.show()`来整齐地显示我们的线图，而不在绘图上方显示 matplotlib 文本行。
 
-```
+```py
 north_america.transpose().plot(title='Average Labor Hours Per Year')
 plt.show()
 ```
 
 ![Pandas-Concatenation-Tutorial_10_0](img/a50bcdd17b4cc05e2547d415cdd28a91.png)
 
-```
+```py
 south_america.transpose().plot(title='Average Labor Hours Per Year')
 plt.show()
 ```
@@ -80,7 +80,7 @@ plt.show()
 
 对于需要添加相同长度的行或列的简单操作， [`pd.concat()`函数](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.concat.html)是完美的。我们所要做的就是传入一个 DataFrame 对象的**列表**,按照我们希望它们连接的顺序。
 
-```
+```py
  result = pd.concat([list of DataFrames], axis=0, join='outer', ignore_index=False)
 ```
 
@@ -90,7 +90,7 @@ plt.show()
 
 在我们的例子中，我们可以保留所有默认参数，只传入我们的`north_america`和`south_america`数据帧。
 
-```
+```py
 americas = pd.concat([north_america, south_america])
 americas
 ```
@@ -109,7 +109,7 @@ americas
 
 让我们使用循环的**和 [`string.format()`方法](https://docs.python.org/3.4/library/functions.html#format)加载新数据，使这个过程稍微自动化一些。我们将把前面的`americas`数据帧放到一个名为`americas_dfs`的列表中，并将这些新的数据帧添加到这个列表中。最后，我们将使用列表索引显示`americas_2011`数据帧。**
 
-```
+```py
  americas_dfs = [americas]
 for year in range(2011, 2016):
     filename = "./americas_{}.csv".format(year)
@@ -136,7 +136,7 @@ americas_dfs[1]
 
 沿着轴 1 连接时要记住的一个警告是，行索引的标题“Country”将被删除。这是因为 pandas 不确定这个标题是否适用于已经添加的新行标签。我们可以通过分配`DataFrame.index.names`属性轻松解决这个问题。之后，让我们做另一个图，看看我们在哪里。
 
-```
+```py
 americas = pd.concat(americas_dfs, axis=1)
 americas.index.names = ['Country']
 americas
@@ -151,7 +151,7 @@ americas
 | 墨西哥 | Two thousand three hundred and eleven point two | Two thousand two hundred and eighty-five point two | Two thousand two hundred and seventy-one point two | Two thousand two hundred and seventy-six point five | Two thousand two hundred and seventy point six | Two thousand two hundred and eighty-one | Two thousand two hundred and eighty point six | Two thousand two hundred and sixty-one point four | Two thousand two hundred and fifty-eight | Two thousand two hundred and fifty point two | Two thousand two hundred and forty-two point four | Two thousand two hundred and fifty point two | Two thousand two hundred and twenty-five point eight | Two thousand two hundred and thirty-six point six | Two thousand two hundred and twenty-eight point four | Two thousand two hundred and forty-six point four |
 | 美利坚合众国 | One thousand eight hundred and thirty-six | One thousand eight hundred and fourteen | One thousand eight hundred and ten | One thousand eight hundred | One thousand eight hundred and two | One thousand seven hundred and ninety-nine | One thousand eight hundred | One thousand seven hundred and ninety-eight | One thousand seven hundred and ninety-two | One thousand seven hundred and sixty-seven | One thousand seven hundred and seventy-eight | One thousand seven hundred and eighty-six | One thousand seven hundred and eighty-nine | One thousand seven hundred and eighty-seven | One thousand seven hundred and eighty-nine | One thousand seven hundred and ninety |
 
-```
+```py
 americas.transpose().plot(title='Average Labor Hours Per Year')
 plt.show()
 ```
@@ -162,7 +162,7 @@ plt.show()
 
 现在我们已经对美洲有了全面的了解，我们想看看与世界其他地方相比如何。数据收集团队提供了 2000 年至 2015 年亚洲、欧洲和南太平洋的 CSV 文件。让我们把这些文件放进去预览一下。由于`europe`是一个高得多的表，我们将利用`DataFrame.head()`方法通过只显示前 5 行来节省空间。
 
-```
+```py
 asia = pd.read_csv('./asia_2000_2015.csv', index_col=0)
 asia
 ```
@@ -176,7 +176,7 @@ asia
 | 朝鲜；韩国 | Two thousand five hundred and twelve | Two thousand four hundred and ninety-nine | Two thousand four hundred and sixty-four | Two thousand four hundred and twenty-four | Two thousand three hundred and ninety-two | Two thousand three hundred and fifty-one | Two thousand three hundred and forty-six | Two thousand three hundred and six | Two thousand two hundred and forty-six | Two thousand two hundred and thirty-two | Two thousand one hundred and eighty-seven | Two thousand and ninety | Two thousand one hundred and sixty-three | Two thousand and seventy-nine | Two thousand one hundred and twenty-four | Two thousand one hundred and thirteen |
 | 俄罗斯 | One thousand nine hundred and eighty-two | One thousand nine hundred and eighty | One thousand nine hundred and eighty-two | One thousand nine hundred and ninety-three | One thousand nine hundred and ninety-three | One thousand nine hundred and eighty-nine | One thousand nine hundred and ninety-eight | One thousand nine hundred and ninety-nine | One thousand nine hundred and ninety-seven | One thousand nine hundred and seventy-four | One thousand nine hundred and seventy-six | One thousand nine hundred and seventy-nine | One thousand nine hundred and eighty-two | One thousand nine hundred and eighty | One thousand nine hundred and eighty-five | One thousand nine hundred and seventy-eight |
 
-```
+```py
 europe = pd.read_csv('./europe_2000_2015.csv', index_col=0)
 europe.head()
 ```
@@ -191,7 +191,7 @@ europe.head()
 | 捷克共和国 | One thousand eight hundred and ninety-six | One thousand eight hundred and eighteen | One thousand eight hundred and sixteen | One thousand eight hundred and six | One thousand eight hundred and seventeen | One thousand eight hundred and seventeen | One thousand seven hundred and ninety-nine | One thousand seven hundred and eighty-four | One thousand seven hundred and ninety | One thousand seven hundred and seventy-nine | One thousand eight hundred | One thousand eight hundred and six | One thousand seven hundred and seventy-six | One thousand seven hundred and sixty-three | One thousand seven hundred and seventy-one | One thousand seven hundred and seventy-nine |
 | 德国 | One thousand four hundred and fifty-two | One thousand four hundred and forty-one point nine | One thousand four hundred and thirty point nine | One thousand four hundred and twenty-four point eight | One thousand four hundred and twenty-two point two | One thousand four hundred and eleven point three | One thousand four hundred and twenty-four point seven | One thousand four hundred and twenty-four point four | One thousand four hundred and eighteen point four | One thousand three hundred and seventy-two point seven | One thousand three hundred and eighty-nine point nine | One thousand three hundred and ninety-two point eight | One thousand three hundred and seventy-five point three | One thousand three hundred and sixty-one point seven | One thousand three hundred and sixty-six point four | One thousand three hundred and seventy-one |
 
-```
+```py
 south_pacific = pd.read_csv('./south_pacific_2000_2015.csv', index_col=0)
 south_pacific
 ```
@@ -205,22 +205,22 @@ south_pacific
 
 当您只想添加新行时，Pandas 有一个快捷方式，称为 [`DataFrame.append()`方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.append.html)。语法略有不同——因为它是一个 DataFrame 方法，我们将使用点符号在我们的`americas`对象上调用它，然后将新对象作为参数传入。
 
-```
+```py
  result = DataFrame.append([DataFrame or list of DataFrames])
 ```
 
 看起来这些新的数据框架把所有 16 年都作为它们的列。如果我们试图追加的数据中缺少任何列，它们将导致那些单元格中有`NaN`值的行落在缺少的年份列下。让我们运行 append 方法，并通过打印`DataFrame.index`来验证所有国家都已被成功追加。然后，我们可以绘制一个线图，看看新追加的数据是什么样子。
 
-```
+```py
 world = americas.append([asia, europe, south_pacific])
 world.index
 ```
 
-```
+```py
 Index(['Canada', 'Chile', 'Mexico', 'USA', 'Israel', 'Japan', 'Korea', 'Russia', 'Austria', 'Belgium', 'Switzerland', 'Czech Republic', 'Germany', 'Denmark', 'Spain', 'Estonia', 'Finland', 'France', 'United Kingdom', 'Greece', 'Hungary', 'Ireland', 'Iceland', 'Italy', 'Lithuania', 'Luxembourg', 'Latvia', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Slovak Republic', 'Slovenia', 'Sweden', 'Australia', 'New Zealand'], dtype='object', name='Country')
 ```
 
-```
+```py
 world.transpose().plot(title='Average Labor Hours Per Year')
 plt.show()
 ```
@@ -235,7 +235,7 @@ plt.show()
 
 最后，我们将处理重叠到我们的阴谋传说。这可以通过`plt.legend()`功能完成。我们将传入`loc='right'`来表示我们希望图例框位于绘图的右侧。你可以测试一下，它并没有和图的边界完全一致。我们可以用`bbox_to_anchor=(1.3,0.5)`论点做一些微调；我们传入的元组是图例框相对于绘图的位置坐标。我摆弄了一下这些值，直到我找到一个匹配的，但是如果你喜欢不同的审美，请随意修改这四个参数中的任何一个。
 
-```
+```py
 world.transpose().plot(figsize=(10,10), colormap='rainbow', linewidth=2, title='Average Labor Hours Per Year')
 plt.legend(loc='right', bbox_to_anchor=(1.3, 0.5))
 plt.show()
@@ -271,7 +271,7 @@ plt.show()
 
 很高兴能够看到自 2000 年以来劳动时间是如何变化的，但是为了看到真正的趋势，我们希望能够看到尽可能多的历史数据。数据收集小组好心地发送了 1950 年到 2000 年的数据，让我们把它载入来看看。
 
-```
+```py
 historical = pd.read_csv('./historical.csv', index_col=0)
 historical.head()
 ```
@@ -292,12 +292,12 @@ historical.head()
 
 合并时，记住每个表中的哪些行将被保留是很重要的。我不确定我的表的完整尺寸是多少，所以我们可以只查看我们感兴趣的事实，而不是显示全部内容。让我们打印`DataFrame.shape()`属性来查看包含两个表的(总行数，总列数)的元组。
 
-```
+```py
  print("World rows & columns: ", world.shape)
 print("Historical rows & columns: ", historical.shape)
 ```
 
-```
+```py
 World rows & columns: (36, 16)Historical rows & columns: (39, 50)
 ```
 
@@ -305,7 +305,7 @@ World rows & columns: (36, 16)Historical rows & columns: (39, 50)
 
 我们将使用 [`pd.merge()`函数](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.merge.html)进行右连接，并使用索引作为键进行连接。
 
-```
+```py
 result = pd.merge(left DataFrame, right DataFrame, left_index=False, right_index=False, how='inner')
 ```
 
@@ -313,13 +313,13 @@ result = pd.merge(left DataFrame, right DataFrame, left_index=False, right_index
 
 正确的连接将确保我们只保留正确表中的 36 行，而丢弃历史表中额外的 3 行。让我们打印生成的数据帧的形状，并显示头部，以确保一切结果正确。
 
-```
+```py
 world_historical = pd.merge(historical, world, left_index=True, right_index=True, how='right')
 print(world_historical.shape)
 world_historical.head()
 ```
 
-```
+```py
 (36, 66)
 ```
 
@@ -339,13 +339,13 @@ world_historical.head()
 
 既然我们已经艰难地完成了，并且从概念上理解了表合并，那么让我们尝试一种更优雅的技术。熊猫有一个干净的方法来加入索引，这是完美的为我们的情况。
 
-```
+```py
 result = DataFrame.join([other DataFrame], how='inner', on=None)
 ```
 
 [`DataFrame.join()`方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.join.html)让我们在左侧的**表中使用点符号，然后传入右侧的表和`how`作为参数。这样就不需要像在前面的函数中那样指定右和左索引参数。如果是`on=None`，连接键将是行索引。让我们通过观察 DataFrame 头来观察空值是如何影响我们的分析的。**
 
-```
+```py
 world_historical = historical.join(world, how='right')world_historical.head()
 ```
 
@@ -363,7 +363,7 @@ world_historical = historical.join(world, how='right')world_historical.head()
 
 看起来很多行在数据帧的左侧有空值，正如我们对右连接的预期。在绘制最终的线形图之前，最好按照字母顺序对行进行排序，以便读者更容易阅读图例。这可以用 [`DataFrame.sort_index()`方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.sort_index.html)来执行。我们可以传入参数`inplace=True`来避免重新分配我们的`world_historical`变量。然后简单地重用我们最近可视化的 matplotlib 代码来显示我们最终排序的数据帧。
 
-```
+```py
 world_historical.sort_index(inplace=True)
 world_historical.transpose().plot(figsize=(15,10), colormap='rainbow', linewidth=2, title='Average Labor Hours Per Year')
 plt.legend(loc='right', bbox_to_anchor=(1.15, 0.5))

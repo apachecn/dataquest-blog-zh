@@ -28,7 +28,7 @@ PyTorch 的灵活性允许轻松集成新的数据类型和算法，并且该框
 
 从一个数字创建一个张量很简单:
 
-```
+```py
 import torch
 import numpy as np
 
@@ -37,7 +37,7 @@ t = torch.from_numpy(ndarray)
 print(t)
 ```
 
-```
+```py
  tensor([0, 1, 2])
 ```
 
@@ -49,13 +49,13 @@ PyTorch 上的张量有三个属性:
 
 如果我们打印我们创建的张量的属性，我们将得到如下结果:
 
-```
+```py
 print(t.shape)
 print(t.dtype)
 print(t.device)
 ```
 
-```
+```py
  torch.Size([3])
     torch.int64
     cpu
@@ -65,36 +65,36 @@ print(t.device)
 
 我们也可以从 Python 列表中实例化张量:
 
-```
+```py
 t = torch.tensor([0, 1, 2])
 print(t)
 ```
 
-```
+```py
  tensor([0, 1, 2])
 ```
 
 张量也可以是多维的:
 
-```
+```py
 ndarray = np.array([[0, 1, 2], [3, 4, 5]])
 t = torch.from_numpy(ndarray)
 print(t)
 ```
 
-```
+```py
  tensor([[0, 1, 2],
             [3, 4, 5]])
 ```
 
 也有可能从另一个张量创建一个张量。在这种情况下，新张量继承了初始张量的特征。以下示例基于之前创建的张量创建了一个包含随机数的张量:
 
-```
+```py
 new_t = torch.rand_like(t, dtype=torch.float)
 print(new_t)
 ```
 
-```
+```py
  tensor([[0.1366, 0.5994, 0.3963],
             [0.1126, 0.8860, 0.8233]])
 ```
@@ -103,13 +103,13 @@ print(new_t)
 
 我们也可以简单地从我们期望的形状创建一个随机张量:
 
-```
+```py
 my_shape = (3, 3)
 rand_t = torch.rand(my_shape)
 print(rand_t)
 ```
 
-```
+```py
  tensor([[0.8099, 0.8816, 0.3071],
             [0.1003, 0.3190, 0.3503],
             [0.9088, 0.0844, 0.0547]])
@@ -121,36 +121,36 @@ print(rand_t)
 
 张量的切片与 Python 中的任何其他数组结构完全一样。考虑下面的张量:
 
-```
+```py
 zeros_tensor = torch.zeros((2, 3))
 print(zeros_tensor)
 ```
 
-```
+```py
  tensor([[0., 0., 0.],
             [0., 0., 0.]])
 ```
 
 我们可以很容易地索引第一行或第一列:
 
-```
+```py
 print(zeros_tensor[1])
 print(zeros_tensor[:, 0])
 ```
 
-```
+```py
  tensor([0., 0., 0.])
     tensor([0., 0.])
 ```
 
 我们也可以把这个张量转置:
 
-```
+```py
 transposed = zeros_tensor.T
 print(transposed)
 ```
 
-```
+```py
  tensor([[0., 0.],
             [0., 0.],
             [0., 0.]])
@@ -158,13 +158,13 @@ print(transposed)
 
 最后，我们可以将张量相乘:
 
-```
+```py
 ones_tensor = torch.ones(3, 3)
 product = torch.matmul(zeros_tensor, ones_tensor)
 print(product)
 ```
 
-```
+```py
  tensor([[0., 0., 0.],
             [0., 0., 0.]])
 ```
@@ -181,7 +181,7 @@ PyTorch 自带一个内置模块，为许多深度学习应用程序提供现成
 
 我们将使用来自`torchvision`的`datasets`模块下载数据:
 
-```
+```py
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 import matplotlib.pyplot as plt
@@ -191,7 +191,7 @@ training_data = datasets.MNIST(root=".", train=True, download=True, transform=To
 test_data = datasets.MNIST(root=".", train=False, download=True, transform=ToTensor())
 ```
 
-```
+```py
  Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
     Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz to ./MNIST/raw/train-images-idx3-ubyte.gz
 
@@ -233,11 +233,11 @@ test_data = datasets.MNIST(root=".", train=False, download=True, transform=ToTen
 
 如果我们打印训练集的第一个元素，我们将看到以下内容:
 
-```
+```py
 training_data[0]
 ```
 
-```
+```py
  (tensor([[[0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
                0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
                0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
@@ -352,7 +352,7 @@ training_data[0]
                0.0000, 0.0000, 0.0000, 0.0000]]]), 5)
 ```
 
-```
+```py
 [0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000,
 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.1765, 0.7294,
 0.9922, 0.9922, 0.5882, 0.1059, 0.0000, 0.0000, 0.0000, 0.0000,
@@ -387,7 +387,7 @@ training_data[0]
 
 这一串数字对我们来说可能没有任何意义，因为它们代表图像，所以我们可以使用 matplotlib 将它们可视化为实际图像:
 
-```
+```py
 figure = plt.figure(figsize=(8, 8)) 
 cols, rows = 5, 5
 
@@ -404,11 +404,11 @@ plt.show()
 
 我们还可以使用`classes`属性来查看数据中的类:
 
-```
+```py
 training_data.classes
 ```
 
-```
+```py
  ['0 - zero',
      '1 - one',
      '2 - two',
@@ -425,7 +425,7 @@ training_data.classes
 
 现在我们已经下载了数据，我们将使用`DataLoader`。这使我们能够以小批量迭代数据集，而不是一次一个观察，并在训练模型的同时洗牌数据。代码如下:
 
-```
+```py
 from torch.utils.data import DataLoader
 
 loaded_train = DataLoader(training_data, batch_size=64, shuffle=True)
@@ -438,7 +438,7 @@ loaded_test = DataLoader(test_data, batch_size=64, shuffle=True)
 
 在 PyTorch 中，与神经网络相关的一切都是使用`torch.nn`模块构建的。网络本身被写成一个继承自`nn.Module`的类，在这个类中，我们将使用`nn`来构建层。以下是 PyTorch [文档](https://pytorch.org/tutorials/)中的一个简单实现:
 
-```
+```py
 from torch import nn
 
 class NeuralNetwork(nn.Module):
@@ -471,12 +471,12 @@ class NeuralNetwork(nn.Module):
 
 下面一行实例化了我们的模型:
 
-```
+```py
 model = NeuralNetwork()
 print(model)
 ```
 
-```
+```py
  NeuralNetwork(
       (flatten): Flatten(start_dim=1, end_dim=-1)
       (linear_relu_stack): Sequential(
@@ -493,13 +493,13 @@ print(model)
 
 现在我们已经定义了我们的神经网络，我们可以把它投入使用。在开始训练之前，我们应该首先设置一个损失函数。损失函数衡量我们的模型离正确结果有多远，这也是我们在网络训练期间试图最小化的。交叉熵是用于分类任务的常见损失函数，也是我们将要使用的函数。我们应该初始化函数:
 
-```
+```py
 loss_function = nn.CrossEntropyLoss()
 ```
 
 训练前的最后一步是设置一个优化算法。这种算法将负责在训练过程中调整模型，以便最小化由我们上面选择的损失函数测量的误差。这种任务的常见选择是随机梯度下降算法。然而，PyTorch 有其他几种可能性，你可以在这里熟悉[。下面是代码:](https://pytorch.org/docs/stable/optim.html)
 
-```
+```py
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 ```
 
@@ -507,7 +507,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
 最后，是训练和测试网络的时候了。对于这些任务中的每一个，我们将实现一个函数。训练函数包括一次遍历一批数据，使用优化器调整模型，以及计算预测和损失。这是 PyTorch 的标准实现:
 
-```
+```py
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     for batch, (X, y) in enumerate(dataloader):
@@ -527,7 +527,7 @@ def train(dataloader, model, loss_fn, optimizer):
 
 然后是测试函数，它计算精度和损耗，这次使用测试集:
 
-```
+```py
 def test(dataloader, model, loss_fn):
     size = len(dataloader.dataset)
     num_batches = len(dataloader)
@@ -548,7 +548,7 @@ def test(dataloader, model, loss_fn):
 
 这是 PyTorch 的实现和这样一个循环的输出:
 
-```
+```py
 epochs = 5
 for t in range(epochs):
     print(f"Epoch {t+1}\n-------------------------------")
@@ -557,7 +557,7 @@ for t in range(epochs):
 print("Done!")
 ```
 
-```
+```py
  Epoch 1
     -------------------------------
     loss: 2.296232  [    0/60000]
@@ -589,7 +589,7 @@ print("Done!")
      Accuracy: 75.8%, Avg loss: 1.562622 
 ```
 
-```
+```py
  Done!
 ```
 
@@ -599,7 +599,7 @@ print("Done!")
 
 随着我们的模型最终定型，保存它并在必要时加载它变得很容易:
 
-```
+```py
 torch.save(model, "model.pth")
 model = torch.load("model.pth")
 ```

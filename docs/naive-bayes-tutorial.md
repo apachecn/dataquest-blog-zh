@@ -10,7 +10,7 @@ March 17, 2015[Sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analy
 
 `1`)，或者负(`-1`)。我们希望在给定文本的情况下，预测评论是负面的还是正面的。为了做到这一点，我们将使用`train.csv`中的评论和分类来训练一个算法，然后对`test.csv`中的评论进行预测。然后我们将能够使用`test.csv`中的实际分类来计算我们的误差，并看看我们的预测有多好。对于我们的分类算法，我们将使用[朴素贝叶斯](https://en.wikipedia.org/wiki/Naive_Bayes_classifier)。朴素贝叶斯分类器的工作原理是计算出数据的不同属性与某个类相关联的概率。这是基于[贝叶斯定理](https://en.wikipedia.org/wiki/Bayes%27_theorem)。定理为\(P(A \mid B) = \frac{P(B \mid A)，P(A)}{P(B)}\)。这基本上说明了“给定 B 为真的概率等于给定 A 为真的概率乘以 A 为真的概率，除以 B 为真的概率。”让我们做一个快速练习来更好地理解这条规则。
 
-```
+```py
  # Here's a running history for the past week.
 # For each day, it contains whether or not the person ran, and whether or not they were tired.
 days = [["ran", "was tired"], ["ran", "was not tired"], ["didn't run", "was tired"], ["ran", "was tired"], ["didn't run", "was not tired"], ["ran", "was not tired"], ["ran", "was tired"]]
@@ -29,7 +29,7 @@ prob_tired_given_ran = (prob_ran_given_tired * prob_tired) / prob_ran
 print("Probability of being tired given that you ran: {0}".format(prob_tired_given_ran))
 ```
 
-```
+```py
 Probability of being tired given that you ran: 0.6
 ```
 
@@ -37,7 +37,7 @@ Probability of being tired given that you ran: 0.6
 
 让我们尝试一个稍微不同的例子。假设我们还有一个分类——你是否累了。假设我们有两个数据点——你是否跑步，以及你是否早起。贝叶斯定理在这种情况下不适用，因为我们有两个数据点，而不是一个。这就是朴素贝叶斯可以帮忙的地方。朴素贝叶斯通过假设每个数据点都是独立的，扩展了贝叶斯定理来处理这种情况。公式看起来是这样的:\(P(y \mid x_1，\dots，x _ n)= \ frac { p(y)\prod_{i=1}^{n} p(x _ I \ mid y)} { p(x _ 1，\dots，x_n)}\。也就是说“给定特征\(x1 \)、\(x2 \)等，分类 y 正确的概率等于 y 乘以给定 y 的每个 x 特征的乘积，再除以 x 特征的概率”。要找到“正确的”分类，我们只需用公式找出哪个分类\( (P(y \mid x_1，\dots，x_n))\)的概率最高。
 
-```
+```py
  # Here's our data, but with "woke up early" or "didn't wake up early" added.
 days = [["ran", "was tired", "woke up early"], ["ran", "was not tired", "didn't wake up early"], ["didn't run", "was tired", "woke up early"], ["ran", "was tired", "didn't wake up early"], ["didn't run", "was tired", "woke up early"], ["ran", "was not tired", "didn't wake up early"], ["ran", "was tired", "woke up early"]]
 
@@ -68,7 +68,7 @@ if prob_not_tired > prob_tired:
 print("Final classification for new day: {0}. Tired probability: {1}. Not tired probability: {2}.".format(classification, prob_tired, prob_not_tired))
 ```
 
-```
+```py
 Final classification for new day: was tired. Tired probability: 0.10204081632653061\. Not tired probability: 0.054421768707482984.
 ```
 
@@ -76,7 +76,7 @@ Final classification for new day: was tired. Tired probability: 0.10204081632653
 
 我们试图确定一个数据行应该归类为负数还是正数。正因为如此，我们可以忽略分母。正如您在最后一个代码示例中看到的，它在每个可能的类中都是一个常数，因此对每个概率的影响是相等的，所以它不会改变哪个是最大的(用 5 除以 2 和用 10 除以 2 不会改变第二个数字更大的事实)。因此，我们必须计算每个分类的概率，以及每个特征落入每个分类的概率。在上一个例子中，我们使用了几个独立的特性。这里，我们只有一根长绳子。从文本生成要素的最简单方法是将文本分割成单词。评论中的每个单词都将成为我们可以使用的功能。为了做到这一点，我们将根据空白分割评论。然后，我们将统计每个词在负面评价中出现的次数，以及每个词在正面评价中出现的次数。这将允许我们最终计算属于每个类的新评论的概率。
 
-```
+```py
  # A nice python class that lets you count how many times items occur in a list
 from collections import Counter
 import csv
@@ -108,7 +108,7 @@ print("Negative text sample: {0}".format(negative_text[:100]))
 print("Positive text sample: {0}".format(positive_text[:100])) 
 ```
 
-```
+```py
  Negative text sample: plot : two teen couples go to a church party drink and then drive . they get into an accident . one 
 Positive text sample: films adapted from comic books have had plenty of success whether they're about superheroes ( batman
 ```
@@ -119,7 +119,7 @@ Positive text sample: films adapted from comic books have had plenty of success 
 
 `didn't like it`表示消极的情绪。我们将找到单词`didn't`在负面评论中出现的总次数，并用它除以负面评论中的单词总数，得到给定 y 时 x 的概率。然后我们将对`like`和`it`做同样的事情。我们将所有三个概率相乘，然后乘以任何表达负面情绪的文档的概率，以获得句子表达负面情绪的最终概率。对于积极情绪，我们也会这样做，然后无论哪个概率更大，都将是该评论被分配到的类别。要做到这一点，我们需要计算数据中每个类出现的概率，然后创建一个函数来计算分类。
 
-```
+```py
  import re
 from collections import Counter
 
@@ -153,7 +153,7 @@ print("Negative prediction: {0}".format(make_class_prediction(reviews[0][0], neg
 print("Positive prediction: {0}".format(make_class_prediction(reviews[0][0], positive_counts, prob_positive, positive_review_count))) 
 ```
 
-```
+```py
 Review: plot : two teen couples go to a church party drink and then drive . they get into an accident . one of the guys dies but his girlfriend continues to see him in her life and has nightmares . what's the deal ? watch the movie and " sorta " find out . . . critique : a mind-fuck movie for the teen generation that touches on a very cool idea but presents it in a very bad package . which is what makes this review an even harder one to write since i generally applaud films which attempt
 Negative prediction: 3.0050530362356505e-221
 Positive prediction: 1.3071705466906793e-226
@@ -165,7 +165,7 @@ Positive prediction: 1.3071705466906793e-226
 
 `test.csv`。如果你对`train.csv`中的评论进行预测，你会得到误导性的好结果，因为概率是从中产生的(而且，算法对它预测的数据有先验知识)。在训练集上获得好的结果可能意味着你的模型是[过度拟合](https://en.wikipedia.org/wiki/Overfitting)，并且只是拾取随机噪声。只有在模型未被训练的集合上进行测试，才能告诉你它是否正常运行。
 
-```
+```py
  import csv
 
 def make_decision(text, make_class_prediction):
@@ -190,7 +190,7 @@ predictions = [make_decision(r[0], make_class_prediction) for r in test]
 
 [ROC](https://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_curve) 曲线。这将告诉我们模型有多“好”——越接近 1 意味着模型越好。计算误差对于知道你的模型什么时候是“好的”，什么时候变得更好或更差非常重要。
 
-```
+```py
  actual = [int(r[1]) for r in test]
 
 from sklearn import metrics
@@ -202,7 +202,7 @@ fpr, tpr, thresholds = metrics.roc_curve(actual, predictions, pos_label=1)
 print("AUC of the predictions: {0}".format(metrics.auc(fpr, tpr))) 
 ```
 
-```
+```py
 AUC of the predictions: 0.680701754385965
 ```
 
@@ -212,7 +212,7 @@ AUC of the predictions: 0.680701754385965
 
 [n-grams](https://en.wikipedia.org/wiki/N-gram) 而不是 unigrams。我们可以删除标点符号和其他非字符。我们可以移除[停用词](https://en.wikipedia.org/wiki/Stop_words)。我们也可以执行[词干](https://en.wikipedia.org/wiki/Stemming)或词条化。但是，我们不希望每次都必须将整个算法编码出来。使用朴素贝叶斯的一个更简单的方法是使用 scikit-learn 中的实现。Scikit-learn 是一个 python 机器学习库，包含了所有常见机器学习算法的实现。
 
-```
+```py
  from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import metrics
@@ -236,7 +236,7 @@ fpr, tpr, thresholds = metrics.roc_curve(actual, predictions, pos_label=1)
 print("Multinomial naive bayes AUC: {0}".format(metrics.auc(fpr, tpr))) 
 ```
 
-```
+```py
 Multinomial naive bayes AUC: 0.6509287925696594
 ```
 

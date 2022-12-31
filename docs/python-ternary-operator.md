@@ -10,7 +10,7 @@ Python 三元运算符(或*条件运算符*)测试条件是真还是假，并根
 
 该语法由三个操作数组成，因此称为“三元”:
 
-```
+```py
 a if condition else b
 ```
 
@@ -22,7 +22,7 @@ a if condition else b
 
 在这种情况下，普通 if-else 语句的等效语句如下:
 
-```
+```py
 if condition:
     a
 else:
@@ -31,11 +31,11 @@ else:
 
 让我们看一个简单的例子:
 
-```
+```py
 "Is true" if True else "Is false"
 ```
 
-```
+```py
 'Is true'
 ```
 
@@ -45,52 +45,52 @@ else:
 
 例如:
 
-```
+```py
 x = "Is true" if True else "Is false"
 print(x)
 ```
 
-```
+```py
 Is true
 ```
 
 在我们有三元运算符之前，我们将使用`condition and a or b`而不是`a if condition else b`。例如，不运行下面的。。。
 
-```
+```py
 True if 2 > 1 else False
 ```
 
-```
+```py
 True
 ```
 
 。。。我们将运行这个:
 
-```
+```py
 2 > 1 and True or False
 ```
 
-```
+```py
 True
 ```
 
 然而，如果语法`condition and a or b`中`a`的值计算为`False`(例如，如果`a`等于`0`，或者`None`，或者`False`，我们将会收到不准确的结果。下面这个三元运算符的例子看起来逻辑上有争议(我们想返回`False`if 2>1；否则，我们希望返回`True`)，但这在技术上是正确的，因为如果条件评估为`True`，则由我们决定返回哪个值，如果条件评估为`False`，则由我们决定返回哪个值。在这种情况下，我们期待`False`，我们得到了它:
 
-```
+```py
 False if 2 > 1 else True
 ```
 
-```
+```py
 False
 ```
 
 出于同样的目的，使用“旧式”语法而不是三元运算符，我们仍然会期待`False`。然而，我们收到了一个意想不到的结果:
 
-```
+```py
 2 > 1 and False or True
 ```
 
-```
+```py
 True
 ```
 
@@ -100,11 +100,11 @@ True
 
 注意，Python 三元运算符的每个操作数都是一个*表达式*，而不是一个*语句*，这意味着我们不能在它们中的任何一个内部使用赋值语句。否则，程序会抛出一个错误:
 
-```
+```py
 1 if True else x = 0
 ```
 
-```
+```py
  File "C:\Users\Utente\AppData\Local\Temp/ipykernel_13352/3435735244.py", line 1
     1 if True else x=0
     ^
@@ -113,7 +113,7 @@ SyntaxError: cannot assign to conditional expression
 
 如果我们需要使用语句，我们必须编写一个完整的 if-else 块，而不是三元运算符:
 
-```
+```py
 if True:
     1
 else:
@@ -122,7 +122,7 @@ else:
 
 Python 三元运算符的另一个限制是，我们不应该使用它来测试多个表达式(即，if-else 块包含两个以上的情况)。从技术上讲，我们仍然可以这样做。例如，以下面这段代码为例:
 
-```
+```py
 x = -1
 
 if x < 0:
@@ -133,18 +133,18 @@ else:
     print('x is equal to 0')
 ```
 
-```
+```py
 x is less than zero
 ```
 
 我们可以使用**嵌套的三元运算符**重写这段代码:
 
-```
+```py
 x = -1
 'x is less than zero' if x < 0 else 'x is greater than zero' if x > 0 else 'x is equal to 0'
 ```
 
-```
+```py
 'x is less than zero'
 ```
 
@@ -156,7 +156,7 @@ x = -1
 
 现在，我们将讨论应用 Python 三元运算符的各种方法。假设我们想检查某个温度的水是否在沸腾。在标准大气压下，水在 100 摄氏度沸腾。假设我们想知道水壶里的水是否在沸腾，因为它的温度达到了 90 摄氏度。在这种情况下，我们可以简单地使用 if-else 块:
 
-```
+```py
 t = 90
 
 if t >= 100:
@@ -165,18 +165,18 @@ else:
     print('Water is not boiling')
 ```
 
-```
+```py
 Water is not boiling
 ```
 
 我们可以使用一个简单的 Python 三元运算符重写这段代码:
 
-```
+```py
 t = 90
 'Water is boiling' if t >= 100 else 'Water is not boiling'
 ```
 
-```
+```py
 'Water is not boiling'
 ```
 
@@ -188,12 +188,12 @@ t = 90
 
 重新组织 Python 三元运算符的第一种方法是编写其元组形式。如果 Python 三元运算符的标准语法是`a if condition else b`，这里我们将把它重写为`(b, a)[condition]`，如下所示:
 
-```
+```py
 t = 90
 ('Water is not boiling', 'Water is boiling')[t >= 100]
 ```
 
-```
+```py
 'Water is not boiling'
 ```
 
@@ -205,12 +205,12 @@ t = 90
 
 除了元组，我们还可以使用 Python 字典，如下所示:
 
-```
+```py
 t = 90
 {True: 'Water is boiling', False: 'Water is not boiling'}[t >= 100]
 ```
 
-```
+```py
 'Water is not boiling'
 ```
 
@@ -220,12 +220,12 @@ t = 90
 
 最后，实现 Python 三元运算符的最后一种方法是应用 Lambda 函数。为此，我们应该按照下面的形式重写初始语法`a if condition else b`:`(lambda: b, lambda: a)[condition]()`
 
-```
+```py
 t = 90
 (lambda: 'Water is not boiling', lambda: 'Water is boiling')[t >= 100]()
 ```
 
-```
+```py
 'Water is not boiling'
 ```
 

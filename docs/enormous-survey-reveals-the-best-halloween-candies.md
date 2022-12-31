@@ -24,7 +24,7 @@ October 30, 2021![glowing pumpkin](img/274dfbe28bbd8cb9a305bcb6dc48af44.png)
 
 从 GitHub 克隆数据集后，我们需要将数据集加载到 Pandas 数据框架中，并探索不同的方面，如数据集的大小和其中变量的类型。我们甚至可以将精度设置为 2 个小数点，以便更容易地处理浮点数字数据。
 
-```
+```py
 import pandas as pd
 span class="token keyword">import matplotlib.pyplot as plt
 span class="token operator">%matplotlib inline
@@ -53,7 +53,7 @@ andy.head()
 
 了解变量类型和数据集的构造将允许我们使用简单的查询和分组来探索数据。例如，我们可以只显示含有巧克力和焦糖的糖果，或者显示胜率为 70%或更高的糖果。我们也可以把两个条件放在一起，看看什么巧克力-焦糖糖果的中奖概率会更高。
 
-```
+```py
 candy[(candy["chocolate"] == 1) & (candy["caramel"] == 1) & (candy["winpercent"] > 70)]
 ```
 
@@ -69,7 +69,7 @@ candy.groupby('巧克力')['winpercent']。均值()[1]
 
 假设我们想知道甜度或价格是否会影响糖果的百分比。我们可以用散点图来显示甜度、价格和胜率。如果我们这样做，我们会发现这两个因素之间没有直接的联系。我们可以看到，一些甜度高的糖果，中奖几率很低。价格并不是决定一颗糖果输赢的决定性因素。
 
-```
+```py
 ax1 = nba.plot(kind='scatter', x='sugarpercent', y='winpercent', color='r', label ='sweetness leve')
 x2 = nba.plot(kind='scatter', x='pricepercent', y='winpercent', color='g', label='price', ax=ax1)
 x2.set_xlabel("Sugar/ Price Percentage")
@@ -80,7 +80,7 @@ x2.set_ylabel("Win Percentage")
 
 所以，这将导致我们想知道哪个因素影响糖果中奖的百分比。然后，我们可以关注 9 个二元变量，看看每个变量如何影响胜率。我们可以从绘制这 9 个变量的平均胜率开始。
 
-```
+```py
 cat = ["chocolate","fruity","caramel","peanutyalmondy","nougat","crispedricewafer","hard","bar","pluribus"]
 ve_win = [nba.groupby(item)['winpercent'].mean()[1] for item in cat]
 lt.figure(figsize=(15,5))
@@ -93,7 +93,7 @@ lt.bar(cat, ave_win )
 
 从平均值中，我们还可以看到，如果糖果含有水果成分或者是硬糖，他们获胜的机会将比坚果巧克力竞争者少得多。
 
-```
+```py
 df = candy.sort_values("winpercent", ascending=False)
 f.head(10).plot(x="competitorname" , y="winpercent" , kind="bar")
 ```

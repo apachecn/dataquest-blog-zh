@@ -16,7 +16,7 @@ Python 有多种可视化库，包括 [seaborn](https://seaborn.pydata.org) 、 
 *   将`tweets.csv`读入一个熊猫[数据帧](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html)。
 *   打印数据帧的前`5`行。
 
-```
+```py
  import pandas as pd
 tweets = pd.read_csv("tweets.csv")
 tweets.head() 
@@ -52,7 +52,7 @@ tweets.head()
 *   创建一个函数，查找在一段文本中出现的候选名称。
 *   在 DataFrames 上使用 [apply](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.apply.html) 方法生成一个名为`candidate`的新列，其中包含推文提到的候选人。
 
-```
+```py
  def get_candidate(row):
     candidates = []
     text = row["text"].lower()
@@ -80,7 +80,7 @@ tweets["candidate"] = tweets.apply(get_candidate,axis=1)
 
 为了使用 matplotlib，您需要首先使用`import matplotlib.pyplot as plt`导入库。如果你正在使用 Jupyter 笔记本，你可以使用`%matplotlib inline`设置 matplotlib 在笔记本内部工作。
 
-```
+```py
  import matplotlib.pyplot as plt
 import numpy as np 
 ```
@@ -95,14 +95,14 @@ import numpy as np
 *   使用`plt.bar`创建条形图。我们将把从`0`到`candidate`列中唯一值的数量的数字列表作为 x 轴输入，计数作为 y 轴输入。
 *   显示计数，以便我们对每个条形代表的内容有更多的了解。
 
-```
+```py
  counts = tweets["candidate"].value_counts()
 plt.bar(range(len(counts)), counts)
 plt.show()
 print(counts)
 ```
 
-```
+```py
  trump                    119998
 clinton,trump             30521
                           25429
@@ -134,7 +134,7 @@ Name: candidate, dtype: int64
 *   创建用户年龄直方图。
 *   显示直方图。
 
-```
+```py
  from datetime import datetime
 
 tweets["created"] = pd.to_datetime(tweets["created"])
@@ -163,7 +163,7 @@ plt.show()
 *   在直方图上绘制一个 y 轴标签。
 *   展示剧情。
 
-```
+```py
  plt.hist(tweets["user_age"])
 plt.title("Tweets mentioning candidates")
 plt.xlabel("Twitter account age in years")
@@ -186,7 +186,7 @@ plt.show()
 *   添加标题、x 轴和 y 轴标签。
 *   展示剧情。
 
-```
+```py
  cl_tweets = tweets["user_age"][tweets["candidate"] == "clinton"]
 sa_tweets = tweets["user_age"][tweets["candidate"] == "sanders"]
 tr_tweets = tweets["user_age"][tweets["candidate"] == "trump"]
@@ -209,7 +209,7 @@ plt.show()
 
 我们可以利用 matplotlibs 在绘图上绘制文本的能力来添加注释。注释指向图表的特定部分，让我们添加一个片段来描述要查看的内容。在下面的代码中，我们将制作与上面相同的直方图，但是我们将调用 [plt.annotate](https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.annotate) 方法向绘图添加注释。
 
-```
+```py
  plt.hist([
          cl_tweets,
          sa_tweets,
@@ -246,7 +246,7 @@ plt.show()
 *   使用`apply`方法遍历`user_bg_color`列中的每一行，并提取其中有多少红色。
 *   使用`apply`方法遍历`user_bg_color`列中的每一行，并提取其中有多少蓝色。
 
-```
+```py
  import matplotlib.colors as colors
 tweets["red"] = tweets["user_bg_color"].apply(lambda x: colors.hex2color('#{0}'.format(x))[0])
 tweets["blue"] = tweets["user_bg_color"].apply(lambda x: colors.hex2color('#{0}'.format(x))[2])
@@ -269,7 +269,7 @@ tweets["blue"] = tweets["user_bg_color"].apply(lambda x: colors.hex2color('#{0}'
 *   调用 [plt.tight_layout](https://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.tight_layout) 方法来减少图形中的填充并适合所有元素。
 *   展示剧情。
 
-```
+```py
  fig, axes = plt.subplots(nrows=2, ncols=2)
 ax0, ax1, ax2, ax3 = axes.flat
 
@@ -294,11 +294,11 @@ plt.show()
 
 Twitter 有默认的背景颜色，我们可能应该删除，这样我们就可以减少噪音，生成一个更准确的图。颜色采用十六进制格式，其中 code>#000000 为黑色，`#ffffff`为白色。以下是如何在背景色中找到最常见的颜色:
 
-```
+```py
  tweets["user_bg_color"].value_counts()
 ```
 
-```
+```py
  C0DEED    108977
     000000     31119
     F5F8FA     25597
@@ -314,7 +314,7 @@ Twitter 有默认的背景颜色，我们可能应该删除，这样我们就可
 *   创建一个函数，不包含内部最后一个图表的绘图逻辑。
 *   绘制与之前相同的`4`图，但不使用`user_bg_color`中最常见的颜色。
 
-```
+```py
  tc = tweets[~tweets["user_bg_color"].isin(["C0DEED", "000000", "F5F8FA"])]
 
 def create_plot(data):
@@ -356,7 +356,7 @@ create_plot(tc)
     *   设置标题。
 *   展示剧情。
 
-```
+```py
  gr = tweets.groupby("candidate").agg([np.mean, np.std])
 
 fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
@@ -390,7 +390,7 @@ plt.show()
 *   使用`apply`生成一个新列`tweet_length`。
 *   算出每个候选人有多少条推文归入每个组。
 
-```
+```py
  def tweet_lengths(text):
     if len(text) < 100:
         return "short"
@@ -420,7 +420,7 @@ for candidate in ["clinton", "sanders", "trump"]:
 *   使用`set_xticks`将刻度标签移动到每个类别区域的中心。
 *   设置刻度标签。
 
-```
+```py
  fig, ax = plt.subplots()
 width = .5
 x = np.array(range(0, 6, 2))

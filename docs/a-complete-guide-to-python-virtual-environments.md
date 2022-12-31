@@ -40,13 +40,13 @@ Python 虚拟环境创建隔离的上下文来保持不同项目所需的依赖�
 
 首先创建一个项目文件夹，并在其中创建一个虚拟环境。为此，打开终端应用程序，编写以下命令，然后按 return 键。
 
-```
+```py
 ~ % mkdir alpha-prj
 ```
 
 现在，使用`venv`命令在项目文件夹中创建一个虚拟环境，如下所示:
 
-```
+```py
 ~ % python3 -m venv alpha-prj/alpha-venv
 ```
 
@@ -60,20 +60,20 @@ Python 虚拟环境创建隔离的上下文来保持不同项目所需的依赖�
 
 要激活我们在上一步中创建的虚拟环境，请运行以下命令。
 
-```
+```py
 ~ % source alpha-prj/alpha-venv/bin/activate
 ```
 
 正如您在激活虚拟环境后所看到的，它的名称出现在终端提示符开始处的括号中。运行 which `python`命令是确保虚拟环境处于活动状态的另一种方式。如果我们运行这个命令，它会显示 Python 解释器在虚拟环境中的位置。让我们检查一下虚拟环境中的位置。
 
-```
+```py
 (alpha-venv) ~ % which python
 /Users/lotfinejad/alpha-prj/alpha-venv/bin/python
 ```
 
 很高兴知道虚拟环境的 Python 版本与用于创建环境的 Python 版本是相同的。让我们在虚拟环境中检查 Python 版本。
 
-```
+```py
 (alpha-venv) ~ % python —version
 Python 3.10.1
 ```
@@ -84,7 +84,7 @@ Python 3.10.1
 
 我们现在处于一个隔离的虚拟环境中，默认情况下只安装了`pip`和`setup tools`。让我们通过运行`pip list`命令来检查虚拟环境中预安装的包。
 
-```
+```py
 (alpha-venv) ~ % pip list
 Package    Version
 ---------- -------
@@ -94,13 +94,13 @@ setuptools 58.1.0
 
 在我们想用`pip`安装任何包之前，让我们把它升级到最新版本。因为我们是在虚拟环境中工作，所以下面的命令只在这个环境中升级`pip`工具，而不在其他虚拟环境或系统范围内升级。
 
-```
+```py
 (alpha-venv) ~ % alpha-prj/alpha-venv/bin/python3 -m pip install --upgrade pip
 ```
 
 让我们重新运行`pip list`命令来查看变化。
 
-```
+```py
 (alpha-venv) ~ % pip list
 Package    Version
 ---------- -------
@@ -110,25 +110,25 @@ setuptools 58.1.0
 
 很明显`pip`从版本 21.2.4 更新到了 21.3.1。现在，让我们将熊猫包安装到环境中。在安装软件包之前，您需要决定安装哪个版本。如果您要安装最新版本，只需使用以下命令:
 
-```
+```py
 (alpha-venv) ~ % python3 -m pip install pandas
 ```
 
 但是如果你想安装软件包的一个特定版本，你需要使用这个命令:
 
-```
+```py
 (alpha-venv) ~ % python3 -m pip install pandas==1.1.1
 ```
 
 现在，让我们看看如何告诉`pip`我们将安装 1.2 版本之前的任何版本的熊猫。
 
-```
+```py
 (alpha-venv) ~ % python3 -m pip install 'pandas<1.2'
 ```
 
 另外，我们可以要求`pip`在 0.25.3 版本之后安装 pandas 包，如下所示:
 
-```
+```py
 (alpha-venv) ~ % python3 -m pip install 'pandas>0.25.3'
 ```
 
@@ -136,7 +136,7 @@ setuptools 58.1.0
 
 让我们回顾一下环境中已安装的软件包列表。
 
-```
+```py
 (alpha-venv) ~ % pip list
 Package         Version
 --------------- -------
@@ -155,7 +155,7 @@ six             1.16.0
 
 再现虚拟环境很常见。假设你的同事将要做你已经做了几周的同一个项目。她需要在她的系统上的虚拟环境中安装具有正确版本的完全相同的包。要创建相同的环境，首先需要使用`pip freeze`命令列出项目虚拟环境中安装的所有依赖项。
 
-```
+```py
 (alpha-venv) ~ % pip freeze
 numpy==1.22.0
 pandas==1.3.5
@@ -166,13 +166,13 @@ six==1.16.0
 
 `pip freeze`的输出与`pip list`非常相似，但是它以正确的格式返回安装在一个环境中的包的列表，以使用项目所需的确切包版本来再现该环境。下一步是将包列表导出到`requirements.txt`文件中。为此，请运行以下命令:
 
-```
+```py
 (alpha-venv) ~ % pip freeze > requirements.txt
 ```
 
 上面的命令在当前文件夹中创建一个名为`requirements.txt`的文本文件。`requirements.txt`文件包含所有的包和它们的确切版本。我们来看看文件内容。
 
-```
+```py
 ~ % cat requirements.txt
 numpy==1.21.5
 pandas==1.3.5
@@ -185,7 +185,7 @@ six==1.16.0
 
 她将运行以下三个命令:
 
-```
+```py
 ~ % python3 -m venv prj/venv                                       
 ~ % source prj/venv/bin/activate 
 (venv) ~ % pip install -r requirements.txt
@@ -203,7 +203,7 @@ six==1.16.0
 
 一旦您完成了虚拟环境的工作，或者您想要切换到另一个虚拟环境，您可以通过运行以下命令来停用环境:
 
-```
+```py
 (alpha-venv) ~ % deactivate
 ```
 
@@ -211,7 +211,7 @@ six==1.16.0
 
 如果您想要删除虚拟环境，只需删除其文件夹，无需卸载。
 
-```
+```py
 ~ % rm -rf alpha-prj/alpha-venv
 ```
 
@@ -219,7 +219,7 @@ six==1.16.0
 
 在这一节中，我们将介绍如何在 VS 代码中使用 Python 虚拟环境。首先，确保您已经创建并激活了虚拟环境。现在，在终端中导航到您的项目文件夹，并运行以下命令:
 
-```
+```py
 (alpha-venv) alpha-prj % code .
 ```
 

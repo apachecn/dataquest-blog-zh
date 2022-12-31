@@ -47,7 +47,7 @@ Spark 需要 Java 7+，可以从 Oracle 网站下载:
 
 为了测试 Spark 构建是否正确，在同一个文件夹(Spark 所在的位置)中运行以下命令:
 
-```
+```py
 bin/pyspark
 ```
 
@@ -61,7 +61,7 @@ bin/pyspark
 
 [`nano`](https://askubuntu.com/questions/54221/how-to-edit-files-in-a-terminal-with-nano) 或`vim`打开`~/.bash_profile`并在末尾添加以下几行:
 
-```
+```py
 export SPARK_HOME="$HOME/spark-1.5.1"
 export PYSPARK_SUBMIT_ARGS="--master local[2]"
 ```
@@ -74,7 +74,7 @@ export PYSPARK_SUBMIT_ARGS="--master local[2]"
 
 最后一步是专门为 PySpark 创建一个 Jupyter 概要文件，并进行一些自定义设置。要创建此配置文件，请运行:
 
-```
+```py
 Jupyter profile create pyspark
 ```
 
@@ -82,13 +82,13 @@ Jupyter profile create pyspark
 
 `nano`或`vim`在以下位置创建以下 Python 脚本:
 
-```
+```py
 ~/.jupyter/profile_pyspark/startup/00-pyspark-setup.py
 ```
 
 然后向其中添加以下内容:
 
-```
+```py
  import os
 import sys
 
@@ -116,7 +116,7 @@ if os.path.exists(spark_release_file) and "Spark 1.5" in open(spark_release_file
 
 `pyspark`配置文件，运行:
 
-```
+```py
 jupyter notebook --profile=pyspark
 ```
 

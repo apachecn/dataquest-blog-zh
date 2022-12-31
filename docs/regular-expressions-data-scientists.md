@@ -28,7 +28,7 @@ January 7, 2020
 
 首先，我们将准备数据集，方法是打开测试文件，将其设置为只读，然后读取它。我们还将它赋给一个变量`fh`(表示“文件句柄”)。
 
-```
+```py
 fh = open(r"test_emails.txt", "r").read()
 ```
 
@@ -36,13 +36,13 @@ fh = open(r"test_emails.txt", "r").read()
 
 现在，假设我们想找出邮件来自谁。我们可以单独尝试原始 Python:
 
-```
+```py
  for line in fh.split("n"):
     if "From:" in line:
         print(line)
 ```
 
-```
+```py
 der.com>
 Message-Id: <[[email protected]](/cdn-cgi/l/email-protection)>
 From: "Mr. Be
@@ -57,14 +57,14 @@ From: "PRINCE OBONG ELEME" <obo
 
 它看起来是这样的:
 
-```
+```py
  import re
 
 for line in re.findall("From:.*", fh):
     print(line) 
 ```
 
-```
+```py
 From: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 From: "PRINCE OBONG ELEME" <[[email protected]](/cdn-cgi/l/email-protection)> 
 ```
@@ -91,24 +91,24 @@ From: "PRINCE OBONG ELEME" <[[email protected]](/cdn-cgi/l/email-protection)>
 
 我们现在可以解释上面的行`re.findall("From:.*", text)`中`.*`的用法。我们先来看`.`:
 
-```
+```py
  for line in re.findall("From:.", fh):
     print(line) 
 ```
 
-```
+```py
 From:
 From: 
 ```
 
 通过在`From:`旁边添加一个`.`，我们在它旁边寻找一个额外的字符。因为`.`寻找除了`n`之外的任何字符，它捕捉空格字符，这是我们看不到的。我们可以尝试更多的点来验证这一点。
 
-```
+```py
  for line in re.findall("From:...........", fh):
     print(line) 
 ```
 
-```
+```py
 From: "Mr. Ben S
 From: "PRINCE OB 
 ```
@@ -119,12 +119,12 @@ From: "PRINCE OB
 
 让我们用`*`构造一个对`.`的贪婪搜索。
 
-```
+```py
  for line in re.findall("From:.*", fh):
     print(line) 
 ```
 
-```
+```py
 From: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 From: "PRINCE OBONG ELEME" <[[email protected]](/cdn-cgi/l/email-protection)> 
 ```
@@ -133,14 +133,14 @@ From: "PRINCE OBONG ELEME" <[[email protected]](/cdn-cgi/l/email-protection)>
 
 我们甚至可以更进一步，只分离出名字。像以前一样，让我们使用`re.findall()`返回包含模式`"From:.*"`的行列表。为了简洁起见，我们将它赋给变量`match`。接下来，我们将遍历列表。在每个循环中，我们将再次执行`re.findall`,匹配第一个引号以仅提取名称:
 
-```
+```py
  match = re.findall("From:.*", fh)
 
 for line in match:
     print(re.findall('\".*\"', line))
 ```
 
-```
+```py
 ['"Mr. Ben Suleman"']
 ['"PRINCE OBONG ELEME"'] 
 ```
@@ -151,14 +151,14 @@ for line in match:
 
 如果我们需要电子邮件地址呢？
 
-```
+```py
  match = re.findall("From:.*", fh)
 
 for line in match:
     print(re.findall("\w\S*@*.\w", line))
 ```
 
-```
+```py
 ['[[email protected]](/cdn-cgi/l/email-protection)']
 ['[[email protected]](/cdn-cgi/l/email-protection)']
 ```
@@ -167,12 +167,12 @@ for line in match:
 
 下面是我们如何匹配电子邮件地址的前部分:
 
-```
+```py
  for line in match:
     print(re.findall("\w\S*@", line))
 ```
 
-```
+```py
 ['[[email protected]](/cdn-cgi/l/email-protection)']
 ['[[email protected]](/cdn-cgi/l/email-protection)'] 
 ```
@@ -181,12 +181,12 @@ for line in match:
 
 现在看看@符号背后的图案:
 
-```
+```py
  for line in match:
     print(re.findall("@.*", line))
 ```
 
-```
+```py
 ['@spinfinder.com>']
 ['@epatra.com>']
 ```
@@ -195,12 +195,12 @@ for line in match:
 
 如果我们仔细观察这一行，我们会看到每封电子邮件都被封装在尖括号内，< and >。我们的模式，`.*`，包括右括号，>。让我们补救一下:
 
-```
+```py
  for line in match:
     print(re.findall("@.*\w", line))
 ```
 
-```
+```py
 ['@spinfinder.com']
 ['@epatra.com']
 ```
@@ -225,7 +225,7 @@ for line in match:
 
 当`re.findall()`匹配一个字符串中一个模式的所有实例并在一个列表中返回它们时，`re.search()`匹配一个字符串中一个模式的第一个实例，并将其作为一个`re`匹配对象返回。
 
-```
+```py
  match = re.search("From:.*", fh)
 print(type(match))
 print(type(match.group()))
@@ -233,7 +233,7 @@ print(match)
 print(match.group())
 ```
 
-```
+```py
 <class 're.Match'>
 <class 'str'>
 <re.Match object; span=(3590, 3644), match='From: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
@@ -250,7 +250,7 @@ From: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 
 假设我们需要一种快速的方法来获得电子邮件地址的域名。我们可以通过三个正则表达式操作来实现，如下所示:
 
-```
+```py
  address = re.findall("From:.*", fh)
 for item in address:
     for line in re.findall("\w\S*@.*\w", item):
@@ -258,7 +258,7 @@ for item in address:
         print("{}, {}".format(username, domain_name)) 
 ```
 
-```
+```py
 bensul2004nng, spinfinder.com
 obong_715, epatra.com
 ```
@@ -269,7 +269,7 @@ obong_715, epatra.com
 
 另一个方便的`re`功能是`re.sub()`。正如函数名所示，它替换字符串的一部分。一个例子:
 
-```
+```py
 sender = re.search("From:.*", fh)
 address = sender.group()
 email = re.sub("From", "Email", address)
@@ -277,7 +277,7 @@ print(address)
 print(email)
 ```
 
-```
+```py
 From: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 Email: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 </[[email protected]](/cdn-cgi/l/email-protection)></[[email protected]](/cdn-cgi/l/email-protection)>
@@ -319,7 +319,7 @@ Email: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>
 
 除了`re`和`pandas`，我们还将导入 Python 的`email`包，这将有助于电子邮件的正文。单独使用正则表达式处理电子邮件的正文相当复杂。它甚至可能需要足够的清理来保证自己的教程。所以，我们将使用开发良好的`email`包来节省一些时间，让我们专注于学习 regex。
 
-```
+```py
  import re
 import pandas as pd
 import email
@@ -333,12 +333,12 @@ fh = open(r"test_emails.txt", "r").read()
 
 现在，让我们开始应用正则表达式！
 
-```
+```py
  contents = re.split(r"From r", fh)
 contents.pop(0) 
 ```
 
-```
+```py
 ['  Thu Oct 31 08:11:39 2002\nReturn-Path: <[[email protected]](/cdn-cgi/l/email-protection)>\nX-Sieve: cmu-sieve 2.0\nReturn-Path: <[[email protected]](/cdn-cgi/l/email-protection)>\nMessage-Id: <[[email protected]](/cdn-cgi/l/email-protection)>\nFrom: "Mr. Ben Suleman" <[[email protected]](/cdn-cgi/l/email-protection)>\nDate: Thu, 31 Oct 2002 05:10:00\nTo: [[email protected]](/cdn-cgi/l/email-protection)\nSubject: URGENT ASSISTANCE /RELATIONSHIP (P)\nMIME-Version: 1.0\nContent-Type: text/plain;charset="iso-8859-1"\nContent-Transfer-Encoding: 7bit\nStatus: O\n\nDear Friend,\n\nI am Mr. Ben Suleman a custom officer and work as Assistant controller of the Customs and Excise department Of the Federal Ministry of Internal Affairs stationed at the Murtala Mohammed International Airport...
 ```
 
@@ -366,7 +366,7 @@ contents.pop(0)
 
 接下来，我们将处理`contents`列表中的电子邮件。
 
-```
+```py
  for item in contents:
     emails_dict = {}
 ```
@@ -375,7 +375,7 @@ contents.pop(0)
 
 这是一个分三步走的过程。它从找到`From:`字段开始。
 
-```
+```py
  for item in contents:
 # First two lines again so that Jupyter runs the code.
     emails_dict = {}
@@ -390,7 +390,7 @@ contents.pop(0)
 
 但是，数据并不总是简单明了的。它可以包含惊喜。例如，如果没有`From:`字段呢？脚本会抛出一个错误并中断。在步骤 2 中，我们先发制人地避免了这个场景中的错误。
 
-```
+```py
  # Step 2: find the email address and name.
     if sender is not None:
         s_email = re.search(r"\w\S*@.*\w", sender.group())
@@ -410,7 +410,7 @@ contents.pop(0)
 
 现在，让我们打印出代码的结果，看看它们是什么样子。
 
-```
+```py
  print("sender type: " + str(type(sender)))
     print("sender.group() type: " + str(type(sender.group())))
     print("sender: " + str(sender))
@@ -418,7 +418,7 @@ contents.pop(0)
     print("n")
 ```
 
-```
+```py
 sender type: <class 're.match'="">
 sender.group() type: <class 'str'="">
 sender: <re.match object="" span="(180," match="From: &quot;PRINCE OBONG ELEME&quot; <obong_715@epatra.com>>
@@ -430,12 +430,12 @@ sender.group(): From: &quot;PRINCE OBONG ELEME&quot; <obong_715@epatra.com>
 
 让我们看看`s_email`和`s_name`是什么样子的。
 
-```
+```py
 print(s_email)
 print(s_name)
 ```
 
-```
+```py
 <re.Match object; span=(28, 48), match='[[email protected]](/cdn-cgi/l/email-protection)'>
 <re.Match object; span=(4, 28), match=': "PRINCE OBONG ELEME" <'> 
 ```
@@ -444,7 +444,7 @@ print(s_name)
 
 在我们这样做之前，回想一下，如果没有`From:`字段，`sender`将具有`None`的值，`s_email`和`s_name`也是如此。因此，我们必须再次检查这个场景，以便脚本不会意外中断。先来看看如何用`s_email`构造代码。
 
-```
+```py
  # Step 3A: assign email address as string to a variable.
     if s_email is not None:
         sender_email = s_email.group()
@@ -460,7 +460,7 @@ print(s_name)
 
 在 3B 步骤中，我们对`s_name`做了几乎完全相同的处理。
 
-```
+```py
  # Step 3B: remove unwanted substrings, assign to variable.
     if s_name is not None:
         sender_name = re.sub("s*<", "", re.sub(":s*", "", s_name.group()))
@@ -477,12 +477,12 @@ print(s_name)
 
 让我们看看我们的结果。
 
-```
+```py
  print(sender_email)
     print(sender_name)
 ```
 
-```
+```py
 [[email protected]](/cdn-cgi/l/email-protection)
  "PRINCE OBONG ELEME" 
 ```
@@ -493,13 +493,13 @@ print(s_name)
 
 首先，我们找到了`To:`字段。
 
-```
+```py
  recipient = re.search(r"To:.*", item)
 ```
 
 接下来，我们先假设`recipient`是`None`的情况。
 
-```
+```py
  if recipient is not None:
         r_email = re.search(r"wS*@.*w", recipient.group())
         r_name = re.search(r":.*<", recipient.group())
@@ -512,7 +512,7 @@ print(s_name)
 
 然后，我们将匹配对象转换成字符串，并将它们添加到字典中。
 
-```
+```py
  if r_email is not None:
         recipient_email = r_email.group()
     else:
@@ -534,7 +534,7 @@ print(s_name)
 
 现在是邮件发出的日期。
 
-```
+```py
  for item in contents:
 # First two lines again so that Jupyter runs the code.
     emails_dict = {}
@@ -546,7 +546,7 @@ print(s_name)
 
 就像我们对这两个字段所做的一样，我们检查分配给`date_field`变量的`Date:`字段不是`None`。
 
-```
+```py
  if date_field is not None:
         date = re.search(r"\d+\s\w+\s\d+", date_field.group())
     else:
@@ -555,7 +555,7 @@ print(s_name)
     print(date_field.group())
 ```
 
-```
+```py
 Date: Thu, 31 Oct 2002 22:17:55 +0100
 ```
 
@@ -569,7 +569,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 接下来，我们像以前一样对值`None`进行同样的检查。
 
-```
+```py
  if date is not None:
         date_sent = date.group()
         date_star = date_star_test.group()
@@ -583,7 +583,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 在我们继续之前，我们应该注意关键的一点。`+`和`*`看似相似，但它们可以产生非常不同的结果。让我们以这里的日期字符串为例。
 
-```
+```py
  date = re.search(r"\d+\s\w+\s\d+", date_field.group())
 
     # What happens when we use * instead?
@@ -596,7 +596,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
     print(date_star)
 ```
 
-```
+```py
 31 Oct 2002
  31 
 ```
@@ -609,7 +609,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 和以前一样，我们使用相同的代码和代码结构来获取我们需要的信息。
 
-```
+```py
  for item in contents:
 # First two lines again so that Jupyter runs the code.
     emails_dict = {}
@@ -630,7 +630,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 最后一个插入字典的条目是电子邮件的正文。
 
-```
+```py
  full_email = email.message_from_string(item)
     body = full_email.get_payload()
     emails_dict["email_body"] = body
@@ -660,7 +660,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 最后，将字典`emails_dict`添加到`emails`列表中:
 
-```
+```py
  emails.append(emails_dict)
 ```
 
@@ -670,7 +670,7 @@ Date: Thu, 31 Oct 2002 22:17:55 +0100
 
 下面是完整的代码:
 
-```
+```py
  import re
 import pandas as pd
 import email
@@ -773,7 +773,7 @@ for key, value in emails[0].items():
 
 如果您使用我们的示例文本文件运行它，您会得到以下结果:
 
-```
+```py
 Number of emails: 7
 n
 sender_email: [[email protected]](/cdn-cgi/l/email-protection)
@@ -795,7 +795,7 @@ email_body: email body here
 
 我们要做的就是应用下面的代码:
 
-```
+```py
  import pandas as pd
 # Module imported above, imported again as reminder.
 emails_df = pd.DataFrame(emails)
@@ -807,7 +807,7 @@ emails_df = pd.DataFrame(emails)
 
 让我们看看前几行。
 
-```
+```py
  pd.DataFrame.head(emails_df, n=3) 
 ```
 
@@ -821,7 +821,7 @@ emails_df = pd.DataFrame(emails)
 
 现在，让我们使用`|`来查找从一个或另一个域名发送的所有电子邮件。
 
-```
+```py
 emails_df[emails_df["sender_email"].str.contains("epatra|spinfinder")]
 ```
 
@@ -831,14 +831,14 @@ emails_df[emails_df["sender_email"].str.contains("epatra|spinfinder")]
 
 我们也可以查看单个手机的电子邮件。为此，我们要经历四个步骤。在步骤 1 中，我们找到了行的索引，在该行中，`"sender_email"`列包含字符串`"@spinfinder"`。请注意我们是如何使用 regex 做到这一点的。
 
-```
+```py
  # Step 1: find the index where the "sender_email" column contains "@spinfinder.com".
 index = emails_df[emails_df["sender_email"].str.contains(r"\w\S*@spinfinder.com")].index.values
 ```
 
 在第 2 步中，我们使用索引来查找电子邮件地址，`loc[]`方法将该地址作为具有几个不同属性的 Series 对象返回。我们把它打印出来，看看它是什么样子。
 
-```
+```py
  # Step 2: use the index to find the value of the cell i the "sender_email" column.
 # The result is returned as pandas Series object
 address_Series = emails_df.loc[index]["sender_email"]
@@ -846,7 +846,7 @@ print(address_Series)
 print(type(address_Series)) 
 ```
 
-```
+```py
 0    [[email protected]](/cdn-cgi/l/email-protection)
 Name: sender_email, dtype: object
 <class 'pandas.core.series.series'>
@@ -854,26 +854,26 @@ Name: sender_email, dtype: object
 
 在第 3 步中，我们从 Series 对象中提取电子邮件地址，就像从列表中提取项目一样。你可以看到它的类型现在是 class。
 
-```
+```py
  # Step 3: extract the email address, which is at index 0 in the Series object.
 address_string = address_Series[0]
 print(address_string)
 print(type(address_string))
 ```
 
-```
+```py
 [[email protected]](/cdn-cgi/l/email-protection)
 <class 'str'> 
 ```
 
 第 4 步是我们提取电子邮件正文。
 
-```
+```py
  # Step 4: find the value of the "email_body" column where the "sender email" column is address_string.
 print(emails_df[emails_df["sender_email"] == address_string]["email_body"].values)
 ```
 
-```
+```py
 ['email body here'] 
 ```
 

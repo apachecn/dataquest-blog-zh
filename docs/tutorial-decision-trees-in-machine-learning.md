@@ -25,7 +25,7 @@ December 5, 2022![Decision Trees](img/be0ab36c6125a9772d650d183eb25023.png)
 
 如果我们把这个过程翻译成 Python 代码，这样的逻辑可以理解为不同的 [*if/else* 语句](https://www.dataquest.io/blog/tutorial-using-if-statements-in-python/)的总和，可以这样表示:
 
-```
+```py
 print("Are you interested in learning Data Science?")
     if True:
         print("Do you prefer to learn online?")
@@ -87,7 +87,7 @@ print("Are you interested in learning Data Science?")
 
 让我们加载它并检查第一个观察结果，以获得信息的一般概念:
 
-```
+```py
 import pandas as pd
 
 df = pd.read_csv("ObesityDataSet_raw_and_data_sinthetic.csv")
@@ -107,7 +107,7 @@ df.iloc[:10, :11]
 | eight | 男性的 | Twenty-four | One point seven eight | Sixty-four | 是 | 是 | Three | Three | 有时 | 不 | Two | 不 | One | One |
 | nine | 男性的 | Twenty-two | One point seven two | Sixty-eight | 是 | 是 | Two | Three | 有时 | 不 | Two | 不 | One | One |
 
-```
+```py
 df.iloc[:10, 11:]
 ```
 
@@ -126,11 +126,11 @@ df.iloc[:10, 11:]
 
 我们还可以探索不同的栏目:
 
-```
+```py
 df.info()
 ```
 
-```
+```py
  <class>RangeIndex: 2111 entries, 0 to 2110
 Data columns (total 17 columns):
  #   Column                          Non-Null Count  Dtype  
@@ -180,11 +180,11 @@ memory usage: 280.5+ KB
 
 至于目标列，它是**nobeeysdad**(肥胖级别)，以下是可能的类值，以及每个类的观察计数:
 
-```
+```py
 df["NObeyesdad"].value_counts()
 ```
 
-```
+```py
 Obesity_Type_I         351
 Obesity_Type_III       324
 Obesity_Type_II        297
@@ -205,13 +205,13 @@ Name: NObeyesdad, dtype: int64
 
 在这种情况下，从我们的 2111 个总观察值中，我们看到对于“性别”列，我们有 1068 个男性和 1043 个女性。
 
-```
+```py
 # "GENDER" COLUMN
 
 df["Gender"].value_counts()
 ```
 
-```
+```py
 Male      1068
 Female    1043
 Name: Gender, dtype: int64
@@ -223,7 +223,7 @@ Name: Gender, dtype: int64
 
 最后，我们将重命名列 *female* 以反映这一变化并避免将来的混淆:
 
-```
+```py
 df["Gender"].replace({"Male": 0, "Female": 1}, inplace = True)
 
 df.rename(columns = {"Gender": "female"}, inplace = True)
@@ -231,13 +231,13 @@ df.rename(columns = {"Gender": "female"}, inplace = True)
 
 为了谨慎起见，我们将使用**仔细检查数据转换是如何进行的。value_counts()** 再次出现。请注意我们现在如何使用新的列名:
 
-```
+```py
 # Double Check
 
 df["female"].value_counts()
 ```
 
-```
+```py
 0    1068
 1    1043
 Name: female, dtype: int64
@@ -247,31 +247,31 @@ Name: female, dtype: int64
 
 让我们将相同的步骤应用于下一列:
 
-```
+```py
 # "FAMILY HISTORY WITH OVERWEIGHT" COLUMN
 
 df["family_history_with_overweight"].value_counts()
 ```
 
-```
+```py
 yes    1726
 no      385
 Name: family_history_with_overweight, dtype: int64
 ```
 
-```
+```py
 df["family_history_with_overweight"].replace({"no": 0, "yes": 1}, inplace = True)
 
 df.rename(columns = {"family_history_with_overweight": "family_history_overweight"}, inplace = True)
 ```
 
-```
+```py
 # Double Check
 
 df["family_history_overweight"].value_counts()
 ```
 
-```
+```py
 1    1726
 0     385
 Name: family_history_overweight, dtype: int64
@@ -279,29 +279,29 @@ Name: family_history_overweight, dtype: int64
 
 我们将继续执行相同的步骤，但是在这种情况下，我们不需要重命名该列:
 
-```
+```py
 # "FREQUENT CONSUMPTION OF HIGH CALORIC FOOD" COLUMN
 
 df["FAVC"].value_counts()
 ```
 
-```
+```py
 yes    1866
 no      245
 Name: FAVC, dtype: int64
 ```
 
-```
+```py
 df["FAVC"].replace({"no": 0, "yes": 1}, inplace = True)
 ```
 
-```
+```py
 # Double Check
 
 df["FAVC"].value_counts()
 ```
 
-```
+```py
 1    1866
 0     245
 Name: FAVC, dtype: int64
@@ -313,13 +313,13 @@ Name: FAVC, dtype: int64
 
 这是一个*序数列*的明显例子。
 
-```
+```py
 # "CONSUMPTION OF FOOD BETWEEN MEALS" COLUMN
 
 df["CAEC"].value_counts()
 ```
 
-```
+```py
 Sometimes     1765
 Frequently     242
 Always          53
@@ -339,7 +339,7 @@ Name: CAEC, dtype: int64
 
 这是一个非常简单的解释，我们将在[决策树课程](https://app.dataquest.io/course/random-forest-modeling-in-python)中更详细地介绍这个主题。
 
-```
+```py
 from sklearn.preprocessing import OrdinalEncoder
 
 ordinal_caec = [["no", "Sometimes", "Frequently", "Always"]]
@@ -349,13 +349,13 @@ df["CAEC"] = OrdinalEncoder(categories = ordinal_caec).fit_transform(df[["CAEC"]
 
 我们可以确认在转换为数值的过程中保留了层次结构:
 
-```
+```py
 # Double Check
 
 df["CAEC"].value_counts()
 ```
 
-```
+```py
 1.0    1765
 2.0     242
 3.0      53
@@ -365,29 +365,29 @@ Name: CAEC, dtype: int64
 
 下面的专栏是二进制的，所以暂时没有太多讨论。我们将简单地应用与上面相同的步骤:
 
-```
+```py
 # "SMOKE" COLUMN
 
 df["SMOKE"].value_counts()
 ```
 
-```
+```py
 no     2067
 yes      44
 Name: SMOKE, dtype: int64
 ```
 
-```
+```py
 df["SMOKE"].replace({"no": 0, "yes": 1}, inplace = True)
 ```
 
-```
+```py
 # Double Check
 
 df["SMOKE"].value_counts()
 ```
 
-```
+```py
 0    2067
 1      44
 Name: SMOKE, dtype: int64
@@ -395,29 +395,29 @@ Name: SMOKE, dtype: int64
 
 * * *
 
-```
+```py
 # "CALORIES CONSUMPTION MONITORING" COLUMN
 
 df["SCC"].value_counts()
 ```
 
-```
+```py
 no     2015
 yes      96
 Name: SCC, dtype: int64
 ```
 
-```
+```py
 df["SCC"].replace({"no": 0, "yes": 1}, inplace = True)
 ```
 
-```
+```py
 # Double Check
 
 df["SCC"].value_counts()
 ```
 
-```
+```py
 0    2015
 1      96
 Name: SCC, dtype: int64
@@ -425,13 +425,13 @@ Name: SCC, dtype: int64
 
 下一列也是有序的，因为它与前一列共享完全相同的层次结构(频率)，所以我们将执行与前一列相同的步骤:
 
-```
+```py
 # "CONSUMPTION OF ALCOHOL" COLUMN
 
 df["CALC"].value_counts()
 ```
 
-```
+```py
 Sometimes     1401
 no             639
 Frequently      70
@@ -439,7 +439,7 @@ Always           1
 Name: CALC, dtype: int64
 ```
 
-```
+```py
 from sklearn.preprocessing import OrdinalEncoder
 
 ordinal_calc = [["no", "Sometimes", "Frequently", "Always"]]
@@ -447,13 +447,13 @@ ordinal_calc = [["no", "Sometimes", "Frequently", "Always"]]
 df["CALC"] = OrdinalEncoder(categories = ordinal_calc).fit_transform(df[["CALC"]])
 ```
 
-```
+```py
 # Double Check
 
 df["CALC"].value_counts()
 ```
 
-```
+```py
 1.0    1401
 0.0     639
 2.0      70
@@ -463,13 +463,13 @@ Name: CALC, dtype: int64
 
 在最后一篇专栏文章中，我们有另一个特例:虽然我们有两个以上不同的值，但是这里没有层次结构。不同的值代表不同的选项，这些选项通过层次结构彼此不相关。他们在这个意义上是独立的。因此，列是*分类的*。
 
-```
+```py
 # "TRANSPORTATION USED" COLUMN
 
 df["MTRANS"].value_counts()
 ```
 
-```
+```py
 Public_Transportation    1580
 Automobile                457
 Walking                    56
@@ -482,7 +482,7 @@ Name: MTRANS, dtype: int64
 
 这是执行操作的必要代码，由于其复杂性，将在[决策树课程](https://app.dataquest.io/course/random-forest-modeling-in-python)中详细分析。
 
-```
+```py
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import make_column_transformer
 
@@ -499,7 +499,7 @@ df = pd.DataFrame(onehot_df, columns = col_trans.get_feature_names_out())
 
 让我们检查转换。我们现在有五个不同的列，而不是“MTRANS”，每一列代表“MTRANS”的一个可能值: *MTRANS_Automobile* 、 *MTRANS_Bike* 、*m trans _ 摩托车*、*m trans _ 公共交通*和*m trans _ 步行*。
 
-```
+```py
 # Double Check
 
 df.iloc[:10, :9]
@@ -520,7 +520,7 @@ df.iloc[:10, :9]
 
 例如，对于第一次观察，由于那个人使用公共交通，相应的*MTRANS _ Public _ Transportation*列被标记为 1(“真”)，其他四列被标记为 0(“假”)。
 
-```
+```py
 df.iloc[:10, 9:]
 ```
 
@@ -549,11 +549,11 @@ df.iloc[:10, 9:]
 
 在这种情况下，我们将坚持使用分类树，因为数据集在其目标列中包含类/类别。
 
-```
+```py
 df["NObeyesdad"].unique()
 ```
 
-```
+```py
 array(['Normal_Weight', 'Overweight_Level_I', 'Overweight_Level_II',
        'Obesity_Type_I', 'Insufficient_Weight', 'Obesity_Type_II',
        'Obesity_Type_III'], dtype=object)
@@ -561,14 +561,14 @@ array(['Normal_Weight', 'Overweight_Level_I', 'Overweight_Level_II',
 
 `scikit-learn`创建机器学习模型的第一步是在特征列(`X`)和目标列(`y`)之间划分数据集。注意，我们从`X`中删除了“NObeyesdad”列，因为它包含目标值。
 
-```
+```py
 X = df.drop(["NObeyesdad"], axis = 1)
 y = df["NObeyesdad"]
 ```
 
 现在我们将导入决策树模型进行分类，以及`train_test_split`。
 
-```
+```py
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 ```
@@ -579,7 +579,7 @@ from sklearn.model_selection import train_test_split
 
 至于`random_state`，它只是一个确保结果可再现性的数字，因此你会经常看到它是不同函数的参数。
 
-```
+```py
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 14)
 ```
 
@@ -591,23 +591,23 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 
 在这种情况下，`max_depth = 4`表示我们将把树限制在四个级别:根节点、两个中间级别和最后一个级别，即叶子所在的级别。
 
-```
+```py
 tree = DecisionTreeClassifier(max_depth = 4, random_state = 14)
 ```
 
 太棒了。现在树已经存在，我们将使用存储在`X_train`和`y_train`中的训练数据来训练它:
 
-```
+```py
 tree.fit(X_train, y_train)
 ```
 
 现在我们需要知道生成的树在准确性方面是否足够好(它预测看不见的数据有多好)。我们可以通过使用`score`方法快速确定这一点，决策树与其他机器学习算法共享该方法。
 
-```
+```py
 tree.score(X_test, y_test)
 ```
 
-```
+```py
 0.7848699763593381
 ```
 
@@ -643,7 +643,7 @@ tree.score(X_test, y_test)
 
 一旦我们完成定制这些参数，我们就用`plt.show()`正式绘制决策树。
 
-```
+```py
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 
@@ -682,11 +682,11 @@ plt.show()
 
     为了确定每个数字属于哪个目标类，我们必须将顺序与`classes_`属性中的顺序进行匹配:
 
-```
+```py
 tree.classes_
 ```
 
-```
+```py
 array(['Insufficient_Weight', 'Normal_Weight', 'Obesity_Type_I',
        'Obesity_Type_II', 'Obesity_Type_III', 'Overweight_Level_I',
        'Overweight_Level_II'], dtype=object)
@@ -694,13 +694,13 @@ array(['Insufficient_Weight', 'Normal_Weight', 'Obesity_Type_I',
 
 例如，如果我们有来自根节点的值`[215, 227, 287, 246, 236, 234, 243]`，我们将像这样匹配它们:
 
-```
+```py
 values = [215, 227, 287, 246, 236, 234, 243]
 classes = tree.classes_
 list(zip(classes, values))
 ```
 
-```
+```py
 [('Insufficient_Weight', 215),
  ('Normal_Weight', 227),
  ('Obesity_Type_I', 287),

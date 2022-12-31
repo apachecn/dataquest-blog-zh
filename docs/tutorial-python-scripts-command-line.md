@@ -49,7 +49,7 @@ October 1, 2019![python-scripts-command-line-hackernews](img/1154fbff27d44f04ed3
 
 为此，我们可以在命令行中键入以下内容
 
-```
+```py
  printf "import pandas as pd\n\ndef load_data():\n\thn_stories = pd.read_csv('hn_stories.csv')\n\thn_stories.colummns = ['sublesson_time', 'upvotes', 'url', 'headline']\n\treturn(hn_stores)\n" > read.py 
 ```
 
@@ -65,7 +65,7 @@ October 1, 2019![python-scripts-command-line-hackernews](img/1154fbff27d44f04ed3
 
 在我们运行上面的代码之后，我们可以在命令行中键入`cat read.py`并执行命令来检查`read.py`的内容。如果一切运行正常，我们的`read.py`文件将如下所示:
 
-```
+```py
  import pandas as pd
 
 def load_data():
@@ -76,7 +76,7 @@ def load_data():
 
 创建这个文件后，我们的目录结构应该如下所示
 
-```
+```py
 Transforming_Data_with_Python
  | read.py
  | 
@@ -96,13 +96,13 @@ ___
 
 还记得使用命令行创建文件有多种方法吗？我们可以使用另一个命令来创建`__init__.py`,这一次，我们将使用`touch`命令来创建文件。`touch`是一个命令，当您运行该命令时，它会为您创建一个空文件:
 
-```
+```py
  touch __init__.py 
 ```
 
 创建这个文件后，目录结构将如下所示
 
-```
+```py
 Transforming_Data_with_Python
  | __init__.py
  | read.py
@@ -125,13 +125,13 @@ ___
 
 如果您使用命令行创建该文件，它看起来是这样的:
 
-```
+```py
  printf "from read import load_data\nfrom collections import Counter\n\nstories = load_data()\nheadlines = stories['headline'].str.cat(sep = ' ').lower()\nwordCount = Counter(headlines.split(' ')).most_common(100)\nprint(wordCount)\n" > count.py 
 ```
 
 运行上面的代码后，可以在命令行中键入`cat count.py`并执行命令来检查`count.py`的内容。如果一切运行正常，您的`count.py`文件将如下所示:
 
-```
+```py
  from read import load_data
 from collections import Counter
 
@@ -143,7 +143,7 @@ print(wordCount)
 
 该目录现在应该是这样的:
 
-```
+```py
 Transforming_Data_with_Python
  | __init__.py
  | read.py
@@ -157,7 +157,7 @@ ___
 
 脚本运行后，您将看到打印的结果:
 
-```
+```py
  [('the', 2045), ('to', 1641), ('a', 1276), ('of', 1170), ('for', 1140), ('in', 1036), ('and', 936), ('', 733), ('is', 620), ('on', 568), ('hn:', 537), ('with', 537), ('how', 526), ('-', 487), ('your', 480), ('you', 392), ('ask', 371), ('from', 310), ('new', 304), ('google', 303), ('why', 262), ('what', 258), ('an', 243), ('are', 223), ('by', 219), ('at', 213), ('show', 205), ('web', 192), ('it', 192), ('–', 184), ('do', 183), ('app', 178), ('i', 173), ('as', 161), ('not', 160), ('that', 160), ('data', 157), ('about', 154), ('be', 154), ('facebook', 150), ('startup', 147), ('my', 131), ('|', 127), ('using', 125), ('free', 125), ('online', 123), ('apple', 123), ('get', 122), ('can', 115), ('open', 114), ('will', 112), ('android', 110), ('this', 110), ('out', 109), ('we', 106), ('its', 102), ('now', 101), ('best', 101), ('up', 100), ('code', 98), ('have', 97), ('or', 96), ('one', 95), ('more', 93), ('first', 93), ('all', 93), ('software', 93), ('make', 92), ('iphone', 91), ('twitter', 91), ('should', 91), ('video', 90), ('social', 89), ('&', 88), ('internet', 88), ('us', 88), ('mobile', 88), ('use', 86), ('has', 84), ('just', 80), ('world', 79), ('design', 79), ('business', 79), ('5', 78), ('apps', 77), ('source', 77), ('cloud', 76), ('into', 76), ('api', 75), ('top', 74), ('tech', 73), ('javascript', 73), ('like', 72), ('programming', 72), ('windows', 72), ('when', 71), ('ios', 70), ('live', 69), ('future', 69), ('most', 68)] 
 ```
 
@@ -176,13 +176,13 @@ ___
 
 下面是它在命令行中的样子:
 
-```
+```py
  printf "from read import load_data\n\nstories = load_data()\ndomains = stories['url'].value_counts()\nfor name, row in domains.items():\n\tprint('{0}: {1}'.format(name, row))\n" > domains.py 
 ```
 
 同样，如果我们在命令行中键入`cat domains.py`来检查`domains.py`，我们应该会看到:
 
-```
+```py
  from read import load_data
 
 stories = load_data()
@@ -193,7 +193,7 @@ for name, row in domains.items():
 
 创建该文件后，我们的目录如下所示:
 
-```
+```py
 Transforming_Data_with_Python
  | __init__.py
  | read.py
@@ -221,13 +221,13 @@ ___
 
 下面是我们在命令行中的操作方法:
 
-```
+```py
  printf "from dateutil.parser import parse\nfrom read import load_data\n\n\ndef extract_hour(timestamp):\n\tdatetime = parse(timestamp)\n\thour = datetime.hour\n\treturn hour\n\nstories = load_data()\nstories['hour'] = stories['sublesson_time'].apply(extract_hour)\ntime = stories['hour'].value_counts()\nprint(time)" > times.py 
 ```
 
 下面是它作为一个单独的`.py`文件的样子(如上所述，您可以通过从命令行运行`cat times.py`检查该文件来确认):
 
-```
+```py
  from dateutil.parser import parse
 from read import load_data
 
@@ -244,7 +244,7 @@ print(time)
 
 让我们再一次更新我们的目录:
 
-```
+```py
 Transforming_Data_with_Python
  | __init__.py
  | read.py
@@ -256,7 +256,7 @@ ___
 
 现在我们已经创建了 Python 脚本，我们可以从命令行运行我们的脚本来获取某个小时内发布的文章数量的列表。为此，您可以从命令行键入命令`python times.py`。运行该脚本，您将看到以下结果:
 
-```
+```py
  17    646
 16    627
 15    618

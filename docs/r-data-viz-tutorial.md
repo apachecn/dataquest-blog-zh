@@ -24,14 +24,14 @@ December 11, 2018
 
 我们首先将数据作为名为`ca_fires`的数据帧导入 R:
 
-```
+```py
 library(readr)
 ca_fires <- read_csv("axios-calfire-wildfire-data.csv")
 ```
 
 让我们看看数据的前几行:
 
-```
+```py
 head(ca_fires)
 ```
 
@@ -60,33 +60,33 @@ head(ca_fires)
 
 为了将`start`和`end`变量日期从字符数据更改为日期数据，我们将使用包 [lubridate](https://lubridate.tidyverse.org/) 。我们还将使用来自`dplyr`包的数据争论工具。
 
-```
+```py
 library(lubridate)
 library(dplyr)
 ```
 
 使用`dplyr`函数`mutate()`和`lubridate`函数`as.Date()`，我们可以将`start`和`end`日期从字符改为数字:
 
-```
+```py
 ca_fires <- ca_fires %>%  mutate(start = as.Date(start, "%m-%d-%Y"), end = as.Date(end, "%m-%d-%Y"))
 ```
 
 由于按月或按年计算汇总统计数据可能很有用，所以让我们从`start`列中提取信息来创建新的`month`和`year`变量。我们可以使用`lubridate`功能`month()`和`year()`来完成这项工作:
 
-```
+```py
 ca_fires <- ca_fires %>%  mutate(Month = month(start, label = TRUE),
          Year = year(start)) 
 ```
 
 从`start`和`end`日期，我们还可以计算出火灾发生的时间长度。我们将使用`mutate()`创建一个新变量`duration`:
 
-```
+```py
 ca_fires <- ca_fires %>%  mutate(duration = end - start)
 ```
 
 为了让我们能够直观地看到一段时间内被野火烧毁的英亩数的趋势，我们将使用`mutate()`和基数 R 函数`cumsum()`创建一个新变量`acres_cumulative`，包含被烧毁的英亩数的累积总和:
 
-```
+```py
 ca_fires <- ca_fires %>%  mutate(acres_cumulative = cumsum(acres))
 ```
 
@@ -101,7 +101,7 @@ ca_fires <- ca_fires %>%  mutate(acres_cumulative = cumsum(acres))
 
 当我们探索数据以试图理解我们对这个问题的答案时，一个好的第一步是创建[](https://en.wikipedia.org/wiki/Histogram)**直方图，以理解数据是如何[](https://en.wikipedia.org/wiki/Probability_distribution)**分布的，或者大部分数据落在值范围的哪个位置。我们将使用 ggplot()函数创建直方图来可视化变量`area`和`duration`的分布:****
 
-```
+```py
 ## area
 ggplot(data = ca_fires) +
   aes(x = acres) +
@@ -124,13 +124,13 @@ ggplot(data = ca_fires) +
 
 让我们看看`duration` : ![duration_outliers](img/f706146ac0d89f7ef8824cc91cd9f7ed.png)的直方图，看看这个图上的 x 轴刻度。`duration`的所有值都应该是正数，但是直方图显示存在一些大的负值。让我们使用`dplyr`函数`filter()`来看看`duration`的值为负的观察值:
 
-```
+```py
 ca_fires %>%  filter(duration < 0)
 ```
 
 如果我们查看这些观察的`start`和`end`日期，我们可以看到它们似乎不正确，可能是由于数据输入错误:
 
-```
+```py
  id         unit     name            start      end       <chr>      <chr>    <chr>           <date>     <date>    
 TUU-007233 Tulare   Frazier         2003-07-08 2003-07-07
 TCU-006534 TUOLUMNE EARLY           2004-08-11 2004-08-09
@@ -140,7 +140,7 @@ BTU-7042   PLUMAS   BOULDER COMPLEX 2016-06-25 2006-07-05
 
 让我们从数据集中删除这些明显不准确的观察结果:
 
-```
+```py
 ca_fires <- ca_fires %>%
     filter(duration >0)
 ```
@@ -155,7 +155,7 @@ ca_fires <- ca_fires %>%
 
 野火在一年中的特定时间更常见吗？因为我们有一个`month`变量，我们可以可视化野火发生的趋势和每月烧毁的英亩数。首先，让我们使用`dplyr`函数`group_by()`和`summarize()`来计算每个月发生的火灾数量:
 
-```
+```py
 month_summary <- ca_fires %>%
   group_by(month) %>%
   summarize(fires = n())
@@ -163,7 +163,7 @@ month_summary <- ca_fires %>%
 
 然后，我们将创建一个条形图来显示每月的火灾数量:
 
-```
+```py
  ggplot(data = month_summary) +
  aes(x = month, y = fires) +
   geom_bar(stat = "identity") +
@@ -173,7 +173,7 @@ month_summary <- ca_fires %>%
 
 ![fires_per_month_bar](img/5e5d94aab53fc9eeadba7677c2c80cba.png)这个条形图让我们清楚地看到，大多数火灾发生在春、夏、秋三季，这些季节的特点是炎热、干燥，有利于火势蔓延。然而，它并没有让我们看到不同年份中每月发生的火灾数量的变化。相反，让我们在`ca_fires`数据框中按月和按年总结火灾发生次数，并创建一个[箱线图](https://en.wikipedia.org/wiki/Box_plot)，它将让我们直观地看到不同年份每月火灾次数的变化:
 
-```
+```py
  month_year_summary <- ca_fires %>% 
  group_by(month, year) %>%
   summarize(fires = n())
@@ -196,7 +196,7 @@ ggplot(data = month_year_summary) +
 
 为了回答这个问题，我们将创建一个随时间推移的累计燃烧英亩数的折线图:
 
-```
+```py
  ca_fires %>%
   ggplot() +
   aes(x = start, y = acres_cumulative) +

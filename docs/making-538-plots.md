@@ -18,7 +18,7 @@ September 5, 2017
 *   使用`info()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.info.html?highlight=dataframe%20info#pandas.DataFrame.info)打印关于数据集的信息。我们寻找行数和列数，同时检查空值。
 *   通过使用`head()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.head.html?highlight=dataframe%20head#pandas.DataFrame.head)，显示前五行以更好地理解数据集的结构。
 
-```
+```py
  import pandas as pd
 direct_link = 'https://www.randalolson.com/wp-content/uploads/percent-bachelors-degrees-women-usa.csv'
 women_majors = pd.read_csv(direct_link)
@@ -26,7 +26,7 @@ print(women_majors.info())
 women_majors.head() 
 ```
 
-```
+```py
  RangeIndex: 42 entries, 0 to 41
 Data columns (total 18 columns):
 Year                             42 non-null int64
@@ -64,7 +64,7 @@ None
 
 `Year`栏，每隔一栏的名称表示该科目的学士学位。学士栏中的每个数据点代表授予女性学士学位的百分比。因此，每一行都描述了某一年授予妇女的各种学士的百分比。如前所述，我们有 1970 年至 2011 年的数据。为了确认后一个限制，让我们使用`tail()` [方法](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.tail.html?highlight=tail#pandas.DataFrame.tail)打印数据集的最后五行:
 
-```
+```py
 women_majors.tail()
 ```
 
@@ -85,12 +85,12 @@ women_majors.tail()
     *   仅选择第一行中值小于 20 的项目；字段`Year`也将被检查，但显然不会被包括在内，因为 1970 年比 20 年大得多。
 *   将结果内容分配给`under_20`。
 
-```
+```py
  under_20 = women_majors.loc[0, women_majors.loc[0] < 20]
 under_20
 ```
 
-```
+```py
  Agriculture           4.229798
 Architecture         11.921005
 Business              9.064439
@@ -111,12 +111,12 @@ Name: 0, dtype: float64
     *   `figsize`–将图形尺寸设置为`tuple`，格式为`(width, height)`，单位为英寸。
 *   将 plot 对象分配给一个名为`under_20_graph`的变量，并打印其类型以显示 pandas 在遮光罩下使用了`matplotlib`对象。
 
-```
+```py
  under_20_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 print('Type:', type(under_20_graph)) 
 ```
 
-```
+```py
 Type: <class 'matplotlib.axes._subplots.AxesSubplot'>
 ```
 
@@ -135,12 +135,12 @@ Type: <class 'matplotlib.axes._subplots.AxesSubplot'>
 *   以`style`的名字导入`matplotlib.style` [模块](https://matplotlib.org/api/style_api.html?highlight=style%20available#module-matplotlib.style)。
 *   探索`matplotlib.style.available`(该模块的预定义变量)的内容，它包含所有可用内置样式的列表。
 
-```
+```py
 import matplotlib.style as style
 style.available
 ```
 
-```
+```py
  ['seaborn-deep', 
 'seaborn-muted', 
 'bmh', 
@@ -170,7 +170,7 @@ style.available
 
 `fivethirtyeight`。让我们使用这种风格，看看会有什么结果。为此，我们将使用来自同一个`matplotlib.style`模块(我们以名称`style`导入该模块)的恰当命名的`use()` [函数](https://matplotlib.org/api/style_api.html?highlight=style%20available#matplotlib.style.use)。然后，我们将使用与前面相同的代码来生成我们的图表。
 
-```
+```py
  style.use('fivethirtyeight')
 women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 ```
@@ -220,7 +220,7 @@ women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
     *   `which`–指示受影响的刻度标签(主要标签或次要标签；不知道区别的见前面展示的图例)；
     *   `labelsize`–设置刻度标签的字体大小。
 
-```
+```py
  fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
 ```
@@ -234,7 +234,7 @@ fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
 
 `set_yticklabels()` [方法](https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set_yticklabels.html?highlight=set_yticklabels#matplotlib.axes.Axes.set_yticklabels)连同`label`参数。从下面的代码可以推断，这个参数可以接受一个混合数据类型的列表，并且不需要传递任何固定数量的标签。
 
-```
+```py
  # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
@@ -243,7 +243,7 @@ fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
 print('The tick labels of the y-axis:', fte_graph.get_yticks()) # -10 and 60 are not visible on the graph
 ```
 
-```
+```py
 The tick labels of the y-axis: [-10\.   0\.  10\.  20\.  30\.  40\.  50\.  60.]
 ```
 
@@ -260,7 +260,7 @@ The tick labels of the y-axis: [-10\.   0\.  10\.  20\.  30\.  40\.  50\.  60.]
 *   `linewidth`–设置线条的宽度；
 *   `alpha`–调节线条的透明度，但我们在这里用它来调节黑色的强度；`alpha`的值范围从 0(完全透明)到 1(完全不透明)。
 
-```
+```py
 #
 # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
@@ -279,7 +279,7 @@ fte_graph.axhline(y = 0, color = 'black', linewidth = 1.3, alpha = .7)
 
 `set_xlim()` [方法](https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.set_xlim.html?highlight=set_xlim#matplotlib.axes.Axes.set_xlim)带有自明参数`left`和`right`。
 
-```
+```py
  # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
@@ -317,7 +317,7 @@ fte_graph.set_xlim(left = 1969, right = 2011)
     *   `color`–指定文本的颜色；下面我们用的值的格式是[十六进制](https://en.wikipedia.org/wiki/Hexadecimal)；我们使用这种格式来精确匹配整个图形的背景颜色(如[中指定的`fivethirtyeight`样式的代码](https://github.com/matplotlib/matplotlib/blob/38be7aeaaac3691560aeadafe46722dda427ef47/lib/matplotlib/mpl-data/stylelib/fivethirtyeight.mplstyle))；
     *   `backgroundcolor`–设置文本片段的背景颜色。
 
-```
+```py
  # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
@@ -341,7 +341,7 @@ fte_graph.text(x = 1965.8, y = -7,
 
 来源: [FiveThirtyEight](https://fivethirtyeight.com/features/old-olympians-ride-horses-young-ones-do-flips/) 这种签名酒吧也很容易复制。我们只是添加一些灰色的文本，并在它的正上方加一条线。我们将通过添加多个下划线字符(“_”)的文本片段来创建一行的视觉效果。你可能想知道为什么我们不使用`axhline()`简单地在我们想要的 y 坐标上画一条水平线。我们没有这样做，因为新的线条会拖下整个图表的网格，这不会产生预期的效果。我们也可以尝试添加一个箭头，然后移除指针，这样我们就得到一条线。然而，“下划线”解决方案要简单得多。在下一个代码块中，我们实现了我们刚刚讨论过的内容。我们在这里使用的方法和参数应该已经在前面的章节中熟悉了。
 
-```
+```py
  # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
@@ -377,7 +377,7 @@ fte_graph.text(x = 1966.1, y = -9,
 
 *   使用与我们在签名栏中添加文本相同的`text()`方法添加标题和副标题。如果你已经有了一些使用 matplotlib 的经验，你可能会想为什么我们不使用`title()`和`suptitle()`方法。这是因为这两种方法在精确移动文本方面有着可怕的功能。`text()`的唯一新参数是`weight`。我们用它来加粗标题。
 
-```
+```py
  # The previous code
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8))
 fte_graph.tick_params(axis = 'both', which = 'major', labelsize = 18)
@@ -405,7 +405,7 @@ fte_graph.text(x = 1966.65, y = 57,
 
 [色盲友好](https://en.wikipedia.org/wiki/Color_blindness)颜色:![cb_friendly](img/e7240e098dd7e6fbdddab1e9aa4179fc.png)来源:[观点:Bang Wong 的色盲](https://www.nature.com/nmeth/journal/v8/n6/full/nmeth.1618.html#ref1)我们将使用上图中的值来编辑色盲友好颜色的 [RGB](https://en.wikipedia.org/wiki/RGB_color_model) 参数列表。顺便提一句，我们避免使用黄色，因为用这种颜色的文本片段在图形的深灰色背景上不容易阅读。编译完这个 RGB 参数列表后，我们将把它传递给我们在前面的代码中使用的`plot()`方法的`color`参数。请注意，matplotlib 将要求 RGB 参数在 0-1 的范围内，因此我们将每个值除以 255，这是最大的 RGB 值。因为 0/255 = 0，所以我们不会费心去划分 0。
 
-```
+```py
  # Colorblind-friendly colors
 colors = [[0,0,0], [230/255,159/255,0], [86/255,180/255,233/255], [0,158/255,115/255], 
           [213/255,94/255,0], [0,114/255,178/255]]
@@ -437,7 +437,7 @@ fte_graph.text(x = 1966.65, y = 57,
 
 `text()`早期使用的方法。唯一的新参数是`rotation`，我们用它来旋转每个标签，使其优雅地适合图表。我们还将在这里做一点小技巧，通过简单地修改标签的背景颜色来匹配图表的颜色，使标签周围的网格线变得透明。在我们之前的代码中，我们只通过将`legend`参数设置为`False`来修改`plot()`方法。这将使我们摆脱默认的图例。我们也跳过了重新声明`colors`列表，因为它已经存储在前一个单元格的内存中。
 
-```
+```py
  # The previous code we modify
 fte_graph = women_majors.plot(x = 'Year', y = under_20.index, figsize = (12,8), color = colors, legend = False)
 

@@ -20,14 +20,14 @@ June 14, 2022![Add column to DataFrame](img/764cafaed84b3d56df422e38a476966f.png
 
 让我们探索向 r 中的数据帧添加新列的不同方法。在我们的实验中，我们将主要使用名为`super_sleepers`的相同数据帧，我们每次都将从以下初始数据帧中重建该数据帧:
 
-```
+```py
 super_sleepers_initial <- data.frame(rating=1:4, 
                                      animal=c('koala', 'hedgehog', 'sloth', 'panda'), 
                                      country=c('Australia', 'Italy', 'Peru', 'China'))
 print(super_sleepers_initial)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -52,13 +52,13 @@ print(super_sleepers_initial)
 
 因为 R 中的数据帧是一个向量列表，其中每个向量代表该数据帧的一个单独的列，所以我们可以通过将相应的新向量添加到该“列表”中来将一列添加到数据帧中。语法如下:
 
-```
+```py
 dataframe_name$new_column_name <- vector
 ```
 
 让我们从初始的`super_sleepers_initial`数据帧重建我们的`super_sleepers`数据帧(我们将对每个后续实验都这样做),并向其添加一个名为`avg_sleep_hours`的列，由向量`c(21, 18, 17, 10)`表示:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -69,7 +69,7 @@ super_sleepers$avg_sleep_hours <- c(21, 18, 17, 10)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -85,7 +85,7 @@ print(super_sleepers)
 
 请注意，添加到 vector 中的项数必须等于 DataFrame 中的当前行数，否则，程序会抛出一个错误:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -97,7 +97,7 @@ super_sleepers$avg_sleep_hours <- c(21, 18, 17)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -118,7 +118,7 @@ Traceback:
 
 我们可以为新列的所有行分配一个值，无论是数字还是字符，而不是分配一个向量:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -129,7 +129,7 @@ super_sleepers$avg_sleep_hours <- 0
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -147,7 +147,7 @@ print(super_sleepers)
 
 或者，我们可以基于现有的列计算一个新列。让我们首先将`avg_sleep_hours`列添加到我们的 DataFrame 中，然后从中计算一个新的列`avg_sleep_hours_per_year`。我们想知道这些动物每年平均睡眠多少小时:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -163,7 +163,7 @@ super_sleepers$avg_sleep_hours_per_year <- super_sleepers$avg_sleep_hours * 365
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -185,7 +185,7 @@ print(super_sleepers)
 
 同样，可以使用下面的语法将一列从一个数据帧复制到另一个数据帧:`df1$new_col <- df2$existing_col`。让我们复制这样一种情况:
 
-```
+```py
 # Creating the `super_sleepers_1` dataframe with the only column `rating`
 super_sleepers_1 <- data.frame(rating=1:4)
 print(super_sleepers_1)
@@ -197,7 +197,7 @@ super_sleepers_1$ANIMAL <- super_sleepers_initial$animal
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating
 1      1
 2      2
@@ -217,7 +217,7 @@ print(super_sleepers_1)
 
 向 R 数据帧添加新列的另一种方式是更“数据帧风格”而不是“列表风格”:通过使用括号符号。让我们看看它是如何工作的:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -228,7 +228,7 @@ super_sleepers['avg_sleep_hours'] <- c(21, 18, 17, 10)
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -244,19 +244,19 @@ print(super_sleepers)
 
 在上面这段代码中，我们可以用下面这行代码代替:
 
-```
+```py
 super_sleepers['avg_sleep_hours'] <- c(21, 18, 17, 10)
 ```
 
 这一行也可以替换为:
 
-```
+```py
 super_sleepers[['avg_sleep_hours']] <- c(21, 18, 17, 10)
 ```
 
 最后，这个也可以替换:
 
-```
+```py
 super_sleepers[,'avg_sleep_hours'] <- c(21, 18, 17, 10)
 ```
 
@@ -264,7 +264,7 @@ super_sleepers[,'avg_sleep_hours'] <- c(21, 18, 17, 10)
 
 与前一种方法一样，我们可以为新列分配一个值，而不是一个向量:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -275,7 +275,7 @@ super_sleepers['avg_sleep_hours'] <- 'Unknown'
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -291,7 +291,7 @@ print(super_sleepers)
 
 或者，我们可以基于现有的列计算一个新列:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -307,7 +307,7 @@ super_sleepers['avg_sleep_hours_per_year'] <- super_sleepers['avg_sleep_hours'] 
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -329,7 +329,7 @@ print(super_sleepers)
 
 使用另一个选项，我们可以从另一个数据帧中复制一列:
 
-```
+```py
 # Creating the `super_sleepers_1` dataframe with the only column `rating`
 super_sleepers_1 <- data.frame(rating=1:4)
 print(super_sleepers_1)
@@ -341,7 +341,7 @@ super_sleepers_1['ANIMAL'] <- super_sleepers_initial['animal']
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating
 1      1
 2      2
@@ -361,13 +361,13 @@ print(super_sleepers_1)
 
 向 R 数据帧添加新列的第三种方式是应用代表“列绑定”的`cbind()`函数，该函数也可用于组合两个或更多数据帧。使用这个函数比前两个方法更通用，因为它允许一次添加几列。其基本语法如下:
 
-```
+```py
 df <- cbind(df, new_col_1, new_col_2, ..., new_col_N)
 ```
 
 下面这段代码将`avg_sleep_hours`列添加到`super_sleepers`数据帧中:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -379,7 +379,7 @@ super_sleepers <- cbind(super_sleepers,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -395,7 +395,7 @@ print(super_sleepers)
 
 下一段代码一次向`super_sleepers`数据帧添加两个新列——`avg_sleep_hours`和`has_tail`:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -408,7 +408,7 @@ super_sleepers <- cbind(super_sleepers,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -424,7 +424,7 @@ print(super_sleepers)
 
 除了一次添加多列之外，使用`cbind()`函数的另一个优点是，它允许将该操作的结果(即向 R 数据帧添加一列或多列)分配给新的数据帧，而不改变初始数据帧:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -439,7 +439,7 @@ cat('\n\n')
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -461,7 +461,7 @@ print(super_sleepers)
 
 与前两种方法一样，在`cbind()`函数中，我们可以为整个新列分配一个值:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -473,7 +473,7 @@ super_sleepers <- cbind(super_sleepers,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -489,7 +489,7 @@ print(super_sleepers)
 
 另一个选项允许我们基于现有的列来计算它:
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -507,7 +507,7 @@ super_sleepers <- cbind(super_sleepers,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -529,7 +529,7 @@ print(super_sleepers)
 
 使用以下选项，我们可以从另一个数据帧中复制一列:
 
-```
+```py
 # Creating the `super_sleepers_1` DataFrame with the only column `rating`
 super_sleepers_1 <- data.frame(rating=1:4)
 print(super_sleepers_1)
@@ -542,7 +542,7 @@ super_sleepers_1 <- cbind(super_sleepers_1,
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating
 1      1
 2      2
@@ -560,7 +560,7 @@ print(super_sleepers_1)
 
 1.  我们不能创建一个新列，然后在同一个`cbind()`函数中基于新列**再计算一列。例如，下面这段代码会抛出一个错误。**
 
-```
+```py
 # Reconstructing the `super_sleepers` DataFrame
 super_sleepers <- super_sleepers_initial
 print(super_sleepers)
@@ -574,7 +574,7 @@ super_sleepers <- cbind(super_sleepers,
 print(super_sleepers)
 ```
 
-```
+```py
  rating   animal   country
 1      1    koala Australia
 2      2 hedgehog     Italy
@@ -596,7 +596,7 @@ Traceback:
 
 2.  当我们从另一个数据帧中复制一个列，并试图在`cbind()`函数中给它一个新名称**时，这个新名称将被忽略，新列的调用将与它在原始数据帧中的调用完全相同。例如，在下面这段代码中，新名称`ANIMAL`被忽略，新列被命名为`animal`，就像在复制它的数据帧中一样:**
 
-```
+```py
 # Creating the `super_sleepers_1` DataFrame with the only column `rating`
 super_sleepers_1 <- data.frame(rating=1:4)
 print(super_sleepers_1)
@@ -609,7 +609,7 @@ super_sleepers_1 <- cbind(super_sleepers_1,
 print(super_sleepers_1)
 ```
 
-```
+```py
  rating
 1      1
 2      2

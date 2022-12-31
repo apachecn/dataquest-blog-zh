@@ -49,7 +49,7 @@ Python 中的列表被实现为**动态可变数组**，它保存了一个**有�
 
 我们可以使用方括号(`[]`)创建一个列表，用逗号分隔零个或多个元素，或者使用[构造函数`list()`](https://docs.python.org/3/library/stdtypes.html#list) 。后者也可以用于将某些其他数据结构转换成列表。
 
-```
+```py
 # Create an empty list using square brackets
 l1 = []
 
@@ -70,7 +70,7 @@ print(f"List l3: {l3}")
 print(f"List l4: {l4}")
 ```
 
-```
+```py
 List l1: []
 List l2: [1, 2, '3', 4]
 List l3: []
@@ -79,7 +79,7 @@ List l4: [1, 2, 3]
 
 我们可以使用索引来访问列表的元素，其中列表的第一个元素的索引为 0:
 
-```
+```py
 # Print out the first element of list l2
 print(f"The first element of the list l2 is {l2[0]}.")
 print()
@@ -88,7 +88,7 @@ print()
 print(f"The third element of the list l4 is {l4[2]}.")
 ```
 
-```
+```py
  The first element of the list l2 is 1.
 
     The third element of the list l4 is 3.
@@ -96,7 +96,7 @@ print(f"The third element of the list l4 is {l4[2]}.")
 
 我们还可以**分割**列表并同时访问多个元素:
 
-```
+```py
 # Assign the third and the fourth elements of l2 to a new list
 l5 = l2[2:]
 
@@ -104,7 +104,7 @@ l5 = l2[2:]
 print(l5)
 ```
 
-```
+```py
  ['3', 4]
 ```
 
@@ -116,14 +116,14 @@ print(l5)
 
 让我们用一个例子来展示这种行为:
 
-```
+```py
 print(f"List l2: {l2}")
 
 # Access the second and the third elements of list l2 (these are the indices 1 and 2)
 print(f"Second and third elements of list l2: {l2[1:3]}")
 ```
 
-```
+```py
  List l2: [1, 2, '3', 4]
     Second and third elements of list l2: [2, '3']
 ```
@@ -134,7 +134,7 @@ print(f"Second and third elements of list l2: {l2[1:3]}")
 
 现在让我们证明列表是可变的。例如，我们可以将一个新元素添加到列表中，或者从列表中添加一个特定的元素:
 
-```
+```py
 # Append a new element to the list l1
 l1.append(5)
 
@@ -150,7 +150,7 @@ print("Removed element 5 from the list l1:")
 print(l1)
 ```
 
-```
+```py
  Appended 5 to list l1:
     [5]
     Removed element 5 from the list l1:
@@ -159,7 +159,7 @@ print(l1)
 
 此外，我们可以通过访问所需的索引并为该索引分配一个新值来修改列表中已经存在的元素:
 
-```
+```py
 # Print the original list l2
 print("Original l2:")
 print(l2)
@@ -172,7 +172,7 @@ print("Modified l2:")
 print(l2)
 ```
 
-```
+```py
  Original l2:
     [1, 2, '3', 4]
     Modified l2:
@@ -187,7 +187,7 @@ Python 中的字典与现实世界中的字典非常相似。这些是**可变�
 
 字典用于快速访问与**唯一**键相关的某些数据。唯一性是必不可少的，因为我们只需要访问特定的信息，不要与其他条目混淆。想象一下，我们想要阅读*数据科学*的定义，但是一本字典将我们重定向到两个不同的页面:哪一个是正确的？请注意，从技术上讲，我们可以创建一个具有两个或更多相同键的字典，尽管由于字典的性质，这是不可取的。
 
-```
+```py
 # Create dictionary with duplicate keys
 d1 = {"1": 1, "1": 2}
 print(d1)
@@ -216,7 +216,7 @@ print(d1["1"])
 
 现在让我们来看几个例子。首先，我们可以用花括号(`{}`)或`dict()`构造函数创建一个字典:
 
-```
+```py
 # Create an empty dictionary using curly brackets
 d1 = {}
 
@@ -237,7 +237,7 @@ print(f"Dictionary d3: {d3}")
 print(f"Dictionary d4: {d4}")
 ```
 
-```
+```py
  Dictionary d1: {}
     Dictionary d2: {'John': {'Age': 27, 'Hometown': 'Boston'}, 'Rebecca': {'Age': 31, 'Hometown': 'Chicago'}}
     Dictionary d3: {}
@@ -246,20 +246,20 @@ print(f"Dictionary d4: {d4}")
 
 现在让我们访问字典中的一个元素。我们可以用与列表相同的方法做到这一点:
 
-```
+```py
 # Access the value associated with the key 'John'
 print("John's personal data is:")
 print(d2["John"])
 ```
 
-```
+```py
  John's personal data is:
     {'Age': 27, 'Hometown': 'Boston'}
 ```
 
 接下来，我们还可以修改字典—例如，通过添加新的`key:value`对:
 
-```
+```py
 # Add another name to the dictionary d2
 d2["Violet"] = {"Age": 34, "Hometown": "Los Angeles"}
 
@@ -267,7 +267,7 @@ d2["Violet"] = {"Age": 34, "Hometown": "Los Angeles"}
 print(d2)
 ```
 
-```
+```py
  {'John': {'Age': 27, 'Hometown': 'Boston'}, 'Rebecca': {'Age': 31, 'Hometown': 'Chicago'}, 'Violet': {'Age': 34, 'Hometown': 'Los Angeles'}}
 ```
 
@@ -295,7 +295,7 @@ Python 中的集合可以定义为不可变的唯一元素的可变动态集合�
 
 为了创建一个集合，我们可以使用花括号(`{}`)或者`set()`构造函数。不要把集合和字典混淆(字典也使用花括号)，因为集合不包含`key:value`对。但是请注意，与字典键一样，只有不可变的数据结构或类型才允许作为集合元素。这一次，让我们直接创建填充集:
 
-```
+```py
 # Create a set using curly brackets
 s1 = {1, 2, 3}
 
@@ -307,7 +307,7 @@ print(f"Set s1: {s1}")
 print(f"Set s2: {s2}")
 ```
 
-```
+```py
  Set s1: {1, 2, 3}
     Set s2: {1, 2, 3, 4}
 ```
@@ -318,7 +318,7 @@ print(f"Set s2: {s2}")
 
 与它们的数学对应物一样，我们可以在集合上执行某些操作。例如，我们可以创建集合的**联合**，这基本上意味着将两个集合合并在一起。但是，如果两个集合有两个或更多相同的值，则得到的集合将只包含其中一个值。创建并集有两种方法:要么用`union()`方法，要么用竖线(`|`)操作符。我们来举个例子:
 
-```
+```py
 # Create two new sets
 names1 = set(["Glory", "Tony", "Joel", "Dennis"])
 names2 = set(["Morgan", "Joel", "Tony", "Emmanuel", "Diego"])
@@ -333,7 +333,7 @@ names_union = names1 | names2
 print(names_union)
 ```
 
-```
+```py
  {'Glory', 'Dennis', 'Diego', 'Joel', 'Emmanuel', 'Tony', 'Morgan'}
 ```
 
@@ -341,7 +341,7 @@ print(names_union)
 
 接下来，我们可能还想找出哪些名字同时出现在两个集合中。这可以通过`intersection()`方法或与(`&`)运算符来完成。
 
-```
+```py
 # Intersection of two sets using the intersection() method
 names_intersection = names1.intersection(names2)
 
@@ -352,7 +352,7 @@ names_intersection = names1 & names2
 print(names_intersection)
 ```
 
-```
+```py
  {'Joel', 'Tony'}
 ```
 
@@ -360,7 +360,7 @@ print(names_intersection)
 
 集合运算的最后一个例子是两个集合之间的差。换句话说，该操作将返回第一个集合中的所有元素，而不是第二个集合中的所有元素。我们可以使用`difference()`方法或减号(`-`):
 
-```
+```py
 # Create a set of all the names present in names1 but absent in names2 with the difference() method
 names_difference = names1.difference(names2)
 
@@ -371,7 +371,7 @@ names_difference = names1 - names2
 print(names_difference)
 ```
 
-```
+```py
  {'Dennis', 'Glory'}
 ```
 
@@ -381,7 +381,7 @@ print(names_difference)
 
 最后，作为奖励，让我们比较一下使用集合与使用列表相比，在检查集合中元素的存在时有多快。
 
-```
+```py
 import time
 
 def find_element(iterable):
@@ -404,7 +404,7 @@ find_element(l) # Find elements in a list
 print(f"Finding an element in a list took {time.time() - start_time} seconds.")
 ```
 
-```
+```py
  Finding an element in a set took 0.00016832351684570312 seconds.
     Finding an element in a list took 0.04723954200744629 seconds.
 ```
@@ -432,7 +432,7 @@ print(f"Finding an element in a list took {time.time() - start_time} seconds.")
 
 让我们来看一些例子:
 
-```
+```py
 # Create a tuple using round brackets
 t1 = (1, 2, 3, 4)
 
@@ -448,7 +448,7 @@ print(f"Tuple t2: {t2}")
 print(f"Tuple t3: {t3}")
 ```
 
-```
+```py
  Tuple t1: (1, 2, 3, 4)
     Tuple t2: (1, 2, 3, 4, 5)
     Tuple t3: (1, 2, 3, 4, 5, 6)
@@ -458,12 +458,12 @@ print(f"Tuple t3: {t3}")
 
 元组是不可变的；因此，一旦它们被创建，我们就不能改变它们的元素。让我们看看如果我们尝试这样做会发生什么:
 
-```
+```py
 # Try to change the value at index 0 in tuple t1
 t1[0] = 1
 ```
 
-```
+```py
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: 'tuple' object does not support item assignment
@@ -473,30 +473,30 @@ TypeError: 'tuple' object does not support item assignment
 
 然而，我们可以通过索引来访问元组中的元素，就像在列表中一样:
 
-```
+```py
 # Print out the value at index 1 in the tuple t2
 print(f"The value at index 1 in t2 is {t2[1]}.")
 ```
 
-```
+```py
  The value at index 1 in t2 is 2.
 ```
 
 元组也可以用作字典键。例如，我们可以将某些元素及其连续索引存储在一个元组中，并为它们赋值:
 
-```
+```py
 # Use tuples as dictionary keys
 working_hours = {("Rebecca", 1): 38, ("Thomas", 2): 40}
 ```
 
 如果使用元组作为字典键，那么元组必须包含不可变的对象:
 
-```
+```py
 # Use tuples containing mutable objects as dictionary keys
 working_hours = {(["Rebecca", 1]): 38, (["Thomas", 2]): 40}
 ```
 
-```
+```py
 ---------------------------------------------------------------------------
 
 TypeError                                 Traceback (most recent call last)

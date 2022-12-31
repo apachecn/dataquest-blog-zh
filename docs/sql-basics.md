@@ -80,7 +80,7 @@ February 1, 2021
 
 或者，如果我们不想使用或安装 Python，我们可以从命令行运行 SQLite3。只需从 [SQLite3 网页](https://sqlite.org/download.html)下载“预编译二进制文件”并使用以下代码打开数据库:
 
-```
+```py
 ~$ sqlite hubway.db SQLite version 3.14.0 2016-07-26 15:17:14Enter ".help" for usage hints.sqlite>
 ```
 
@@ -90,7 +90,7 @@ February 1, 2021
 
 为此，我们将定义一个函数，该函数将我们的查询(存储为字符串)作为输入，并将结果显示为格式化的数据帧:
 
-```
+```py
 import sqlite3
 span class="token keyword">import pandas as pd
 b = sqlite3.connect('hubway.db')
@@ -106,7 +106,7 @@ span class="token keyword">def run_query(query):
 
 除了我们想要检索的列之外，我们还必须告诉数据库从哪个表中获取它们。为此，我们使用关键字`FROM`后跟表名。例如，如果我们希望在`trips`表中看到每次旅行的`start_date`和`bike_number`，我们可以使用以下查询:
 
-```
+```py
 SELECT start_date, bike_number FROM trips;
 ```
 
@@ -120,7 +120,7 @@ SELECT start_date, bike_number FROM trips;
 
 我们在上一节中看到的`SELECT`查询将为`trips`表中的每一行返回所请求的信息，但有时这可能意味着大量数据。我们可能不需要全部。相反，如果我们希望在数据库中看到前五次旅行的`start_date`和`bike_number`，我们可以将`LIMIT`添加到我们的查询中，如下所示:
 
-```
+```py
 SELECT start_date, bike_number FROM trips LIMIT 5;
 ```
 
@@ -130,7 +130,7 @@ SELECT start_date, bike_number FROM trips LIMIT 5;
 
 让我们在 Hubway 数据库上运行第一个查询。首先，我们将查询存储为一个字符串，然后使用我们之前定义的函数在数据库上运行它。看一下下面的例子:
 
-```
+```py
 query = 'SELECT * FROM trips LIMIT 5;'
 un_query(query)
 ```
@@ -149,7 +149,7 @@ un_query(query)
 
 我们之前的例子返回了`trips`表中的每一列。如果我们只对`duration`和`start_date`列感兴趣，我们可以用列名替换通配符，如下所示:
 
-```
+```py
 query = 'SELECT duration, start_date FROM trips LIMIT 5'
 un_query(query)
 ```
@@ -170,7 +170,7 @@ un_query(query)
 
 例如，如果我们想将`trips`表从最短的`duration`到最长的进行排序，我们可以在查询中添加下面一行:
 
-```
+```py
 ORDER BY duration ASC
 ```
 
@@ -190,7 +190,7 @@ ORDER BY duration ASC
 
 让我们继续运行这个查询，找出最长的旅行持续了多长时间。
 
-```
+```py
 query = '''
 ELECT duration FROM trips
 RDER BY duration DESC
@@ -207,7 +207,7 @@ un_query(query)
 
 如果特别长的旅行真的被数据库缩短了，那么我们可能会看到很多旅行在 9999 秒达到极限。让我们尝试运行与之前相同的查询，但是调整`LIMIT`以返回 10 个最高的持续时间，看看情况是否如此:
 
-```
+```py
 query = '''
 ELECT durationFROM trips
 RDER BY duration DESC
@@ -237,7 +237,7 @@ Hubway 对超过 30 分钟的骑行收取额外费用(有人骑自行车 9999 �
 
 前面的命令对于提取特定列的排序信息非常有用，但是如果我们想要查看特定的数据子集呢？这就是`WHERE`的用武之地。`WHERE`命令允许我们使用逻辑运算符来指定应该返回哪些行。例如，您可以使用以下命令返回骑自行车`B00400`的每一次旅行:
 
-```
+```py
 WHERE bike_number = "B00400"
 ```
 
@@ -245,7 +245,7 @@ WHERE bike_number = "B00400"
 
 让我们编写一个查询，使用`WHERE`返回`trips`表中的每一列，每一行的`duration`超过 9990 秒:
 
-```
+```py
 query = '''
 ELECT * FROM trips
 HERE duration > 9990;
@@ -280,7 +280,7 @@ un_query(query)
 
 让我们现在运行该查询。我们已经知道它应该只返回一个结果，所以应该很容易检查我们是否得到了正确的结果:
 
-```
+```py
 query = '''
 ELECT * FROM trips
 HERE (duration >= 9990) AND (sub_type = "Registered")
@@ -299,7 +299,7 @@ un_query(query)
 
 允许我们将计算转移到数据库，省去了我们编写额外脚本来统计结果的麻烦。要使用它，我们只需包含`COUNT(column_name)`而不是(或除此之外)您想要`SELECT`的列，就像这样:
 
-```
+```py
 SELECT COUNT(id)
 span class="token keyword">FROM trips
 ```
@@ -310,7 +310,7 @@ span class="token keyword">FROM trips
 
 让我们看一个查询来回答我们的问题。我们可以使用`SELECT COUNT(*)`来计算返回的总行数，使用`WHERE sub_type = "Registered"`来确保我们只计算注册用户的旅行次数。
 
-```
+```py
 query = '''
 ELECT COUNT(*)FROM trips
 HERE sub_type = "Registered";
@@ -325,7 +325,7 @@ un_query(query)
 这个查询成功了，并返回了我们问题的答案。但是列标题不是特别有描述性。如果其他人看到这张桌子，他们将无法理解它的含义。
 如果我们想让我们的结果更易读，我们可以使用`AS`给我们的输出一个别名(或昵称)。让我们重新运行前面的查询，但是给我们的列标题一个别名`Total Trips by Registered Users`:
 
-```
+```py
 query = '''
 ELECT COUNT(*) AS "Total Trips by Registered Users"
 ROM trips
@@ -344,7 +344,7 @@ un_query(query)
 
 为了回答我们的第三个问题，**“平均旅行持续时间是多少？”**，我们可以在`duration`列上使用`AVG`函数(再一次，使用`AS`给我们的输出列一个更具描述性的名称):
 
-```
+```py
 query = '''
 ELECT AVG(duration) AS "Average Duration"
 ROM trips;
@@ -379,7 +379,7 @@ un_query(query)
 
 下面是我们将所有代码放在一起时的样子:
 
-```
+```py
 query = '''
 ELECT sub_type, AVG(duration) AS "Average Duration"
 ROM trips
@@ -399,7 +399,7 @@ un_query(query)
 
 然而，出于本教程的目的，让我们继续。我们的下一个问题是**哪辆自行车被用于最多的旅行？**。我们可以用一个非常相似的查询来回答这个问题。看一下下面的例子，看看你是否能弄清楚每一行在做什么——我们以后会一步一步地检查，这样你就能检查你是否做对了:
 
-```
+```py
 query = '''
 ELECT bike_number as "Bike Number", COUNT(*) AS "Number of Trips"
 ROM trips
@@ -428,7 +428,7 @@ un_query(query)
 
 我们可以在脑子里算出 30 岁的人出生的年份，然后输入，但是更好的解决方案是直接在查询中使用算术运算。SQL 允许我们使用`+`、`-`、`*`和`/`一次对整个列执行算术运算。
 
-```
+```py
 query = '''
 ELECT AVG(duration) FROM trips
 HERE (2017 - birth_date) > 30;
@@ -450,7 +450,7 @@ un_query(query)
 
 假设我们想要编写一个查询，为数据库中的每个订单返回`order_number`和`name`。如果它们都存储在同一个表中，我们可以使用以下查询:
 
-```
+```py
 SELECT order_number, name
 span class="token keyword">FROM orders;
 ```
@@ -469,13 +469,13 @@ span class="token keyword">FROM orders;
 
 正如我们前面所讨论的，这些表在每个表的`customer_id`列上是相连的。因此，我们将使用`ON`告诉数据库这两列指的是同一个东西，如下所示:
 
-```
+```py
 ON orders.customer_ID = customers.customer_id
 ```
 
 我们再次使用`.`来确保数据库知道这些列在哪个表中。因此，当我们将所有这些放在一起时，我们会得到如下所示的查询:
 
-```
+```py
 SELECT orders.order_number, customers.name
 span class="token keyword">FROM orders
 span class="token keyword">INNER JOIN customers
@@ -488,7 +488,7 @@ span class="token keyword">ON orders.customer_id = customers.customer_id
 
 在开始之前，我们应该看一下`stations`表中的其余列。下面是一个显示前 5 行的查询，这样我们就可以看到`stations`表的样子:
 
-```
+```py
 query = '''
 ELECT * FROM stations
 IMIT 5;
@@ -519,7 +519,7 @@ un_query(query)
 *   然后我们进入查询的实质——我们将`stations`表中的`station`列设为`GROUP BY`,这样我们的`COUNT`将分别计算每个车站的旅行次数
 *   最后我们可以`ORDER BY`我们的`COUNT`和`LIMIT`输出可管理数量的结果
 
-```
+```py
 query = '''
 ELECT stations.station AS "Station", COUNT(*) AS "Count"
 ROM trips INNER JOIN stations
@@ -541,7 +541,7 @@ un_query(query)
 
 我们接下来要看的问题是**哪些车站是往返最常用的？我们可以使用和以前差不多的查询。我们将以同样的方式`SELECT`相同的输出列和`JOIN`表格，但是这一次我们将添加一个`WHERE`子句，以将我们的`COUNT`限制为`start_station`与`end_station`相同的旅行。**
 
-```
+```py
 query = '''SELECT stations.station AS "Station", COUNT(*) AS "Count"
 ROM trips INNER JOIN stations
 N trips.start_station = stations.id
@@ -573,13 +573,13 @@ un_query(query)
 
 例如，我们可以使用下面的代码，通过别名“start”将`stations`表转换为`trips`表。然后，我们可以使用`.`将“start”与我们的列名结合起来，以引用来自这个特定的`JOIN`的数据(而不是第二个`JOIN`，我们将使用`ON`的`end_station`列):
 
-```
+```py
 INNER JOIN stations AS start ON trips.start_station = start.id
 ```
 
 下面是我们运行最终查询时的样子。注意，我们使用了`<>`来表示“不等于”，但是`!=`也可以。
 
-```
+```py
 query =
 span class="token triple-quoted-string string">'''
 ELECT COUNT(trips.id) AS "Count"

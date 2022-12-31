@@ -63,7 +63,7 @@ May 23, 2018
 
 我们已经分别突出显示了请求类型、URL 和表单数据的字段。从屏幕截图来看，要生成报告，我们需要使用给定的表单数据向 URL 发送 POST 请求。为了使事情变得简单，我们将使用 URL 编码的表单数据源代码。然后，我们将使用下面的代码片段发出我们的 [POST 请求](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST)，使用 [`requests.post()`](https://2.python-requests.org/en/master/api/#requests.post) 和`x-www-form-urlencoded`内容类型头。
 
-```
+```py
  import requests
 
 form_data = (    
@@ -87,7 +87,7 @@ re = requests.post('https://migbirdapps.fws.gov/mbdc/databases/afbws/disp_plot.a
 
 总的来说，它看起来像:
 
-```
+```py
  import requests
 
 se = requests.Session()
@@ -111,7 +111,7 @@ re = se.post('https://migbirdapps.fws.gov/mbdc/databases/afbws/disp_plot.asp', d
 
 成功！我们得到了所需的报告表，但是注意有 616 页的数据需要解析。我们可以减少数量的一种方法是选择更大数量的`textRows`表单值。让我们将其更改为最大值，即每个表 99 行。
 
-```
+```py
  import requests
 
 se = requests.Session()
@@ -139,7 +139,7 @@ re = se.post('https://migbirdapps.fws.gov/mbdc/databases/afbws/disp_plot.asp', d
 
 为了解析数据，我们需要用报告响应 HTML 字符串创建一个`BeautifulSoup`对象。在底层，`BeautifulSoup`对象将 HTML 字符串转换成树状数据结构。这使得查询标签变得容易，比如包含报告数据的`<table>`标签。
 
-```
+```py
  import requests
 from bs4 import BeautifulSoup
 
@@ -166,7 +166,7 @@ soup = BeautifulSoup(re.text, "lxml")
 
 使用我们的可解析对象，我们现在可以在 HTML 文档中搜索`<table>`标签。在文档中，报表数据在第二个`<table>`中，所以我们将使用`.findAll()`方法并选择列表中的第二项。然后，我们将过滤表中的所有行，`<tr>`，并将它们设置为一个`rows`变量。
 
-```
+```py
  soup = BeautifulSoup(re.text, "lxml")
 data_table = soup.findAll('table')[1]
 rows = data_table.findAll('tr')
@@ -174,7 +174,7 @@ rows = data_table.findAll('tr')
 
 接下来，我们希望提取标题行并清理值。作为参考，HTML 表格的标题行使用`<th>`标签格式化，数据行使用`<td>`格式化。为了获得标签值，我们需要调用一个`BeautifulSoup`标签的`.string`属性。我们将从表的第一行获取标题值。
 
-```
+```py
  soup = BeautifulSoup(re.text, "lxml")
 data_table = soup.findAll('table')[1]
 rows = data_table.findAll('tr')
@@ -183,7 +183,7 @@ header = [col.string for col in rows[0].findAll('th') if col.string]
 
 提取了标题后，就该从行中获取数据了。我们将遍历表中剩余的行，找到所有的`<td>`标记，并将其分配给一个新行。此外，我们将合并标题和行，然后清除值周围的一些空白，使其更容易解析。
 
-```
+```py
  soup = BeautifulSoup(re.text, "lxml")
 data_table = soup.findAll('table')[1]
 rows = data_table.findAll('tr')
@@ -197,7 +197,7 @@ table = [header] + modified_rows
 
 使用`unicodedata.normalize()`进行更多的 unicode 清理，我们应该得到以下输出:
 
-```
+```py
 import unicodedata
 
 soup = BeautifulSoup(re.text, "lxml")
@@ -212,7 +212,7 @@ table = [header] + modified_rows
 print(table[:3]) 
 ```
 
-```
+```py
 >> [['Year', 'State', 'Stratum', 'Plot', 'Type of check', 'Wet Habitat', 'AMERICAN BLACK DUCK TIP', 'AMERICAN BLACK DUCK TIB', 'GREEN-WINGED TEAL TIP', 'GREEN-WINGED TEAL TIB', 'BLUE-WINGED TEAL TIP', 'BLUE-WINGED TEAL TIB', 'CANADA GOOSE TIP', 'CANADA GOOSE TIB OLD', 'CANADA GOOSE TIB NEW', 'COMMON MERGANSER TIP', 'COMMON MERGANSER TIB', 'GADWALL TIP', 'GADWALL TIB', 'HOODED MERGANSER TIP', 'HOODED MERGANSER TIB', 'MALLARD TIP', 'MALLARD TIB', 'MUTE SWAN TIP', 'MUTE SWAN TIB', 'WOOD DUCK TIP', 'WOOD DUCK TIB', 'OTHER SPECIES TOTAL', 'TOTDUCKS'], ['1993', 'CT', '012', '0002', '2', 'Y', 'N', '0', '0', '', '0', '', '0', '', '0', '', '', '0', '', '', '', '0', '0', '0', '', '0', '1', '2', '', '2'], ['1993', 'CT', '012', '0004', '1', 'Y', 'Y', '0', '0', '', '0', '', '0', '', '2', '', '', '0', '', '', '', '0', '0', '0', '', '0', '0', '0', '', '0']]
 ```
 
@@ -230,7 +230,7 @@ print(table[:3])
 
 相反，如果我们仔细查看表单数据，会发现有一个*隐藏的*输入字段为我们工作。在标记的底部，有一个带有`name=txtLastPage`的输入值。使用`BeautifulSoup`，我们只需要搜索一个输入标签和匹配的名称，并将值转换成一个整数。这里有一个潜在的实现。
 
-```
+```py
  from bs4 import BeautifulSoup
 import requests
 import unicodedata
@@ -268,7 +268,7 @@ table = [header] + modified_rows
 
 现在，我们要将模板和分页一起添加进去。首先，我们将创建一个`form_data`的字符串模板，它使用字符串格式提交动态表单数据。在我们的例子中，我们希望动态修改当前页面值。接下来，我们将使用总页数值并继续循环，直到用完数据集。经过一点清理，我们得到了下面的最终实现:
 
-```
+```py
  from bs4 import BeautifulSoup
 import requests
 import unicodedata

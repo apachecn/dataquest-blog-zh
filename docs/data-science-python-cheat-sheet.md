@@ -83,21 +83,21 @@ Range 对象对于创建循环整数序列很有用。
 
 ## 循环功能
 
-```
+```py
 for i, value in enumerate(l):
     print("The value of item {} is {}".format(i,value))
 ```
 
 遍历列表 l，打印每一项的索引位置及其值
 
-```
+```py
 for one, two in zip(l_one,l_two):
     print("one: {}, two: {}".format(one,two))
 ```
 
 遍历两个列表`l_one`和`l_two`，并打印每个值
 
-```
+```py
 while x < 10:
     x += 1
 ```
@@ -131,13 +131,13 @@ while x < 10:
 
 *捕捉并处理错误*
 
-```
+```py
 l_ints = [1, 2, 3, "", 5]
 ```
 
 将一组缺少一个值的整数赋给`l_ints`
 
-```
+```py
 l_floats = []
 for i in l_ints:
     try:

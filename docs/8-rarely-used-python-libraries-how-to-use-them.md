@@ -19,14 +19,14 @@ August 29, 2021![Rarely Used Python Libraries](img/1231ed7f6b195206533d5544bf34e
 
 首先，我们将从 Kaggle 下载一个数据集—[动物护理和控制收养的动物](https://www.kaggle.com/jinbonnie/animal-data)
 
-```
+```py
 import pandas as pd
 f = pd.read_csv('animal-data-1.csv')
 rint('Number of pets:', len(df))
 rint(df.head(3))
 ```
 
-```
+```py
 Number of pets: 10290
 
          id           intakedate intakereason  istransfer sheltercode  \
@@ -64,7 +64,7 @@ Number of pets: 10290
 *   树状图和热图一样，度量列之间的空关系，但在这种情况下不是成对的，而是在列组之间，检测缺失数据的聚类。那些在图表上位置更近的变量显示出更强的零相关性。对于少于 50 列的数据帧，树状图是垂直的，否则，它翻转成水平的。
     让我们在 pet 数据集上使用默认设置尝试所有这些图表:
 
-```
+```py
 import missingno as msno
 
 sno.matrix(df)
@@ -72,19 +72,19 @@ sno.matrix(df)
 
 ![How to Use Missingno Library in Python](img/08d376883b50e1a6f254870cf182b2c6.png "how-to-use-python-libraries-missingno-chart1")
 
-```
+```py
 msno.bar(df)
 ```
 
 ![How to Use Missingno Library in Python](img/ead8ec176fc3ef4a52e63c4ba235089c.png "how-to-use-python-libraries-missingno-chart2")
 
-```
+```py
 msno.heatmap(df)
 ```
 
 ![Using Missingno Library to Plot a Heatmap](img/a02ce3284b1f481989835709585978b7.png "how-to-use-python-libraries-missingno-heatmap")
 
-```
+```py
 msno.dendrogram(df)
 ```
 
@@ -101,7 +101,7 @@ msno.dendrogram(df)
 
 有几个选项可以自定义缺少图表:figsize、fontsize、sort(按完整性对行进行排序，升序或降序)、labels(可以是 True 或 False，表示是否显示列标签)。一些参数是特定于图表的:矩阵和条形图的颜色、矩阵的迷你图(是否绘制)和 width_ratios(矩阵宽度与迷你图宽度之比)、条形图的 log(对数刻度)、热图的 cmap 颜色图、树状图的方向。让我们将其中一些应用到上面的图表中:
 
-```
+```py
 msno.matrix(
            df,
            figsize=(25,7),
@@ -116,7 +116,7 @@ msno.matrix(
 
 最后，如果还有什么我们想要调整的，我们总是可以将 matplotlib 的任何功能添加到缺少的图形中。为此，我们应该内联添加参数，并将其赋值为 False。让我们给矩阵图添加一个标题:
 
-```
+```py
 import matplotlib.pyplot as plt
 sno.matrix(
            df,
@@ -135,7 +135,7 @@ lt.show()
 
 为了进一步练习，让我们只保留数据帧中最有趣的列:
 
-```
+```py
 columns = ['identichipnumber', 'animalname', 'breedname', 'speciesname', 'sexname', 'returndate',
           'returnedreason']
 f = df[columns]
@@ -151,13 +151,13 @@ f = df[columns]
 
 table te()函数接受一个表格数据类型(dataframe、list 或 dictionary、dictionary、NumPy 数组)、一些其他可选参数，并输出一个格式良好的表格。让我们在 pet 数据集的一个片段上练习一下，从最基本的漂亮打印的表格开始:
 
-```
+```py
 from tabulate import tabulate
 f_pretty_printed = df.iloc[:5, [1,2,4,6]]
 rint(tabulate(df_pretty_printed))
 ```
 
-```
+```py
 -  -----------  -----------------------  ------  -----
   Jadzia       Domestic Short Hair      Female  Stray
   Gonzo        German Shepherd Dog/Mix  Male    Stray
@@ -173,7 +173,7 @@ rint(tabulate(df_pretty_printed))
 
 让我们自定义我们的表格:
 
-```
+```py
 print(tabulate(
               df_pretty_printed,
               headers='keys',
@@ -182,7 +182,7 @@ print(tabulate(
               ))
 ```
 
-```
+```py
 │    │  animalname  │        breedname        │  sexname  │  returnedreason  │
 ════╪══════════════╪═════════════════════════╪═══════════╪══════════════════╡
   0 │    Jadzia    │   Domestic Short Hair   │  Female   │      Stray       │
@@ -214,29 +214,29 @@ print(tabulate(
 
 在上面印刷精美的表格中，我们看到了一个名为“西伯利亚哈士奇”的犬种。作为练习，我们将语言设置为俄语(我的母语:little _ smiling _ face:)，并搜索相应维基百科页面的一些建议:
 
-```
+```py
 import wikipedia
 ikipedia.set_lang('ru')
 rint(wikipedia.search('Siberian Husky'))
 ```
 
-```
+```py
 ['Сибирский хаски', 'Древние породы собак', 'Маккензи Ривер Хаски', 'Породы собак по классификации кинологических организаций', 'Ричардсон, Кевин Майкл']
 ```
 
 让我们取第一个建议，取该页摘要的第一句话:
 
-```
+```py
 print(wikipedia.summary('Сибирский хаски', sentences=1))
 ```
 
-```
+```py
 Сибирский хаски — заводская специализированная порода собак, выведенная чукчами северо-восточной части Сибири и зарегистрированная американскими кинологами в 1930-х годах как ездовая собака, полученная от аборигенных собак Дальнего Востока России, в основном из Анадыря, Колымы, Камчатки у местных оседлых приморских племён — юкагиров, кереков, азиатских эскимосов и приморских чукчей — анкальын (приморские, поморы — от анкы (море)).
 ```
 
 现在，我们将从该页面获得一张哈士奇图片的链接:
 
-```
+```py
 print(wikipedia.page('Сибирский хаски').images[0])
 ```
 
@@ -254,12 +254,12 @@ Wget 库允许下载 Python 中的文件，而不需要打开它们。我们还�
 
 下面下载上面哈士奇的图片:
 
-```
+```py
 import wget
 get.download('https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Big-Boy.jpg')
 ```
 
-```
+```py
 'Black-Magic-Big-Boy.jpg'
 ```
 
@@ -267,17 +267,17 @@ get.download('https://upload.wikimedia.org/wikipedia/commons/a/a3/Black-Magic-Bi
 
 由于互联网上的任何网页实际上都是一个 HTML 文件，这个库的另一个非常有用的应用是抓取整个网页，包括所有的元素。让我们下载数据集所在的 Kaggle 网页:
 
-```
+```py
 wget.download('https://www.kaggle.com/jinbonnie/animal-data')
 ```
 
-```
+```py
 'animal-data'
 ```
 
 生成的动物数据文件如下所示(我们将只显示前几行):
 
-```
+```py
 <!DOCTYPE html>
 lt;html lang="en">
 lt;head>
@@ -298,7 +298,7 @@ lt;head>
 
 让我们看一些例子。
 
-```
+```py
 from faker import Faker
 ake = Faker()
 
@@ -321,7 +321,7 @@ aker.seed(3920)
 rint('This English fake name is always the same:', fake.name())
 ```
 
-```
+```py
 Fake color: #212591
 ake job: Occupational therapist
 ake email: [[email protected]](/cdn-cgi/l/email-protection)
@@ -341,12 +341,12 @@ his English fake name is always the same: Kim Lopez
 
 回到我们的数据集，我们发现至少有两只不幸的宠物有着不太好听的名字:
 
-```
+```py
 df_bad_names = df[df['animalname'].str.contains('Stink|Pooh')]
 rint(df_bad_names)
 ```
 
-```
+```py
 identichipnumber animalname            breedname speciesname sexname  \
 692              NaN    Stinker  Domestic Short Hair         Cat    Male
 336  981020023417175       Pooh  German Shepherd Dog         Dog  Female
@@ -360,7 +360,7 @@ identichipnumber animalname            breedname speciesname sexname  \
 
 最后 2 排的狗实际上是同一只，因为与主人的生活方式不兼容而被送回收容所。用我们的新技能，让我们拯救这两种动物的名声，给它们重新起个更体面的名字。因为这只狗是德国牧羊犬，我们将为她选择一个德国名字。至于猫，根据这个[维基百科页面](https://en.wikipedia.org/wiki/Domestic_short-haired_cat)，家养短毛是美国最常见的品种，所以我们会为它取一个英文名字。
 
-```
+```py
 # Defining a function to rename the unlucky pets
 ef rename_pets(name):
    if name == 'Stinker':
@@ -380,7 +380,7 @@ f['animalname'] = df['animalname'].apply(rename_pets)
 rint(df.iloc[df_bad_names.index.tolist(), :] )
 ```
 
-```
+```py
 identichipnumber            animalname            breedname speciesname  \
 692              NaN         Steven Harris  Domestic Short Hair         Cat
 336  981020023417175  Helena Fliegner-Karz  German Shepherd Dog         Dog
@@ -404,7 +404,7 @@ identichipnumber            animalname            breedname speciesname  \
 
 现在让我们在数据集上尝试一下。一些宠物的名字包含数字:
 
-```
+```py
 df_numerized_names = df[['identichipnumber', 'animalname', 'speciesname']]\
                        [df['animalname'].str.contains('Two|Seven|Fifty')]
 f_numerized_names
@@ -422,7 +422,7 @@ f_numerized_names
 
 我们将把这些名字的数字部分转换成实数:
 
-```
+```py
 from numerizer import numerize
 f['animalname'] = df['animalname'].apply(lambda x: numerize(x))
 f[['identichipnumber', 'animalname', 'speciesname']].iloc[df_numerized_names.index.tolist(), :]
@@ -446,7 +446,7 @@ f[['identichipnumber', 'animalname', 'speciesname']].iloc[df_numerized_names.ind
 
 Python 中的表情库是什么？–通过使用这个库，我们可以根据由 [Unicode Consortium 2](http://www.unicode.org/emoji/charts/full-emoji-list.html) 定义的表情符号代码，将字符串转换为表情符号，并且如果指定了 use_aliases=True，则使用[别名](https://www.webfx.com/tools/emoji-cheat-sheet/)进行补充。表情包只有两个功能:emojize()和 demojize()。默认的英语语言(language='en ')可以更改为西班牙语(es)、葡萄牙语(pt)或意大利语(it)。
 
-```
+```py
 import emoji
 rint(emoji.emojize(':koala:'))
 rint(emoji.demojize(''))
@@ -458,20 +458,20 @@ rint(emoji.emojize(':rana:', language='it'))
 koala:
 img role="img" class="emoji" alt="🐸" src="https://s.w.oimg/core/emoji/13.1.0/svg/1f438.svg">
 /code>
-```
+```py
 
 让我们给我们的动物表情符号。首先，我们将检查它们独特的物种名称:
 
 ```
 print(df['speciesname'].unique())
-```
+```py
 
 ```
 ['Cat' 'Dog' 'House Rabbit' 'Rat' 'Bird' 'Opossum' 'Chicken' 'Wildlife'
 'Ferret' 'Tortoise' 'Pig' 'Hamster' 'Guinea Pig' 'Gerbil' 'Lizard'
 Hedgehog' 'Chinchilla' 'Goat' 'Snake' 'Squirrel' 'Sugar Glider' 'Turtle'
 Tarantula' 'Mouse' 'Raccoon' 'Livestock' 'Fish']
-```
+```py
 
 我们必须将这些名称转换成小写，给每个名称添加前导和尾随冒号，然后将 emojize()应用于结果:
 
@@ -479,14 +479,14 @@ Tarantula' 'Mouse' 'Raccoon' 'Livestock' 'Fish']
 df['speciesname'] = df['speciesname'].apply(lambda x: emoji.emojize(f':{x.lower()}:',
                                                                    use_aliases=True))
 rint(df['speciesname'].unique())
-```
+```py
 
 ```
 ['' '' ':house rabbit:' '' '' ':opossum:' '' ':wildlife:' ':ferret:'
 :tortoise:' '' '' ':guinea pig:' ':gerbil:' '' '' ':chinchilla:' ''
 ' ':squirrel:' ':sugar glider:' '' ':tarantula:' '' '' ':livestock:'
 ']
-```
+```py
 
 让我们将家兔、乌龟和松鼠重命名为表情库可以理解的同义词，并再次尝试对它们进行表情符号化:
 
@@ -496,13 +496,13 @@ df['speciesname'] = df['speciesname'].str.replace(':house rabbit:', ':rabbit:')\
                                         .replace(':squirrel:', ':chipmunk:')
 f['speciesname'] = df['speciesname'].apply(lambda x: emoji.emojize(x, variant='emoji_type'))
 rint(df['speciesname'].unique())
-```
+```py
 
 ```
 ['' '' '️' '' '' ':opossum:️' '' ':wildlife:️' ':ferret:️' '️' ''
 ' ':guinea pig:' ':gerbil:️' '' '' ':chinchilla:️' '' '' ''
 :sugar glider:' '' ':tarantula:️' '' '' ':livestock:️' '']
-```
+```py
 
 剩下的物种有集合名称(野生动物和家畜)，或者没有表情符号，至少现在还没有。我们将让它们保持原样，仅删除冒号，并将它们转换回标题大小写:
 
@@ -510,7 +510,7 @@ rint(df['speciesname'].unique())
 df['speciesname'] = df['speciesname'].str.replace(':', '').apply(lambda x: x.title())
 rint(df['speciesname'].unique())
 f[['animalname', 'speciesname', 'breedname']].head(3)
-```
+```py
 
 ```
 ['' '' '️' '' '' 'Opossum️' '' 'Wildlife️' 'Ferret️' '️' '' ''
@@ -532,7 +532,7 @@ Guinea Pig' 'Gerbil️' '' '' 'Chinchilla️' '' '' '' 'Sugar Glider'
 
 **Python 中的 PyAstro 库是什么？**–PyAztro 的设计似乎更多是为了娱乐而不是工作。这个图书馆为每个星座提供了一个占星术。该预测包括那天的标志描述、该标志的日期范围、心情、幸运数字、幸运时间、幸运颜色、与其他标志的兼容性。例如:
 
-```
+```py
 import pyaztro
 yaztro.Aztro(sign='taurus').description
 ```
@@ -543,7 +543,7 @@ yaztro.Aztro(sign='taurus').description
 
 在我们的数据集中，有一只猫和一只狗叫白羊座:
 
-```
+```py
 df[['animalname', 'speciesname']][(df['animalname'] == 'Aries')]
 ```
 
@@ -554,17 +554,17 @@ df[['animalname', 'speciesname']][(df['animalname'] == 'Aries')]
 
 还有很多叫狮子座的宠物:
 
-```
+```py
 print('Leo:', df['animalname'][(df['animalname'] == 'Leo')].count())
 ```
 
-```
+```py
 Leo: 18
 ```
 
 让我们假设那些是他们相应的黄道十二宫😉有了 PyAztro，我们可以查看明星们今天为这些动物准备了什么:
 
-```
+```py
 aries = pyaztro.Aztro(sign='aries')
 eo = pyaztro.Aztro(sign='leo')
 
@@ -591,7 +591,7 @@ rint('ARIES: \n',
      'Lucky color:',      leo.color)
 ```
 
-```
+```py
 ARIES:
 Sign: aries
 Current date: 2021-02-06

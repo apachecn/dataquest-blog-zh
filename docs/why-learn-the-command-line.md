@@ -58,7 +58,7 @@ shell 拥有非常强大的文本处理工具，如 [AWK](https://en.wikipedia.o
 
 例如，下面的代码使用 AWK 打印名为 a_csv_file 的文件的第一列和第三列，其中第二个字段的值是 Dataquest，使用逗号作为字段分隔符。
 
-```
+```py
 awk 'BEGIN {FS=","} {if ($2=="Dataquest") {print $1 $3} } a_csv_file'
 ```
 

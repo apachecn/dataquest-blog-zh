@@ -26,7 +26,7 @@ September 25, 2017
 
 让我们导入我们的数据，快速浏览一下:
 
-```
+```py
 import pandas as pd
 import numpy as np
 # reading the data
@@ -66,7 +66,7 @@ data.head(10)
 
 我们将集中在最后的`Happiness Score`来演示数据透视表的技术方面。
 
-```
+```py
  # getting an overview of our data
 print("Our data has {0} rows and {1} columns".format(data.shape[0], data.shape[1]))
 # checking for missing values
@@ -74,7 +74,7 @@ print("Are there missing values? {}".format(data.isnull().any().any()))
 data.describe() 
 ```
 
-```
+```py
 Our data has 495 rows and 12 columns
 Are there missing values? True
 ```
@@ -104,7 +104,7 @@ Are there missing values? True
 
 让我们先看看输出，然后解释这个表是如何产生的:
 
-```
+```py
 pd.pivot_table(data, index= 'Year', values= "Happiness Score")
 ```
 
@@ -124,7 +124,7 @@ pd.pivot_table(data, index= 'Year', values= "Happiness Score")
 
 接下来，让我们将`Region`列用作`index`:
 
-```
+```py
 pd.pivot_table(data, index = 'Region', values="Happiness Score")
 ```
 
@@ -151,7 +151,7 @@ pd.pivot_table(data, index = 'Region', values="Happiness Score")
 
 为了按多个列对数据进行分组，我们所要做的就是传入一个列名列表。让我们按照`Region`和`Year`对数据进行分类。
 
-```
+```py
 pd.pivot_table(data, index = ['Region', 'Year'], values="Happiness Score")
 ```
 
@@ -198,7 +198,7 @@ pd.pivot_table(data, index = ['Region', 'Year'], values="Happiness Score")
 
 使用`Year`作为`Columns`参数将显示`year`的不同值，并且会有更好的显示效果，如下所示:
 
-```
+```py
 pd.pivot_table(data, index= 'Region', columns='Year', values="Happiness Score")
 ```
 
@@ -221,7 +221,7 @@ pd.pivot_table(data, index= 'Region', columns='Year', values="Happiness Score")
 
 如果您想查看我们之前创建的数据透视表的可视化表示，您需要做的就是在`pivot_table`函数调用的末尾添加`plot()`(您还需要导入相关的绘图库)。
 
-```
+```py
  import matplotlib.pyplot as plt
 import seaborn as sns
 # use Seaborn styles
@@ -230,7 +230,7 @@ pd.pivot_table(data, index= 'Region', columns= 'Year', values= "Happiness Score"
 plt.ylabel("Happiness Rank") 
 ```
 
-```
+```py
 <matplotlib.text.Text at 0x11b885630>
 ```
 
@@ -246,7 +246,7 @@ plt.ylabel("Happiness Rank")
 
 让我们添加每个区域的中值、最小值、最大值和标准偏差。这可以帮助我们评估平均值的准确性，以及它是否真正代表真实的情况。
 
-```
+```py
 pd.pivot_table(data, index= 'Region', values= "Happiness Score", aggfunc= [np.mean, np.median, min, max, np.std])
 ```
 
@@ -273,7 +273,7 @@ pd.pivot_table(data, index= 'Region', values= "Happiness Score", aggfunc= [np.me
 
 `pivot_table`允许您将自己的自定义聚合函数作为参数传递。您可以使用 lambda 函数，也可以创建一个函数。让我们计算一下给定年份每个地区的平均国家数量。我们可以使用 lambda 函数轻松做到这一点，如下所示:
 
-```
+```py
 pd.pivot_table(data, index = 'Region', values="Happiness Score", aggfunc= [np.mean, min, max, np.std, lambda x: x.count()/3])
 ```
 
@@ -296,7 +296,7 @@ pd.pivot_table(data, index = 'Region', values="Happiness Score", aggfunc= [np.me
 
 标准偏差最低的两个排名最高的区域仅占两个国家。而`Sub-Saharan Africa`最低的`Happiness score`，却占了 43 个国家。一个有趣的下一步是从计算中去除极端值，看看排名是否有显著变化。让我们创建一个只计算 0.25 和 0.75 分位数之间的值的函数。我们将使用这个函数来计算每个地区的平均值，并检查排名是否保持不变。
 
-```
+```py
  def remove_outliers(values):
     mid_quantiles = values.quantile([.25, .75])
 return np.mean(mid_quantiles)
@@ -326,7 +326,7 @@ pd.pivot_table(data, index = 'Region', values="Happiness Score", aggfunc= [np.me
 
 到目前为止，我们已经根据原始表中的类别对数据进行了分组。然而，我们可以在类别中搜索字符串来创建我们自己的组。例如，按大洲查看结果会很有趣。我们可以通过查找包含`Asia`、`Europe`等的区域名称来做到这一点。为此，我们可以首先将数据透视表分配给一个变量，然后添加过滤器:
 
-```
+```py
  table = pd.pivot_table(data, index = 'Region', values="Happiness Score", aggfunc= [np.mean, remove_outliers])
 table[table.index.str.contains('Asia')]
 ```
@@ -343,7 +343,7 @@ table[table.index.str.contains('Asia')]
 
 让我们看看`Europe`的结果:
 
-```
+```py
 table[table.index.str.contains('Europe')]
 ```
 
@@ -360,7 +360,7 @@ table[table.index.str.contains('Europe')]
 
 如果您想从多个列中提取特定的值，那么最好使用`df.query`,因为前面的方法不适用于处理多索引。例如，我们可以选择查看非洲地区的特定年份和特定地区。
 
-```
+```py
  table = pd.pivot_table(data, index = ['Region', 'Year'], values='Happiness Score',aggfunc= [np.mean, remove_outliers])
 table.query('Year == [2015, 2017] and Region == ["Sub-Saharan Africa", "Middle East and Northern Africa"]')
 ```
@@ -396,7 +396,7 @@ table.query('Year == [2015, 2017] and Region == ["Sub-Saharan Africa", "Middle E
 *   50%-75%
 *   75%-100%
 
-```
+```py
  # splitting the happiness score into 3 quantiles
 score = pd.qcut(data["Happiness Score"], 4)
 pd.pivot_table(data, index= ['Region', score], values= "Happiness Score", aggfunc= 'count').head(9)
@@ -418,7 +418,7 @@ pd.pivot_table(data, index= ['Region', score], values= "Happiness Score", aggfun
 
 特定分位数中没有国家的地区显示`NaN`。这并不理想，因为等于 NaN 的计数不会给我们任何有用的信息。为了减少显示`0`的混乱，让我们使用`fill_value`将`NaN`替换为零:
 
-```
+```py
  # splitting the happiness score into 3 quantiles
 score = pd.qcut(data["Happiness Score"], 3)
 pd.pivot_table(data, index= ['Region', score], values= "Happiness Score", aggfunc= 'count', fill_value= 0)
@@ -468,7 +468,7 @@ pd.pivot_table(data, index= ['Region', score], values= "Happiness Score", aggfun
 
 让我们用这些将总数加到最后一个表中。
 
-```
+```py
  # splitting the happiness score into 3 quantiles
 score = pd.qcut(data['Happiness Score'], 3)
 # creating a pivot table and only displaying the first 9 values

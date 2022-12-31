@@ -58,7 +58,7 @@ February 9, 2017Yes, you read correctly — this post will only give you 1 tip. 
 *   创建一个包含所有价格数据的数据框架。
 *   显示数据帧。
 
-```
+```py
  from yahoo_finance import Share
 import pandas as pd
 from datetime import date, timedelta
@@ -91,12 +91,12 @@ stocks.head()
 
 `62`成排。如果我们想在特定的一天查找特定股票的价格，这是非常好的。例如，我可以很快知道 2017 年 2 月 1 日收盘时`AAPL`股票的价格是`128.75`。然而，我们可能只关心我们是否从每个股票代码中赚钱或赔钱。我们可以找到每股买入时的价格和当前价格之间的差额。在下面的代码中，我们从当前股票价格中减去买入时的价格。
 
-```
+```py
  change = stocks.loc["2017-02-06"] - stocks.loc["2016-11-07"]
 change 
 ```
 
-```
+```py
  AAPL    19.879989
 BA      20.949997
 CMG     13.100006
@@ -108,12 +108,12 @@ dtype: float64
 
 太好了！看起来我们每笔投资都赚了钱。然而，我们无法知道我们的投资增加了多少。我们可以用一个稍微复杂一点的公式来实现:
 
-```
+```py
  pct_change = (stocks.loc["2017-02-06"] - stocks.loc["2016-11-07"]) / stocks.loc["2016-11-07"]
 pct_change 
 ```
 
-```
+```py
  AAPL    0.180056
 BA      0.146473
 CMG     0.034249
@@ -125,14 +125,14 @@ dtype: float64
 
 看起来我们的投资在百分比上表现得非常好。但是很难说我们总共赚了多少钱。让我们将价格变化乘以我们的股份数，看看我们赚了多少:
 
-```
+```py
  import numpy as np
 share_counts = np.array([500, 250, 200, 450, 100, 500])
 portfolio_change = change * share_counts
 portfolio_change 
 ```
 
-```
+```py
  AAPL    9939.99450
 BA      5237.49925
 CMG     2620.00120
@@ -144,21 +144,21 @@ dtype: float64
 
 最后，我们可以合计一下我们总共赚了多少:
 
-```
+```py
 sum(portfolio_change)
 ```
 
-```
+```py
 31645.49969999996
 ```
 
 看看我们的购买价格，看看我们赚了多少百分比:
 
-```
+```py
 sum(stocks.loc["2016-11-07"] * share_counts)
 ```
 
-```
+```py
 565056.50745000003
 ```
 
@@ -172,11 +172,11 @@ sum(stocks.loc["2016-11-07"] * share_counts)
 
 标准偏差，但他们不会告诉我们全部情况:
 
-```
+```py
 stocks.std()
 ```
 
-```
+```py
  AAPL     6.135476
 BA       6.228163
 CMG     15.352962
@@ -196,12 +196,12 @@ dtype: float64
 
 熊猫。DataFrame.plot 方法。这将为每个股票代码创建一个每日收盘价线图。我们需要首先对数据帧进行逆序排序，因为目前它是按日期的降序排序的，我们希望它按升序排序:
 
-```
+```py
  stocks = stocks.iloc[::-1]
 stocks.plot() 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x1105cd048>
 ```
 
@@ -209,12 +209,12 @@ stocks.plot()
 
 上面的情节是一个好的开始，我们已经在很短的时间内走了很远。不幸的是，图表有点混乱，很难说出一些低价符号的总体趋势。让我们将图表标准化，将每天的收盘价显示为起始价的一部分:
 
-```
+```py
  normalized_stocks = stocks / stocks.loc["2016-11-07"]
 normalized_stocks.plot() 
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x10f81b8d0>
 ```
 
@@ -224,14 +224,14 @@ normalized_stocks.plot()
 
 我们买下它后，股票价格迅速上涨，并持续增值。`RHT`12 月底似乎损失了不少价值，但价格一直在稳步回升。不幸的是，这个情节有一些视觉问题，使情节难以阅读。这些标签挤在一起，很难看出`GOOG`、`CMG`、`RHT`、`BA`和`AAPL`发生了什么，因为这些线捆在一起了。我们将使用`figsize`关键字参数增加绘图的大小，并增加线条的宽度来解决这些问题。我们还将增加轴标签和轴字体大小，使它们更容易阅读。
 
-```
+```py
  import matplotlib.pyplot as plt
 
 normalized_stocks.plot(figsize=(15,8), linewidth=3, fontsize=14)
 plt.legend(fontsize=14)
 ```
 
-```
+```py
 <matplotlib.legend.Legend at 0x10eaba160>
 ```
 
@@ -244,7 +244,7 @@ plt.legend(fontsize=14)
 *   在面积图中绘制数值，其中 y 轴从`0`到`1`。
 *   隐藏 y 轴标签。
 
-```
+```py
  portfolio = stocks * share_counts
 portfolio_percentages = portfolio.apply(lambda x: x/sum(x), axis=1)
 portfolio_percentages.plot(kind="area", ylim=(0,1), figsize=(15,8), fontsize=14)
@@ -252,7 +252,7 @@ plt.yticks([])
 plt.legend(fontsize=14)
 ```
 
-```
+```py
 <matplotlib.legend.Legend at 0x10ea8cda0>
 ```
 
@@ -262,11 +262,11 @@ plt.legend(fontsize=14)
 
 `GOOG`股票。自从我们购买股票以来，每个股票代码的美元总分配没有太大变化。从另一个角度来看之前的数据，我们知道`NVDA`的价格在过去几个月里增长很快，但是从这个角度来看，我们可以看到它的总价值在我们的投资组合中并不算多。这意味着，尽管`NVDA`的股价大幅上涨，但它并没有对我们的整体投资组合价值产生巨大影响。请注意，上面的图表很难解析，也很难看出。这是一个图表的例子，通常最好是一系列数字，显示每只股票占投资组合价值的平均百分比。思考这个问题的一个好方法是“这个图表比其他图表能更好地回答什么问题？”如果答案是“没有问题”，那么你可能会更喜欢别的东西。为了更好地把握我们的整体投资组合价值，我们可以绘制出:
 
-```
+```py
 portfolio.sum(axis=1).plot(figsize=(15,8), fontsize=14, linewidth=3)
 ```
 
-```
+```py
 <matplotlib.axes._subplots.AxesSubplot at 0x110dede48>
 ```
 

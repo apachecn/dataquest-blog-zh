@@ -28,7 +28,7 @@ September 28, 2022![SQL Project Ideas](img/5ea34c91e6782382b3e786db55bf7a04.png)
 
 让我们看看如何使用`sqlite3`和 Python 创建一个单表数据库。要运行代码，你可以使用[谷歌实验室](https://colab.research.google.com/)，在那里我们也可以上传我们需要的数据。
 
-```
+```py
 import sqlite3
 from pathlib import Path
 
@@ -55,7 +55,7 @@ c.execute(
 )
 ```
 
-```
+```py
  <sqlite3.Cursor at 0x7f917402ff40>
 ```
 
@@ -63,7 +63,7 @@ c.execute(
 
 现在我们必须用从 Kaggle 下载的数据填充这个表。我们使用`pandas`(Google Colab 上一个流行的数据分析包)打开`csv`文件，然后将其插入数据库。
 
-```
+```py
 # Import pandas to work with data sets
 import pandas as pd
 
@@ -74,7 +74,7 @@ bank = pd.read_csv("bank.csv")
 bank.to_sql("bank", conn, if_exists="append", index=False)
 ```
 
-```
+```py
  11162
 ```
 
@@ -86,12 +86,12 @@ bank.to_sql("bank", conn, if_exists="append", index=False)
 2.  `fetchmany()`得到`n`结果。
 3.  `fetchall()`获得所有结果。
 
-```
+```py
 # Return one row from the 'bank' table
 c.execute("""SELECT * FROM bank""").fetchone()
 ```
 
-```
+```py
  (59,
      'admin.',
      'married',

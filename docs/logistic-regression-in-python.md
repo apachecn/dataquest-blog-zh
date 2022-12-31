@@ -32,7 +32,7 @@ November 21, 2022![Logistic regression](img/aa85e0927ff490615d09fefcc009e662.png
 
 此外，我们还初始化了截距、`b`和系数`w`值。这些是我们希望使用梯度下降优化的值。
 
-```
+```py
 class SLR(object):
     """
     This is the SLR class
@@ -59,19 +59,19 @@ def __init__(self, learning_rate=10e-3, n_epochs=10_000, cutoff=0.5):
 
 #### 创建 SLR 类的一个实例
 
-```
+```py
 slr0 = SLR()
 ```
 
 #### 打印 slr0 对象
 
-```
+```py
 print(slr0)
 ```
 
 当我们在没有`__repr__`方法的情况下打印`SLR`类的实例时，输出的是对象在内存中的地址。使用`__repr__`方法，我们定义我们想要如何打印对象，如下所示:
 
-```
+```py
 class SLR(object):
     ...
 
@@ -95,13 +95,13 @@ class SLR(object):
 
 #### 创建 SLR 类的一个实例
 
-```
+```py
 slr1 = SLR()
 ```
 
 #### 打印 slr1 对象
 
-```
+```py
 print(slr1)
 ```
 
@@ -115,7 +115,7 @@ sigmoid 函数的形状如下图所示。sigmoid 函数的渐近线在$z$变为$
 
 ![sigmoid](img/65104927277394ad51e1bca47a49e845.png)
 
-```
+```py
 class SLR(object):
     ...
 
@@ -142,7 +142,7 @@ class SLR(object):
 
 此方法预测每一行的概率值。使用截距`b`和系数`w`参数计算线性函数值`z`。`z`的值被传递给`sigmoid`方法以获得一个概率值。
 
-```
+```py
 class SLR(object):
     ...
 
@@ -171,7 +171,7 @@ class SLR(object):
 
 该方法采用随机梯度下降来更新`w`和`b`参数。首先要做的事情之一是初始化`w`和`b`的参数。`b`的值被设置为`0.0`，而`w`中的值被设置为`zeros`，如下图所示:
 
-```
+```py
 class SLR(object):
     ...
 
@@ -195,7 +195,7 @@ class SLR(object):
 *   计算梯度 w.r.t `b`，`grad_b`:$ \ nabla _ b = \ hat { y _ I }–y _ I $
 *   计算梯度 w.r.t `w`，`grad_w`:$ \ nab la _ w = x _ I(\ hat { y _ I }–y _ I)$
 
-```
+```py
 class SLR(object):
     ...
 
@@ -219,7 +219,7 @@ class SLR(object):
 *   更新`w`的值:$ w = w –\ alpha \ nab la _ w $
 *   计算对数损失:$-(y _ I \ log(\ hat { y } _ I+(1–y _ I)\ log((1 –\ hat { y } _ I))$
 
-```
+```py
 class SLR(object):
     ...
     def fit(self, X, y):
@@ -244,7 +244,7 @@ class SLR(object):
 
 将`fit`方法中的所有内容放在一起，我们得到:
 
-```
+```py
 class SLR(object):
     ...
 
@@ -300,7 +300,7 @@ class SLR(object):
 
 这种方法用于进行离散预测。它使用`predict_proba`方法获得概率值，然后将这些概率值与临界值进行比较。低于临界值的概率值属于一个类，大于或等于临界值的概率值属于另一个类。
 
-```
+```py
 class SLR(object):
     ...
 
@@ -335,7 +335,7 @@ class SLR(object):
 
 该方法用于使用模型的训练参数来计算准确度分数。它使用`predict`方法进行离散预测，并将这些值与实际值进行比较。
 
-```
+```py
 class SLR(object):
     ...
 
@@ -378,7 +378,7 @@ class SLR(object):
 
 #### ../logreg/slr.py
 
-```
+```py
 """
     # slr.py 
     This is stochastic logistic regression module
@@ -516,7 +516,7 @@ class SLR(object):
 
 #### ../log reg/random . ipynb
 
-```
+```py
 import slr
 from slr import SLR
 ```
@@ -527,13 +527,13 @@ from slr import SLR
 
 #### slr 模块的属性和方法
 
-```
+```py
 dir(slr)
 ```
 
 #### SLR 类的属性和方法
 
-```
+```py
 dir(SLR)
 ```
 
@@ -541,7 +541,7 @@ dir(SLR)
 
 #### slr.py 模块中的 Docstring
 
-```
+```py
 print(slr.__doc__)
 
 print(SLR.__doc__)
@@ -549,7 +549,7 @@ print(SLR.__doc__)
 
 让我们也查看一下`sigmoid`和`fit`方法中的文档字符串:
 
-```
+```py
 print(SLR.sigmoid.__doc__)
 
 print(SLR.fit.__doc__)
@@ -557,7 +557,7 @@ print(SLR.fit.__doc__)
 
 或者，您可以使用`help()`功能查看所有文档字符串:
 
-```
+```py
 help(SLR)
 ```
 
@@ -567,7 +567,7 @@ help(SLR)
 
 #### ../log reg/random . ipynb
 
-```
+```py
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -587,7 +587,7 @@ warnings.filterwarnings('ignore')
 
 #### 加载数据
 
-```
+```py
 bin_data = load_breast_cancer()
 X = bin_data.data
 y = bin_data.target
@@ -595,7 +595,7 @@ y = bin_data.target
 
 #### 将数据存储为熊猫对象
 
-```
+```py
 X = pd.DataFrame(X, columns=bin_data.feature_names)
 y = pd.Series(y, name='diagnosis', dtype=np.int8)
 
@@ -605,13 +605,13 @@ X.head()
 
 #### 目标有两类——二元分类任务
 
-```
+```py
 y.value_counts()
 ```
 
 #### 将数据分成训练集和测试集
 
-```
+```py
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.75, random_state=47)
 ```
 
@@ -667,7 +667,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.75, rando
 
 ### 基线模型
 
-```
+```py
 y_train.value_counts(normalize='True')
 
 y_test.value_counts(normalize='True')
@@ -677,7 +677,7 @@ y_test.value_counts(normalize='True')
 
 ### 比例特征
 
-```
+```py
 X_train.describe()
 
 X_train.info()
@@ -689,7 +689,7 @@ X_train.info()
 
 #### 用管道连接 StandardScaler()和 SLR()
 
-```
+```py
 pipe0 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', SLR(learning_rate=1e-2, n_epochs=1000, cutoff=0.5))
@@ -698,7 +698,7 @@ pipe0 = Pipeline([
 
 ## 训练模型
 
-```
+```py
 pipe0.fit(X_train, y_train)
 ```
 
@@ -706,7 +706,7 @@ pipe0.fit(X_train, y_train)
 
 #### 检查他们是否击败了基线模型
 
-```
+```py
 accuracies = {
     'train accuracy': pipe0.score(X_train, y_train), 
     'test accuracy': pipe0.score(X_test, y_test)
@@ -717,13 +717,13 @@ print(*accuracies.items())
 
 #### 检查测试集的其他分类指标
 
-```
+```py
 print(classification_report(y_test, pipe0.predict(X_test)))
 ```
 
 #### 检查训练集的其他分类指标
 
-```
+```py
 print(classification_report(y_train, pipe0.predict(X_train)))
 ```
 
@@ -735,14 +735,14 @@ print(classification_report(y_train, pipe0.predict(X_train)))
 
 我们将在本节中使用`pipe0`进行预测。然后我们将使用 0.5 的临界值来绘制预测概率。截止点以上的点属于一个类，截止点以下的点属于单独的类。
 
-```
+```py
 import matplotlib
 matplotlib.rcParams['font.family'] = 'monospace'
 ```
 
 #### 使用管道 0 预测
 
-```
+```py
 predictions = pipe0.predict(X_test)
 predict_probas = pipe0['lr'].predict_probas
 cutoff = pipe0['lr'].cutoff
@@ -750,7 +750,7 @@ cutoff = pipe0['lr'].cutoff
 
 #### 绘制预测概率
 
-```
+```py
 fig = plt.figure(figsize=(15, 5), constrained_layout=True)
 x = range(1, len(predict_probas) + 1)
 plt.scatter(x, predict_probas, c=predictions, label='predicted probabilities')
@@ -763,7 +763,7 @@ plt.legend(loc=7);
 
 #### 使用 pipe0 调用精度值
 
-```
+```py
 print(*accuracies.items())
 ```
 
@@ -771,7 +771,7 @@ print(*accuracies.items())
 
 #### 创建新实例 pipe1，截断值为 0.35
 
-```
+```py
 pipe1 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', SLR(learning_rate=1e-2, n_epochs=1000, cutoff=0.35))
@@ -780,13 +780,13 @@ pipe1 = Pipeline([
 
 #### 拟合管道 1 实例
 
-```
+```py
 pipe1.fit(X_train, y_train)
 ```
 
 #### 获取管道 1 的预测概率
 
-```
+```py
 predictions = pipe1.predict(X_test)
 predict_probas = pipe1['lr'].predict_probas
 cutoff = pipe1['lr'].cutoff
@@ -794,7 +794,7 @@ cutoff = pipe1['lr'].cutoff
 
 #### 绘制预测的概率
 
-```
+```py
 fig = plt.figure(figsize=(15, 5), constrained_layout=True)
 x = range(1, len(predict_probas) + 1)
 plt.scatter(x, predict_probas, c=predictions, label='predicted probabilities')
@@ -807,7 +807,7 @@ plt.legend(loc=5);
 
 #### 获取管道 1 精度
 
-```
+```py
 accuracies1 = {
     'train accuracy': pipe1.score(X_train, y_train), 
     'test accuracy': pipe1.score(X_test, y_test)
@@ -828,7 +828,7 @@ print(*accuracies1.items())
 
 让我们从 Scikit-Learn 导入这个模型:
 
-```
+```py
 from sklearn.linear_model import LogisticRegression
 ```
 
@@ -838,7 +838,7 @@ from sklearn.linear_model import LogisticRegression
 
 #### 不使用正则化训练 sklearn 逻辑回归模型:pipe2
 
-```
+```py
 pipe2 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', LogisticRegression(penalty='none'))
@@ -847,13 +847,13 @@ pipe2 = Pipeline([
 
 #### 符合模型
 
-```
+```py
 pipe2.fit(X_train, y_train)
 ```
 
 #### Fet 模型精度
 
-```
+```py
 accuracies2 = {
     'train accuracy': pipe2.score(X_train, y_train), 
     'test accuracy': pipe2.score(X_test, y_test)
@@ -888,7 +888,7 @@ print(*accuracies2.items())
 
 #### 正则化参数 C=1e-1 的 L1 正则化逻辑回归
 
-```
+```py
 pipe3 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', LogisticRegression(penalty='l1', C=1e-1, solver='saga'))
@@ -897,13 +897,13 @@ pipe3 = Pipeline([
 
 #### 安装管道
 
-```
+```py
 pipe3.fit(X_train, y_train)
 ```
 
 #### 获得精确度
 
-```
+```py
 accuracies3 = {
     'train accuracy': pipe3.score(X_train, y_train), 
     'test accuracy': pipe3.score(X_test, y_test)
@@ -914,7 +914,7 @@ print(*accuracies3.items())
 
 回想一下，逻辑回归将系数设置为零。让我们从下面的模型中检查这些系数:
 
-```
+```py
 df_coefficients = pd.DataFrame(
     {
         'feature': X_train.columns,
@@ -927,7 +927,7 @@ df_coefficients
 
 让我们只检查下面的重要特性:
 
-```
+```py
 (
     df_coefficients[df_coefficients.coefficient != 0]
     .sort_values(by=['coefficient'])
@@ -950,7 +950,7 @@ df_coefficients
 
 #### 具有正则化参数 C=1e-1 的 L2 正则化的逻辑回归
 
-```
+```py
 pipe4 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', LogisticRegression(penalty='l2', C=1e-1, solver='saga'))
@@ -959,13 +959,13 @@ pipe4 = Pipeline([
 
 #### 安装管道
 
-```
+```py
 pipe4.fit(X_train, y_train)
 ```
 
 #### 获得精确度
 
-```
+```py
 accuracies4 = {
     'train accuracy': pipe4.score(X_train, y_train), 
     'test accuracy': pipe4.score(X_test, y_test)
@@ -976,7 +976,7 @@ print(*accuracies4.items())
 
 我们可以从下面的数据框架中观察到，没有任何特征的系数为零。如果我们想要一个具有更少特征的更简单的模型，L2 正则化不是很有帮助。
 
-```
+```py
 pd.DataFrame(
     {
         'feature': X_train.columns,
@@ -997,7 +997,7 @@ pd.DataFrame(
 
 #### 使用 L1 和 L2 正则化的逻辑回归，正则化参数 C=1e-1，L1 比率=0.5
 
-```
+```py
 pipe5 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', LogisticRegression(penalty='elasticnet', l1_ratio=0.5, C=1e-1, solver='saga'))
@@ -1006,13 +1006,13 @@ pipe5 = Pipeline([
 
 #### 安装管道
 
-```
+```py
 pipe5.fit(X_train, y_train)
 ```
 
 #### 获得精确度
 
-```
+```py
 accuracies5 = {
     'train accuracy': pipe5.score(X_train, y_train), 
     'test accuracy': pipe5.score(X_test, y_test)
@@ -1023,7 +1023,7 @@ print(*accuracies5.items())
 
 #### 获取特征系数
 
-```
+```py
 pd.DataFrame(
     {
         'feature': X_train.columns,
@@ -1034,7 +1034,7 @@ pd.DataFrame(
 
 #### 系数设置为零和未设置为零的百分比特征
 
-```
+```py
 (
     pd.DataFrame(
     {
@@ -1067,13 +1067,13 @@ pd.DataFrame(
 
 #### import gridsearchcv
 
-```
+```py
 from sklearn.model_selection import GridSearchCV
 ```
 
 #### 创建管道评估器
 
-```
+```py
 pipe6 = Pipeline([
     ('scaler', StandardScaler()),
     ('lr', LogisticRegression(solver='saga'))
@@ -1082,7 +1082,7 @@ pipe6 = Pipeline([
 
 #### 指定超参数及其值
 
-```
+```py
 params = {
     'lr__C': [1.0, 1e-1, 1e-2, 1e-3],
     'lr__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1092,7 +1092,7 @@ params = {
 
 #### 将管道作为估计器来拟合网格搜索
 
-```
+```py
 grid_pipe6 = GridSearchCV(
     pipe6,
     params,
@@ -1104,25 +1104,25 @@ grid_pipe6.fit(X_train, y_train)
 
 #### 获得最佳超参数值
 
-```
+```py
 print(grid_pipe6.best_params_)
 ```
 
 #### 获得最佳评估者/模型
 
-```
+```py
 print(grid_pipe6.best_estimator_)
 ```
 
 #### 探索最佳估计参数字典
 
-```
+```py
 grid_pipe6.best_estimator_.get_params()
 ```
 
 #### 获得最佳估计精度
 
-```
+```py
 accuracies6 = {
     'train accuracy': grid_pipe6.score(X_train, y_train), 
     'test accuracy': grid_pipe6.score(X_test, y_test)
@@ -1141,7 +1141,7 @@ print(*accuracies6.items())
 
 ### 加载多类数据
 
-```
+```py
 from sklearn.datasets import load_wine
 
 mult_data = load_wine()
@@ -1160,13 +1160,13 @@ X_train.head()
 
 #### 获取训练集的基线
 
-```
+```py
 y_train.value_counts(normalize=True)
 ```
 
 #### 获取测试集的基线
 
-```
+```py
 y_test.value_counts(normalize=True)
 ```
 
@@ -1178,25 +1178,25 @@ y_test.value_counts(normalize=True)
 
 #### class_0 与 rest 分类器的目标变量
 
-```
+```py
 y0_train = (y_train == 0)
 ```
 
 #### class_1 与 rest 分类器的目标变量
 
-```
+```py
 y1_train = (y_train == 1) 
 ```
 
 #### class_2 与 rest 分类器的目标变量
 
-```
+```py
 y2_train = (y_train == 2) 
 ```
 
 #### 创建 class_0 vs rest 分类器
 
-```
+```py
 mult_pipe0 = Pipeline([
     ('scaler', StandardScaler()),
     ('mult_lr', LogisticRegression(solver='saga'))
@@ -1205,7 +1205,7 @@ mult_pipe0 = Pipeline([
 
 #### 要优化的超参数
 
-```
+```py
 params = {
     'mult_lr__C': [1.0, 1e-1, 1e-2, 1e-3],
     'mult_lr__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1215,7 +1215,7 @@ params = {
 
 #### 使用 gridsearch 执行优化
 
-```
+```py
 grid_mult_pipe0 = GridSearchCV(
     mult_pipe0,
     params,
@@ -1227,7 +1227,7 @@ grid_mult_pipe0.fit(X_train, y0_train)
 
 #### 创建 class_1 vs rest 分类器
 
-```
+```py
 mult_pipe1 = Pipeline([
     ('scaler', StandardScaler()),
     ('mult_lr', LogisticRegression(solver='saga'))
@@ -1236,7 +1236,7 @@ mult_pipe1 = Pipeline([
 
 #### 要优化的超参数
 
-```
+```py
 params = {
     'mult_lr__C': [1.0, 1e-1, 1e-2, 1e-3],
     'mult_lr__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1246,7 +1246,7 @@ params = {
 
 #### 使用 gridsearch 执行优化
 
-```
+```py
 grid_mult_pipe1 = GridSearchCV(
     mult_pipe1,
     params,
@@ -1258,7 +1258,7 @@ grid_mult_pipe1.fit(X_train, y1_train)
 
 #### 创建 class_2 vs rest 分类器
 
-```
+```py
 mult_pipe2 = Pipeline([
     ('scaler', StandardScaler()),
     ('mult_lr', LogisticRegression(solver='saga'))
@@ -1267,7 +1267,7 @@ mult_pipe2 = Pipeline([
 
 #### 要优化的超参数
 
-```
+```py
 params = {
     'mult_lr__C': [1.0, 1e-1, 1e-2, 1e-3],
     'mult_lr__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1277,7 +1277,7 @@ params = {
 
 #### 使用 gridsearch 执行优化
 
-```
+```py
 grid_mult_pipe2 = GridSearchCV(
     mult_pipe2,
     params,
@@ -1289,25 +1289,25 @@ grid_mult_pipe2.fit(X_train, y2_train)
 
 #### 获取测试集上 class_0 与 rest 分类器的预测概率值
 
-```
+```py
 predict_proba_pipe0 = grid_mult_pipe0.best_estimator_.predict_proba(X_test)
 ```
 
 #### 获取测试集上 class_1 与 rest 分类器的预测概率值
 
-```
+```py
 predict_proba_pipe1 = grid_mult_pipe1.best_estimator_.predict_proba(X_test)
 ```
 
 #### 获取测试集上 class_2 与 rest 分类器的预测概率值
 
-```
+```py
 predict_proba_pipe2 = grid_mult_pipe2.best_estimator_.predict_proba(X_test)
 ```
 
 #### 创建他们结果的数据框架
 
-```
+```py
 df_result_proba_test = pd.DataFrame(
     {
         'class_0': predict_proba_pipe0[:, 1],
@@ -1323,13 +1323,13 @@ df_result_proba_test.head()
 
 #### 一行被赋予具有最高概率值的类
 
-```
+```py
 df_result_proba_test.idxmax(axis=1).head()
 ```
 
 #### 将字符串输出转换为整数
 
-```
+```py
 y_mult_pred_test = (
     df_result_proba_test.idxmax(axis=1)
     .replace({
@@ -1343,7 +1343,7 @@ y_mult_pred_test.head()
 
 #### 获取测试多类分类报告
 
-```
+```py
 print(classification_report(y_test, y_mult_pred_test))
 ```
 
@@ -1353,7 +1353,7 @@ print(classification_report(y_test, y_mult_pred_test))
 
 ../logreg/onevsall3.py
 
-```
+```py
 """
 ####onevsall3.py
 
@@ -1443,13 +1443,13 @@ def onevsall3(X_train, y_train, X_test, y_test):
 
 #### 将测试集数据传递给 valid，以确保其正常工作
 
-```
+```py
 test_predict_onevsall = onevsall3(X_train, y_train, X_test, y_test)
 ```
 
 #### 获取测试集分类报告
 
-```
+```py
 print(classification_report(y_test, test_predict_onevsall))
 ```
 
@@ -1457,7 +1457,7 @@ print(classification_report(y_test, test_predict_onevsall))
 
 #### 使用 onevsall3 模块的列车组分类报告
 
-```
+```py
 train_predict_onevsall = onevsall3(X_train, y_train, X_train, y_train)
 print(classification_report(y_train, train_predict_onevsall))
 ```
@@ -1470,19 +1470,19 @@ print(classification_report(y_train, train_predict_onevsall))
 
 #### 导入 OneVsRestClassifier
 
-```
+```py
 from sklearn.multiclass import OneVsRestClassifier
 ```
 
 #### 创建 OneVsRestClassifier 的实例
 
-```
+```py
 onevsrest = OneVsRestClassifier(LogisticRegression(solver='saga'))
 ```
 
 #### 创建连接缩放和训练的管道
 
-```
+```py
 onevsrest_pipe = Pipeline([
     ('scaler', StandardScaler()),
     ('mult_lr', onevsrest)
@@ -1491,7 +1491,7 @@ onevsrest_pipe = Pipeline([
 
 #### 指定要优化的超参数
 
-```
+```py
 params = {
     'mult_lr__estimator__C': [1.0, 1e-1, 1e-2, 1e-3],
     'mult_lr__estimator__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1501,7 +1501,7 @@ params = {
 
 #### 火车上休息
 
-```
+```py
 grid_onevsrest = GridSearchCV(
     onevsrest_pipe,
     params,
@@ -1513,7 +1513,7 @@ grid_onevsrest.fit(X_train, y_train)
 
 #### 获取模型精确度
 
-```
+```py
 print(*{
     'test accuracy': grid_onevsrest.best_estimator_.score(X_test, y_test), 
     'train accuracy': grid_onevsrest.best_estimator_.score(X_train, y_train)}
@@ -1529,7 +1529,7 @@ print(*{
 
 #### 为 Scikit-Learn 的逻辑回归多类分类器创建一个管道
 
-```
+```py
 mult_class_pipe = Pipeline([
     ('scaler', StandardScaler()),
     ('mult_lr', LogisticRegression(solver='saga', multi_class='auto'))
@@ -1538,7 +1538,7 @@ mult_class_pipe = Pipeline([
 
 #### 指定要优化的超参数
 
-```
+```py
 params = {
         'mult_lr__C': [1.0, 1e-1, 1e-2, 1e-3],
         'mult_lr__penalty': ['l1', 'l2', 'elasticnet'],
@@ -1548,7 +1548,7 @@ params = {
 
 #### 训练管子
 
-```
+```py
 grid_mult_class = GridSearchCV(
     mult_class_pipe,
     params,
@@ -1560,7 +1560,7 @@ grid_mult_class.fit(X_train, y_train)
 
 #### 获取模型精确度
 
-```
+```py
 print(*{
     'test accuracy': grid_mult_class.score(X_test, y_test), 
     'train accuracy': grid_mult_class.score(X_train, y_train)}

@@ -135,7 +135,7 @@ while True:
 `*   从分割表示中提取所有字段。
     *   请注意，有些字段在这里看起来并不“完美”——例如，时间仍然用括号括起来。*   初始化一个存储数据库记录创建时间的`created`变量。这将使未来的管道步骤能够查询数据。`
 
- ````
+```
  split_line = line.split(" ")
 remote_addr = split_line[0]
 time_local = split_line[3] + " " + split_line[4]

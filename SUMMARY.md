@@ -42,7 +42,6 @@
 +   [学习 SQL 的最佳方法(根据经验丰富的开发人员)](docs/best-way-to-learn-sql.md)
 +   [利用箱线图探索女性身高数据](docs/box-plots-womens-heights.md)
 +   [让你得到工作的数据科学投资组合](docs/build-a-data-science-portfolio.md)
-+   [利用 R 中的网飞数据构建推荐系统](docs/building-a-recommender-system-with-netflix-data-in-r.md)
 +   [商业分析和商业智能—解释！](docs/business-analysis-and-business-intelligence-explained.md)
 +   [业务分析师岗位说明书(2022 年版)](docs/business-analyst-job-description-2022.md)
 +   [2022 年商业分析师的工作前景](docs/business-analyst-job-outlook.md)
